@@ -2712,7 +2712,7 @@ createTableForTeam1();
 const similarPlayersContainer = document.createElement("div");
 similarPlayersContainer.id = "similarPlayersContainer";
 similarPlayersContainer.style.position = "absolute";
-similarPlayersContainer.style.top = "783px";
+similarPlayersContainer.style.top = "883px";
 similarPlayersContainer.style.left = "210px";
 document.body.appendChild(similarPlayersContainer);
 
@@ -2833,11 +2833,21 @@ colorIndex++; // Increment color index for the next search
 <script>
     // Function to scroll down a tiny bit
     function scrollDown() {
-        window.scrollBy(0, 70); // Adjust the value (20) to change the scroll distance
+        window.scrollBy(0, 100); // Adjust the value (20) to change the scroll distance
     }
 
     // Scroll down when the page loads
     window.addEventListener('load', scrollDown);
+</script>
+
+	<script>
+    // Function to scroll up a tiny bit
+    function scrollUp() {
+        window.scrollBy(0, -100); // Adjust the value (-70) to change the scroll distance
+    }
+
+    // Scroll up when the page loads
+    window.addEventListener('load', scrollUp);
 </script>
 
 <a href="https://datamb.football/radars/" target="_blank" rel="noopener noreferrer">
