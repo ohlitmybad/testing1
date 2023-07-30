@@ -944,7 +944,7 @@ table {
 
 
 #searchInput1 {
-  width: 436px;
+  width: 440px;
 height: 35px;
 Margin-left: 5px;
 }
@@ -1290,19 +1290,19 @@ function takeScreenshot() {
     x = 0;
     y = 0;
     cropPercentageX = -0.0147;
-    cropPercentageY = 0.06;
-    cropPercentageRight = 0.23;
+    cropPercentageY = 0.12;
+    cropPercentageRight = 0.238;
     captureWidth = 930;
-    captureHeight = 723;
+    captureHeight = 975;
   } else {
     // Values for desktop
     x = 0;
     y = 0;
     cropPercentageX = -0.0087;
-    cropPercentageY = 0.05;
-    cropPercentageRight = 0.385;
+    cropPercentageY = 0.1;
+    cropPercentageRight = 0.4;
     captureWidth = 1200;
-    captureHeight = 723;
+    captureHeight = 975;
   }
 
 
@@ -1347,9 +1347,6 @@ ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       ctx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
 
-ctx.font = '12px Arial'; // Adjust the font size for the other text
-ctx.fillStyle = 'grey'; // Adjust the color for the other text
-ctx.fillText('datamb.football', 629, 676);
 
 
       // Convert the canvas to a PNG image
