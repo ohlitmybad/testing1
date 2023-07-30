@@ -914,10 +914,10 @@ fill-opacity: 0.02;
            
 svg:nth-of-type(1) {
   position: absolute;
-  top: 370px;
-  left: 38px;
-  width: 520px;
-  height: 520px;
+  top: 310px;
+  left: -26px;
+  width: 758px;
+  height: 758px;
 }
 
 svg:nth-of-type(2) {
@@ -1780,7 +1780,7 @@ table.appendChild(dataRow);
   const combResults = dataArray[teamIndex].join(', ');
   console.log(combResults);
 
-  const outerRadius = 190;
+  const outerRadius = 280;
   const center = [0, 0];
   const angles = [
     0,
@@ -1795,8 +1795,8 @@ table.appendChild(dataRow);
   function axisValueToCartesian(axis, value) {
     let angle = angles[axis - 1];
     angle += (2 * Math.PI / 7) * 0.2;
-    const x = 190 * value * Math.cos(angle);
-    const y = 190 * value * Math.sin(angle);
+    const x = 280 * value * Math.cos(angle);
+    const y = 280 * value * Math.sin(angle);
     return { x, y };
   }
 
@@ -1804,7 +1804,7 @@ table.appendChild(dataRow);
   const radarWrapper = svg.appendChild(
     document.createElementNS('http://www.w3.org/2000/svg', 'g')
   );
-  radarWrapper.setAttribute('transform', 'translate(231.77,225.77)');
+  radarWrapper.setAttribute('transform', 'translate(280.77,280.77)');
   radarWrapper.innerHTML = '';
 
   const data = [];
@@ -1847,7 +1847,7 @@ table.appendChild(dataRow);
     );
     circle.setAttribute('class', `radarCircle ${color}`);
     circle.style.fillOpacity = '0.86';
-    circle.setAttribute('r', '6');
+    circle.setAttribute('r', '8.4');
     circle.setAttribute('cx', x);
     circle.setAttribute('cy', y);
     radarWrapper.appendChild(circle);
@@ -1908,8 +1908,8 @@ createTableForTeam1();
 const similarPlayersContainer = document.createElement("div");
 similarPlayersContainer.id = "similarPlayersContainer";
 similarPlayersContainer.style.position = "absolute";
-similarPlayersContainer.style.top = "933px";
-similarPlayersContainer.style.left = "200px";
+similarPlayersContainer.style.top = "1024px";
+similarPlayersContainer.style.left = "178px";
 document.body.appendChild(similarPlayersContainer);
 
 let colorIndex = 0; // Initialize color index
