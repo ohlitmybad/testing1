@@ -2172,17 +2172,12 @@ function scrollDown() {
     window.scrollBy(0, 200); // Increase the scroll distance
 }
 
-// Function to scroll up
-function scrollUp() {
-    window.scrollBy(0, -190); // Increase the scroll distance
-}
 
 // Combine both actions with a small timer between them
 function initializeScroll() {
     // Check if the screen width is below the threshold for mobile devices (e.g., 768 pixels)
     if (window.innerWidth < 768) {
         setTimeout(scrollDown, 100); // Increase the delay time to ensure the action is registered
-        setTimeout(scrollUp, 50); // Increase the delay time to ensure the action is registered
 
     }
 }
