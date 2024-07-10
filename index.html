@@ -2184,7 +2184,9 @@ function calculateEuclideanDifference(data1, data2) {
         // Check if the screen width is below the threshold for mobile devices (e.g., 768 pixels)
         if (window.innerWidth < 768) {
 		            setTimeout(scrollDown, 15); // Adjust the delay time (1000ms = 1 second)
-            setTimeout(scrollUp, 20); // Adjust the delay time (1000ms = 1 second)
+            setTimeout(scrollUp, 10); // Adjust the delay time (1000ms = 1 second)
+		            setTimeout(scrollDown, 10); // Adjust the delay time (1000ms = 1 second)
+
         }
     }
 
