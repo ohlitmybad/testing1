@@ -513,7 +513,7 @@ table {
 }
 .similar-table {
   position: absolute;
-  top: -278px;
+  top: -128px;
   width: auto;
   left: 381px;
   transform: translateX(-50%);
@@ -2169,12 +2169,12 @@ function calculateEuclideanDifference(data1, data2) {
 </script></center>
 <script>// Function to scroll down
 function scrollDown() {
-    window.scrollBy(0, 300); // Increase the scroll distance
+    window.scrollBy(0, 200); // Increase the scroll distance
 }
 
 // Function to scroll up
 function scrollUp() {
-    window.scrollBy(0, -1000); // Increase the scroll distance
+    window.scrollBy(0, -190); // Increase the scroll distance
 }
 
 // Combine both actions with a small timer between them
@@ -2182,6 +2182,8 @@ function initializeScroll() {
     // Check if the screen width is below the threshold for mobile devices (e.g., 768 pixels)
     if (window.innerWidth < 768) {
         setTimeout(scrollDown, 100); // Increase the delay time to ensure the action is registered
+        setTimeout(scrollUp, 50); // Increase the delay time to ensure the action is registered
+
     }
 }
 
@@ -2190,7 +2192,6 @@ window.addEventListener('load', initializeScroll);
 	
 
 </script>
-        <div class="emptycontainer"></div>
         <div class="emptycontainer"></div>
 
 </body>
