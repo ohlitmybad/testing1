@@ -2167,31 +2167,28 @@ function calculateEuclideanDifference(data1, data2) {
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({});
 </script></center>
-<script>
-    // Function to scroll down a tiny bit
-    function scrollDown() {
-        window.scrollBy(0, 550); // Adjust the value (100) to change the scroll distance
+<script>// Function to scroll down
+function scrollDown() {
+    window.scrollBy(0, 1000); // Increase the scroll distance
+}
+
+// Function to scroll up
+function scrollUp() {
+    window.scrollBy(0, -1000); // Increase the scroll distance
+}
+
+// Combine both actions with a small timer between them
+function initializeScroll() {
+    // Check if the screen width is below the threshold for mobile devices (e.g., 768 pixels)
+    if (window.innerWidth < 768) {
+        setTimeout(scrollDown, 500); // Increase the delay time to ensure the action is registered
+        setTimeout(scrollUp, 1000); // Increase the delay time to ensure the action is registered
     }
+}
 
-    // Function to scroll up a tiny bit
-    function scrollUp() {
-        window.scrollBy(0, -540); // Adjust the value (-80) to change the scroll distance
-    }
+// Add an event listener to execute the scrolling functions when the page loads
+window.addEventListener('load', initializeScroll);
 
-
-    // Combine both actions with a small timer between them
-    function initializeScroll() {
-        // Check if the screen width is below the threshold for mobile devices (e.g., 768 pixels)
-        if (window.innerWidth < 768) {
-		            setTimeout(scrollDown, 15); // Adjust the delay time (1000ms = 1 second)
-            setTimeout(scrollUp, 10); // Adjust the delay time (1000ms = 1 second)
-		            setTimeout(scrollDown, 10); // Adjust the delay time (1000ms = 1 second)
-
-        }
-    }
-
-    // Add an event listener to execute the scrolling functions when the page loads
-    window.addEventListener('load', initializeScroll);
 </script>
 
 </body>
