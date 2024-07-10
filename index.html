@@ -1247,6 +1247,10 @@ body, html {
             margin: 0;
             padding: 0;
         }
+        .screenshotcontainer {
+            margin-left: 8px;
+        }
+        
 	.emptycontainer {
     height: 150px;
     width: 100%; /* This ensures the container takes the full width of its parent */
@@ -1301,8 +1305,6 @@ body, html {
 </div>
 
 
-
-
 <script>
 
   
@@ -1332,6 +1334,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script></center>
+<div class="screenshotcontainer">
     <input type="text" id="searchInput1" class="search-bar" placeholder="Enter name of midfielder..." />
     <input type="button" id="searchButton1" value="+&nbsp;" />
     <div id="resultsTable"></div>
@@ -1423,7 +1426,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
   <g class="radarWrapper"></g>
   </g></g>    
 	  
-
+</div>
 <script>
       
     const allData1 = [];
@@ -2076,41 +2079,36 @@ function calculateEuclideanDifference(data1, data2) {
     
 </script>
 	  
-<script>
-    async function takeScreenshot() {
-      const body = document.querySelector('body');
-      const isDarkMode = body.classList.contains('dark-mode');
-      const backgroundColor = isDarkMode ? '#0F0F0E' : '#ffffff'; // Black for dark mode, white for light mode
-      
-      try {
-        const element = document.body; // Capture entire document body
-        const canvas = await html2canvas(element, {
-          width: 795, 
-          height: 773, 
-          y: +45,
-          x: -5,
-          useCORS: true,
-          backgroundColor: backgroundColor, // Set the background color based on mode
-          scale: window.devicePixelRatio,
-          logging: false, // Disable logging for production
-          foreignObjectRendering: false,
-          scrollX: 0, // Capture from the top of the page
-          scrollY: 0 // Capture from the top of the page
-        });
-    
-        const ctx = canvas.getContext('2d');
-    
-        canvas.toBlob(blob => {
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = 'screenshot.png';
-          link.click();
-        }, 'image/png');
-      } catch (error) {
-        console.error('Error in takeScreenshot:', error);
-        // Handle errors appropriately (e.g., display to user or log)
-      }
+<script>async function takeScreenshot() {
+  const body = document.querySelector('body');
+  const isDarkMode = body.classList.contains('dark-mode');
+  const backgroundColor = isDarkMode ? '#0F0F0E' : '#ffffff'; // Black for dark mode, white for light mode
+  
+  try {
+    const element = document.querySelector('.screenshotcontainer'); // Capture the screenshotcontainer using the class name
+    if (!element) {
+      throw new Error('screenshotcontainer element not found');
     }
+
+    const canvas = await html2canvas(element, {
+      useCORS: true,
+      backgroundColor: backgroundColor, // Set the background color based on mode
+      scale: window.devicePixelRatio,
+      logging: false, // Disable logging for production
+      foreignObjectRendering: false,
+    });
+
+    canvas.toBlob(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'screenshot.png';
+      link.click();
+    }, 'image/png');
+  } catch (error) {
+    console.error('Error in takeScreenshot:', error);
+    // Handle errors appropriately (e.g., display to user or log)
+  }
+}
 
 
 
