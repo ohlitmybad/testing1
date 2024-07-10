@@ -2167,7 +2167,24 @@ function calculateEuclideanDifference(data1, data2) {
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({});
 </script></center>
+<script>
+    // Function to scroll down a tiny bit
+    function scrollDown() {
+        window.scrollBy(0, 250); // Adjust the value (100) to change the scroll distance
+    }
 
+
+    // Combine both actions with a small timer between them
+    function initializeScroll() {
+        // Check if the screen width is below the threshold for mobile devices (e.g., 768 pixels)
+        if (window.innerWidth < 768) {
+            setTimeout(scrollDown, 15); // Adjust the delay time (1000ms = 1 second)
+        }
+    }
+
+    // Add an event listener to execute the scrolling functions when the page loads
+    window.addEventListener('load', initializeScroll);
+</script>
 
 </body>
 </html>
