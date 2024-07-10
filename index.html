@@ -2160,11 +2160,33 @@ function calculateEuclideanDifference(data1, data2) {
 <script>
         document.addEventListener('DOMContentLoaded', function() {
             var width = window.innerWidth;
-            var initialScale = width / 1024; // Example calculation
+            var initialScale = width / 1000; // Example calculation
             var viewportMeta = document.querySelector('meta[name="viewport"]');
             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
         });
 </script>
+<script>
+    // Function to scroll down a tiny bit
+    function scrollDown() {
+        window.scrollBy(0, 250); // Adjust the value (100) to change the scroll distance
+    }
 
+    // Function to scroll up a tiny bit
+    function scrollUp() {
+        window.scrollBy(0, -240); // Adjust the value (-80) to change the scroll distance
+    }
+
+    // Combine both actions with a small timer between them
+    function initializeScroll() {
+        // Check if the screen width is below the threshold for mobile devices (e.g., 768 pixels)
+        if (window.innerWidth < 768) {
+            scrollDown();
+            setTimeout(scrollUp, 10); // Adjust the delay time (1000ms = 1 second)
+        }
+    }
+
+    // Add an event listener to execute the scrolling functions when the page loads
+    window.addEventListener('load', initializeScroll);
+</script>
 </body>
 </html>
