@@ -13,7 +13,14 @@
   <meta name="twitter:image" content="https://datamb.football/vignettes/cm.png">
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var width = window.innerWidth;
+            var initialScale = width / 980; // Example calculation
+            var viewportMeta = document.querySelector('meta[name="viewport"]');
+            viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+        });
+</script>
 <defs>
 <style>
 
@@ -2158,14 +2165,7 @@ function calculateEuclideanDifference(data1, data2) {
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({});
 </script></center>
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var width = window.innerWidth;
-            var initialScale = width / 980; // Example calculation
-            var viewportMeta = document.querySelector('meta[name="viewport"]');
-            viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
-        });
-</script>
+
 
 </body>
 </html>
