@@ -3,8 +3,8 @@
 <html>
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=0.4868, user-scalable=no">
-<link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
   <title translate="no">DataMB | Compare Midfielders</title>
   <meta property="og:image" content="https://datamb.football/vignettes/cm.png">
 		<meta name="description" content="Compare midfielder statistics in the Top 7 Leagues. Visualize player performance. Find similar profiles. Use our radar tool to compare duels; interceptions; tackles; passes; passing accuracy; progressive passes; progressive runs; key passes and more for midfielders in Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga.">
@@ -720,12 +720,16 @@ svg:nth-of-type(1) {
 }
 
 
-
+.searchcontainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
 
 .dark-mode-toggle {
-    position: absolute;
-    top: 88.9px;
-    left: 93%;
+position: absolute;
+left: 93%;
+top:5%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1335,9 +1339,11 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script></center>
 <div class="screenshotcontainer">
+  <div class="searchcontainer">
     <input type="text" id="searchInput1" class="search-bar" placeholder="Enter name of midfielder..." />
     <input type="button" id="searchButton1" value="+&nbsp;" />
-    <div id="resultsTable"></div>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()"><div class="toggle-icon"></div></div></div>
+    <div id="resultsTable"></div>  
  <br><br>
   <div id="matchingNames"></div>
   <div class="maxcontainer">
@@ -1371,9 +1377,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
     <button class="button-6" role="button">Team</button></a>
 
   </div>
-  <div class="dark-mode-toggle" onclick="toggleDarkMode()">
-    <div class="toggle-icon"></div>
-  </div>
+
 
   <svg class="radar"><g transform="translate(379.77,225.77)"><g class="axisWrapper">
   
@@ -2156,7 +2160,15 @@ function calculateEuclideanDifference(data1, data2) {
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({});
 </script></center><br>
+<script>
+  (function() {
+    var width = window.innerWidth;
+    var initialScale = width / 780; // Example calculation
+    var viewportMeta = document.querySelector('meta[name="viewport"]');
+    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+})();
 
+</script>
 
 </body>
 </html>
