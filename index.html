@@ -9,7 +9,7 @@
 <script>
         document.addEventListener('DOMContentLoaded', function() {
             var width = window.innerWidth;
-            var initialScale = width / 605; // Example calculation
+            var initialScale = width / 400; // Example calculation
             var viewportMeta = document.querySelector('meta[name="viewport"]');
             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
         });
@@ -501,7 +501,7 @@ margin-left: 0%;
 
 .similar-table {
   position: absolute;
-  top: -503px;
+  top: -353px;
   left: 78px;
   width: 350px;
   text-align: center;
@@ -607,7 +607,7 @@ background-color : #333333;
 
   
 svg:nth-of-type(1) {
-  width: 700px;
+  width: 400px;
   height: 500px;
 }
 
@@ -1058,10 +1058,7 @@ body, html {
             margin-left: 8px;
         }
         
-	.emptycontainer {
-    height: 150px;
-    width: 100%; /* This ensures the container takes the full width of its parent */
-}
+	
 .maxcontainer {
 position: absolute;
     }
@@ -1866,7 +1863,6 @@ console.error('Error fetching or processing data:', error);
 
 </script>
 
-        <div class="emptycontainer"></div>
 
         <div class="finalcontainer">
 
