@@ -9,7 +9,7 @@
 <script>
         document.addEventListener('DOMContentLoaded', function() {
             var width = window.innerWidth;
-            var initialScale = width / 450; // Example calculation
+            var initialScale = width / 470; // Example calculation
             var viewportMeta = document.querySelector('meta[name="viewport"]');
             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
         });
@@ -620,7 +620,7 @@ svg:nth-of-type(1) {
 .dark-mode-toggle {
 position: absolute;
 top: 60px;
-    left: 409.2px;
+    left: 414px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -636,7 +636,7 @@ top: 60px;
  .button-10 {
     position: absolute;
     top: 400px;
-    left: 399px;
+    left: 410px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -889,7 +889,7 @@ align-items: center;
 justify-content: center;
 position: absolute;
   top: 400px;
-  left: -38.4px;
+  left: -35.4px;
  width: 120px; 
     }
 
@@ -979,7 +979,7 @@ position: absolute;
   </div>
 
 
-  <svg class="radar"><g transform="translate(204,225.77)"><g class="axisWrapper">
+  <svg class="radar"><g transform="translate(223,225.77)"><g class="axisWrapper">
     <g class="radar_label">
         <text class="label" data-type="Aerial%" data-idx="0" transform="translate(-48.60 -154.8) rotate(-2)">Key Passes</text>
     </g>
@@ -1465,7 +1465,7 @@ return { x, y };
 
 const svg = document.querySelector('.radar');
 const radarWrapper = svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
-radarWrapper.setAttribute('transform', 'translate(204,225.77)');
+radarWrapper.setAttribute('transform', 'translate(223,225.77)');
 radarWrapper.innerHTML = '';
 
 const data = [];
@@ -1667,7 +1667,6 @@ console.error('Error fetching or processing data:', error);
 
     const canvas = await html2canvas(element, {
         width: 460,
-        height: element.offsetHeight - 50, // Reduce height by 150px
         y: -10,
         x: -10,
         useCORS: true,
