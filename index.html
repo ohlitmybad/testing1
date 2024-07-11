@@ -501,7 +501,7 @@ margin-left: 0%;
 
 .similar-table {
   position: absolute;
-  top: -503px;
+  top: -453px;
   left: 78px;
   width: 350px;
   text-align: center;
@@ -620,8 +620,8 @@ svg:nth-of-type(1) {
 
 .dark-mode-toggle {
 position: absolute;
-top: 60px;
-    left: 404px;
+top: 6px;
+    left: 427px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -960,10 +960,11 @@ position: absolute;
       
       <a href="https://datamb.football/appst/" target="_top" rel="noopener noreferrer">
         <button class="button-6" role="button">ST</button></a>
+        <div class="dark-mode-toggle" onclick="toggleDarkMode()"><div class="toggle-icon"></div></div>
   <div class="searchcontainer">
     <input type="text" id="searchInput1" class="search-bar" placeholder="Enter midfielder name..." />
     &nbsp;<input type="button" id="searchButton1" value="+&nbsp;" />
-    <div class="dark-mode-toggle" onclick="toggleDarkMode()"><div class="toggle-icon"></div></div></div>
+    </div>
     <div class="screenshotcontainer">
 	<div id="resultsTable"></div>  
   <div id="matchingNames"></div>
@@ -1668,7 +1669,7 @@ console.error('Error fetching or processing data:', error);
     }
 
     const canvas = await html2canvas(element, {
-        width: 480,
+        width: 472,
         height: element.offsetHeight - 50, // Reduce height by 150px
         y: -10,
         x: -10,
