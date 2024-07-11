@@ -9,7 +9,7 @@
 <script>
         document.addEventListener('DOMContentLoaded', function() {
             var width = window.innerWidth;
-            var initialScale = width / 450; // Example calculation
+            var initialScale = width / 448; // Example calculation
             var viewportMeta = document.querySelector('meta[name="viewport"]');
             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
         });
@@ -620,8 +620,8 @@ svg:nth-of-type(1) {
 
 .dark-mode-toggle {
 position: absolute;
-top: 6px;
-    left: 427px;
+top: 60px;
+    left: 408.5px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -960,11 +960,10 @@ position: absolute;
       
       <a href="https://datamb.football/appst/" target="_top" rel="noopener noreferrer">
         <button class="button-6" role="button">ST</button></a>
-        <div class="dark-mode-toggle" onclick="toggleDarkMode()"><div class="toggle-icon"></div></div>
   <div class="searchcontainer">
     <input type="text" id="searchInput1" class="search-bar" placeholder="Enter midfielder name..." />
     &nbsp;<input type="button" id="searchButton1" value="+&nbsp;" />
-    </div>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()"><div class="toggle-icon"></div></div></div>
     <div class="screenshotcontainer">
 	<div id="resultsTable"></div>  
   <div id="matchingNames"></div>
@@ -1669,7 +1668,7 @@ console.error('Error fetching or processing data:', error);
     }
 
     const canvas = await html2canvas(element, {
-        width: 472,
+        width: 460,
         height: element.offsetHeight - 50, // Reduce height by 150px
         y: -10,
         x: -10,
