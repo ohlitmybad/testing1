@@ -968,8 +968,8 @@ position: absolute;
     &nbsp;<input type="button" id="searchButton1" value="+&nbsp;" />
     <div class="dark-mode-toggle" onclick="toggleDarkMode()"><div class="toggle-icon"></div></div></div>
     <div class="screenshotcontainer">
+      <div id="matchingNames"></div>
 	<div id="resultsTable"></div>  
-  <div id="matchingNames"></div>
   <div class="maxcontainer">
   <div class="toggle-container2">
     <img src="https://datamb.football/logo.png" alt="Logo">
@@ -1284,14 +1284,13 @@ function updateMatchingNames() {
   } else {
     matchingNamesContainer.style.display = "block";
 
-    // Style the matching names container
     matchingNamesContainer.style.backgroundColor = "#9c9b9b";
     matchingNamesContainer.style.width = "384px";
     matchingNamesContainer.style.padding = "10px";
-    matchingNamesContainer.style.position = "absolute";
-    matchingNamesContainer.style.top = "10.75%";
-    matchingNamesContainer.style.left = "12px";
-matchingNamesContainer.style.zIndex = "9999"; // Set a high z-index value
+    matchingNamesContainer.style.position = "relative";
+    matchingNamesContainer.style.left = "5.5px";
+    matchingNamesContainer.style.zIndex = "9999"; // Set a high z-index value
+
   }
 
   if (searchQuery === "") {
