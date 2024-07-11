@@ -9,7 +9,7 @@
 <script>
         document.addEventListener('DOMContentLoaded', function() {
             var width = window.innerWidth;
-            var initialScale = width / 405; // Example calculation
+            var initialScale = width / 355; // Example calculation
             var viewportMeta = document.querySelector('meta[name="viewport"]');
             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
         });
@@ -654,7 +654,7 @@ top: 60px;
   display: flex;
 }
 
-	button-1 a {
+	body a {
 text-decoration: none;
 	}
 	
@@ -905,151 +905,6 @@ opacity: .8;
 
 
 
-        .header .logo {
-  display: flex;
-  align-items: center;
-}
-
-.header .logo img {
-  width: 40px;
-  height: 40px;
-opacity: 0.84;
-}
-
-.header .logo-text {
-  margin-left: 10px;
-  font-size: 20px;
-color: #444444;
-  font-weight: 600;
-}
-
-.header .navigation {
-  display: center;
-  align-items: center;
-  word-spacing: 2.6em; /* Adjust the spacing as needed */
-}
-
-
-
-
-.header {
-  font-family: system-ui;
-  background: white;
-  padding: 20px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #ececec;
-}
-
-
-
-
-.header .button {
-  margin: 0 10px;
-  padding: 0px 20px;
-  color: #444444;
-  text-decoration: none;
-  border-radius: 0px;
-font-size: 18px;
-}
-
-header a {
-      color: #444444;
-      text-decoration: none;
-
-    }
-
-.header .twitter-link svg {
-  width: 25px;
-  height: 24px;
-  fill: #444444;
-}
-
-
-
-
-
-
-.search-input-modal {
-    display: none;
-    position: fixed; /* Change this to "fixed" to cover the entire viewport */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* Increase opacity for better obscuring */
-    z-index: 999; /* Ensure it's above other elements */
-}
-
-.search-input-container {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 4px;
-    z-index: 1000; /* Make sure it's on top of the modal background */
-}
-
-#searchInput {
-            width: 340px;
-            padding: 12px;
-            border: 3px solid #ccc;
-            border-radius: 4px;
-            font-size: 19px;
-            outline: none;
-        }
-
-        #autocompleteBox {
-            width: 360px;
-            max-height: 150px;
-            overflow-y: auto;
-            background-color: #fff;
-        }
-
-
-        #autocompleteBox ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        #autocompleteBox li {
-            margin: 0;
-            padding: 5px;
-        }
-
-        #autocompleteBox {
-            line-height: 2; /* Adjust the value as needed to control line spacing */
-            text-align: center !important;
-
-        }
-
-        #autocompleteBox a {
-            text-decoration: none;
-            font-family: Arial, sans-serif;
-            text-align: center !important;
-            color: #333 !important;
-            cursor: pointer; /* Add pointer cursor style to the anchor element */
-        }
-
-        #autocompleteBox li:hover {
-            background-color: #f0f0f0;
-        }
-        #searchButton {
-    padding: 10px;
-    background-color: #0074d9;
-    color: #fff;
-    border: none;
-    width: 40px; /* Set the width and height to the same value for a round button */
-    height: 40px;
-    border-radius: 50%; /* Make the button round by setting border-radius to 50% of the size */
-    cursor: pointer;
-    font-size: 20px; /* Increase the text size */
-}
 body, html {
             margin: 0;
             padding: 0;
@@ -1058,9 +913,7 @@ body, html {
             margin-left: 8px;
         }
         
-	.emptycontainer {
-    width: 100%; /* This ensures the container takes the full width of its parent */
-}
+
 .maxcontainer {
 position: absolute;
     }
@@ -1864,7 +1717,6 @@ console.error('Error fetching or processing data:', error);
 
 </script>
 
-        <div class="emptycontainer"></div>
 
         <div class="finalcontainer">
 
