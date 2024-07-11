@@ -7,12 +7,25 @@
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var width = window.innerWidth;
-            var initialScale = width / 470; // Example calculation
-            var viewportMeta = document.querySelector('meta[name="viewport"]');
-            viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
-        });
+  (function() {
+      // Get the width of the viewport
+      var width = window.innerWidth;
+      console.log('Window width:', width);  // Debug log
+
+      // Calculate the initial scale based on the width
+      var initialScale = width / 470;
+      console.log('Initial scale:', initialScale);  // Debug log
+
+      // Find the viewport meta tag
+      var viewportMeta = document.querySelector('meta[name="viewport"]');
+      if (viewportMeta) {
+          // Set the viewport meta tag content attribute
+          viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+          console.log('Viewport meta updated with initial scale:', initialScale);  // Debug log
+      } else {
+          console.error('Viewport meta tag not found');
+      }
+  })();
 </script>
 <defs>
 <style>
