@@ -215,14 +215,25 @@ h1 {
     margin-bottom: 10.5px;
 }
 
-.logo-image2 {
+.logo-image {
     width: 42px; /* Example width */
    position:absolute;
    left: 500px;
    top: 68px;
 }
 
+.logo-image2 {
+    width: 42px; /* Example width */
+   position:absolute;
+   left: 482.5px;
+   top: 2.4px;
+}
 
+@media (max-width: 767px) { /* Adjust this value based on your mobile breakpoint */
+    .logo-image2 {
+        top: 0.8px; /* Adjusted for mobile */
+    }
+}
 
 .toggleSortingButton {
   position: absolute;
@@ -338,7 +349,7 @@ h1 {
 
     #chartContainer {
     width: 550px;  /* Set the desired width of the container */
-    height: 550px; /* Set the desired height of the container */
+    height: 600px; /* Set the desired height of the container */
     position: relative;
 }
 
@@ -452,12 +463,7 @@ h1 {
     </div>
     <div id="chartTitle"></div>
     <div id="fullcontainer">
-        <div class="dropdown">
-            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
-            <div id="metric-controls" class="dropdown-content">
-                <!-- Checkboxes will be generated here by JavaScript -->
-            </div>
-</div>
+        <div id="chartButton"></div>
     <div id="chartContainer">
         <canvas id="pizzaChart"></canvas>
     </div>
@@ -2562,7 +2568,9 @@ const metricsHTML = metricsData.map(metric => {
 
     // Construct player results HTML
     playerResults = `
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
          `;
          const selectedAge = parseInt(ageSelect.value);
 const filteredData1 = parseCSV(csvData).filter(player => 
@@ -2844,9 +2852,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} ${selectedPlayer.position}s, per 90</i></h1>
+          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} ${selectedPlayer.position}s, per 90</i></h1><br>
               
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
 
     createPizzaChart(rankData, player.player);
 
@@ -3366,7 +3381,9 @@ const metricsHTML = metricsData.map(metric => {
 
 // Construct player results HTML
     playerResults = `
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
           `;
           const selectedAge = parseInt(ageSelect.value);
         const filteredData2 = parseCSV(csvData).filter(player => player.position === selectedPlayer.position && player.league === selectedPlayer.league &&
@@ -3641,9 +3658,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} ${selectedPlayer.position}s</i></h1>
+          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} ${selectedPlayer.position}s</i></h1><br>
               
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
         
 
     createPizzaChart(rankData, player.player);
@@ -4164,7 +4188,9 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
 // Construct player results HTML
     playerResults = `
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
           `;
           const selectedAge = parseInt(ageSelect.value);
         const filteredData3 = parseCSV(csvData).filter(player => player.position === selectedPlayer.position &&
@@ -4439,9 +4465,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs Top 5 League ${titleSuffix} ${selectedPlayer.position}s, per 90</i></h1>
+          <h1><i>vs Top 5 League ${titleSuffix} ${selectedPlayer.position}s, per 90</i></h1><br>
               
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
 
     createPizzaChart(rankData, player.player);
 // JavaScript part
@@ -4962,7 +4995,9 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
 // Construct player results HTML
     playerResults = `
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
           `;
           const selectedAge = parseInt(ageSelect.value);
         const filteredData4 = parseCSV(csvData).filter(player => player.position === selectedPlayer.position &&
@@ -5239,9 +5274,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs Top 5 League ${titleSuffix} ${selectedPlayer.position}s</i></h1>
+          <h1><i>vs Top 5 League ${titleSuffix} ${selectedPlayer.position}s</i></h1><br>
               
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
     createPizzaChart(rankData, player.player);
 // JavaScript part
 let userExclusions = new Set();
@@ -5757,7 +5799,9 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
 // Construct player results HTML
     playerResults = `    
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
           `;
           const selectedAge = parseInt(ageSelect.value);
         const filteredData5 = parseCSV(csvData).filter(player => player.league === selectedPlayer.league &&
@@ -6033,9 +6077,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} players, per 90</i></h1>
+          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} players, per 90</i></h1><br>
               
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
     createPizzaChart(rankData, player.player);
 // JavaScript part
 let userExclusions = new Set();
@@ -6555,7 +6606,9 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 
 // Construct player results HTML
     playerResults = `
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
           `;
     const selectedAge = parseInt(ageSelect.value);
         const filteredData6 = parseCSV(csvData).filter(player => player.league === selectedPlayer.league &&
@@ -6830,9 +6883,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} players</i></h1>
+          <h1><i>vs ${selectedPlayer.league} ${titleSuffix} players</i></h1><br>
               
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
 
     createPizzaChart(rankData, player.player);
 // JavaScript part
@@ -7352,7 +7412,9 @@ const metricsHTML = metricsData.map(metric => {
 
 // Construct player results HTML
     playerResults = `     
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
           `;
           const selectedAge = parseInt(ageSelect.value);
         const filteredData7 = parseCSV(csvData).filter(player =>
@@ -7628,9 +7690,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-        <h1><i>vs Top 5 League ${titleSuffix} players, per 90</i></h1>
+        <h1><i>vs Top 5 League ${titleSuffix} players, per 90</i></h1><br>
             
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
     createPizzaChart(rankData, player.player);
 // JavaScript part
 let userExclusions = new Set();
@@ -8147,7 +8216,9 @@ const rankB = b.data.find(rank => rank.player === selectedPlayer.player && rank.
 }).join('');
 // Construct player results HTML
     playerResults = `
+    <div class="metrics-container">
         ${metricsHTML}
+    </div>
           `;
           const selectedAge = parseInt(ageSelect.value);
         const filteredData8 = parseCSV(csvData).filter(player =>
@@ -8423,9 +8494,16 @@ metricsToCompute.forEach(metric => {
 document.getElementById('chartTitle').innerHTML = `
 <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
 <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-        <h1><i>vs Top 5 League ${titleSuffix} players</i></h1>
+        <h1><i>vs Top 5 League ${titleSuffix} players</i></h1><br>
             
-`;
+ `;
+document.getElementById('chartButton').innerHTML = `
+       <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bar-chart"></i></button>
+            <div id="metric-controls" class="dropdown-content">
+                <!-- Checkboxes will be generated here by JavaScript -->
+            </div>
+</div> `;
 
     createPizzaChart(rankData, player.player);
 // JavaScript part
@@ -8721,6 +8799,10 @@ document.getElementById('toggleSortingButton').addEventListener('change', functi
   element.classList.toggle('active');
 }
 
+const resultsDiv = document.getElementById('results');
+const chartContainer = document.getElementById('chartContainer');
+
+
 
 
 window.onclick = function(event) {
@@ -8740,4 +8822,3 @@ window.onclick = function(event) {
 
 </body>
 </html>
-
