@@ -631,11 +631,12 @@ function createPizzaChart(rankData, playerName) {
 
     // Color gradient function: interpolates between blue (low) and red (high)
     function getColor(value) {
-        const r = Math.round(255 * value); // Red increases with value
-        const g = 0; // No green
-        const b = Math.round(255 * (1 - value)); // Blue decreases with value
-        return `rgba(${r}, ${g}, ${b}, 0.5)`; // Adjust the opacity as needed
+        const r = Math.round(255 * value); 
+        const g = Math.round(100 * (1- value));
+        const b = Math.round(255 * (1 - value)); 
+        return `rgba(${r}, ${g}, ${b}, 0.75)`;
     }
+
 
     // Generate colors based on data values
     const colors = data.map(value => getColor(value));
