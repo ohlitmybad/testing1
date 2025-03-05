@@ -1976,7 +1976,7 @@ const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAn
       
         // Construct the HTML with the rank and suffix
         return `
-        ${metric.name} – ${playerRank}${rankSuffix}
+        ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
       <div class="rank-bar" onclick="toggleActive(this)">
       <div class="rank-bar-fill" style="width: ${rankBarWidth1}%; background-color: ${color}"></div>
         <span class="hover-content">${currentValue}</span>
@@ -1986,7 +1986,7 @@ const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAn
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -3357,7 +3357,7 @@ const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAn
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth2}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue2}</span>
@@ -3366,7 +3366,7 @@ const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAn
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -4728,7 +4728,7 @@ const positionRankAccelerations = calculateRankForMetric(samePosition, 'accelera
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth3}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue3}</span>                    
@@ -4737,7 +4737,7 @@ const positionRankAccelerations = calculateRankForMetric(samePosition, 'accelera
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -6099,7 +6099,7 @@ const positionRankAccelerations = calculateRankForMetric(samePosition, 'accelera
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth4}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue4}</span>
@@ -6108,7 +6108,7 @@ const positionRankAccelerations = calculateRankForMetric(samePosition, 'accelera
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -7471,7 +7471,7 @@ const position5RankAccelerations = calculateRankForMetric(samePositionTop5, 'acc
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth3}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue3}</span>                    
@@ -7480,7 +7480,7 @@ const position5RankAccelerations = calculateRankForMetric(samePositionTop5, 'acc
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -8850,7 +8850,7 @@ const position5RankAccelerations = calculateRankForMetric(samePositionTop5, 'acc
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth4}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue4}</span>
@@ -8859,7 +8859,7 @@ const position5RankAccelerations = calculateRankForMetric(samePositionTop5, 'acc
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -10241,7 +10241,7 @@ const top5RankAccelerations = calculateRankForMetric(top5Filtered, 'acceleration
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth7}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue7}</span>
@@ -10250,7 +10250,7 @@ const top5RankAccelerations = calculateRankForMetric(top5Filtered, 'acceleration
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -11629,7 +11629,7 @@ const top5RankAccelerations = calculateRankForMetric(top5Filtered, 'acceleration
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth8}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue8}</span>
@@ -11638,7 +11638,7 @@ const top5RankAccelerations = calculateRankForMetric(top5Filtered, 'acceleration
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       // Construct player results HTML
@@ -13004,7 +13004,7 @@ const leagueRankAccelerations = calculateRankForMetric(sameLeague, 'acceleration
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth5}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue5}</span>
@@ -13013,7 +13013,7 @@ const leagueRankAccelerations = calculateRankForMetric(sameLeague, 'acceleration
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -14373,7 +14373,7 @@ const leagueRankAccelerations = calculateRankForMetric(sameLeague, 'acceleration
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth6}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue6}</span>
@@ -14382,7 +14382,7 @@ const leagueRankAccelerations = calculateRankForMetric(sameLeague, 'acceleration
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -15759,7 +15759,7 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth7}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue7}</span>
@@ -15768,7 +15768,7 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       
@@ -17146,7 +17146,7 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
       
         // Construct the HTML with the rank and suffix
         return `
-            ${metric.name} – ${playerRank}${rankSuffix}
+            ${translateMetricName(metric.name)} – ${playerRank}${rankSuffix}
             <div class="rank-bar" onclick="toggleActive(this)">
               <div class="rank-bar-fill" style="width: ${rankBarWidth8}%; background-color: ${color}"></div>
                 <span class="hover-content">${currentValue8}</span>
@@ -17155,7 +17155,7 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
           `;
       } else {
         // If player rank not found, display a message
-        return `${metric.name} – Not available`;
+        return `${translateMetricName(metric.name)} – Not available`;
       }
       }).join('');
       // Construct player results HTML
@@ -18061,6 +18061,15 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
       
       
 <script>
+  let currentTranslations = null;
+
+function translateMetricName(metricName) {
+  if (currentTranslations && currentTranslations.metrics && currentTranslations.metrics[metricName]) {
+    return currentTranslations.metrics[metricName];
+  }
+  return metricName;
+}
+
   function applyLanguage(language) {
   fetch(`locales/${language}.json`)
     .then(response => response.json())
