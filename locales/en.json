@@ -20,7 +20,9 @@
     "Shots": "Shots",
     "Passes": "Passes"
   },
- "age.all": "Age",
+"age": {
+    "all": "Age"
+  },
   "leagues": {
     "premierLeague": "Premier League",
     "laLiga": "La Liga",
@@ -29,8 +31,8 @@
     "ligue1": "Ligue 1",
     "ligaPortugal": "Liga Portugal",
     "eredivisie": "Eredivisie",
-    "top5": "Top 5 Leagues",
-    "top7": "Top 7 Leagues"
+    "top5": "Top 5 League",
+    "top7": "Top 7 League"
   },
   "positions": {
     "goalkeeper": "Goalkeeper",
@@ -39,10 +41,10 @@
     "midfielder": "Midfielder",
     "winger": "Winger",
     "striker": "Striker",
-    "all": "All positions"
+    "all": "Players"
   },
   "player_comparison": {
     "title": "vs {league} {suffix} {position}s",
-        "per90": ", per 90"
+    "per90": ", per 90"
   }
 } 
