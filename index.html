@@ -18116,7 +18116,7 @@ function setLanguage(language) {
   }
 
   function applyLanguage(language) {
-  fetch(`/locales/${language}.json`)
+  fetch(`locales/${language}.json`)
     .then(response => response.json())
     .then(translations => {
       document.querySelectorAll('[data-i18n]').forEach(element => {
