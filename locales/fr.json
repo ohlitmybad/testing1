@@ -46,5 +46,9 @@
   "player_comparison": {
     "title": "vs {position} {suffix} de{league}",
     "per90": ", par 90"
+  },
+  "hover": {
+    "per90": "Par 90 : Oui / Non",
+    "ascending": "Ascendant : Oui / Non"
   }
 }
