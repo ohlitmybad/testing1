@@ -20,7 +20,9 @@
     "Shots": "Tirs",
     "Passes": "Passes"
    },
-  "age.all": "Âge",
+"age": {
+    "all": "Âge"
+  },
   "leagues": {
     "premierLeague": "Premier League",
     "laLiga": "La Liga",
@@ -29,8 +31,8 @@
     "ligue1": "Ligue 1",
     "ligaPortugal": "Liga Portugal",
     "eredivisie": "Eredivisie",
-    "top5": "Top 5 Ligues",
-    "top7": "Top 7 Ligues"
+    "top5": "5 grands championnats",
+    "top7": "7 grands championnats"
   },
   "positions": {
     "goalkeeper": "Gardiens",
