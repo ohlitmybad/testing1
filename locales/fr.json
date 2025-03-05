@@ -33,15 +33,16 @@
     "top7": "Top 7 Ligues"
   },
   "positions": {
-    "goalkeeper": "Gardien",
-    "centreback": "Défenseur central",
-    "fullback": "Latéral",
-    "midfielder": "Milieu",
-    "winger": "Ailier",
-    "striker": "Attaquant",
-    "all": "Toutes positions"
+    "goalkeeper": "Gardiens",
+    "centreback": "Défenseur centraux",
+    "fullback": "Latéraux",
+    "midfielder": "Milieux",
+    "winger": "Ailiers",
+    "striker": "Buteurs",
+    "all": "Joueurs"
   },
   "player_comparison": {
-    "title": "vs {league} {suffix} {position}s"
+    "title": "vs {position} {suffix} de {league}"
+    "per90": "par 90"
   }
 }
