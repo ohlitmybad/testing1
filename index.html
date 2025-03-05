@@ -686,122 +686,120 @@ body.dark-mode #SFctr td {
       
       let pizzaChartInstance = null; // Variable to store the chart instance
       function createPizzaChart(rankData, playerName) {
-      const ctx = document.getElementById('pizzaChart').getContext('2d');
-      
-      // Destroy existing chart if it exists
-      if (pizzaChartInstance) {
+    const ctx = document.getElementById('pizzaChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (pizzaChartInstance) {
         pizzaChartInstance.destroy();
-      }
-      
-      // Define the labels and the corresponding ranks
-      const labels = Object.keys(rankData);
-      const data = Object.values(rankData);
-      
-      // Color gradient function: interpolates between blue (low) and red (high)
-      function getColor(value) {
+    }
+    
+    // Define the labels and the corresponding ranks
+    const labels = Object.keys(rankData).map(label => translateMetricName(label));
+    const data = Object.values(rankData);
+    
+    // Color gradient function: interpolates between blue (low) and red (high)
+    function getColor(value) {
         const r = Math.round(255 * value); 
-        const g = Math.round(100 * (1- value));
+        const g = Math.round(100 * (1 - value));
         const b = Math.round(255 * (1 - value)); 
         return `rgba(${r}, ${g}, ${b}, 0.75)`;
-      }
-      
-      
-      // Generate colors based on data values
-      const colors = data.map(value => getColor(value));
-      
-      // Create a new chart instance
-      pizzaChartInstance = new Chart(ctx, {
-      type: 'polarArea',
-      data: {
-        labels: labels,
-        datasets: [{
-            data: data,
-            backgroundColor: colors,
-        }]
-      },
-      options: {
-        plugins: {
-            legend: {
-                display: false
-            },
-            datalabels: {
-                display: true,
-                color: colors,
-                align: 'end',
-                anchor: 'end',
-                offset: -5,
-                padding: 0,
-                font: {
-                    size: 9,
-                },
-                formatter: (value) => (1 - value).toFixed(2),
-            },
-            beforeDraw: (chart) => {
-                const { ctx, chartArea } = chart;
-                const { top, right, bottom, left, width, height } = chartArea;
-                const centerX = (left + right) / 2;
-                const centerY = (top + bottom) / 2;
-                const radius = Math.min(width, height) / 2;
-      
-                // Draw the outer circle
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = 'rgba(0, 0, 0, .5)';
-                ctx.stroke();
-                ctx.restore();
-            }
+    }
+    
+    // Generate colors based on data values
+    const colors = data.map(value => getColor(value));
+    
+    // Create a new chart instance
+    pizzaChartInstance = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+            }]
         },
-        scales: {
-            r: {
-                min: 0,
-                max: 1.04,
-                reverse: true,
-                angleLines: {
-                    display: true,
-                    color: 'rgba(0, 0, 0, 0.1)',
-                    lineWidth: 2
-                },
-                ticks: {
-                    beginAtZero: false,
+        options: {
+            plugins: {
+                legend: {
                     display: false
                 },
-                pointLabels: {
+                datalabels: {
                     display: true,
-                    centerPointLabels: true,
+                    color: colors,
+                    align: 'end',
+                    anchor: 'end',
+                    offset: -5,
+                    padding: 0,
                     font: {
-                        size: 10,
-                        family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        size: 9,
                     },
-                    padding: 10,
-                    callback: function(label) {
-                        const fixedLength = 20;
-      
-                        if (label.length > fixedLength) {
-                            return label.substring(0, fixedLength);
+                    formatter: (value) => (1 - value).toFixed(2),
+                },
+                beforeDraw: (chart) => {
+                    const { ctx, chartArea } = chart;
+                    const { top, right, bottom, left, width, height } = chartArea;
+                    const centerX = (left + right) / 2;
+                    const centerY = (top + bottom) / 2;
+                    const radius = Math.min(width, height) / 2;
+
+                    // Draw the outer circle
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'rgba(0, 0, 0, .5)';
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            },
+            scales: {
+                r: {
+                    min: 0,
+                    max: 1.04,
+                    reverse: true,
+                    angleLines: {
+                        display: true,
+                        color: 'rgba(0, 0, 0, 0.1)',
+                        lineWidth: 2
+                    },
+                    ticks: {
+                        beginAtZero: false,
+                        display: false
+                    },
+                    pointLabels: {
+                        display: true,
+                        centerPointLabels: true,
+                        font: {
+                            size: 10,
+                            family: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
+                        },
+                        padding: 10,
+                        callback: function(label) {
+                            const fixedLength = 20;
+
+                            if (label.length > fixedLength) {
+                                return label.substring(0, fixedLength);
+                            }
+
+                            const totalPadding = fixedLength - label.length;
+                            const paddingBefore = Math.floor(totalPadding / 2);
+                            const paddingAfter = totalPadding - paddingBefore;
+
+                            return ' '.repeat(paddingBefore) + label + ' '.repeat(paddingAfter);
                         }
-      
-                        const totalPadding = fixedLength - label.length;
-                        const paddingBefore = Math.floor(totalPadding / 2);
-                        const paddingAfter = totalPadding - paddingBefore;
-      
-                        return ' '.repeat(paddingBefore) + label + ' '.repeat(paddingAfter);
                     }
                 }
+            },
+            interaction: {
+                mode: null // Disables hover effect
+            },
+            hover: {
+                mode: null // Ensures no hover mode is applied
             }
         },
-        interaction: {
-            mode: null // Disables hover effect
-        },
-        hover: {
-            mode: null // Ensures no hover mode is applied
-        }
-      },
-      plugins: [ChartDataLabels]
-      });
-      
-      }
+        plugins: [ChartDataLabels]
+    });
+}
       
       
       function getCurrentMetricValue(parsedData, selectedPlayer, metric) {
