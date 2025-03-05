@@ -3968,17 +3968,20 @@ const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAn
       metricControlsDiv.innerHTML = ''; // Clear any existing content
       
       Object.keys(metricsToInclude).forEach(metric => {
-        const isExcluded = exclusionMapping[playerPosition]?.includes(metric) || userExclusions.has(metric);
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.setAttribute('data-metric', metric);
-        checkbox.checked = !isExcluded;
-      
-        const label = document.createElement('label');
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(metric));
-        
-        metricControlsDiv.appendChild(label);
+    const isExcluded = exclusionMapping[playerPosition]?.includes(metric) || userExclusions.has(metric);
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.setAttribute('data-metric', metric);
+    checkbox.checked = !isExcluded;
+
+    const label = document.createElement('label');
+    label.appendChild(checkbox);
+
+    // Translate the metric name before appending
+    const translatedMetric = translateMetricName(metric);
+    label.appendChild(document.createTextNode(translatedMetric));
+    
+    metricControlsDiv.appendChild(label);
       
         // Add event listener to handle changes
         checkbox.addEventListener('change', function() {
