@@ -18051,15 +18051,20 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
       
 <script>
 
+
 function translateLeague(league) {
   if (!currentTranslations || !currentTranslations.leagues) return league;
+  // Handle special cases
+  if (league === "Top 5 Leagues") return currentTranslations.leagues.top5;
+  if (league === "Top 7 Leagues") return currentTranslations.leagues.top7;
+  
   const key = league.toLowerCase().replace(/\s+/g, '');
   return currentTranslations.leagues[key] || league;
 }
 
 function translatePosition(position) {
   if (!currentTranslations || !currentTranslations.positions) return position;
-  const key = position.toLowerCase().replace(/\s+/g, '');
+  const key = position.toLowerCase().replace(/[-\s]+/g, '');
   return currentTranslations.positions[key] || position;
 }
 
@@ -18068,13 +18073,16 @@ function translateTitle(league, suffix, position) {
     return `vs ${league} ${suffix} ${position}s`;
   }
   const template = currentTranslations.player_comparison.title;
+  const translatedLeague = translateLeague(league);
+  const translatedPosition = translatePosition(position);
+  
   return template
-    .replace('{league}', translateLeague(league))
+    .replace('{league}', translatedLeague)
     .replace('{suffix}', suffix)
-    .replace('{position}', translatePosition(position));
+    .replace('{position}', translatedPosition);
 }
 
-  let currentTranslations = null;
+let currentTranslations = null;
 
 function translateMetricName(metricName) {
   if (currentTranslations && currentTranslations.metrics && currentTranslations.metrics[metricName]) {
