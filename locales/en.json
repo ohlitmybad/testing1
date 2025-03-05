@@ -42,7 +42,7 @@
     "all": "All positions"
   },
   "player_comparison": {
-    "title": "vs {league} {suffix} {position}s"
+    "title": "vs {league} {suffix} {position}s",
         "per90": ", per 90"
   }
 } 
