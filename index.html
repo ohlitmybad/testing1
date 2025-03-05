@@ -18072,53 +18072,11 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
       
       
 <script>
-function updateMetricNamesUsingRegex(translations) {
-  // Get all text nodes in the document
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-  let node;
-
-  while (node = walker.nextNode()) {
-    let textContent = node.nodeValue;
-
-    // Replace each metric name using regex
-    for (const [key, translation] of Object.entries(translations.metrics)) {
-      const regex = new RegExp(`\\b${key}\\b`, 'g'); // Match whole words
-      textContent = textContent.replace(regex, translation);
-    }
-
-    node.nodeValue = textContent;
-  }
-}
-
-function setLanguage(language) {
-    localStorage.setItem('preferredLanguage', language);
-    const url = new URL(window.location.href);
-    if (language === 'en') {
-      url.searchParams.delete('lang');
-    } else {
-      url.searchParams.set('lang', language);
-    }
-    window.history.pushState({}, '', url);
-    applyLanguage(language);
-  }
-
-  function getPreferredLanguage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const langParam = urlParams.get('lang');
-    if (langParam) {
-      return langParam;
-    }
-    return localStorage.getItem('preferredLanguage') || getBrowserLanguage() || 'en';
-  }
-
-  function getBrowserLanguage() {
-    return navigator.language.slice(0, 2);
-  }
-
   function applyLanguage(language) {
   fetch(`locales/${language}.json`)
     .then(response => response.json())
     .then(translations => {
+      // Handle elements with data-i18n attribute
       document.querySelectorAll('[data-i18n]').forEach(element => {
         const keys = element.getAttribute('data-i18n').split('.');
         let value = translations;
@@ -18126,23 +18084,59 @@ function setLanguage(language) {
           value = value[key];
         }
         if (value) {
-          console.log(`Applying translation for ${keys.join('.')} : ${value}`);
-          if (element.tagName === 'META') {
+          if (element.tagName === 'OPTION') {
+            element.text = value;
+            element.textContent = value;
+          } else if (element.tagName === 'META') {
             element.setAttribute('content', value);
           } else if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
             element.setAttribute('placeholder', value);
           } else {
             element.textContent = value;
           }
-        } else {
-          console.warn(`No translation found for ${keys.join('.')}`);
         }
       });
-
-      // Update metric names using regex after they are rendered
-      updateMetricNamesUsingRegex(translations);
+      
+      // Handle metrics translation
+      if (translations.metrics) {
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        while (node = walker.nextNode()) {
+          if (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE') continue;
+          let text = node.nodeValue;
+          Object.entries(translations.metrics).forEach(([key, translation]) => {
+            text = text.replace(new RegExp(`\\b${key}\\b`, 'g'), translation);
+          });
+          node.nodeValue = text;
+        }
+      }
     });
 }
+
+function setLanguage(language) {
+  localStorage.setItem('preferredLanguage', language);
+  const url = new URL(window.location.href);
+  if (language === 'en') {
+    url.searchParams.delete('lang');
+  } else {
+    url.searchParams.set('lang', language);
+  }
+  window.history.pushState({}, '', url);
+  applyLanguage(language);
+}
+
+function getPreferredLanguage() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const langParam = urlParams.get('lang');
+  if (langParam) {
+    return langParam;
+  }
+  return localStorage.getItem('preferredLanguage') || getBrowserLanguage() || 'en';
+}
+
+function getBrowserLanguage() {
+  return navigator.language.slice(0, 2);
+} 
   const preferredLanguage = getPreferredLanguage();
   applyLanguage(preferredLanguage);
 </script>
