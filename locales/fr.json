@@ -19,6 +19,29 @@
     "Assists": "Passes décisives",
     "Shots": "Tirs",
     "Passes": "Passes"
+   },
+  "age.all": "Âge",
+  "leagues": {
+    "premierLeague": "Premier League",
+    "laLiga": "La Liga",
+    "bundesliga": "Bundesliga",
+    "serieA": "Serie A",
+    "ligue1": "Ligue 1",
+    "ligaPortugal": "Liga Portugal",
+    "eredivisie": "Eredivisie",
+    "top5": "Top 5 Ligues",
+    "top7": "Top 7 Ligues"
   },
-  "age.all": "Âge"
+  "positions": {
+    "goalkeeper": "Gardien",
+    "centreback": "Défenseur central",
+    "fullback": "Latéral",
+    "midfielder": "Milieu",
+    "winger": "Ailier",
+    "striker": "Attaquant",
+    "all": "Toutes positions"
+  },
+  "player_comparison": {
+    "title": "vs {league} {suffix} {position}s"
+  }
 }
