@@ -18138,38 +18138,10 @@ function setLanguage(language) {
       updateMetricNamesUsingRegex(translations);
     });
 }
-document.addEventListener('DOMContentLoaded', function() {
   const preferredLanguage = getPreferredLanguage();
   applyLanguage(preferredLanguage);
-});
-  // Language dropdown functionality
-  document.addEventListener('DOMContentLoaded', function() {
-    const languageButton = document.getElementById('languageButton');
-    const languageDropdown = document.getElementById('languageDropdown');
-
-    languageButton.addEventListener('click', function(e) {
-      e.stopPropagation();
-      languageDropdown.classList.toggle('show');
-    });
-
-    document.querySelectorAll('.language-option').forEach(option => {
-      option.addEventListener('click', function(e) {
-        e.preventDefault();
-        const lang = this.getAttribute('href').split('=')[1];
-        setLanguage(lang);
-        languageDropdown.classList.remove('show');
-      });
-    });
-
-    document.addEventListener('click', function(event) {
-      if (!event.target.closest('.language-switcher-container')) {
-        languageDropdown.classList.remove('show');
-      }
-    });
-  });
 </script>
       
       </body>
       </html>
       
-
