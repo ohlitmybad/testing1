@@ -18070,10 +18070,12 @@ function translateMetricName(metricName) {
   return metricName;
 }
 
-  function applyLanguage(language) {
+function applyLanguage(language) {
   fetch(`locales/${language}.json`)
     .then(response => response.json())
     .then(translations => {
+      currentTranslations = translations;  // Store translations globally
+      
       // Handle elements with data-i18n attribute
       document.querySelectorAll('[data-i18n]').forEach(element => {
         const keys = element.getAttribute('data-i18n').split('.');
@@ -18094,19 +18096,39 @@ function translateMetricName(metricName) {
           }
         }
       });
-      
-      // Handle metrics translation
+
+      // Handle metrics translation in text nodes
       if (translations.metrics) {
-        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        const walker = document.createTreeWalker(
+          document.body,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: function(node) {
+              // Skip script and style tags
+              if (node.parentNode.tagName === 'SCRIPT' || 
+                  node.parentNode.tagName === 'STYLE') {
+                return NodeFilter.FILTER_REJECT;
+              }
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          },
+          false
+        );
+
         let node;
         while (node = walker.nextNode()) {
-          if (node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE') continue;
           let text = node.nodeValue;
           Object.entries(translations.metrics).forEach(([key, translation]) => {
-            text = text.replace(new RegExp(`\\b${key}\\b`, 'g'), translation);
+            const regex = new RegExp(`\\b${key}\\b(?=\\s*[–-])`, 'g');
+            text = text.replace(regex, translation);
           });
           node.nodeValue = text;
         }
+      }
+
+      // Trigger a re-render of the metrics if needed
+      if (window.displaySelectedPlayer) {
+        displaySelectedPlayer();
       }
     });
 }
@@ -18134,7 +18156,10 @@ function getPreferredLanguage() {
 
 function getBrowserLanguage() {
   return navigator.language.slice(0, 2);
-} 
+}
+
+// Export the translateMetricName function for use in other files
+window.translateMetricName = translateMetricName; 
   const preferredLanguage = getPreferredLanguage();
   applyLanguage(preferredLanguage);
 </script>
