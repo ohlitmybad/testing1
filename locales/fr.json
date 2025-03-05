@@ -24,15 +24,15 @@
     "all": "Âge"
   },
   "leagues": {
-    "premierLeague": "Premier League",
-    "laLiga": "La Liga",
-    "bundesliga": "Bundesliga",
-    "serieA": "Serie A",
-    "ligue1": "Ligue 1",
-    "ligaPortugal": "Liga Portugal",
-    "eredivisie": "Eredivisie",
-    "top5": "5 grands championnats",
-    "top7": "7 grands championnats"
+    "premierLeague": " Premier League",
+    "laLiga": " La Liga",
+    "bundesliga": " Bundesliga",
+    "serieA": " Serie A",
+    "ligue1": " Ligue 1",
+    "ligaPortugal": " Liga Portugal",
+    "eredivisie": " Eredivisie",
+    "top5": "s 5 grands championnats",
+    "top7": "s 7 grands championnats"
   },
   "positions": {
     "goalkeeper": "Gardiens",
@@ -44,7 +44,7 @@
     "all": "Joueurs"
   },
   "player_comparison": {
-    "title": "vs {position} {suffix} de {league}",
+    "title": "vs {position} {suffix} de{league}",
     "per90": ", par 90"
   }
 }
