@@ -35,16 +35,16 @@
     "top7": "Top 7 League"
   },
   "positions": {
-    "goalkeeper": "Goalkeepers",
-    "centreback": "Centre-backs",
-    "fullback": "Full-backs",
-    "midfielder": "Midfielders",
-    "winger": "Wingers",
-    "striker": "Strikers",
-    "all": "Players"
+    "goalkeeper": "Goalkeeper",
+    "centreback": "Centre-back",
+    "fullback": "Full-back",
+    "midfielder": "Midfielder",
+    "winger": "Winger",
+    "striker": "Striker",
+    "all": "Player"
   },
   "player_comparison": {
-    "title": "vs {league} {suffix} {position}",
+    "title": "vs {league} {suffix} {position}s",
     "per90": ", per 90"
   },
   "hover": {
