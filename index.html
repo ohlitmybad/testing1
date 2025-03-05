@@ -18070,7 +18070,7 @@ function translatePosition(position) {
 
 function translateTitle(league, suffix, position) {
   if (!currentTranslations || !currentTranslations.player_comparison) {
-    return `vs ${league} ${suffix} ${position}s`;
+    return { league, suffix, position };
   }
   const template = currentTranslations.player_comparison.title;
   const translatedLeague = translateLeague(league);
