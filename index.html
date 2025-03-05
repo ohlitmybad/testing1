@@ -18064,7 +18064,7 @@ function translateLeague(league) {
 
 function translatePosition(position) {
   if (!currentTranslations || !currentTranslations.positions) return position;
-  if (league === "Players") return currentTranslations.positions.all;
+  if (position === "Players") return currentTranslations.positions.all;
   const key = position.toLowerCase().replace(/[-\s]+/g, '');
   return currentTranslations.positions[key] || position;
 }
