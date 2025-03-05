@@ -450,18 +450,6 @@ body.dark-mode #SFctr td {
   
   
   <select id="sectionSelect" class="select-style">
-    <option data-i18n="samePositionAndLeague"></option>
-  <option data-i18n="samePositionAndLeagueWithMinutes"></option>
-  <option data-i18n="position5"></option>
-  <option data-i18n="position5WithMinutes"></option>
-  <option data-i18n="position"></option>
-  <option data-i18n="positionWithMinutes"></option>
-  <option data-i18n="league"></option>
-  <option data-i18n="leagueWithMinutes"></option>
-  <option data-i18n="top5"></option>
-  <option data-i18n="top5WithMinutes"></option>
-  <option data-i18n="allCsv"></option>
-  <option data-i18n="allCsvWithMinutes"></option>
   </select>
   
 
@@ -511,31 +499,40 @@ body.dark-mode #SFctr td {
       function hideSpinner() {
         spinner.style.display = 'none';
       }
-      
       document.addEventListener("DOMContentLoaded", function() {
-      var selectElement = document.getElementById("sectionSelect");
-      var options = {
-        "samePositionAndLeague": "vs League and Position, per 90",
-        "samePositionAndLeagueWithMinutes": "vs League and Position",
-        "position5": "vs Top 5 Leagues and Position, per 90",
-        "position5WithMinutes": "vs Top 5 Leagues and Position",
-        "position": "vs Top 7 Leagues and Position, per 90",
-        "positionWithMinutes": "vs Top 7 Leagues and Position",
-        "league": "vs League, per 90",
-        "leagueWithMinutes": "vs League",
-        "top5": "vs Top 5 Leagues, per 90",
-        "top5WithMinutes": "vs Top 5 Leagues",
-        "allCsv": "vs Top 7 Leagues, per 90",
-        "allCsvWithMinutes": "vs Top 7 Leagues"
-      };
-      
-      // Function to add options to the select element
-      function addOption(key, value) {
-        var option = document.createElement("option");
-        option.value = key;
-        option.text = value;
-        selectElement.add(option);
-      }
+  var selectElement = document.getElementById("sectionSelect");
+  
+  // Define the option keys in the order we want them
+  const optionKeys = [
+    "samePositionAndLeague",
+    "samePositionAndLeagueWithMinutes",
+    "position5",
+    "position5WithMinutes",
+    "position",
+    "positionWithMinutes",
+    "league",
+    "leagueWithMinutes",
+    "top5",
+    "top5WithMinutes",
+    "allCsv",
+    "allCsvWithMinutes"
+  ];
+
+  // Clear any existing options
+  selectElement.innerHTML = "";
+  
+  // Add options with data-i18n attributes
+  optionKeys.forEach(key => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.setAttribute('data-i18n', key);
+    selectElement.appendChild(option);
+  });
+
+  // Apply initial translations
+  const preferredLanguage = getPreferredLanguage();
+  applyLanguage(preferredLanguage);
+
       
       // Populate the select element with options based on your criteria
       function populateOptions(usePer90) {
