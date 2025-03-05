@@ -3962,54 +3962,12 @@ const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAn
       // JavaScript part
       let userExclusions = new Set();
       
-      // Function to populate checkboxes in the dropdown
-      function populateMetricControls() {
-      const metricControlsDiv = document.getElementById('metric-controls');
-      metricControlsDiv.innerHTML = ''; // Clear any existing content
-      
-      Object.keys(metricsToInclude).forEach(metric => {
-    const isExcluded = exclusionMapping[playerPosition]?.includes(metric) || userExclusions.has(metric);
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-    checkbox.setAttribute('data-metric', metric);
-    checkbox.checked = !isExcluded;
-
-    const label = document.createElement('label');
-    label.appendChild(checkbox);
-
-    // Translate the metric name before appending
-    const translatedMetric = translateMetricName(metric);
-    label.appendChild(document.createTextNode(translatedMetric));
     
-    metricControlsDiv.appendChild(label);
-      
-        // Add event listener to handle changes
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                // Remove the metric from userExclusions and exclusionMapping
-                userExclusions.delete(metric);
-      
-                // Remove the metric from exclusionMapping array for the player's position
-                const index = exclusionMapping[playerPosition]?.indexOf(metric);
-                if (index !== -1) {
-                    exclusionMapping[playerPosition].splice(index, 1);
-                }
-            } else {
-                userExclusions.add(metric);
-            }
-            updateChart();
-        });
-      });
-      }
       function toggleDropdown() {
       document.querySelector('.dropdown').classList.toggle('show');
       }
       
-      // Function to update the chart based on current exclusions
-      
-      // Function to update the chart based on current exclusions
       function updateChart() {
-      // Filter out the excluded metrics based on position and user selections
       const metricsToCompute = Object.keys(metricsToInclude).filter(metric => 
         !exclusionMapping[playerPosition]?.includes(metric) && !userExclusions.has(metric)
       );
@@ -18161,7 +18119,44 @@ function applyLanguage(language) {
       }
     });
 }
+function populateMetricControls() {
+      const metricControlsDiv = document.getElementById('metric-controls');
+      metricControlsDiv.innerHTML = ''; // Clear any existing content
+      
+      Object.keys(metricsToInclude).forEach(metric => {
+    const isExcluded = exclusionMapping[playerPosition]?.includes(metric) || userExclusions.has(metric);
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.setAttribute('data-metric', metric);
+    checkbox.checked = !isExcluded;
 
+    const label = document.createElement('label');
+    label.appendChild(checkbox);
+
+    // Translate the metric name before appending
+    const translatedMetric = translateMetricName(metric);
+    label.appendChild(document.createTextNode(translatedMetric));
+    
+    metricControlsDiv.appendChild(label);
+      
+        // Add event listener to handle changes
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                // Remove the metric from userExclusions and exclusionMapping
+                userExclusions.delete(metric);
+      
+                // Remove the metric from exclusionMapping array for the player's position
+                const index = exclusionMapping[playerPosition]?.indexOf(metric);
+                if (index !== -1) {
+                    exclusionMapping[playerPosition].splice(index, 1);
+                }
+            } else {
+                userExclusions.add(metric);
+            }
+            updateChart();
+        });
+      });
+      }
 function setLanguage(language) {
   localStorage.setItem('preferredLanguage', language);
   const url = new URL(window.location.href);
