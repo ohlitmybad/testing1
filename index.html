@@ -2583,7 +2583,7 @@ const samePositionAndLeagueAccelerations = calculateRankForMetric(samePositionAn
       document.getElementById('chartTitle').innerHTML = `
       <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
       <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position)}, per 90</i></h1>              
+<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position), per90}</i></h1>              
       `;
       document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -5324,7 +5324,7 @@ const positionRankAccelerations = calculateRankForMetric(samePosition, 'accelera
       document.getElementById('chartTitle').innerHTML = `
       <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
       <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position)}, per 90</i></h1>              
+<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position, per90)}</i></h1>              
       `;
       document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -8069,7 +8069,7 @@ const position5RankAccelerations = calculateRankForMetric(samePositionTop5, 'acc
       document.getElementById('chartTitle').innerHTML = `
       <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
       <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position)}, per 90</i></h1>              
+<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position, per90)}</i></h1>              
       `;
       document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -10835,7 +10835,7 @@ const top5RankAccelerations = calculateRankForMetric(top5Filtered, 'acceleration
       document.getElementById('chartTitle').innerHTML = `
       <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
       <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position)}, per 90</i></h1>            
+<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position, per90)}</i></h1>            
       `;
       document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -13593,7 +13593,7 @@ const leagueRankAccelerations = calculateRankForMetric(sameLeague, 'acceleration
       document.getElementById('chartTitle').innerHTML = `
       <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
       <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position)}, per 90</i></h1>              
+<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position, per90)}</i></h1>              
       `;
       document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
@@ -16349,7 +16349,7 @@ const allCsvRankAccelerations = calculateRankForMetric(baseFiltered, 'accelerati
       document.getElementById('chartTitle').innerHTML = `
       <img class="logo-image2" src="https://datamb.football/logopro.png" alt="">
       <h3><b>${selectedPlayer.player} (${selectedPlayer.team}, ${selectedPlayer.age})</b></h3>
-<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position)}, per 90</i></h1>            
+<h1><i>${translateTitle(selectedPlayer.league, titleSuffix, selectedPlayer.position, per90)}</i></h1>            
       `;
       document.getElementById('chartButton').innerHTML = `
        <div class="dropdown">
