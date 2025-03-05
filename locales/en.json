@@ -43,5 +43,6 @@
   },
   "player_comparison": {
     "title": "vs {league} {suffix} {position}s"
+        "per90": ", per 90"
   }
 } 
