@@ -42,7 +42,7 @@
     "all": "Joueurs"
   },
   "player_comparison": {
-    "title": "vs {position} {suffix} de {league}"
+    "title": "vs {position} {suffix} de {league}",
     "per90": "par 90"
   }
 }
