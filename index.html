@@ -108,6 +108,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow: hidden; /* Prevent content from creating unwanted space */
         }
 
         .legend {
@@ -142,6 +143,7 @@
             margin-bottom: 20px;
             justify-content: center;
             align-items: center;
+            width: 100%; /* Ensure controls take full width */
         }
 
         select, input {
@@ -268,6 +270,9 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            margin-top: 10px; /* Add some space after controls */
+            flex: 1; /* Allow chart container to fill available space */
+            min-height: 0; /* Prevent overflow */
         }
         
         .watermark-logo {
@@ -437,6 +442,7 @@
             
   .plot-container {
       padding: 15px;
+      overflow: hidden; /* Ensure no overflow on mobile */
   }
   
   
@@ -458,6 +464,11 @@
   /* Adjust tooltip position for mobile */
   .tooltip {
       max-width: 80%;
+  }
+  
+  /* Ensure controls don't create extra space */
+  .controls {
+      margin-bottom: 10px;
   }
 }
 
@@ -2127,6 +2138,12 @@ body.dark-mode .language-option {
             
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
+            
+            // Force a redraw of the container to fix any layout issues
+            document.querySelector('.plot-container').style.display = 'none';
+            setTimeout(function() {
+                document.querySelector('.plot-container').style.display = 'flex';
+            }, 0);
         }
         
         // Function to update the "Click All" button icon
