@@ -801,6 +801,9 @@ header a {
 
 .custom-select-option iconify-icon, .metric-select-option iconify-icon {
     margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 body.dark-mode .language-button:hover {
@@ -1568,6 +1571,85 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                     trigger.classList.remove('open');
                     options.style.display = 'none';
                 });
+            });
+            
+            // Add keyboard navigation
+            let searchTerm = '';
+            let searchTimeout;
+            
+            // Add keydown event listener to the document
+            document.addEventListener('keydown', function(e) {
+                // Only process keyboard input when dropdown is open
+                if (!trigger.classList.contains('open')) return;
+                
+                // Handle arrow keys for navigation
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    
+                    const visibleOptions = Array.from(optionElements);
+                    const currentIndex = visibleOptions.findIndex(opt => opt.classList.contains('selected'));
+                    let newIndex;
+                    
+                    if (e.key === 'ArrowDown') {
+                        newIndex = currentIndex < visibleOptions.length - 1 ? currentIndex + 1 : 0;
+                    } else {
+                        newIndex = currentIndex > 0 ? currentIndex - 1 : visibleOptions.length - 1;
+                    }
+                    
+                    // Update selection
+                    optionElements.forEach(opt => opt.classList.remove('selected'));
+                    visibleOptions[newIndex].classList.add('selected');
+                    
+                    // Ensure the selected option is visible in the dropdown
+                    visibleOptions[newIndex].scrollIntoView({ block: 'nearest' });
+                    
+                    return;
+                }
+                
+                // Handle Enter key to select the currently highlighted option
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const selectedOption = options.querySelector('.selected');
+                    if (selectedOption) {
+                        selectedOption.click();
+                    }
+                    return;
+                }
+                
+                // Handle Escape key to close the dropdown
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    trigger.classList.remove('open');
+                    options.style.display = 'none';
+                    return;
+                }
+                
+                // Handle typing to search
+                if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
+                    // Clear the previous timeout
+                    clearTimeout(searchTimeout);
+                    
+                    // Add the key to the search term
+                    searchTerm += e.key.toLowerCase();
+                    
+                    // Find the first option that starts with the search term
+                    const matchingOption = Array.from(optionElements).find(option => {
+                        const optionText = option.querySelector('span').textContent.toLowerCase();
+                        return optionText.startsWith(searchTerm);
+                    });
+                    
+                    // If a matching option is found, select it
+                    if (matchingOption) {
+                        optionElements.forEach(opt => opt.classList.remove('selected'));
+                        matchingOption.classList.add('selected');
+                        matchingOption.scrollIntoView({ block: 'nearest' });
+                    }
+                    
+                    // Clear the search term after a delay
+                    searchTimeout = setTimeout(() => {
+                        searchTerm = '';
+                    }, 1000);
+                }
             });
         }
         
@@ -2450,6 +2532,29 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                         }
                     }
                 });
+            } else {
+                // No matches found - reset to default state
+                // Remove all team labels that aren't for clicked circles
+                svg.selectAll(".team-label").each(function() {
+                    var label = d3.select(this);
+                    var teamName = label.text();
+                    
+                    if (!clickedCircles.includes(teamName)) {
+                        label.remove();
+                    }
+                });
+                
+                // Make sure clicked circles remain highlighted
+                svg.selectAll("circle")
+                    .style("fill", function(d) {
+                        return clickedCircles.includes(d[1]) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
+                    })
+                    .style("stroke", function(d) {
+                        return clickedCircles.includes(d[1]) ? "#000" : "none";
+                    })
+                    .style("stroke-width", function(d) {
+                        return clickedCircles.includes(d[1]) ? 2 : 0;
+                    });
             }
         });
         
