@@ -96,19 +96,18 @@
             max-width: 1200px;
             margin: 30px auto;
             padding: 0 20px;
+            box-sizing: border-box;
         }
 
-        .plot-container {
+        /* Replace plot-container with a simpler structure */
+        .chart-wrapper {
             background-color: var(--container-bg);
             border-radius: 10px;
             box-shadow: var(--shadow);
             padding: 30px;
             margin-bottom: 30px;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow: hidden; /* Prevent content from creating unwanted space */
+            width: 100%;
         }
 
         .legend {
@@ -143,7 +142,6 @@
             margin-bottom: 20px;
             justify-content: center;
             align-items: center;
-            width: 100%; /* Ensure controls take full width */
         }
 
         select, input {
@@ -256,33 +254,31 @@
             color: white;
         }
 
-        #scatter-plot {
-            width: 100%;
-            height: 770px;
-            display: block;
-            margin: 0 auto;
-            max-width: 1082px;
-        }
-
         .chart-container {
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             position: relative;
-            margin-top: 10px; /* Add some space after controls */
-            flex: 1; /* Allow chart container to fill available space */
-            min-height: 0; /* Prevent overflow */
+            margin-top: 30px; /* Consistent spacing from controls */
+        }
+
+        #scatter-plot {
+            width: 100%;
+            height: auto; /* Height will be set dynamically */
+            display: block;
+            margin: 0 auto;
+            max-width: 1082px;
         }
         
         .watermark-logo {
-            width: 230px;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-44%, -60%);
-            pointer-events: none;
+            bottom: 10px;
+            right: 10px;
+            width: 100px;
             opacity: 0;
+            z-index: 1;
+            pointer-events: none; /* Ensure it doesn't interfere with chart interactions */
         }
 
         .tooltip {
@@ -440,9 +436,8 @@
         @media (max-width: 768px) {
   
             
-  .plot-container {
+  .chart-wrapper {
       padding: 15px;
-      overflow: hidden; /* Ensure no overflow on mobile */
   }
   
   
@@ -464,11 +459,6 @@
   /* Adjust tooltip position for mobile */
   .tooltip {
       max-width: 80%;
-  }
-  
-  /* Ensure controls don't create extra space */
-  .controls {
-      margin-bottom: 10px;
   }
 }
 
@@ -855,7 +845,7 @@ body.dark-mode .language-option {
 @media screen and (max-width: 550px) { .header .navigation { display: none; } }
 
         /* Enhanced Dark Mode Styles */
-        .dark-mode .plot-container {
+        .dark-mode .chart-wrapper {
             background-color: var(--container-bg);
             border: 1px solid #333;
         }
@@ -1061,7 +1051,7 @@ body.dark-mode .language-option {
         }
 
         .dark-mode .watermark-logo {
-            opacity: 0.04 !important;
+            opacity: 0 !important;
             filter: brightness(0.7) invert(0.8);
         }
         
@@ -1178,9 +1168,8 @@ body.dark-mode .language-option {
     </div></div>
   </header>
     <div class="container">
-        <div class="plot-container">
+        <div class="chart-wrapper">
             <div class="controls">
-                <!-- Hidden selects for compatibility with existing code -->
                 <select id="select-x" style="display: none;"></select>
                 <select id="select-y" style="display: none;"></select>
                 <select id="select-league" style="display: none;" onchange="updateChart()">
@@ -1338,7 +1327,7 @@ body.dark-mode .language-option {
             // Add transition for smoother dark mode toggle
             setTimeout(() => {
                 document.body.style.transition = "background-color 0.3s, color 0.3s";
-                document.querySelectorAll('.plot-container, .header, .btn, input, select, .tooltip, .dark-mode-toggle')
+                document.querySelectorAll('.chart-wrapper, .header, .btn, input, select, .tooltip, .dark-mode-toggle')
                     .forEach(el => {
                         el.style.transition = "background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s";
                     });
@@ -1517,7 +1506,7 @@ body.dark-mode .language-option {
                 // Convert canvas to image and trigger download
                 const dataURL = renderedCanvas.toDataURL('image/png', 1.0); // Use maximum quality
                 const link = document.createElement('a');
-                link.download = 'chart-screenshot.png';
+                link.download = 'team-performance-chart.png';
                 link.href = dataURL;
                 link.click();
             }).catch(function(error) {
@@ -1586,7 +1575,7 @@ body.dark-mode .language-option {
                     // Convert canvas to image and trigger download
                     const dataURL = canvas.toDataURL('image/png', 1.0); // Use maximum quality
                     const link = document.createElement('a');
-                    link.download = 'chart-screenshot.png';
+                    link.download = 'team-performance-chart.png';
                     link.href = dataURL;
                     link.click();
                     
@@ -1651,7 +1640,7 @@ body.dark-mode .language-option {
             });
         });
         
-        var margin = { top: 40, right: 80, bottom: 60, left: 100 };
+        var margin = { top: 0, right: 0, bottom: 0, left: 0 };
         var width = 1082 - margin.left - margin.right;
         var height = 770 - margin.top - margin.bottom;
         
@@ -1673,29 +1662,43 @@ body.dark-mode .language-option {
         
         // Calculate container width to center the chart
         function updateChartDimensions() {
-            var containerWidth = document.querySelector('.plot-container').clientWidth;
+            var containerWidth = document.querySelector('.chart-wrapper').clientWidth;
             var containerHeight = window.innerHeight * 0.7; // Use 70% of viewport height as max height
-            var svgWidth = Math.min(1082, containerWidth - 60);
+            
+            // Set consistent side margins regardless of screen size
+            var sideMargin = 30; // Consistent side margin in pixels
+            var svgWidth = Math.min(1082, containerWidth - (sideMargin * 2));
             
             // Detect if we're on a vertical screen (mobile)
             var isVerticalScreen = window.innerWidth / window.innerHeight < 1;
             
+            // Set consistent margins that work for both orientations
             if (isVerticalScreen) {
-                // Adjust margins for vertical screens
-                margin = { top: 40, right: 40, bottom: 60, left: 70 };
+                // Mobile/vertical layout
+                margin = { 
+                    top: 40,          // Space for title/labels
+                    right: 30, // Consistent right margin
+                    bottom: 60,       // Space for x-axis labels
+                    left: 75          // Space for y-axis labels
+                };
                 
                 // For vertical screens, make the chart taller
-                var verticalAspectRatio = 1.4; // Taller than wide (adjust as needed)
+                var verticalAspectRatio = 1.4; // Taller than wide
                 var svgHeight = Math.min(containerHeight, svgWidth * verticalAspectRatio);
                 
                 // Ensure minimum height for mobile
                 svgHeight = Math.max(svgHeight, 500);
             } else {
-                // Reset to original margins for horizontal screens
-                margin = { top: 40, right: 80, bottom: 60, left: 100 };
+                // Desktop/horizontal layout
+                margin = { 
+                    top: 40,          // Space for title/labels
+                    right: 30, // Consistent right margin
+                    bottom: 60,       // Space for x-axis labels
+                    left: 79         // Space for y-axis labels
+                };
                 
-                // For horizontal screens, use the original aspect ratio
-                var horizontalAspectRatio = 770/1082;
+                // For horizontal screens, use a fixed aspect ratio
+                var horizontalAspectRatio = 0.7; // Width:height ratio
                 var svgHeight = svgWidth * horizontalAspectRatio;
             }
             
@@ -1707,9 +1710,22 @@ body.dark-mode .language-option {
             d3.select("#scatter-plot")
                 .attr("width", svgWidth)
                 .attr("height", svgHeight);
+                
+            // Update the chart container to match SVG size
+            document.querySelector('.chart-container').style.height = svgHeight + 'px';
         }
         
         // Call on load and on window resize
+        window.addEventListener('resize', function() {
+            // Debounce resize event to prevent excessive recalculations
+            clearTimeout(window.resizeTimer);
+            window.resizeTimer = setTimeout(function() {
+                updateChartDimensions();
+                updateChart(); // Redraw the chart with new dimensions
+            }, 250);
+        });
+
+        // Initial call to set dimensions
         updateChartDimensions();
         
         // Debounce function to limit how often the resize handler fires
@@ -1901,6 +1917,7 @@ body.dark-mode .language-option {
             svg.selectAll("linearGradient#line-gradient").remove(); // Remove gradient definition
             svg.selectAll("marker#arrow-over, marker#arrow-under").remove(); // Remove arrow markers
             svg.selectAll(".xy-line-hover").remove(); // Remove hover detection element
+            svg.selectAll(".median-line").remove(); // Always remove median lines before potentially redrawing them
             
             // Add diagonal reference line for xG vs Goals
             if ((xMetric === 'xG per 90' && yMetric === 'Goals per 90') || 
@@ -2017,8 +2034,6 @@ body.dark-mode .language-option {
                     .attr("y2", yScale(yMedian))
                     .style("stroke", "rgba(0, 0, 0, 0.3)")
                     .style("stroke-dasharray", "4");
-            } else {
-                svg.selectAll(".median-line").remove();
             }
             
             // Add circles
@@ -2138,12 +2153,6 @@ body.dark-mode .language-option {
             
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
-            
-            // Force a redraw of the container to fix any layout issues
-            document.querySelector('.plot-container').style.display = 'none';
-            setTimeout(function() {
-                document.querySelector('.plot-container').style.display = 'flex';
-            }, 0);
         }
         
         // Function to update the "Click All" button icon
