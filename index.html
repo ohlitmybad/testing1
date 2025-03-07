@@ -1313,9 +1313,6 @@ body.dark-mode .language-option {
             
             // Update chart to apply dark mode styles to SVG elements
             updateChart();
-            
-            // Remove focus from the toggle button
-            document.querySelector('.dark-mode-toggle').blur();
         }
         
         // Check if user has a stored preference for dark mode
@@ -1335,15 +1332,6 @@ body.dark-mode .language-option {
                         el.style.transition = "background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s";
                     });
             }, 100);
-            
-            // Add click handler to remove focus from buttons after click
-            document.addEventListener('click', function(e) {
-                if (e.target.tagName === 'BUTTON' || e.target.classList.contains('btn')) {
-                    setTimeout(() => {
-                        e.target.blur();
-                    }, 100);
-                }
-            });
         });
         
         // We'll initialize the custom selectors after the data is loaded
@@ -1527,9 +1515,6 @@ body.dark-mode .language-option {
                 // Fallback method if html2canvas fails
                 fallbackScreenshot(isDarkMode);
             });
-            
-            // Remove focus from the button
-            document.querySelector('.btn-icon[onclick="takeScreenshot()"]').blur();
         }
         
         // Fallback screenshot method that captures just the SVG but with higher quality
@@ -1672,26 +1657,10 @@ body.dark-mode .language-option {
 
         // Function to get color based on league
         function getLeagueColor(league) {
-            // Check if dark mode is active
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            
-            // Define more vibrant colors for dark mode
-            if (isDarkMode) {
-                const darkModeColors = {
-                    "Premier League": "rgba(255, 50, 50, 0.85)",      // Brighter Red
-                    "La Liga": "rgba(255, 180, 30, 0.85)",            // Brighter Orange
-                    "Bundesliga": "rgba(255, 255, 60, 0.85)",         // Brighter Yellow
-                    "Serie A": "rgba(40, 180, 40, 0.85)",             // Brighter Green
-                    "Ligue 1": "rgba(50, 120, 255, 0.85)",            // Brighter Blue
-                    "Eredivisie": "rgba(130, 60, 200, 0.85)",         // Brighter Indigo
-                    "Primeira Liga": "rgba(255, 120, 255, 0.85)"      // Brighter Violet
-                };
-                return darkModeColors[league] || "rgba(255, 50, 50, 0.85)"; // Default to bright red if league not found
-            }
-            
             return leagueColors[league] || "rgba(255, 0, 0, 0.7)"; // Default to red if league not found
         }
-                // Calculate container width to center the chart
+        
+        // Calculate container width to center the chart
         function updateChartDimensions() {
             var containerWidth = document.querySelector('.plot-container').clientWidth;
             var containerHeight = window.innerHeight * 0.7; // Use 70% of viewport height as max height
@@ -1879,7 +1848,8 @@ body.dark-mode .language-option {
                     return d[2] === selectedLeague;
                 });
             }
-                        // Update filtered names
+            
+            // Update filtered names
             filteredNames = filteredData.map(function(d) {
                 return d[1];
             });
@@ -1909,23 +1879,7 @@ body.dark-mode .language-option {
             xLabel.text(xMetric);
             yLabel.text(yMetric);
             
-            // Apply dark mode styling to axes if needed
-            if (isDarkMode) {
-                gXAxis.selectAll("text").style("fill", "#aaa");
-                gYAxis.selectAll("text").style("fill", "#aaa");
-                gXAxis.selectAll("path").style("stroke", "#444");
-                gYAxis.selectAll("path").style("stroke", "#444");
-                xLabel.style("fill", "#ccc");
-                yLabel.style("fill", "#ccc");
-            } else {
-                gXAxis.selectAll("text").style("fill", "#333");
-                gYAxis.selectAll("text").style("fill", "#333");
-                gXAxis.selectAll("path").style("stroke", "#333");
-                gYAxis.selectAll("path").style("stroke", "#333");
-                xLabel.style("fill", "#333");
-                yLabel.style("fill", "#333");
-            }
-                        // Remove existing circles and labels
+            // Remove existing circles and labels
             svg.selectAll("circle").remove();
             svg.selectAll(".team-label").remove();
             svg.selectAll(".xy-line").remove(); // Remove any existing diagonal reference line
@@ -1963,10 +1917,9 @@ body.dark-mode .language-option {
                     .attr("y1", yScale(minVal))
                     .attr("x2", xScale(maxVal))
                     .attr("y2", yScale(maxVal))
-                    .style("stroke", isDarkMode ? "#2ecc71" : "#2ecc71") // Green color
+                    .style("stroke", "#2ecc71") // Simple green color
                     .style("stroke-width", "2")
-                    .style("stroke-dasharray", "5,3")
-                    .style("opacity", isDarkMode ? 0.8 : 1);
+                    .style("stroke-dasharray", "5,3");
                 
                 // Add invisible wider line for better hover detection
                 svg.append("line")
@@ -2041,7 +1994,7 @@ body.dark-mode .language-option {
                     .attr("y1", 0)
                     .attr("x2", xScale(xMedian))
                     .attr("y2", height)
-                    .style("stroke", isDarkMode ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.3)")
+                    .style("stroke", "rgba(0, 0, 0, 0.3)")
                     .style("stroke-dasharray", "4");
                 
                 // Add Y median line
@@ -2051,7 +2004,7 @@ body.dark-mode .language-option {
                     .attr("y1", yScale(yMedian))
                     .attr("x2", width)
                     .attr("y2", yScale(yMedian))
-                    .style("stroke", isDarkMode ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.3)")
+                    .style("stroke", "rgba(0, 0, 0, 0.3)")
                     .style("stroke-dasharray", "4");
             } else {
                 svg.selectAll(".median-line").remove();
@@ -2070,7 +2023,7 @@ body.dark-mode .language-option {
                     if (clickedCircles.includes(d[1])) {
                         return getLeagueColor(d[2]);
                     }
-                    return isDarkMode ? "rgba(120, 180, 220, 0.8)" : "rgba(70, 130, 180, 0.7)";
+                    return "rgba(70, 130, 180, 0.7)";
                 })
                 .style("stroke", function(d) {
                     return clickedCircles.includes(d[1]) ? "#000" : "none";
@@ -2110,7 +2063,7 @@ body.dark-mode .language-option {
                         .style("fill", function() {
                             // If the circle is clicked, keep the league color
                             // Otherwise, revert to the default blue
-                            return isClicked ? getLeagueColor(d[2]) : (isDarkMode ? "rgba(120, 180, 220, 0.8)" : "rgba(70, 130, 180, 0.7)");
+                            return isClicked ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
                         });
                     
                     tooltip.transition()
@@ -2134,7 +2087,7 @@ body.dark-mode .language-option {
                         clickedCircles.push(d[1]);
                         d3.select(this)
                             .style("fill", getLeagueColor(d[2]))
-                            .style("stroke", isDarkMode ? "#222" : "#000")
+                            .style("stroke", "#000")
                             .style("stroke-width", 2);
                             
                         // Add team label
@@ -2143,7 +2096,7 @@ body.dark-mode .language-option {
                         // Remove from clicked circles
                         clickedCircles.splice(index, 1);
                         d3.select(this)
-                            .style("fill", isDarkMode ? "rgba(120, 180, 220, 0.8)" : "rgba(70, 130, 180, 0.7)")
+                            .style("fill", "rgba(70, 130, 180, 0.7)")
                             .style("stroke", "none");
                             
                         // Remove team label
@@ -2359,9 +2312,6 @@ body.dark-mode .language-option {
 
             const medianTooltip = document.getElementById('median-lines-tooltip');
             medianTooltip.textContent = medianLinesVisible ? "Hide median lines" : "Show median lines";
-            
-            // Remove focus from the button
-            this.blur();
         });
         
         // Select all circles
@@ -2404,9 +2354,6 @@ body.dark-mode .language-option {
             // Update the legend
             var selectedLeague = document.getElementById("select-league").value;
             updateLeagueLegend(selectedLeague);
-            
-            // Remove focus from the button
-            document.getElementById('select-all-button').blur();
         }
         
         // Position filter buttons
@@ -2682,6 +2629,3 @@ body.dark-mode .language-option {
     </script>
 </body>
 </html>
-
-
-
