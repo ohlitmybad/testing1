@@ -16,6 +16,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -121,16 +122,10 @@
         .controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 20px;
             justify-content: center;
             align-items: center;
-        }
-
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         select, input {
@@ -142,11 +137,19 @@
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             transition: border-color 0.2s;
+            height: 36px;
+            box-sizing: border-box;
         }
 
         select:focus, input:focus {
             outline: none;
             border-color: var(--primary-color);
+        }
+
+        /* Ensure consistent height for controls in the same row */
+        select, input, .btn:not(.btn-icon), .custom-select-trigger, .metric-select-trigger {
+            height: 36px;
+            box-sizing: border-box;
         }
 
         .btn {
@@ -160,6 +163,8 @@
             font-weight: 500;
             cursor: pointer;
             transition: background-color 0.2s;
+            height: 36px;
+            box-sizing: border-box;
         }
 
         .btn:hover {
@@ -186,22 +191,25 @@
             border-radius: 6px;
         }
 
-        #search-bar {
-            width: 150px;
+        #search-bar, #select-league {
+            width: 178px;
         }
 
         #select-x, #select-y {
-            width: 180px;
+            width: 190px;
         }
 
-        .select-all-button, 
-        button[onclick="takeScreenshot()"] {
-            width: 100px;
-            text-align: center;
+        /* Add tooltip for icon buttons */
+        .btn-icon .icon {
             display: flex;
-            justify-content: center;
             align-items: center;
-            padding: 8px 0;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .btn-icon i {
+            font-size: 18px;
         }
 
         .position-filters {
@@ -232,10 +240,10 @@
 
         #scatter-plot {
             width: 100%;
-            height: 764px;
+            height: 770px;
             display: block;
             margin: 0 auto;
-            max-width: 1040px;
+            max-width: 1082px;
         }
 
         .chart-container {
@@ -243,6 +251,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+        }
+        
+        .watermark-logo {
+            width: 230px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-44%, -60%);
+            pointer-events: none;
+            opacity: .055;
         }
 
         .tooltip {
@@ -257,6 +276,50 @@
             transition: opacity 0.2s;
             box-shadow: var(--shadow);
             z-index: 1000;
+        }
+
+        /* Custom button tooltips */
+        .btn-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn-tooltip .btn-tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1001;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            font-weight: normal;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            pointer-events: none;
+        }
+
+        .btn-tooltip .btn-tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--border-color) transparent transparent transparent;
+        }
+
+        .btn-tooltip:hover .btn-tooltip-text {
+            visibility: visible;
+            opacity: 1;
         }
 
         .player-name {
@@ -353,60 +416,6 @@
             content: "\f3b0";
         }
 
-        .search-input-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 999;
-        }
-
-        .search-input-container {
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--container-bg);
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 1000;
-            width: 400px;
-        }
-
-        #searchInput {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 10px;
-        }
-
-        #autocompleteBox {
-            max-height: 200px;
-            overflow-y: auto;
-            background-color: var(--container-bg);
-        }
-
-        #autocompleteBox div {
-            padding: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        #autocompleteBox div:hover {
-            background-color: var(--hover-color);
-        }
-
-        #autocompleteBox a {
-            text-decoration: none;
-            color: var(--text-color);
-            display: block;
-        }
-
         @media (max-width: 768px) {
             .header {
                 padding: 15px;
@@ -424,10 +433,41 @@
             
             .controls {
                 flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
             }
             
+            /* Remove fixed height for scatter plot - now handled by updateChartDimensions */
             #scatter-plot {
-                height: 400px;
+                min-height: 500px; /* Minimum height for mobile */
+            }
+            
+            select, input {
+                width: 100%;
+            }
+            
+            .btn-icon {
+                width: 100%;
+            }
+            
+            .custom-select-container,
+            .metric-select-container {
+                width: 100%;
+            }
+            
+            .custom-select-options,
+            .metric-select-options {
+                max-height: 200px;
+            }
+            
+            /* Make text elements more readable on mobile */
+            .x-label, .y-label {
+                font-size: 12px;
+            }
+            
+            /* Adjust tooltip position for mobile */
+            .tooltip {
+                max-width: 80%;
             }
         }
 
@@ -546,18 +586,6 @@ body.dark-mode .language-button:hover {
 }
 
 
-body.dark-mode .language-dropdown {
-
-  background: #e8e6e6;
-
-}
-
-body.dark-mode .language-option {
-
-  color: #000000;
-}
-
-
 
   
 
@@ -576,6 +604,7 @@ body.dark-mode .language-option {
   margin-left: 10px;
   font-size: 23px;
   font-weight: 600;
+  transform: translateY(-1.1px); /* Move logo text slightly higher */
 }
 
 .header .navigation {
@@ -584,7 +613,7 @@ body.dark-mode .language-option {
   gap: 25px; /* Reduced gap between buttons */
   position: absolute;
   left: 50%;
-  transform: translateX(-50%); /* Center the navigation */
+  transform: translateX(-50%) translateY(-2px); /* Center the navigation and move it higher */
 }
 
 
@@ -614,6 +643,7 @@ body.dark-mode .language-option {
   align-items: center;
   gap: 10px;
   margin-left: auto; /* Push buttons to the right */
+  transform: translateY(-1.25px); /* Move search and language buttons higher */
 }
 
 header a {
@@ -675,6 +705,153 @@ header a {
 .language-dropdown.show {
   display: block;
 }
+
+/* Styles for flag icons in select dropdown */
+#select-league option {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+}
+
+#select-league iconify-icon {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+/* Styles for custom league selector dropdown */
+.custom-select-container {
+    position: relative;
+    width: 172px;
+}
+
+.metric-select-container {
+    position: relative;
+    width: 192px;
+}
+
+.custom-select-trigger, .metric-select-trigger {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    line-height: 1;
+}
+
+.custom-select-trigger span, .metric-select-trigger span {
+    display: inline-block;
+    transform: translateY(1px);
+}
+
+.custom-select-trigger::after, .metric-select-trigger::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    margin-left: auto;
+    border-right: 1.5px solid var(--text-color);
+    border-bottom: 1.5px solid var(--text-color);
+    transform: rotate(45deg) translateY(-2px);
+    transition: transform 0.3s;
+    opacity: 0.7;
+    margin-right: 2px;
+}
+
+.custom-select-trigger.open::after, .metric-select-trigger.open::after {
+    transform: rotate(-135deg) translateY(1px);
+}
+
+.custom-select-options, .metric-select-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--container-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-top: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+    font-size: 13px;
+    display: none;
+    box-shadow: var(--shadow);
+}
+
+.custom-select-option, .metric-select-option {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.custom-select-option:hover, .metric-select-option:hover {
+    background-color: var(--hover-color);
+}
+
+.custom-select-option.selected, .metric-select-option.selected {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.custom-select-option iconify-icon, .metric-select-option iconify-icon {
+    margin-right: 8px;
+}
+
+body.dark-mode .language-button:hover {
+      background-color: #0F0F0E;
+      color: #aeaeae;
+}
+
+body.dark-mode .language-dropdown {
+  background: #e8e6e6;
+}
+
+body.dark-mode .language-option {
+  color: #000000;
+}
+
+/* Dark mode styles for custom dropdown */
+.dark-mode .custom-select-trigger,
+.dark-mode .custom-select-options,
+.dark-mode .metric-select-trigger,
+.dark-mode .metric-select-options {
+    border-color: var(--border-color);
+    background-color: var(--container-bg);
+    color: var(--text-color);
+}
+
+.dark-mode .custom-select-option:hover,
+.dark-mode .metric-select-option:hover {
+    background-color: var(--hover-color);
+}
+
+.dark-mode .custom-select-option.selected,
+.dark-mode .metric-select-option.selected {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+
+.custom-select-option iconify-icon, .metric-select-option iconify-icon {
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Adjust flag icon alignment in the trigger */
+#league-select-trigger iconify-icon {
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-1px);
+}
+
     </style>
 </head>
 <body>
@@ -705,41 +882,116 @@ header a {
     <div class="container">
         <div class="plot-container">
             <div class="controls">
-
-
-              <div class="control-group">
-                <select id="select-x"></select>
-                <select id="select-y"></select>
-                </div>
-                <div class="control-group">
-                    <select id="select-league" onchange="updateChart()">
-                        <option value="all">🇪🇺 Top 7 Leagues</option>
-                        <option value="Top 5 Leagues">🇪🇺 Top 5 Leagues</option>
-                        <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-                        <option value="La Liga">🇪🇸 La Liga</option>
-                        <option value="Bundesliga">🇩🇪 Bundesliga</option>
-                        <option value="Serie A">🇮🇹 Serie A</option> 
-                        <option value="Ligue 1">🇫🇷 Ligue 1</option>
-                        <option value="Eredivisie">🇳🇱 Eredivisie</option>
-                        <option value="Primeira Liga">🇵🇹 Liga Portugal</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                  <input type="text" id="search-bar" placeholder="Search team...">
-                  <button id="toggle-median-lines" class="btn btn-outline btn-icon">
-                    <div class="icon">
-                        <i class="ion-stats-bars" style="font-size: 18px;"></i>
+                <!-- Hidden selects for compatibility with existing code -->
+                <select id="select-x" style="display: none;"></select>
+                <select id="select-y" style="display: none;"></select>
+                <select id="select-league" style="display: none;" onchange="updateChart()">
+                    <option value="all">Top 7 Leagues</option>
+                    <option value="Top 5 Leagues">Top 5 Leagues</option>
+                    <option value="Premier League">Premier League</option>
+                    <option value="La Liga">La Liga</option>
+                    <option value="Bundesliga">Bundesliga</option>
+                    <option value="Serie A">Serie A</option> 
+                    <option value="Ligue 1">Ligue 1</option>
+                    <option value="Eredivisie">Eredivisie</option>
+                    <option value="Primeira Liga">Liga Portugal</option>
+                </select>
+                
+                <!-- Custom X metric selector -->
+                <div class="metric-select-container">
+                    <div class="metric-select-trigger" id="x-metric-trigger">
+                        <span>Goals per 90</span>
                     </div>
-                </button>
-              </div>
-      
-                    <div class="control-group">
-                      <button class="btn btn-outline select-all-button" onclick="selectAllCircles()">Click All</button>
-                      <button class="btn btn-outline select-all-button" onclick="takeScreenshot()">Screenshot</button>
+                    <div class="metric-select-options" id="x-metric-options">
+                        <!-- Options will be populated by JavaScript -->
                     </div>
                 </div>
+                
+                <!-- Custom Y metric selector -->
+                <div class="metric-select-container">
+                    <div class="metric-select-trigger" id="y-metric-trigger">
+                        <span>xG per 90</span>
+                    </div>
+                    <div class="metric-select-options" id="y-metric-options">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Custom league selector with flag icons -->
+                <div class="custom-select-container">
+                    <div class="custom-select-trigger" id="league-select-trigger">
+                        <iconify-icon icon="emojione:flag-for-flag-european-union" width="18" height="18"></iconify-icon>
+                        <span>Top 7 Leagues</span>
+                    </div>
+                    <div class="custom-select-options" id="league-select-options">
+                        <div class="custom-select-option selected" data-value="all">
+                            <iconify-icon icon="emojione:flag-for-flag-european-union" width="18" height="18"></iconify-icon>
+                            <span>Top 7 Leagues</span>
+                        </div>
+                        <div class="custom-select-option" data-value="Top 5 Leagues">
+                            <iconify-icon icon="emojione:flag-for-flag-european-union" width="18" height="18"></iconify-icon>
+                            <span>Top 5 Leagues</span>
+                        </div>
+                        <div class="custom-select-option" data-value="Premier League">
+                            <iconify-icon icon="emojione:flag-for-united-kingdom" width="18" height="18"></iconify-icon>
+                            <span>Premier League</span>
+                        </div>
+                        <div class="custom-select-option" data-value="La Liga">
+                            <iconify-icon icon="emojione:flag-for-spain" width="18" height="18"></iconify-icon>
+                            <span>La Liga</span>
+                        </div>
+                        <div class="custom-select-option" data-value="Bundesliga">
+                            <iconify-icon icon="emojione:flag-for-germany" width="18" height="18"></iconify-icon>
+                            <span>Bundesliga</span>
+                        </div>
+                        <div class="custom-select-option" data-value="Serie A">
+                            <iconify-icon icon="emojione:flag-for-italy" width="18" height="18"></iconify-icon>
+                            <span>Serie A</span>
+                        </div>
+                        <div class="custom-select-option" data-value="Ligue 1">
+                            <iconify-icon icon="emojione:flag-for-france" width="18" height="18"></iconify-icon>
+                            <span>Ligue 1</span>
+                        </div>
+                        <div class="custom-select-option" data-value="Eredivisie">
+                            <iconify-icon icon="emojione:flag-for-netherlands" width="18" height="18"></iconify-icon>
+                            <span>Eredivisie</span>
+                        </div>
+                        <div class="custom-select-option" data-value="Primeira Liga">
+                            <iconify-icon icon="emojione:flag-for-portugal" width="18" height="18"></iconify-icon>
+                            <span>Liga Portugal</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <input type="text" id="search-bar" placeholder="Search team...">
+                <div class="btn-tooltip">
+                    <button id="toggle-median-lines" class="btn btn-outline btn-icon">
+                        <div class="icon">
+                            <i class="ion-stats-bars"></i>
+                        </div>
+                    </button>
+                    <span class="btn-tooltip-text" id="median-lines-tooltip">Show median lines</span>
+                </div>
+                <div class="btn-tooltip">
+                    <button class="btn btn-outline btn-icon" id="select-all-button" onclick="selectAllCircles()">
+                        <div class="icon">
+                            <i class="ion-ios-circle-filled" id="select-icon"></i>
+                        </div>
+                    </button>
+                    <span class="btn-tooltip-text" id="select-all-tooltip">Select all teams</span>
+                </div>
+                <div class="btn-tooltip">
+                    <button class="btn btn-outline btn-icon" onclick="takeScreenshot()">
+                        <div class="icon">
+                            <i class="ion-camera"></i>
+                        </div>
+                    </button>
+                    <span class="btn-tooltip-text">Download chart as image</span>
+                </div>
+            </div>
        
             <div class="chart-container">
+              <img class="watermark-logo" src="https://datamb.football/logo.png" alt="Football data visualization. Plot statistics of Top 7 League clubs.">
               <svg id="scatter-plot"></svg>
             </div>
             
@@ -781,42 +1033,256 @@ header a {
             body.classList.add("dark-mode");
         }
         
+        // We'll initialize the custom selectors after the data is loaded
+        let initializeCustomSelectors = function() {
+            // League selector functionality
+            const leagueTrigger = document.getElementById('league-select-trigger');
+            const leagueOptions = document.getElementById('league-select-options');
+            const leagueSelect = document.getElementById('select-league');
+            
+            setupCustomSelect(leagueTrigger, leagueOptions, leagueSelect);
+            
+            // X metric selector functionality
+            const xTrigger = document.getElementById('x-metric-trigger');
+            const xOptions = document.getElementById('x-metric-options');
+            const xSelect = document.getElementById('select-x');
+            
+            // Populate X metric options
+            populateMetricOptions(xOptions, header.slice(3), function(option, value) {
+                if (xTrigger.querySelector('span').textContent === value) {
+                    option.classList.add('selected');
+                }
+                if (value === header[3]) { // Default value
+                    option.classList.add('selected');
+                    // Update trigger text
+                    xTrigger.querySelector('span').textContent = value;
+                }
+            });
+            
+            setupCustomSelect(xTrigger, xOptions, xSelect);
+            
+            // Y metric selector functionality
+            const yTrigger = document.getElementById('y-metric-trigger');
+            const yOptions = document.getElementById('y-metric-options');
+            const ySelect = document.getElementById('select-y');
+            
+            // Populate Y metric options
+            populateMetricOptions(yOptions, header.slice(3), function(option, value) {
+                if (yTrigger.querySelector('span').textContent === value) {
+                    option.classList.add('selected');
+                }
+                if (value === header[4]) { // Default value
+                    option.classList.add('selected');
+                    // Update trigger text
+                    yTrigger.querySelector('span').textContent = value;
+                }
+            });
+            
+            setupCustomSelect(yTrigger, yOptions, ySelect);
+        };
+        
+        // Function to populate metric options
+        function populateMetricOptions(optionsContainer, metrics, callback) {
+            // Clear existing options
+            optionsContainer.innerHTML = '';
+            
+            // Create a custom option for each metric
+            metrics.forEach(function(metric) {
+                const customOption = document.createElement('div');
+                customOption.className = 'metric-select-option';
+                customOption.setAttribute('data-value', metric);
+                
+                const span = document.createElement('span');
+                span.textContent = metric;
+                customOption.appendChild(span);
+                
+                // Call the callback to potentially add selected class
+                if (callback) callback(customOption, metric);
+                
+                optionsContainer.appendChild(customOption);
+            });
+        }
+        
+        // Function to set up a custom select
+        function setupCustomSelect(trigger, options, selectElement) {
+            // Toggle dropdown when clicking the trigger
+            trigger.addEventListener('click', function() {
+                // Close all other open dropdowns first
+                document.querySelectorAll('.custom-select-trigger.open, .metric-select-trigger.open').forEach(function(openTrigger) {
+                    if (openTrigger !== trigger) {
+                        openTrigger.classList.remove('open');
+                        const openOptions = openTrigger.nextElementSibling;
+                        if (openOptions) openOptions.style.display = 'none';
+                    }
+                });
+                
+                // Toggle this dropdown
+                trigger.classList.toggle('open');
+                const isOpen = trigger.classList.contains('open');
+                options.style.display = isOpen ? 'block' : 'none';
+            });
+            
+            // Handle option selection
+            const optionElements = options.querySelectorAll('.custom-select-option, .metric-select-option');
+            optionElements.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Update selected option
+                    optionElements.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    // Update trigger content
+                    const text = this.querySelector('span').textContent;
+                    const icon = this.querySelector('iconify-icon');
+                    
+                    trigger.innerHTML = '';
+                    
+                    if (icon) {
+                        const clonedIcon = icon.cloneNode(true);
+                        clonedIcon.style.marginRight = '8px';
+                        trigger.appendChild(clonedIcon);
+                    }
+                    
+                    const span = document.createElement('span');
+                    span.textContent = text;
+                    trigger.appendChild(span);
+                    
+                    // Update hidden select and trigger change event
+                    const value = this.getAttribute('data-value');
+                    selectElement.value = value || text;
+                    
+                    // Trigger the change event on the hidden select
+                    const event = new Event('change');
+                    selectElement.dispatchEvent(event);
+                    
+                    // Close dropdown
+                    trigger.classList.remove('open');
+                    options.style.display = 'none';
+                });
+            });
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            const triggers = document.querySelectorAll('.custom-select-trigger, .metric-select-trigger');
+            const optionsContainers = document.querySelectorAll('.custom-select-options, .metric-select-options');
+            
+            let clickedInsideDropdown = false;
+            
+            triggers.forEach(function(trigger, index) {
+                const options = optionsContainers[index];
+                
+                if (trigger && options && (trigger.contains(e.target) || options.contains(e.target))) {
+                    clickedInsideDropdown = true;
+                }
+            });
+            
+            if (!clickedInsideDropdown) {
+                triggers.forEach(function(trigger, index) {
+                    if (trigger && optionsContainers[index]) {
+                        trigger.classList.remove('open');
+                        optionsContainers[index].style.display = 'none';
+                    }
+                });
+            }
+        });
+        
         // Function to capture and download the chart area
         function takeScreenshot() {
-            // Get the SVG element
-            const svg = document.getElementById('scatter-plot');
+            // Get the chart container element (includes SVG and watermark)
+            const chartContainer = document.querySelector('.chart-container');
             
-            // Create a canvas element
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
+            // Check if we're in dark mode
+            const isDarkMode = document.body.classList.contains('dark-mode');
             
-            // Set canvas size to match SVG
-            const svgRect = svg.getBoundingClientRect();
-            canvas.width = svgRect.width;
-            canvas.height = svgRect.height;
-            
-            // Fill canvas with a white background
-            ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Create an image from the SVG
-            const img = new Image();
-            const svgData = new XMLSerializer().serializeToString(svg);
-            
-            // Properly encode the SVG data
-            const encodedData = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-            img.src = encodedData;
-            
-            img.onload = function() {
-                // Draw the image on the canvas
-                ctx.drawImage(img, 0, 0);
-                
+            // Use html2canvas to capture the entire chart container with watermark
+            html2canvas(chartContainer, {
+                scale: 2, // 2x resolution for higher quality
+                backgroundColor: isDarkMode ? '#2c2c2c' : '#FFFFFF',
+                allowTaint: true,
+                useCORS: true,
+                logging: false
+            }).then(function(renderedCanvas) {
                 // Convert canvas to image and trigger download
-                const dataURL = canvas.toDataURL('image/png');
+                const dataURL = renderedCanvas.toDataURL('image/png', 1.0); // Use maximum quality
                 const link = document.createElement('a');
                 link.download = 'chart-screenshot.png';
                 link.href = dataURL;
                 link.click();
+            }).catch(function(error) {
+                console.error('Screenshot failed:', error);
+                
+                // Fallback method if html2canvas fails
+                fallbackScreenshot(isDarkMode);
+            });
+        }
+        
+        // Fallback screenshot method that captures just the SVG but with higher quality
+        function fallbackScreenshot(isDarkMode) {
+            // Get the SVG element
+            const svg = document.getElementById('scatter-plot');
+            const watermark = document.querySelector('.watermark-logo');
+            
+            // Get dimensions
+            const svgRect = svg.getBoundingClientRect();
+            
+            // Create a canvas with 2x resolution for higher quality
+            const canvas = document.createElement('canvas');
+            const scale = 2; // Increase resolution by 2x
+            canvas.width = svgRect.width * scale;
+            canvas.height = svgRect.height * scale;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.scale(scale, scale); // Scale the context to match our increased canvas size
+            
+            // Set high quality rendering
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            
+            // Fill canvas with appropriate background color
+            ctx.fillStyle = isDarkMode ? '#2c2c2c' : '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // First draw the watermark
+            const watermarkImg = new Image();
+            watermarkImg.crossOrigin = "Anonymous";
+            watermarkImg.src = watermark.src;
+            
+            // Create an image from the SVG
+            const svgImg = new Image();
+            
+            // Get SVG data with proper XML serialization
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(svgBlob);
+            
+            // First load the watermark
+            watermarkImg.onload = function() {
+                // Calculate watermark position (centered)
+                const wmX = (svgRect.width - watermark.width) / 2;
+                const wmY = (svgRect.height - watermark.height) / 2;
+                
+                // Draw watermark with proper opacity
+                ctx.globalAlpha = 0.04; // Match the CSS opacity
+                ctx.drawImage(watermarkImg, wmX, wmY, watermark.width, watermark.height);
+                ctx.globalAlpha = 1.0;
+                
+                // Then load and draw the SVG
+                svgImg.onload = function() {
+                    // Draw the SVG on top
+                    ctx.drawImage(svgImg, 0, 0, svgRect.width, svgRect.height);
+                    
+                    // Convert canvas to image and trigger download
+                    const dataURL = canvas.toDataURL('image/png', 1.0); // Use maximum quality
+                    const link = document.createElement('a');
+                    link.download = 'chart-screenshot.png';
+                    link.href = dataURL;
+                    link.click();
+                    
+                    // Clean up
+                    URL.revokeObjectURL(url);
+                };
+                
+                svgImg.src = url;
             };
         }
         
@@ -873,9 +1339,9 @@ header a {
             });
         });
         
-        var margin = { top: 40, right: 80, bottom: 100, left: 100 };
-        var width = 1040 - margin.left - margin.right;
-        var height = 764 - margin.top - margin.bottom;
+        var margin = { top: 40, right: 80, bottom: 60, left: 100 };
+        var width = 1082 - margin.left - margin.right;
+        var height = 770 - margin.top - margin.bottom;
         
         // Define league colors for clicked circles
         var leagueColors = {
@@ -896,12 +1362,33 @@ header a {
         // Calculate container width to center the chart
         function updateChartDimensions() {
             var containerWidth = document.querySelector('.plot-container').clientWidth;
-            var svgWidth = Math.min(1040, containerWidth - 60);
-            width = svgWidth - margin.left - margin.right;
+            var containerHeight = window.innerHeight * 0.7; // Use 70% of viewport height as max height
+            var svgWidth = Math.min(1082, containerWidth - 60);
             
-            // Calculate height to maintain aspect ratio
-            var aspectRatio = 764/1040;
-            var svgHeight = svgWidth * aspectRatio;
+            // Detect if we're on a vertical screen (mobile)
+            var isVerticalScreen = window.innerWidth / window.innerHeight < 1;
+            
+            if (isVerticalScreen) {
+                // Adjust margins for vertical screens
+                margin = { top: 40, right: 40, bottom: 60, left: 70 };
+                
+                // For vertical screens, make the chart taller
+                var verticalAspectRatio = 1.4; // Taller than wide (adjust as needed)
+                var svgHeight = Math.min(containerHeight, svgWidth * verticalAspectRatio);
+                
+                // Ensure minimum height for mobile
+                svgHeight = Math.max(svgHeight, 500);
+            } else {
+                // Reset to original margins for horizontal screens
+                margin = { top: 40, right: 80, bottom: 60, left: 100 };
+                
+                // For horizontal screens, use the original aspect ratio
+                var horizontalAspectRatio = 770/1082;
+                var svgHeight = svgWidth * horizontalAspectRatio;
+            }
+            
+            // Update dimensions
+            width = svgWidth - margin.left - margin.right;
             height = svgHeight - margin.top - margin.bottom;
             
             // Update SVG dimensions
@@ -912,10 +1399,24 @@ header a {
         
         // Call on load and on window resize
         updateChartDimensions();
-        window.addEventListener('resize', function() {
-            updateChartDimensions();
-            updateChart();
-        });
+        
+        // Debounce function to limit how often the resize handler fires
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+        
+        // Add debounced resize handler
+        window.addEventListener('resize', debounce(function() {
+            updateChart(); // updateChartDimensions is called inside updateChart
+        }, 250)); // Wait 250ms after resize stops before updating
         
         var medianLinesVisible = false;
         
@@ -972,7 +1473,7 @@ header a {
             .attr("class", "x-label")
             .attr("text-anchor", "middle")
             .attr("x", width / 2)
-            .attr("y", height + 40)
+            .attr("y", height + 48)
             .style("font-family", "Inter, sans-serif")
             .style("font-size", "14px");
         
@@ -980,7 +1481,7 @@ header a {
             .attr("class", "y-label")
             .attr("text-anchor", "middle")
             .attr("transform", "rotate(-90)")
-            .attr("y", -60)
+            .attr("y", -53)
             .attr("x", -height / 2)
             .style("font-family", "Inter, sans-serif")
             .style("font-size", "14px");
@@ -997,6 +1498,43 @@ header a {
         
         // Function to update the chart
         function updateChart() {
+            // Update chart dimensions based on current window size
+            updateChartDimensions();
+            
+            // Reset the SVG container with new dimensions
+            d3.select("#scatter-plot g").remove();
+            var svg = d3.select("#scatter-plot")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            
+            // Reset axis groups
+            gXAxis = svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(0," + height + ")");
+                
+            gYAxis = svg.append("g")
+                .attr("class", "y-axis");
+                
+            // Reset axis labels
+            xLabel = svg.append("text")
+                .attr("class", "x-label")
+                .attr("text-anchor", "middle")
+                .attr("x", width / 2)
+                .attr("y", height + 48)
+                .style("font-family", "Inter, sans-serif")
+                .style("font-size", "14px");
+            
+            yLabel = svg.append("text")
+                .attr("class", "y-label")
+                .attr("text-anchor", "middle")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -53)
+                .attr("x", -height / 2)
+                .style("font-family", "Inter, sans-serif")
+                .style("font-size", "14px");
+            
             // Get the selected league
             var selectedLeague = document.getElementById("select-league").value;
             
@@ -1025,19 +1563,23 @@ header a {
             yMetric = selectY.property("value");
             
             // Update scales
-            xScale.domain([
-                d3.min(filteredData, function(d) { return d[header.indexOf(xMetric)] * 0.9; }),
-                d3.max(filteredData, function(d) { return d[header.indexOf(xMetric)] * 1.1; })
-            ]);
+            xScale = d3.scaleLinear()
+                .range([0, width])
+                .domain([
+                    d3.min(filteredData, function(d) { return d[header.indexOf(xMetric)] * 0.9; }),
+                    d3.max(filteredData, function(d) { return d[header.indexOf(xMetric)] * 1.1; })
+                ]);
             
-            yScale.domain([
-                d3.min(filteredData, function(d) { return d[header.indexOf(yMetric)] * 0.9; }),
-                d3.max(filteredData, function(d) { return d[header.indexOf(yMetric)] * 1.1; })
-            ]);
+            yScale = d3.scaleLinear()
+                .range([height, 0])
+                .domain([
+                    d3.min(filteredData, function(d) { return d[header.indexOf(yMetric)] * 0.9; }),
+                    d3.max(filteredData, function(d) { return d[header.indexOf(yMetric)] * 1.1; })
+                ]);
             
             // Update axes
-            gXAxis.call(xAxis);
-            gYAxis.call(yAxis);
+            gXAxis.call(d3.axisBottom(xScale).tickSize(0));
+            gYAxis.call(d3.axisLeft(yScale).tickSize(0));
             
             // Update axis labels
             xLabel.text(xMetric);
@@ -1063,10 +1605,10 @@ header a {
                 var diagonalLineHoverTimer = null;
                 
                 // Calculate the intersection points for the x=y line
-                var minX = d3.min(filteredData, d => d[header.indexOf(xMetric)]);
-                var maxX = d3.max(filteredData, d => d[header.indexOf(xMetric)]);
-                var minY = d3.min(filteredData, d => d[header.indexOf(yMetric)]);
-                var maxY = d3.max(filteredData, d => d[header.indexOf(yMetric)]);
+                var minX = d3.min(filteredData, function(d) { return d[header.indexOf(xMetric)]; });
+                var maxX = d3.max(filteredData, function(d) { return d[header.indexOf(xMetric)]; });
+                var minY = d3.min(filteredData, function(d) { return d[header.indexOf(yMetric)]; });
+                var maxY = d3.max(filteredData, function(d) { return d[header.indexOf(yMetric)]; });
                 
                 // Get the smaller max between the x and y axes
                 var maxVal = Math.min(maxX, maxY);
@@ -1293,14 +1835,25 @@ header a {
             updateLeagueLegend(selectedLeague);
         }
         
-        // Function to update the "Click All" button text
+        // Function to update the "Click All" button icon
         function updateSelectAllButtonText() {
-            var selectAllButton = document.querySelector('.select-all-button');
+            var selectIcon = document.getElementById('select-icon');
+            var selectTooltip = document.getElementById('select-all-tooltip');
             var allSelected = filteredData.every(function(d) {
                 return clickedCircles.includes(d[1]);
             });
             
-            selectAllButton.textContent = allSelected ? "Unclick All" : "Click All";
+            if (allSelected) {
+                selectIcon.className = "ion-ios-circle-outline"; // Icon for "Unclick All"
+                if (selectTooltip) {
+                    selectTooltip.textContent = "Unselect all teams";
+                }
+            } else {
+                selectIcon.className = "ion-ios-circle-filled"; // Icon for "Click All"
+                if (selectTooltip) {
+                    selectTooltip.textContent = "Select all teams";
+                }
+            }
         }
         
         // Add event listeners to the selectors
@@ -1462,6 +2015,9 @@ header a {
         toggleButton.addEventListener("click", function() {
             medianLinesVisible = !medianLinesVisible;
             updateChart();
+
+            const medianTooltip = document.getElementById('median-lines-tooltip');
+            medianTooltip.textContent = medianLinesVisible ? "Hide median lines" : "Show median lines";
         });
         
         // Select all circles
@@ -1521,6 +2077,9 @@ header a {
         
         // Initialize the chart
         updateChart();
+        
+        // Initialize the custom selectors now that data is loaded
+        initializeCustomSelectors();
         
         // Function to update the league legend based on selected league
         function updateLeagueLegend(selectedLeague) {
@@ -1767,7 +2326,12 @@ header a {
                 });
             }, 10); // Small delay to ensure DOM is updated
         };
+
+        // Initialize median lines tooltip text on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const medianTooltip = document.getElementById('median-lines-tooltip');
+            medianTooltip.textContent = medianLinesVisible ? "Hide median lines" : "Show median lines";
+        });
     </script>
 </body>
 </html>
-
