@@ -18,7 +18,23 @@
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <script>
+  (function() {
+      var width = window.innerWidth;
+      var viewportMeta = document.querySelector('meta[name="viewport"]');
+      if (viewportMeta) {
+if (width < 770) {
+	      
+      var initialScale = width / 770;
+viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale');
+} else {
+            var fixedScale = 1;
+	viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + fixedScale');
+
+  }
+    } 
+})();
+</script>
     <style>
         :root {
             --primary-color: #3498db;
