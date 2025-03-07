@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.68">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
     <meta name="description" content="Plot Top 7 League team statistics. Visualize team performance and analyze multiple metrics such as Goals, Goals conceded, xG, Shots on target, Pressing, Defensive duels, Pass completion and more for teams in Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga.">
     <meta name="twitter:card" content="summary_large_image">
@@ -12,8 +12,23 @@
     <meta name="twitter:image" content="https://datamb.football/vignettes/teamplots.png">
     <meta property="og:image" content="https://datamb.football/vignettes/teamplots.png">
     <title translate="no">DataMB | Plot Teams</title>
-    
-    
+    <script>
+        (function() {
+            var width = window.innerWidth;
+            var viewportMeta = document.querySelector('meta[name="viewport"]');
+            if (viewportMeta) {
+      if (width < 590) {
+                
+            var initialScale = width / 590;
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+      } else {
+                  var fixedScale = 1;
+          viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + fixedScale + ', user-scalable=no');
+      
+        }
+          } 
+      })();
+      </script>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -420,31 +435,31 @@
         @media (max-width: 768px) {
   
             
-            .plot-container {
-                padding: 15px;
-            }
-            
-            
-            /* Remove fixed height for scatter plot - now handled by updateChartDimensions */
-            #scatter-plot {
-                min-height: 500px; /* Minimum height for mobile */
-            }
-            
-            select, input {
-                width: 100%;
-            }
-            
-            
-            /* Make text elements more readable on mobile */
-            .x-label, .y-label {
-                font-size: 12px;
-            }
-            
-            /* Adjust tooltip position for mobile */
-            .tooltip {
-                max-width: 80%;
-            }
-        }
+  .plot-container {
+      padding: 15px;
+  }
+  
+  
+  /* Remove fixed height for scatter plot - now handled by updateChartDimensions */
+  #scatter-plot {
+      min-height: 500px; /* Minimum height for mobile */
+  }
+  
+  select, input {
+      width: 100%;
+  }
+  
+  
+  /* Make text elements more readable on mobile */
+  .x-label, .y-label {
+      font-size: 12px;
+  }
+  
+  /* Adjust tooltip position for mobile */
+  .tooltip {
+      max-width: 80%;
+  }
+}
 
         /* Styles for the diagonal reference line */
         .dark-mode .xy-line {
@@ -1388,11 +1403,25 @@ body.dark-mode .language-option {
             };
         }
         
+        // Track previous window dimensions to detect orientation changes
+        var prevWindowWidth = window.innerWidth;
+        var prevWindowHeight = window.innerHeight;
+        
         // Add debounced resize handler
         window.addEventListener('resize', debounce(function() {
-            updateChart(); // updateChartDimensions is called inside updateChart
+            // Check if orientation has changed (width/height ratio flipped)
+            var wasVertical = prevWindowWidth / prevWindowHeight < 1;
+            var isVertical = window.innerWidth / window.innerHeight < 1;
+            
+            // Update previous dimensions
+            prevWindowWidth = window.innerWidth;
+            prevWindowHeight = window.innerHeight;
+            
+            // Always update the chart on resize
+            updateChart();
         }, 250)); // Wait 250ms after resize stops before updating
         
+
         var medianLinesVisible = false;
         
         var selectX = d3.select("#select-x");
@@ -1476,39 +1505,16 @@ body.dark-mode .language-option {
             // Update chart dimensions based on current window size
             updateChartDimensions();
             
-            // Reset the SVG container with new dimensions
-            d3.select("#scatter-plot g").remove();
-            var svg = d3.select("#scatter-plot")
+            // Update SVG dimensions without recreating it
+            d3.select("#scatter-plot")
                 .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-            
-            // Reset axis groups
-            gXAxis = svg.append("g")
-                .attr("class", "x-axis")
-                .attr("transform", "translate(0," + height + ")");
+                .attr("height", height + margin.top + margin.bottom);
                 
-            gYAxis = svg.append("g")
-                .attr("class", "y-axis");
-                
-            // Reset axis labels
-            xLabel = svg.append("text")
-                .attr("class", "x-label")
-                .attr("text-anchor", "middle")
-                .attr("x", width / 2)
-                .attr("y", height + 48)
-                .style("font-family", "Inter, sans-serif")
-                .style("font-size", "14px");
-            
-            yLabel = svg.append("text")
-                .attr("class", "y-label")
-                .attr("text-anchor", "middle")
-                .attr("transform", "rotate(-90)")
-                .attr("y", -53)
-                .attr("x", -height / 2)
-                .style("font-family", "Inter, sans-serif")
-                .style("font-size", "14px");
+            // Update axis positions based on new dimensions
+            gXAxis.attr("transform", "translate(0," + height + ")");
+            xLabel.attr("x", width / 2)
+                  .attr("y", height + 48);
+            yLabel.attr("x", -height / 2);
             
             // Get the selected league
             var selectedLeague = document.getElementById("select-league").value;
@@ -1538,19 +1544,17 @@ body.dark-mode .language-option {
             yMetric = selectY.property("value");
             
             // Update scales
-            xScale = d3.scaleLinear()
-                .range([0, width])
-                .domain([
-                    d3.min(filteredData, function(d) { return d[header.indexOf(xMetric)] * 0.9; }),
-                    d3.max(filteredData, function(d) { return d[header.indexOf(xMetric)] * 1.1; })
-                ]);
+            xScale.range([0, width])
+                  .domain([
+                      d3.min(filteredData, function(d) { return d[header.indexOf(xMetric)] * 0.9; }),
+                      d3.max(filteredData, function(d) { return d[header.indexOf(xMetric)] * 1.1; })
+                  ]);
             
-            yScale = d3.scaleLinear()
-                .range([height, 0])
-                .domain([
-                    d3.min(filteredData, function(d) { return d[header.indexOf(yMetric)] * 0.9; }),
-                    d3.max(filteredData, function(d) { return d[header.indexOf(yMetric)] * 1.1; })
-                ]);
+            yScale.range([height, 0])
+                  .domain([
+                      d3.min(filteredData, function(d) { return d[header.indexOf(yMetric)] * 0.9; }),
+                      d3.max(filteredData, function(d) { return d[header.indexOf(yMetric)] * 1.1; })
+                  ]);
             
             // Update axes
             gXAxis.call(d3.axisBottom(xScale).tickSize(0));
