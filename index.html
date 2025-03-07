@@ -17,9 +17,9 @@
             var width = window.innerWidth;
             var viewportMeta = document.querySelector('meta[name="viewport"]');
             if (viewportMeta) {
-      if (width < 600) {
+      if (width < 650) {
                 
-            var initialScale = width / 600;
+            var initialScale = width / 650;
       viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
       } else {
                   var fixedScale = 1;
@@ -260,6 +260,7 @@
             display: block;
             margin: 0 auto;
             max-width: 1082px;
+            margin-botton:10px;
         }
 
         .chart-container {
