@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
     <meta name="description" content="Plot Top 7 League team statistics. Visualize team performance and analyze multiple metrics such as Goals, Goals conceded, xG, Shots on target, Pressing, Defensive duels, Pass completion and more for teams in Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga.">
     <meta name="twitter:card" content="summary_large_image">
@@ -18,7 +18,7 @@
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    
     <style>
         :root {
             --primary-color: #3498db;
@@ -417,16 +417,47 @@
         }
 
         @media (max-width: 768px) {
-           
+            .header {
+                padding: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .navigation {
+                gap: 15px;
+                margin-top: 10px;
+            }
+            
             .plot-container {
                 padding: 15px;
             }
             
-           
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
             #scatter-plot {
                 height: 400px;
             }
-       
+            
+            select, input {
+                width: 100%;
+            }
+            
+            .btn-icon {
+                width: 100%;
+            }
+            
+            .custom-select-container,
+            .metric-select-container {
+                width: 100%;
+            }
+            
+            .custom-select-options,
+            .metric-select-options {
+                max-height: 200px;
+            }
         }
 
         /* Styles for the diagonal reference line */
