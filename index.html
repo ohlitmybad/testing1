@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.68">
     <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
     <meta name="description" content="Plot Top 7 League team statistics. Visualize team performance and analyze multiple metrics such as Goals, Goals conceded, xG, Shots on target, Pressing, Defensive duels, Pass completion and more for teams in Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga.">
     <meta name="twitter:card" content="summary_large_image">
@@ -12,23 +12,7 @@
     <meta name="twitter:image" content="https://datamb.football/vignettes/teamplots.png">
     <meta property="og:image" content="https://datamb.football/vignettes/teamplots.png">
     <title translate="no">DataMB | Plot Teams</title>
-    <script>
-  (function() {
-      var width = window.innerWidth;
-      var viewportMeta = document.querySelector('meta[name="viewport"]');
-      if (viewportMeta) {
-if (width < 590) {
-	      
-      var initialScale = width / 590;
-viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
-} else {
-            var fixedScale = 1;
-	viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + fixedScale + ', user-scalable=no');
-
-  }
-    } 
-})();
-</script>
+    
     
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
