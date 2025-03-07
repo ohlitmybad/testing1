@@ -323,6 +323,13 @@
             pointer-events: none;
         }
 
+        /* Hide button tooltips on mobile */
+        @media (max-width: 768px) {
+            .btn-tooltip .btn-tooltip-text {
+                display: none;
+            }
+        }
+
         .btn-tooltip .btn-tooltip-text::after {
             content: "";
             position: absolute;
@@ -1121,7 +1128,90 @@ body.dark-mode .language-option {
   height: 50px;
 }
 
+/* Promo links styling */
+.promo-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 15px auto 25px;
+    max-width: 800px;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
 
+.promo-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+    font-weight: 500;
+    flex: 1;
+    min-width: 220px;
+    max-width: 350px;
+    justify-content: center;
+}
+
+.promo-link iconify-icon {
+    margin-right: 8px;
+}
+
+.promo-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.radar-link {
+    border-left: 4px solid #3498db;
+}
+
+.pro-link {
+    border-left: 4px solid #f39c12;
+}
+
+.dark-mode .radar-link {
+    border-left: 4px solid #2980b9;
+}
+
+.dark-mode .pro-link {
+    border-left: 4px solid #d35400;
+}
+
+@media (max-width: 768px) {
+  
+    
+    .control-group {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    select, input {
+        width: 100%;
+    }
+    
+    /* Make text elements more readable on mobile */
+    .x-label, .y-label {
+        font-size: 12px;
+    }
+    
+    /* Adjust tooltip position for mobile */
+    .tooltip {
+        max-width: 80%;
+    }
+    
+    /* Adjust promo links for mobile */
+    .promo-links-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 0 15px;
+    }
+}
 
     </style>
 
@@ -1292,13 +1382,23 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             </div>
        
             <div class="chart-container">
-              <img class="watermark-logo" src="https://datamb.football/logo.png" alt="Football data visualization. Plot statistics of Top 7 League clubs.">
               <svg id="scatter-plot"></svg>
             </div>
-            
+
             <div class="legend" id="league-legend">
               <!-- Legend items will be added here dynamically -->
             </div>
+        </div>
+
+        <div class="promo-links-container">
+            <a href="https://datamb.football/teamradars" class="promo-link radar-link">
+                <iconify-icon icon="mdi:radar" width="20" height="20"></iconify-icon>
+                <span>Compare Teams with Radar Charts</span>
+            </a>
+            <a href="https://datamb.football/join" class="promo-link pro-link">
+                <iconify-icon icon="mdi:account-star" width="20" height="20"></iconify-icon>
+                <span>Get Pro for Player Data</span>
+            </a>
         </div>
     </div>
 
@@ -1806,18 +1906,18 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         // Add axis labels
         var xLabel = svg.append("text")
             .attr("class", "x-label")
-            .attr("text-anchor", "middle")
-            .attr("x", width / 2)
-            .attr("y", height + 48)
+            .attr("text-anchor", "end")
+            .attr("x", width)
+            .attr("y", height + 35)
             .style("font-family", "Inter, sans-serif")
             .style("font-size", "14px");
         
         var yLabel = svg.append("text")
             .attr("class", "y-label")
-            .attr("text-anchor", "middle")
+            .attr("text-anchor", "end")
             .attr("transform", "rotate(-90)")
             .attr("y", -53)
-            .attr("x", -height / 2)
+            .attr("x", 0)
             .style("font-family", "Inter, sans-serif")
             .style("font-size", "14px");
         
@@ -1826,6 +1926,41 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             .append("div")
             .attr("class", "tooltip");
         
+        // Function to check if device is mobile
+        function isMobileDevice() {
+            return window.innerWidth <= 768;
+        }
+
+        // Function to position tooltip to prevent overflow
+        function positionTooltip(event, tooltipElement) {
+            const tooltipNode = tooltipElement.node();
+            if (!tooltipNode) return { left: 0, top: 0 };
+            
+            const tooltipRect = tooltipNode.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+            
+            // Default position
+            let left = event.pageX + 10;
+            let top = event.pageY - 28;
+            
+            // Adjust if tooltip would overflow right edge
+            if (left + tooltipRect.width > viewportWidth - 10) {
+                left = event.pageX - tooltipRect.width - 10;
+            }
+            
+            // Adjust if tooltip would overflow bottom edge
+            if (top + tooltipRect.height > viewportHeight - 10) {
+                top = event.pageY - tooltipRect.height - 10;
+            }
+            
+            // Ensure tooltip doesn't go off the left or top edge
+            left = Math.max(10, left);
+            top = Math.max(10, top);
+            
+            return { left, top };
+        }
+
         var clickedCircles = [];
         var filteredData = data;
         var filteredNames = names;
@@ -1843,9 +1978,9 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                 
             // Update axis positions based on new dimensions
             gXAxis.attr("transform", "translate(0," + height + ")");
-            xLabel.attr("x", width / 2)
-                  .attr("y", height + 48);
-            yLabel.attr("x", -height / 2);
+            xLabel.attr("x", width)
+                  .attr("y", height + 35);
+            yLabel.attr("x", 0);
             
             // Check if dark mode is active
             const isDarkMode = document.body.classList.contains('dark-mode');
@@ -2052,10 +2187,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                 })
                 .style("cursor", "pointer")
                 .on("mouseover", function(d) {
-                    // Store the original fill color before hover
-                    var originalFill = d3.select(this).style("fill");
                     d3.select(this)
-                        .attr("original-fill", originalFill) // Store original fill for mouseout
                         .transition()
                         .duration(200)
                         .attr("r", 10)
@@ -2067,11 +2199,57 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                     
                     tooltip.html("<strong>" + d[1] + "</strong><br/>" +
                                 xMetric + ": " + d[header.indexOf(xMetric)].toFixed(2) + "<br/>" +
-                                yMetric + ": " + d[header.indexOf(yMetric)].toFixed(2))
-                        .style("left", (d3.event.pageX + 10) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
+                                yMetric + ": " + d[header.indexOf(yMetric)].toFixed(2));
+                    
+                    // Position tooltip to prevent overflow
+                    const tooltipNode = tooltip.node();
+                    if (tooltipNode) {
+                        const tooltipRect = tooltipNode.getBoundingClientRect();
+                        const viewportWidth = window.innerWidth;
+                        const viewportHeight = window.innerHeight;
+                        
+                        // Default position
+                        let left = d3.event.pageX + 10;
+                        let top = d3.event.pageY - 28;
+                        
+                        // Adjust if tooltip would overflow right edge
+                        if (left + tooltipRect.width > viewportWidth - 10) {
+                            left = d3.event.pageX - tooltipRect.width - 10;
+                        }
+                        
+                        // Adjust if tooltip would overflow bottom edge
+                        if (top + tooltipRect.height > viewportHeight - 10) {
+                            top = d3.event.pageY - tooltipRect.height - 10;
+                        }
+                        
+                        // Ensure tooltip doesn't go off the left or top edge
+                        left = Math.max(10, left);
+                        top = Math.max(10, top);
+                        
+                        tooltip.style("left", left + "px")
+                               .style("top", top + "px");
+                    } else {
+                        tooltip.style("left", (d3.event.pageX + 10) + "px")
+                               .style("top", (d3.event.pageY - 28) + "px");
+                    }
+                    
+                    // On mobile, hide tooltip after 1 second
+                    if (window.innerWidth <= 768) {
+                        setTimeout(function() {
+                            tooltip.transition()
+                                .duration(200)
+                                .style("opacity", 0);
+                        }, 1000);
+                    }
                 })
                 .on("mouseout", function(d) {
+                    // Only hide tooltip on non-mobile devices (mobile has timeout)
+                    if (window.innerWidth > 768) {
+                        tooltip.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    }
+                    
                     // Get the original fill color
                     var isClicked = clickedCircles.includes(d[1]);
                     
@@ -2084,10 +2262,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                             // Otherwise, revert to the default blue
                             return isClicked ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
                         });
-                    
-                    tooltip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
                 })
                 .on("click", function(d) {
                     // Check if this is a search match
@@ -2517,9 +2691,10 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                 .style("font-weight", "500")
                 .style("fill", "#333");
                 
-            // Position the label to avoid overlaps
+            // Position the label to avoid overlaps and prevent overflow
             positionLabelToAvoidOverlap(label, x, y);
         }
+        
         
         // Function to position a label to avoid overlaps with other labels
         function positionLabelToAvoidOverlap(label, x, y) {
@@ -2566,6 +2741,12 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                     y2: pos.y + 5
                 };
                 
+                // Check if label would be outside chart bounds
+                if (testRect.x1 < 0 || testRect.x2 > width || testRect.y1 < 0 || testRect.y2 > height) {
+                    // This position would place the label outside the chart bounds
+                    continue;
+                }
+                
                 // Check for overlaps with existing labels
                 existingLabels.each(function() {
                     var existingBox = d3.select(this).node().getBBox();
@@ -2594,11 +2775,32 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                 }
             }
             
-            // If all positions have overlaps, add a small random offset to the default position
-            return {
-                x: positions[0].x + (Math.random() * 20 - 10),
-                y: positions[0].y + (Math.random() * 20 - 10)
+            // If all positions have overlaps or are out of bounds, find a position that's at least within bounds
+            for (var i = 0; i < positions.length; i++) {
+                var pos = positions[i];
+                
+                // Create a rectangle for this position
+                var testRect = {
+                    x1: pos.x,
+                    y1: pos.y - labelBox.height,
+                    x2: pos.x + labelBox.width,
+                    y2: pos.y + 5
+                };
+                
+                // Check if label would be inside chart bounds
+                if (testRect.x1 >= 0 && testRect.x2 <= width && testRect.y1 >= 0 && testRect.y2 <= height) {
+                    // This position would place the label inside the chart bounds
+                    return pos;
+                }
+            }
+            
+            // If all positions are problematic, create a position that's guaranteed to be within bounds
+            var safePos = {
+                x: Math.min(Math.max(0, positions[0].x), width - labelBox.width),
+                y: Math.min(Math.max(labelBox.height, positions[0].y), height)
             };
+            
+            return safePos;
         }
         
         // Modify updateChart to reposition labels when the chart changes
