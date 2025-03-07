@@ -17,9 +17,9 @@
             var width = window.innerWidth;
             var viewportMeta = document.querySelector('meta[name="viewport"]');
             if (viewportMeta) {
-      if (width < 690) {
+      if (width < 620) {
                 
-            var initialScale = width / 690;
+            var initialScale = width / 620;
       viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
       } else {
                   var fixedScale = 1;
@@ -103,14 +103,11 @@
             border-radius: 10px;
             box-shadow: var(--shadow);
             padding: 30px;
-            margin: 0 auto;
+            margin-bottom: 30px;
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: fit-content;
-            max-width: 100%;
-            box-sizing: border-box;
         }
 
         .legend {
@@ -259,10 +256,10 @@
 
         #scatter-plot {
             width: 100%;
-            height: auto;
+            height: 770px;
             display: block;
             margin: 0 auto;
-            max-width: 100%;
+            max-width: 1082px;
         }
 
         .chart-container {
@@ -461,11 +458,6 @@
   /* Adjust tooltip position for mobile */
   .tooltip {
       max-width: 80%;
-  }
-
-  /* Ensure bottom of chart is visible on mobile */
-  .chart-container {
-      padding-bottom: 40px;
   }
 }
 
@@ -1673,19 +1665,33 @@ body.dark-mode .language-option {
             var containerWidth = document.querySelector('.plot-container').clientWidth;
             var containerHeight = window.innerHeight * 0.7; // Use 70% of viewport height as max height
             var svgWidth = Math.min(1082, containerWidth - 60);
-            var svgHeight = svgWidth * (770 / 1082); // Maintain aspect ratio
-
-            // Adjust margins for mobile devices
-            if (window.innerWidth <= 768) {
-                margin.bottom = 100; // Increase bottom margin on mobile
+            
+            // Detect if we're on a vertical screen (mobile)
+            var isVerticalScreen = window.innerWidth / window.innerHeight < 1;
+            
+            if (isVerticalScreen) {
+                // Adjust margins for vertical screens
+                margin = { top: 40, right: 40, bottom: 60, left: 70 };
+                
+                // For vertical screens, make the chart taller
+                var verticalAspectRatio = 1.4; // Taller than wide (adjust as needed)
+                var svgHeight = Math.min(containerHeight, svgWidth * verticalAspectRatio);
+                
+                // Ensure minimum height for mobile
+                svgHeight = Math.max(svgHeight, 500);
             } else {
-                margin.bottom = 60; // Default bottom margin for desktop
+                // Reset to original margins for horizontal screens
+                margin = { top: 40, right: 80, bottom: 60, left: 100 };
+                
+                // For horizontal screens, use the original aspect ratio
+                var horizontalAspectRatio = 770/1082;
+                var svgHeight = svgWidth * horizontalAspectRatio;
             }
-
+            
             // Update dimensions
             width = svgWidth - margin.left - margin.right;
             height = svgHeight - margin.top - margin.bottom;
-
+            
             // Update SVG dimensions
             d3.select("#scatter-plot")
                 .attr("width", svgWidth)
@@ -1815,20 +1821,10 @@ body.dark-mode .language-option {
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom);
                 
-            // Ensure there's enough space at the bottom of the SVG container
-            if (window.innerWidth <= 768) {
-                d3.select(".chart-container")
-                    .style("margin-bottom", "40px");
-            }
-                
             // Update axis positions based on new dimensions
             gXAxis.attr("transform", "translate(0," + height + ")");
-            
-            // Adjust x-label position based on device width
-            var xLabelYPosition = window.innerWidth <= 768 ? height + 35 : height + 48;
-            
             xLabel.attr("x", width / 2)
-                  .attr("y", xLabelYPosition);
+                  .attr("y", height + 48);
             yLabel.attr("x", -height / 2);
             
             // Check if dark mode is active
