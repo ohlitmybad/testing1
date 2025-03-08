@@ -2078,90 +2078,131 @@ document.getElementById('league').addEventListener('change', function () {
     const labels = document.querySelectorAll('label[for]');
     const inputs = document.querySelectorAll('input[type="number"]');
     let position = '';
+    let metricNames = [];
     
-    // Determine position code based on dataset
+    // Determine position code and metric names based on dataset
     switch(dataset) {
-      case 'dataset1': position = 'gk'; break;
-      case 'dataset2': position = 'cb'; break;
-      case 'dataset3': position = 'fb'; break;
-      case 'dataset4': position = 'cm'; break;
-      case 'dataset5': position = 'fw'; break;
-      case 'dataset6': position = 'st'; break;
+      case 'dataset1': 
+        position = 'gk'; 
+        metricNames = metricNames1;
+        break;
+      case 'dataset2': 
+        position = 'cb'; 
+        metricNames = metricNames2;
+        break;
+      case 'dataset3': 
+        position = 'fb'; 
+        metricNames = metricNames3;
+        break;
+      case 'dataset4': 
+        position = 'cm'; 
+        metricNames = metricNames4;
+        break;
+      case 'dataset5': 
+        position = 'fw'; 
+        metricNames = metricNames5;
+        break;
+      case 'dataset6': 
+        position = 'st'; 
+        metricNames = metricNames6;
+        break;
     }
 
-    // Define hardcoded metric labels for each position
-    const metricLabels = {
+    // Map the form fields to their corresponding index in the metricNames array
+    const fieldToIndexMap = {
+      'defensiveActions': 0,
+      'aerialsContested': 1,
+      'exitLine': 2,
+      'passes': 3,
+      'longPassPercentage': 4,
+      'shortPassPercentage': 5,
+      'psxg': 6
+    };
+
+    // Create a mapping of translation keys for each position
+    const translationKeyMap = {
       'gk': {
-        'defensiveActions': 'Def actions',
-        'aerialsContested': 'Aerials',
-        'exitLine': 'Exit line',
-        'passes': 'Passes',
-        'longPassPercentage': 'Long pass%',
-        'shortPassPercentage': 'Short pass%',
-        'psxg': 'PSxG - GA'
+        0: 'metrics.gk.def_actions',
+        1: 'metrics.gk.aerials',
+        2: 'metrics.gk.exit_line',
+        3: 'metrics.gk.passes',
+        4: 'metrics.gk.long_pass',
+        5: 'metrics.gk.short_pass',
+        6: 'metrics.gk.psxg_ga'
       },
       'cb': {
-        'defensiveActions': 'Passes',
-        'aerialsContested': 'Forward pass%',
-        'exitLine': 'Prog passes',
-        'passes': 'Def actions',
-        'longPassPercentage': 'Def duel%',
-        'shortPassPercentage': 'Aerial%',
-        'psxg': 'Prog carries'
+        0: 'metrics.cb.passes',
+        1: 'metrics.cb.forward_pass',
+        2: 'metrics.cb.prog_passes',
+        3: 'metrics.cb.def_actions',
+        4: 'metrics.cb.def_duel',
+        5: 'metrics.cb.aerial',
+        6: 'metrics.cb.prog_carries'
       },
       'fb': {
-        'defensiveActions': 'Cross%',
-        'aerialsContested': 'xA',
-        'exitLine': 'Prog passes',
-        'passes': 'Def actions',
-        'longPassPercentage': 'Def duel%',
-        'shortPassPercentage': 'Aerial%',
-        'psxg': 'Prog carries'
+        0: 'metrics.fb.cross',
+        1: 'metrics.fb.xa',
+        2: 'metrics.fb.prog_passes',
+        3: 'metrics.fb.def_actions',
+        4: 'metrics.fb.def_duel',
+        5: 'metrics.fb.aerial',
+        6: 'metrics.fb.prog_carries'
       },
       'cm': {
-        'defensiveActions': 'Duel%',
-        'aerialsContested': 'Def actions',
-        'exitLine': 'Prog carries',
-        'passes': 'Forward passes',
-        'longPassPercentage': 'Forward pass%',
-        'shortPassPercentage': 'Key passes',
-        'psxg': 'Prog passes'
+        0: 'metrics.cm.duel',
+        1: 'metrics.cm.def_actions',
+        2: 'metrics.cm.prog_carries',
+        3: 'metrics.cm.forward_passes',
+        4: 'metrics.cm.forward_pass',
+        5: 'metrics.cm.key_passes',
+        6: 'metrics.cm.prog_passes'
       },
       'fw': {
-        'defensiveActions': 'Prog carries',
-        'aerialsContested': 'Dribbles',
-        'exitLine': 'NPG',
-        'passes': 'xG+xA',
-        'longPassPercentage': 'Assists',
-        'shortPassPercentage': 'Key passes',
-        'psxg': 'Off actions'
+        0: 'metrics.fw.prog_carries',
+        1: 'metrics.fw.dribbles',
+        2: 'metrics.fw.npg',
+        3: 'metrics.fw.xg_xa',
+        4: 'metrics.fw.assists',
+        5: 'metrics.fw.key_passes',
+        6: 'metrics.fw.off_actions'
       },
       'st': {
-        'defensiveActions': 'Pass received',
-        'aerialsContested': 'Aerial%',
-        'exitLine': 'NPG',
-        'passes': 'xG',
-        'longPassPercentage': 'Pass to pen',
-        'shortPassPercentage': 'xA',
-        'psxg': 'Off actions'
+        0: 'metrics.st.pass_received',
+        1: 'metrics.st.aerial',
+        2: 'metrics.st.npg',
+        3: 'metrics.st.xg',
+        4: 'metrics.st.pass_to_pen',
+        5: 'metrics.st.xa',
+        6: 'metrics.st.off_actions'
       }
     };
 
-    // Update metric labels based on position
-    if (position && metricLabels[position]) {
-      const positionLabels = metricLabels[position];
+    // Update each label with the appropriate metric name
+    for (const [field, index] of Object.entries(fieldToIndexMap)) {
+      updateLabel(field, metricNames[index], translationKeyMap[position][index]);
+    }
+
+    // Try to apply translations if available, but the labels already have the correct text
+    if (translations && Object.keys(translations).length > 0) {
+      applyTranslations();
+    }
+  }
+
+  // Update a label with the actual metric name and set the translation key
+  function updateLabel(forAttribute, metricName, translationKey) {
+    const label = document.querySelector(`label[for="${forAttribute}"]`);
+    if (label) {
+      // Set the data-i18n attribute for potential translation
+      label.setAttribute('data-i18n', translationKey);
       
-      // Set the label text directly
-      for (const [forAttribute, labelText] of Object.entries(positionLabels)) {
-        const label = document.querySelector(`label[for="${forAttribute}"]`);
-        if (label) {
-          // Create the translation key
-          const translationKey = `metrics.${position}.${forAttribute.replace(/([A-Z])/g, '_$1').toLowerCase()}`;
-          label.setAttribute('data-i18n', translationKey);
-          
-          // Try to get translation, fall back to hardcoded value if not available
-          const translation = translations && getNestedTranslation(translations, translationKey);
-          label.textContent = translation || labelText;
+      // Set the actual metric name directly
+      label.textContent = metricName;
+      
+      // If translations are available, try to use them
+      if (translations) {
+        const translation = getNestedTranslation(translations, translationKey);
+        if (translation) {
+          label.textContent = translation;
         }
       }
     }
@@ -2607,48 +2648,6 @@ return true;
     loadTranslations(preferredLanguage);
   });
 
-  // Initialize with preferred language following priority rules
-  document.addEventListener('DOMContentLoaded', async () => {
-    // Then try to load translations
-    await loadAvailableLanguages();
-    const preferredLanguage = await getPreferredLanguage();
-    await loadTranslations(preferredLanguage);
-  });
-
-  // Initialize dataset selector immediately when this script runs
-  // This ensures it works even if translations fail to load
-  initializeDatasetSelector();
-  
-  // Initialize metric labels with the default dataset
-  updateMetricLabels('dataset1');
-
-  // Apply translations to all elements with data-i18n attribute
-  function applyTranslations() {
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-      const key = element.getAttribute('data-i18n');
-      const translation = getNestedTranslation(translations, key);
-      if (translation) {
-        element.textContent = translation;
-      }
-    });
-
-    // Apply translations to placeholders
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
-      const key = element.getAttribute('data-i18n-placeholder');
-      const translation = getNestedTranslation(translations, key);
-      if (translation) {
-        element.placeholder = translation;
-      }
-    });
-    
-    // Update metric labels with translations
-    // Get the currently selected dataset
-    const datasetSelector = document.getElementById('datasetSelector');
-    if (datasetSelector) {
-      const selectedDataset = datasetSelector.value;
-      updateMetricLabels(selectedDataset);
-    }
-  }
 })}) })}) })}) })}) })}) })}) 
 </script></div>
 
@@ -2726,10 +2725,6 @@ return true;
       // If there's an error, try to load English as fallback
       if (lang !== 'en') {
         loadTranslations('en');
-      } else {
-        // If even English fails, make sure we have default values
-        console.error('Failed to load any translations, using defaults');
-        translations = {}; // Empty translations object
       }
     }
   }
@@ -2752,31 +2747,31 @@ return true;
         element.placeholder = translation;
       }
     });
-    
-    // Update metric labels with translations
-    // Get the currently selected dataset
+
+    // Update dataset selector options - no longer dependent on translations.position
     const datasetSelector = document.getElementById('datasetSelector');
     if (datasetSelector) {
-      const selectedDataset = datasetSelector.value;
-      updateMetricLabels(selectedDataset);
+      // Use the existing HTML values or set default English values if needed
+      const defaultPositions = {
+        'goalkeepers': 'Goalkeepers',
+        'centre-backs': 'Centre-backs',
+        'full-backs': 'Full-backs',
+        'midfielders': 'Midfielders',
+        'wingers': 'Wingers',
+        'strikers': 'Strikers'
+      };
+      
+      // Try to use translations if available, otherwise use defaults
+      const positions = translations && translations.position ? translations.position : defaultPositions;
+      
+      datasetSelector.options[0].textContent = positions.goalkeepers || defaultPositions.goalkeepers;
+      datasetSelector.options[1].textContent = positions['centre-backs'] || defaultPositions['centre-backs'];
+      datasetSelector.options[2].textContent = positions['full-backs'] || defaultPositions['full-backs'];
+      datasetSelector.options[3].textContent = positions.midfielders || defaultPositions.midfielders;
+      datasetSelector.options[4].textContent = positions.wingers || defaultPositions.wingers;
+      datasetSelector.options[5].textContent = positions.strikers || defaultPositions.strikers;
     }
   }
-
-  // Separate function to initialize dataset selector - completely independent from translations
-  function initializeDatasetSelector() {
-    const datasetSelector = document.getElementById('datasetSelector');
-    if (datasetSelector) {
-      // Use the correct metric names that match what's used in the code
-      datasetSelector.options[0].textContent = 'Goalkeepers';  // dataset1
-      datasetSelector.options[1].textContent = 'Centre-backs'; // dataset2
-      datasetSelector.options[2].textContent = 'Full-backs';   // dataset3
-      datasetSelector.options[3].textContent = 'Midfielders';  // dataset4
-      datasetSelector.options[4].textContent = 'Wingers';      // dataset5
-      datasetSelector.options[5].textContent = 'Strikers';     // dataset6
-    }
-  }
-
-  // We're removing the updateDatasetSelector function since we don't want translations to affect the dataset selector
 
   // Helper function to get nested translations
   function getNestedTranslation(obj, path) {
@@ -2823,10 +2818,6 @@ return true;
 
   // Initialize with preferred language following priority rules
   document.addEventListener('DOMContentLoaded', async () => {
-    // Initialize dataset selector with default values immediately
-    initializeDatasetSelector();
-    
-    // Then try to load translations
     await loadAvailableLanguages();
     const preferredLanguage = await getPreferredLanguage();
     await loadTranslations(preferredLanguage);
