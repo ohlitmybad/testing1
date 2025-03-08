@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,11 +32,9 @@
               font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
               margin: 0;
               padding: 0;
-              display: flex;
               background-color: #ffffff;
               color: #1a1a1a;
               line-height: 1.6;
-              text-align: justify;  /* Add text justification */
             }
         
             h1, h2, h3, h4, h5 {
@@ -83,7 +80,7 @@
               height: calc(100vh - 60px); /* Subtract header height */
               overflow-y: auto;
               border-right: 1px solid #e5e7eb;
-              position: absolute;
+              position: fixed;
               left: 0;
               top: 60px; /* Start below header */
               z-index: 100; /* Reduced from 1000 */
@@ -594,7 +591,7 @@ color: #fff;
   align-items: center;
   justify-content: space-between;
   background-color: #fff;
-  position: absolute;
+  position: fixed;
   left: 0; /* Start from left edge */
   right: 0;
   top: 0;
@@ -824,9 +821,6 @@ color: #fff;
 </script>
 
 
-<body>
-
-<div class="fullpage">
 
 <header class="header">
   <div class="logo">
@@ -852,6 +846,8 @@ color: #fff;
   </div>
 </div>
 </header>
+<body>
+
   <div class="search-input-modal" id="searchInputModal">
     <div class="search-input-container">
       <input type="text" id="searchInput" data-i18n-placeholder="search.placeholder" placeholder="Enter a team or player name...">
@@ -860,7 +856,8 @@ color: #fff;
   </div>
   <!-- Add menu toggle button right after body tag -->
   <button class="menu-toggle">☰</button>
-              <div class="nav-container">
+          <!-- Left Navigation -->
+          <div class="nav-container">
             <ul class="tree">
               <li><a href="#aboutus">About Us</a></li>
               <li><a href="#ourservices">What We Offer</a>
@@ -1892,7 +1889,7 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
               </div><br>
               Or <a href="https://x.com/datamb_" target="_blank">message us on 𝕏</a>
            
-          </div> </section></div></div>
+          </div> </section>
            <script>
             document.addEventListener('DOMContentLoaded', function () {
               const navLinks = document.querySelectorAll('.nav-container a');
