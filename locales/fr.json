@@ -1,54 +1,80 @@
 {
+  "position": {
+    "goalkeepers": "Gardiens",
+    "centre-backs": "Défenseurs centraux",
+    "full-backs": "Arrières latéraux",
+    "midfielders": "Milieux",
+    "wingers": "Ailiers",
+    "strikers": "Attaquants"
+  },
+  "league": {
+    "all": "🌎 Tous les championnats",
+    "top5": "🇪🇺 Top 5 championnats",
+    "top7": "🇪🇺 Top 7 championnats"
+  },
   "search": {
-    "placeholder": "Rechercher un joueur..."
+    "age": "Âge",
+    "minutes": "Minutes jouées",
+    "button": "Rechercher",
+    "percentile": "Percentile 0-100"
   },
-  "samePositionAndLeague": "vs Ligue et Position, par 90",
-  "samePositionAndLeagueWithMinutes": "vs Ligue et Position",
-  "position5": "vs Top 5 Ligues et Positions, par 90",
-  "position5WithMinutes": "vs Top 5 Ligues et Positions",
-  "position": "vs Top 7 Ligues et Position, par 90",
-  "positionWithMinutes": "vs Top 7 Ligues et Position",
-  "league": "vs Ligue, par 90",
-  "leagueWithMinutes": "vs Ligue",
-  "top5": "vs Top 5 Ligues, par 90",
-  "top5WithMinutes": "Top 5 Ligues",
-  "allCsv": "vs Top 7 Ligues, par 90",
-  "allCsvWithMinutes": "vs Top 7 Ligues, par 90",
+  "switch": {
+    "button": "Passer à 2023/24"
+  },
   "metrics": {
-    "Goals": "Buts",
-    "Assists": "Passes décisives",
-    "Shots": "Tirs",
-    "Passes": "Passes"
-   },
-"age": {
-    "all": "Âge"
-  },
-  "leagues": {
-    "premierLeague": " Premier League",
-    "laLiga": " La Liga",
-    "bundesliga": " Bundesliga",
-    "serieA": " Serie A",
-    "ligue1": " Ligue 1",
-    "ligaPortugal": " Liga Portugal",
-    "eredivisie": " Eredivisie",
-    "top5": "s 5 grands championnats",
-    "top7": "s 7 grands championnats"
-  },
-  "positions": {
-    "goalkeeper": "Gardiens",
-    "centreback": "Défenseur centraux",
-    "fullback": "Latéraux",
-    "midfielder": "Milieux",
-    "winger": "Ailiers",
-    "striker": "Buteurs",
-    "all": "Joueurs"
-  },
-  "player_comparison": {
-    "title": "vs {position} {suffix} de{league}",
-    "per90": ", par 90"
-  },
-  "hover": {
-    "per90": "Par 90 : Oui / Non",
-    "ascending": "Ascendant : Oui / Non"
+    "gk": {
+      "def_actions": "Actions déf",
+      "aerials": "Aériens",
+      "exit_line": "Sorties",
+      "passes": "Passes",
+      "long_pass": "% passes longues",
+      "short_pass": "% passes courtes",
+      "psxg_ga": "PSxG - BA"
+    },
+    "cb": {
+      "passes": "Passes",
+      "forward_pass": "% passes avant",
+      "prog_passes": "Passes prog",
+      "def_actions": "Actions déf",
+      "def_duel": "% duels déf",
+      "aerial": "% aériens",
+      "prog_carries": "Conduites prog"
+    },
+    "fb": {
+      "cross": "% centres",
+      "xa": "xA",
+      "prog_passes": "Passes prog",
+      "def_actions": "Actions déf",
+      "def_duel": "% duels déf",
+      "aerial": "% aériens",
+      "prog_carries": "Conduites prog"
+    },
+    "cm": {
+      "duel": "% duels",
+      "def_actions": "Actions déf",
+      "prog_carries": "Conduites prog",
+      "forward_passes": "Passes avant",
+      "forward_pass": "% passes avant",
+      "key_passes": "Passes clés",
+      "prog_passes": "Passes prog"
+    },
+    "fw": {
+      "prog_carries": "Conduites prog",
+      "dribbles": "Dribbles",
+      "npg": "BNP",
+      "xg_xa": "xB+xA",
+      "assists": "Passes déc",
+      "key_passes": "Passes clés",
+      "off_actions": "Actions off"
+    },
+    "st": {
+      "pass_received": "Passes reçues",
+      "aerial": "% aériens",
+      "npg": "BNP",
+      "xg": "xB",
+      "pass_to_pen": "Passes surf pen",
+      "xa": "xA",
+      "off_actions": "Actions off"
+    }
   }
-}
+} 
