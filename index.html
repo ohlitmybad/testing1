@@ -958,9 +958,15 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
               valueSpan.textContent = numericValue;
               
               const suffixSpan = document.createElement('span');
-              suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.' + percentileSuffix.replace('th', 'th_suffix'));
-              suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.' + percentileSuffix.replace('rd', 'rd_suffix'));
-              suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.' + percentileSuffix.replace('nd', 'nd_suffix'));
+              if (percentileSuffix === 'th') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.th_suffix');
+              } else if (percentileSuffix === 'st') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.st_suffix');
+              } else if (percentileSuffix === 'nd') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.nd_suffix');
+              } else if (percentileSuffix === 'rd') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.rd_suffix');
+              }
               suffixSpan.textContent = percentileSuffix;
               
               const percentileSpan = document.createElement('span');
@@ -1122,8 +1128,25 @@ if (!headersExist) {
   
       if (results) {
         const teamId = parseInt(results[0]);
-        const teamName =
-          results[1] + ' (' + results[2] + ', ' + results[3] + ') - ' + results[11] + ' min';
+        
+        // Create a container for the team name with HTML
+        const teamNameContainer = document.createElement('div');
+        
+        // Add the team name
+        teamNameContainer.appendChild(document.createTextNode(results[1] + ' ('));
+        
+        // Add the "vs Top 7 League teams" with data-i18n attribute
+        const vsTextSpan = document.createElement('span');
+        vsTextSpan.setAttribute('data-i18n', 'teams.vs_top7');
+        vsTextSpan.textContent = results[2]; // "vs Top 7 League teams"
+        teamNameContainer.appendChild(vsTextSpan);
+        
+        // Add the rest of the text
+        teamNameContainer.appendChild(document.createTextNode(', ' + results[3] + ') - ' + results[11] + ' min'));
+        
+        // Get the HTML content
+        const teamName = teamNameContainer.innerHTML;
+        
         const color = colorClasses[searchCounter % colorClasses.length];
   
         createTable(teamName, teamId - 1, color);
@@ -1138,7 +1161,7 @@ if (!headersExist) {
 
   // Function to add data-i18n attribute to "vs Top 7 League teams" text
   function addI18nToVsText() {
-    // Find all text nodes in the document
+    // First approach: Use TreeWalker to find text nodes
     const walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
@@ -1186,11 +1209,51 @@ if (!headersExist) {
       // Replace the original text node with the fragment
       parent.replaceChild(fragment, textNode);
     });
+    
+    // Second approach: Look for specific elements that might contain the text
+    // Check table cells
+    document.querySelectorAll('td').forEach(cell => {
+      if (cell.textContent.includes('vs Top 7 League teams')) {
+        const html = cell.innerHTML;
+        if (!html.includes('data-i18n="teams.vs_top7"')) {
+          cell.innerHTML = html.replace(
+            'vs Top 7 League teams',
+            '<span data-i18n="teams.vs_top7">vs Top 7 League teams</span>'
+          );
+        }
+      }
+    });
+    
+    // Check div elements
+    document.querySelectorAll('div').forEach(div => {
+      if (div.textContent.includes('vs Top 7 League teams')) {
+        const html = div.innerHTML;
+        if (!html.includes('data-i18n="teams.vs_top7"')) {
+          div.innerHTML = html.replace(
+            'vs Top 7 League teams',
+            '<span data-i18n="teams.vs_top7">vs Top 7 League teams</span>'
+          );
+        }
+      }
+    });
+    
+    // Apply the language translation again to catch the newly added elements
+    const preferredLanguage = getPreferredLanguage();
+    if (preferredLanguage !== 'en') {
+      applyLanguage(preferredLanguage);
+    }
   }
   
   // Call the function after the page loads and after a short delay to ensure the content is rendered
   window.addEventListener('load', function() {
+    // Call once immediately
+    addI18nToVsText();
+    
+    // Call again after a delay to catch any dynamically added content
     setTimeout(addI18nToVsText, 1000);
+    
+    // Call again after a longer delay
+    setTimeout(addI18nToVsText, 2000);
   });
   
 </script>
