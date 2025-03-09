@@ -1135,11 +1135,14 @@ if (!headersExist) {
         // Add the team name
         teamNameContainer.appendChild(document.createTextNode(results[1] + ' ('));
         
-        // Add the "vs Top 7 League teams" with data-i18n attribute
-        const vsTextSpan = document.createElement('span');
-        vsTextSpan.setAttribute('data-i18n', 'teams.vs_top7');
-        vsTextSpan.textContent = results[2]; // "vs Top 7 League teams"
-        teamNameContainer.appendChild(vsTextSpan);
+        // Check if the value is the placeholder
+        if (results[2] === 'vs Top 7 League teams') {
+          // Add the "vs Top 7 League teams" with data-i18n attribute
+          const vsTextSpan = document.createElement('span');
+          vsTextSpan.setAttribute('data-i18n', 'teams.vs_top7');
+          vsTextSpan.textContent = 'vs Top 7 League teams';
+          teamNameContainer.appendChild(vsTextSpan);
+        } 
         
         // Add the rest of the text
         teamNameContainer.appendChild(document.createTextNode(', ' + results[3] + ') - ' + results[11] + ' min'));
@@ -1223,19 +1226,7 @@ if (!headersExist) {
         }
       }
     });
-    
-    // Check div elements
-    document.querySelectorAll('div').forEach(div => {
-      if (div.textContent.includes('vs Top 7 League teams')) {
-        const html = div.innerHTML;
-        if (!html.includes('data-i18n="teams.vs_top7"')) {
-          div.innerHTML = html.replace(
-            'vs Top 7 League teams',
-            '<span data-i18n="teams.vs_top7">vs Top 7 League teams</span>'
-          );
-        }
-      }
-    });
+
     
     // Apply the language translation again to catch the newly added elements
     const preferredLanguage = getPreferredLanguage();
@@ -1244,18 +1235,7 @@ if (!headersExist) {
     }
   }
   
-  // Call the function after the page loads and after a short delay to ensure the content is rendered
-  window.addEventListener('load', function() {
-    // Call once immediately
-    addI18nToVsText();
-    
-    // Call again after a delay to catch any dynamically added content
-    setTimeout(addI18nToVsText, 1000);
-    
-    // Call again after a longer delay
-    setTimeout(addI18nToVsText, 2000);
-  });
-  
+
 </script>
 
 <script>
