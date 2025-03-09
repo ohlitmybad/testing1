@@ -959,6 +959,8 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
               
               const suffixSpan = document.createElement('span');
               suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.' + percentileSuffix.replace('th', 'th_suffix'));
+              suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.' + percentileSuffix.replace('rd', 'rd_suffix'));
+              suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.' + percentileSuffix.replace('nd', 'nd_suffix'));
               suffixSpan.textContent = percentileSuffix;
               
               const percentileSpan = document.createElement('span');
@@ -1136,25 +1138,60 @@ if (!headersExist) {
 
   // Function to add data-i18n attribute to "vs Top 7 League teams" text
   function addI18nToVsText() {
-    // Wait for the table to be created
-    setTimeout(() => {
-      // Find all table cells that might contain the text
-      const tableCells = document.querySelectorAll('.metrics-table td');
+    // Find all text nodes in the document
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      null,
+      false
+    );
+
+    const nodesToReplace = [];
+    let node;
+    
+    // Collect all text nodes containing "vs Top 7 League teams"
+    while (node = walker.nextNode()) {
+      if (node.nodeValue.includes('vs Top 7 League teams')) {
+        nodesToReplace.push(node);
+      }
+    }
+    
+    // Replace the text in each node
+    nodesToReplace.forEach(textNode => {
+      const parent = textNode.parentNode;
+      const text = textNode.nodeValue;
       
-      tableCells.forEach(cell => {
-        // Check if the cell contains the text "vs Top 7 League teams"
-        if (cell.textContent.includes('vs Top 7 League teams')) {
-          // Replace the text with a span that has the data-i18n attribute
-          const cellText = cell.textContent;
-          const newText = cellText.replace('vs Top 7 League teams', '<span data-i18n="teams.vs_top7">vs Top 7 League teams</span>');
-          cell.innerHTML = newText;
-        }
-      });
-    }, 500); // Wait 500ms for the table to be created
+      // Create a document fragment with the new content
+      const fragment = document.createDocumentFragment();
+      
+      // Split the text by "vs Top 7 League teams"
+      const parts = text.split('vs Top 7 League teams');
+      
+      // Add the first part
+      if (parts[0]) {
+        fragment.appendChild(document.createTextNode(parts[0]));
+      }
+      
+      // Add the span with data-i18n attribute
+      const span = document.createElement('span');
+      span.setAttribute('data-i18n', 'teams.vs_top7');
+      span.textContent = 'vs Top 7 League teams';
+      fragment.appendChild(span);
+      
+      // Add the second part
+      if (parts[1]) {
+        fragment.appendChild(document.createTextNode(parts[1]));
+      }
+      
+      // Replace the original text node with the fragment
+      parent.replaceChild(fragment, textNode);
+    });
   }
   
-  // Call the function after the page loads
-  window.addEventListener('load', addI18nToVsText);
+  // Call the function after the page loads and after a short delay to ensure the content is rendered
+  window.addEventListener('load', function() {
+    setTimeout(addI18nToVsText, 1000);
+  });
   
 </script>
 
