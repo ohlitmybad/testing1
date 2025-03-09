@@ -847,7 +847,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
 <script>
   
   
-  const csvData = '1,Manchester United,vs_top_7_league_teams,2024/25,Premier League,0.427,0.595,0.721,0.679,0.55,0.569,0.702';  
+  const csvData = '1,Manchester United,X,2024/25,Premier League,0.427,0.595,0.721,0.679,0.55,0.569,0.702';  
 
 
 
@@ -936,18 +936,14 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
       
       const td2 = document.createElement('td');
       let value = teamData[i];
-      let htmlContentSet = false;
     
-      // Add translation for "vs Top 7 League teams"
-      if (i === 2 && value === "vs_top_7_league_teams") {
-        // Set the data-i18n attribute directly on the td element
-        td2.setAttribute('data-i18n', 'team.vs_top_7');
-        td2.textContent = "vs Top 7 League teams"; // Default English text
-        value = ''; // Clear the value so it doesn't get set again below
-        htmlContentSet = true;
-      }
-
-        if (i >= 5 && i <= 11) {
+        if (i === 2) {
+          const vsSpan = document.createElement('span');
+          vsSpan.setAttribute('data-i18n', 'table.vs_top_7_leagues');
+          vsSpan.textContent = "vs Top 7 Leagues";
+          td2.appendChild(vsSpan);
+          value = '';
+        } else if (i >= 5 && i <= 11) {
           value = parseFloat(value) * 100;
           const roundedValue = Math.round(value);
           const lastDigit = roundedValue % 10;
@@ -989,14 +985,13 @@ const suffixSpan = document.createElement('span');
               
               // Set empty text content since we're using child nodes
               value = '';
-              htmlContentSet = true;
         }
     
         if ([1, 2, 3, 4].includes(i)) {
           td2.classList.add('black'); // Add the black class
         }
         
-        if (value !== '' && !htmlContentSet) {
+        if (value !== '') {
           td2.textContent = value;
         }
         td2.classList.add(color);
@@ -1029,12 +1024,6 @@ if (!headersExist) {
     const combResults = dataArray[teamIndex].join(', ');
     console.log(combResults);
   
-    // Apply translations to the newly added elements
-    const preferredLanguage = getPreferredLanguage();
-    if (preferredLanguage !== 'en') {
-      applyLanguage(preferredLanguage);
-    }
-
     const outerRadius = 190;
     const center = [0, 0];
     const angles = [
@@ -1145,13 +1134,8 @@ if (!headersExist) {
   
       if (results) {
         const teamId = parseInt(results[0]);
-        // Handle the special format for "vs_top_7_league_teams"
-        let vsText = results[2];
-        if (vsText === "vs_top_7_league_teams") {
-          vsText = "vs Top 7 League teams";
-        }
         const teamName =
-          results[1] + ' (' + vsText + ', ' + results[3] + ') - ' + results[11] + ' min';
+          results[1] + ' (' + results[2] + ', ' + results[3] + ') - ' + results[11] + ' min';
         const color = colorClasses[searchCounter % colorClasses.length];
   
         createTable(teamName, teamId - 1, color);
