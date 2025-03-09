@@ -847,7 +847,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
 <script>
   
   
-  const csvData = '1,Manchester United,<span data-i18n="team.vs_top_7">vs Top 7 League teams</span>,2024/25,Premier League,0.427,0.595,0.721,0.679,0.55,0.569,0.702';  
+  const csvData = '1,Manchester United,vs Top 7 League teams,2024/25,Premier League,0.427,0.595,0.721,0.679,0.55,0.569,0.702';  
 
 
 
@@ -937,6 +937,11 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
       const td2 = document.createElement('td');
       let value = teamData[i];
     
+      // Add translation for "vs Top 7 League teams"
+      if (i === 2 && value === "vs Top 7 League teams") {
+        td2.innerHTML = '<span data-i18n="team.vs_top_7">vs Top 7 League teams</span>';
+        value = ''; // Clear the value so it doesn't get set again below
+      }
 
         if (i >= 5 && i <= 11) {
           value = parseFloat(value) * 100;
