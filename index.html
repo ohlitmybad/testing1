@@ -847,7 +847,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
 <script>
   
   
-  const csvData = '1,Manchester United,vs Top 7 League teams,2024/25,Premier League,0.427,0.595,0.721,0.679,0.55,0.569,0.702';  
+  const csvData = '1,Manchester United,<span data-i18n="team.vs_top_7">vs Top 7 League teams</span>,2024/25,Premier League,0.427,0.595,0.721,0.679,0.55,0.569,0.702';  
 
 
 
@@ -957,7 +957,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
               const valueSpan = document.createElement('span');
               valueSpan.textContent = numericValue;
               
-              const suffixSpan = document.createElement('span');
+const suffixSpan = document.createElement('span');
               if (percentileSuffix === 'th') {
                 suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.th_suffix');
               } else if (percentileSuffix === 'st') {
@@ -968,6 +968,7 @@ const _0x1cda9d=_0x3279;(function(_0x3d1616,_0x106f05){const _0x561e6e=_0x3279,_
                 suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.rd_suffix');
               }
               suffixSpan.textContent = percentileSuffix;
+              
               
               const percentileSpan = document.createElement('span');
               percentileSpan.setAttribute('data-i18n', 'table.percentile');
@@ -1128,28 +1129,8 @@ if (!headersExist) {
   
       if (results) {
         const teamId = parseInt(results[0]);
-        
-        // Create a container for the team name with HTML
-        const teamNameContainer = document.createElement('div');
-        
-        // Add the team name
-        teamNameContainer.appendChild(document.createTextNode(results[1] + ' ('));
-        
-        // Check if the value is the placeholder
-        if (results[2] === 'vs Top 7 League teams') {
-          // Add the "vs Top 7 League teams" with data-i18n attribute
-          const vsTextSpan = document.createElement('span');
-          vsTextSpan.setAttribute('data-i18n', 'teams.vs_top7');
-          vsTextSpan.textContent = 'vs Top 7 League teams';
-          teamNameContainer.appendChild(vsTextSpan);
-        } 
-        
-        // Add the rest of the text
-        teamNameContainer.appendChild(document.createTextNode(', ' + results[3] + ') - ' + results[11] + ' min'));
-        
-        // Get the HTML content
-        const teamName = teamNameContainer.innerHTML;
-        
+        const teamName =
+          results[1] + ' (' + results[2] + ', ' + results[3] + ') - ' + results[11] + ' min';
         const color = colorClasses[searchCounter % colorClasses.length];
   
         createTable(teamName, teamId - 1, color);
@@ -1162,80 +1143,7 @@ if (!headersExist) {
   createTableForTeam1();
   searchButton1.click(); // Trigger the search button click event
 
-  // Function to add data-i18n attribute to "vs Top 7 League teams" text
-  function addI18nToVsText() {
-    // First approach: Use TreeWalker to find text nodes
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-      null,
-      false
-    );
-
-    const nodesToReplace = [];
-    let node;
-    
-    // Collect all text nodes containing "vs Top 7 League teams"
-    while (node = walker.nextNode()) {
-      if (node.nodeValue.includes('vs Top 7 League teams')) {
-        nodesToReplace.push(node);
-      }
-    }
-    
-    // Replace the text in each node
-    nodesToReplace.forEach(textNode => {
-      const parent = textNode.parentNode;
-      const text = textNode.nodeValue;
-      
-      // Create a document fragment with the new content
-      const fragment = document.createDocumentFragment();
-      
-      // Split the text by "vs Top 7 League teams"
-      const parts = text.split('vs Top 7 League teams');
-      
-      // Add the first part
-      if (parts[0]) {
-        fragment.appendChild(document.createTextNode(parts[0]));
-      }
-      
-      // Add the span with data-i18n attribute
-      const span = document.createElement('span');
-      span.setAttribute('data-i18n', 'teams.vs_top7');
-      span.textContent = 'vs Top 7 League teams';
-      fragment.appendChild(span);
-      
-      // Add the second part
-      if (parts[1]) {
-        fragment.appendChild(document.createTextNode(parts[1]));
-      }
-      
-      // Replace the original text node with the fragment
-      parent.replaceChild(fragment, textNode);
-    });
-    
-    // Second approach: Look for specific elements that might contain the text
-    // Check table cells
-    document.querySelectorAll('td').forEach(cell => {
-      if (cell.textContent.includes('vs Top 7 League teams')) {
-        const html = cell.innerHTML;
-        if (!html.includes('data-i18n="teams.vs_top7"')) {
-          cell.innerHTML = html.replace(
-            'vs Top 7 League teams',
-            '<span data-i18n="teams.vs_top7">vs Top 7 League teams</span>'
-          );
-        }
-      }
-    });
-
-    
-    // Apply the language translation again to catch the newly added elements
-    const preferredLanguage = getPreferredLanguage();
-    if (preferredLanguage !== 'en') {
-      applyLanguage(preferredLanguage);
-    }
-  }
   
-
 </script>
 
 <script>
