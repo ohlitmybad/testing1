@@ -808,14 +808,15 @@ color: #fff;
 
       
 </style>
-<script> window.__tcfapi('addEventListener', 2, function(tcData, success) {
-  if (success && tcData.eventStatus === 'tcloaded') {
-    // Force small pastille display
-    window.__tcfapi('setUIDisplay', 2, function() {}, {
-      'displayType': 'minimal'
-    });
-  }
-}); </script>
+<script>
+// Add this to your site configuration
+window.__tcfapi('setDefaultCMPLocation', 2, function() {}, {
+  'display': 'small',  // Forces the pastille display
+  'position': 'bottom-right', // Positions the pastille
+  'buttonText': 'Cookie Settings', // Optional: customize text
+  'showLogo': true // Shows Google logo
+});	
+</script>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
      crossorigin="anonymous"></script>
