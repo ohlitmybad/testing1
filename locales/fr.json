@@ -13,6 +13,7 @@
     "top7": "🇪🇺 Top 7 championnats"
   },
   "search": {
+    "no_results": "Aucun Résultat",
     "age": "Âge",
     "minutes": "Minutes jouées",
     "button": "Rechercher",
