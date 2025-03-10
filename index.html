@@ -2290,9 +2290,10 @@ resultsContainer.innerHTML = '';
 if (restrictedPlayers.length === 0) {
   const noResultsMessage = document.createElement('p');
   noResultsMessage.setAttribute('data-i18n', 'search.no_results');
+  noResultsMessage.textContent = 'No Players Found'; // Default text for users without translations
   noResultsMessage.classList.add('no-results-message'); // Add a class to the element
   resultsContainer.appendChild(noResultsMessage);
-  applyTranslations(); // Apply translations after adding the element
+  // Translation will be handled by the global translation system
 } else {
   // Create the table element
   const table = document.createElement('table');
