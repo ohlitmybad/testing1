@@ -2293,7 +2293,7 @@ if (restrictedPlayers.length === 0) {
   noResultsMessage.textContent = 'No Players Found'; // Default text for users without translations
   noResultsMessage.classList.add('no-results-message'); // Add a class to the element
   resultsContainer.appendChild(noResultsMessage);
-  applyLanguage(preferredLanguage)
+  applyLanguage(getPreferredLanguage()); // Use getPreferredLanguage() to get the current preferred language
 } else {
   // Create the table element
   const table = document.createElement('table');
