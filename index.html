@@ -2293,7 +2293,7 @@ if (restrictedPlayers.length === 0) {
   noResultsMessage.textContent = 'No Players Found'; // Default text for users without translations
   noResultsMessage.classList.add('no-results-message'); // Add a class to the element
   resultsContainer.appendChild(noResultsMessage);
-  // Translation will be handled by the global translation system
+  applyLanguage(preferredLanguage)
 } else {
   // Create the table element
   const table = document.createElement('table');
@@ -2701,7 +2701,7 @@ return true;
   }
 
   // Load and apply translations
-  async function applyTranslations(lang) {
+  async function applyLanguage(lang) {
 
     
     currentLanguage = lang;
@@ -2764,7 +2764,7 @@ return true;
   // Initialize with preferred language following priority rules
   document.addEventListener('DOMContentLoaded', async () => {
     const preferredLanguage = getPreferredLanguage();
-    await applyTranslations(preferredLanguage);
+    await applyLanguage(preferredLanguage);
   });
 </script>
 <a href="https://datamb.football/prosearch/" target="_self" rel="noopener noreferrer">
