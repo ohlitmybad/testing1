@@ -2182,10 +2182,7 @@ document.getElementById('league').addEventListener('change', function () {
       updateLabel(field, metricNames[index], translationKeyMap[position][index]);
     }
 
-    // Try to apply translations if available, but the labels already have the correct text
-    if (translations && Object.keys(translations).length > 0) {
-      applyTranslations();
-    }
+
   }
 
   // Update a label with the actual metric name and set the translation key
