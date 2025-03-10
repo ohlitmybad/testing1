@@ -808,7 +808,14 @@ color: #fff;
 
       
 </style>
-<script> window.cookieChoiceConfig = { 'display': 'minimal', 'position': 'bottom-right' }; </script>
+<script> window.__tcfapi('addEventListener', 2, function(tcData, success) {
+  if (success && tcData.eventStatus === 'tcloaded') {
+    // Force small pastille display
+    window.__tcfapi('setUIDisplay', 2, function() {}, {
+      'displayType': 'minimal'
+    });
+  }
+}); </script>
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
      crossorigin="anonymous"></script>
