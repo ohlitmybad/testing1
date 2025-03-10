@@ -2704,10 +2704,7 @@ return true;
 
   // Load and apply translations
   async function applyTranslations(lang) {
-    if (!lang) {
-      console.error('Language parameter is undefined');
-      lang = 'en'; // Fallback to English if lang is undefined
-    }
+
     
     currentLanguage = lang;
     console.log(lang);
