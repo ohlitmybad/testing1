@@ -5,9 +5,8 @@
   "previous": "Précédent",
   "metrics": {
     "minutes": "Minutes jouées",
-    "none": "Aucun"
-  },
-  "minutes_played": "Minutes jouées",
+    "none": "Aucun",
+    "minutes_played": "Minutes jouées",
   "goalkeeping": "Gardien de but",
   "clean_sheets": "Clean sheets",
   "save_percentage": "Pourcentage d'arrêts %",
@@ -72,7 +71,9 @@
   "discipline": "Discipline",
   "fouls_per_90": "Fautes par 90",
   "yellow_cards_per_90": "Cartons jaunes par 90",
-  "red_cards_per_90": "Cartons rouges par 90",
+  "red_cards_per_90": "Cartons rouges par 90"
+  },
+  "minutes_played": "Minutes jouées",
   "leagues": {
     "all": "Toutes les ligues",
     "top7": "Top 7 ligues",
