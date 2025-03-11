@@ -3822,6 +3822,8 @@ function applyLanguage(language) {
   overlay.style.zIndex = '9999';
   overlay.style.backgroundColor = 'transparent';
   overlay.style.pointerEvents = 'all';
+	  overlay.style.touchAction = 'none'; // Disable touch events for mobile
+
   document.body.appendChild(overlay);
 
   fetch(`locales/${language}.json`)
