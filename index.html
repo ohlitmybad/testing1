@@ -516,9 +516,29 @@
     z-index: 1000;
     display: none;
     box-shadow: var(--shadow);
+    /* Improve scrolling behavior */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    /* Ensure dropdown stays above other content */
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
+/* Add overlay when dropdown is open */
+.dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: transparent;
+    display: none;
+}
 
+/* Show overlay when dropdown is open */
+.dropdown-overlay.active {
+    display: block;
+}
 
 .dark-mode .metric-category-header {
             background-color: rgba(255, 252, 252, 0.05);
@@ -1740,7 +1760,52 @@ body.dark-mode #SFctr td {
                 trigger.classList.toggle('open');
                 const isOpen = trigger.classList.contains('open');
                 options.style.display = isOpen ? 'block' : 'none';
-                });
+                
+                // Manage overlay
+                let overlay = document.querySelector('.dropdown-overlay');
+                if (!overlay) {
+                    overlay = document.createElement('div');
+                    overlay.className = 'dropdown-overlay';
+                    document.body.appendChild(overlay);
+                    
+                    // Close all dropdowns when clicking the overlay
+                    overlay.addEventListener('click', function() {
+                        document.querySelectorAll('.custom-select-trigger.open, .metric-select-trigger.open').forEach(function(openTrigger) {
+                            openTrigger.classList.remove('open');
+                            const openOptions = openTrigger.nextElementSibling;
+                            if (openOptions) openOptions.style.display = 'none';
+                        });
+                        overlay.classList.remove('active');
+                    });
+                }
+                
+                if (isOpen) {
+                    overlay.classList.add('active');
+                } else {
+                    overlay.classList.remove('active');
+                }
+            });
+            
+            // Prevent scroll propagation
+            options.addEventListener('wheel', function(e) {
+                e.stopPropagation();
+                
+                // Check if we're at the top or bottom of the dropdown
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const height = this.clientHeight;
+                const delta = e.deltaY;
+                
+                // If we're at the top and trying to scroll up, or at the bottom and trying to scroll down, prevent default
+                if ((scrollTop <= 0 && delta < 0) || (scrollTop + height >= scrollHeight && delta > 0)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // Handle touch events for mobile
+            options.addEventListener('touchmove', function(e) {
+                e.stopPropagation();
+            }, { passive: false });
             
             // Handle option selection
             const optionElements = options.querySelectorAll('.custom-select-option, .metric-select-option');
@@ -1950,7 +2015,13 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
         document.addEventListener('click', function(e) {
             const triggers = document.querySelectorAll('.custom-select-trigger, .metric-select-trigger');
             const optionsContainers = document.querySelectorAll('.custom-select-options, .metric-select-options');
-
+            const overlay = document.querySelector('.dropdown-overlay');
+            
+            // If clicking on the overlay, it will handle closing itself
+            if (overlay && overlay.contains(e.target)) {
+                return;
+            }
+            
             let clickedInsideDropdown = false;
             
             triggers.forEach(function(trigger, index) {
@@ -1958,6 +2029,7 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
                 
                 if (trigger && options && (trigger.contains(e.target) || options.contains(e.target))) {
                     clickedInsideDropdown = true;
+                    overlay.classList.remove('active');
 
                 }
             });
@@ -1970,7 +2042,10 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
                     }
                 });
                 
-
+                // Hide overlay
+                if (overlay) {
+                    overlay.classList.remove('active');
+                }
             }
         });
         
