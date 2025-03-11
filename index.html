@@ -3811,81 +3811,90 @@ function applyLanguage(language) {
     return;
   }
   
-  // More robust approach to prevent user interaction
-  // 1. Save current body overflow state
-  const originalOverflow = document.body.style.overflow;
-  // 2. Disable all pointer events on the body
-  document.body.style.overflow = 'hidden';
-  document.body.style.pointerEvents = 'none';
-  
-  // Create a full-screen overlay with higher z-index and visible on all devices
-  const overlay = document.createElement('div');
-  overlay.id = 'translation-overlay';
-  overlay.style.position = 'fixed';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100vw'; // Use viewport units
-  overlay.style.height = '100vh'; // Use viewport units
-  overlay.style.zIndex = '2147483647'; // Maximum z-index value
-  overlay.style.backgroundColor = 'transparent';
-  overlay.style.pointerEvents = 'all';
-  overlay.style.touchAction = 'none'; // Disable touch events for mobile
-  overlay.style.webkitTapHighlightColor = 'transparent'; // Remove tap highlight on mobile
-  overlay.style.webkitTouchCallout = 'none'; // Prevent callout on mobile
-  overlay.style.webkitUserSelect = 'none'; // Prevent selection on mobile
-  document.body.appendChild(overlay);
+  // Create a promise that will resolve when translations are ready
+  return new Promise((resolve) => {
+    // More robust approach to prevent user interaction
+    // 1. Save current body overflow state
+    const originalOverflow = document.body.style.overflow;
+    // 2. Disable all pointer events on the body
+    document.body.style.overflow = 'hidden';
+    document.body.style.pointerEvents = 'none';
+    
+    // Create a full-screen overlay with higher z-index and visible on all devices
+    const overlay = document.createElement('div');
+    overlay.id = 'translation-overlay';
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw'; // Use viewport units
+    overlay.style.height = '100vh'; // Use viewport units
+    overlay.style.zIndex = '2147483647'; // Maximum z-index value
+    overlay.style.backgroundColor = 'transparent';
+    overlay.style.pointerEvents = 'all';
+    overlay.style.touchAction = 'none'; // Disable touch events for mobile
+    overlay.style.webkitTapHighlightColor = 'transparent'; // Remove tap highlight on mobile
+    overlay.style.webkitTouchCallout = 'none'; // Prevent callout on mobile
+    overlay.style.webkitUserSelect = 'none'; // Prevent selection on mobile
+    document.body.appendChild(overlay);
 
-  // Function to restore user interaction
-  const restoreInteraction = () => {
-    // Remove the overlay
-    if (overlay && overlay.parentNode) {
-      overlay.parentNode.removeChild(overlay);
-    }
-    // Restore original body state
-    document.body.style.overflow = originalOverflow;
-    document.body.style.pointerEvents = 'auto';
-  };
-
-  fetch(`locales/${language}.json`)
-    .then(response => {
-      // Don't throw an error, just return null if response is not OK
-      return response.ok ? response.json() : null;
-    })
-    .then(translations => {
-      // Only proceed if translations exist
-      if (translations) {
-        // Store translations globally
-        window.currentTranslations = translations;
-        
-        // Apply translations to DOM elements
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-          const keys = element.getAttribute('data-i18n').split('.');
-          let value = translations;
-          for (const key of keys) {
-            if (value === undefined || value === null) break;
-            value = value[key];
-          }
-          if (value) {
-            if (element.tagName === 'META') {
-            element.setAttribute('content', value);
-            } else if (element.tagName === 'INPUT') {
-            element.setAttribute('placeholder', value);
-        } else if (value.includes('<')) {
-            element.innerHTML = value;
-        } else {
-            element.textContent = value;
-        }          }
-        });
+    // Function to restore user interaction
+    const restoreInteraction = () => {
+      // Remove the overlay
+      if (overlay && overlay.parentNode) {
+        overlay.parentNode.removeChild(overlay);
       }
-      
-      // Restore user interaction
-      restoreInteraction();
-    })
-    .catch(() => {
-      // Restore user interaction even if there was an error
-      restoreInteraction();
-      // Completely empty catch block to silently ignore any errors
-    });
+      // Restore original body state
+      document.body.style.overflow = originalOverflow;
+      document.body.style.pointerEvents = 'auto';
+      resolve(); // Resolve the promise
+    };
+
+    fetch(`locales/${language}.json`)
+      .then(response => {
+        // Don't throw an error, just return null if response is not OK
+        return response.ok ? response.json() : null;
+      })
+      .then(translations => {
+        // Only proceed if translations exist
+        if (translations) {
+          // Store translations globally FIRST
+          window.currentTranslations = translations;
+          
+          // Small delay to ensure window.currentTranslations is fully available
+          setTimeout(() => {
+            // Apply translations to DOM elements
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+              const keys = element.getAttribute('data-i18n').split('.');
+              let value = translations;
+              for (const key of keys) {
+                if (value === undefined || value === null) break;
+                value = value[key];
+              }
+              if (value) {
+                if (element.tagName === 'META') {
+                element.setAttribute('content', value);
+                } else if (element.tagName === 'INPUT') {
+                element.setAttribute('placeholder', value);
+            } else if (value.includes('<')) {
+                element.innerHTML = value;
+            } else {
+                element.textContent = value;
+            }          }
+            });
+            
+            // Add a small delay before restoring interaction to ensure everything is ready
+            setTimeout(restoreInteraction, 100);
+          }, 50);
+        } else {
+          restoreInteraction();
+        }
+      })
+      .catch(() => {
+        // Restore user interaction even if there was an error
+        restoreInteraction();
+        // Completely empty catch block to silently ignore any errors
+      });
+  });
 }
 
 const preferredLanguage = getPreferredLanguage();
