@@ -1389,7 +1389,7 @@ body.dark-mode #SFctr td {
                         <!-- Options will be populated by JavaScript -->
                     </div>
                 </div>
-                <input type="text" id="search-bar" data-i18n="placeholder2" placeholder="Search player...">
+                <input type="text" id="search-bar" data-i18n="search.placeholder2" placeholder="Search player...">
                 <div class="btn-tooltip">
                     <button id="toggle-median-lines" class="btn btn-outline btn-icon">
                         <div class="icon">
@@ -2708,8 +2708,8 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             gYAxis.call(d3.axisLeft(yScale).tickSize(0));
             
             // Create metric key for translation
-            const xMetricKey = "metrics." + xMetric.toLowerCase().replace(/ /g, '_').replace(/%/g, 'percentage');
-            const yMetricKey = "metrics." + yMetric.toLowerCase().replace(/ /g, '_').replace(/%/g, 'percentage');
+            const xMetricKey = "metrics." + xMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+            const yMetricKey = "metrics." + yMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
             
             // Set data-i18n attribute
             xLabel.attr("data-i18n", xMetricKey);
