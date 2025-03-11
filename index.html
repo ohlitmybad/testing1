@@ -52,18 +52,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .header {
-            background-color: var(--header-bg);
-            display: flex;
-            padding: 20px;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: var(--shadow);
-            position: relative;
-            font-family: system-ui;
-            top: 0;
-            z-index: 100;
-        }
 
 
         .container {
@@ -419,153 +407,6 @@
 
 
 
-  body.dark-mode .header .button10 {
-      color: #aeaeae;
-}
-body.dark-mode .header .button10:hover {
-  color: #2563eb;
-background-color: #ffffff;
-}
-
-    body.dark-mode header a {
-      color: #aeaeae;
-}
-
-body.dark-mode .header .logo img {
-  opacity: 0.88;
-}
-
-
-body.dark-mode .language-button {
-      background-color: #0F0F0E;
-      color: #aeaeae;
-}
-
-body.dark-mode .language-button:hover {
-      background-color: #0F0F0E;
-      color: #aeaeae;
-}
-
-
-
-  
-
-.header .logo {
-  display: flex;
-  align-items: center;
-  margin-right: auto; /* Push logo to the left */
-}
-
-.header .logo img {
-  height: 34px;
-  width: auto;
-  opacity: 0.84;
-}
-.header .logo-text {
-  margin-left: 10px;
-  font-size: 23px;
-  font-weight: 600;
-  transform: translateY(-1.1px); /* Move logo text slightly higher */
-}
-
-.header .navigation {
-  display: flex;
-  align-items: center;
-  gap: 25px; /* Reduced gap between buttons */
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateY(-2px); /* Center the navigation and move it higher */
-}
-
-
-
-.header .button10 {
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  color: #333;
-  line-height: 1.6;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  font-size: 1.1rem;  /* Added larger font size */
-}
-
-
-.header .button10:hover {
-  background-color: #f0f0f0;
-  color: #2563eb;
-
-}
-
-
-
-/* Group search and language buttons */
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-left: auto; /* Push buttons to the right */
-  transform: translateY(-1.25px); /* Move search and language buttons higher */
-}
-
-header a {
-      color: black;
-      text-decoration: none;
-    }
-
-    .language-switcher-container {
-  position: relative;
-  display: none;
-}
-
-.language-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  color: #444444;
-  display: flex;
-  align-items: center;
-  font-size: 17px;
-}
-
-.language-button iconify-icon {
-  font-size: 24px;
-  opacity: 0.7;
-}
-
-.language-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  padding: 10px;
-  width: 200px;
-  z-index: 1000;
-}
-
-.language-option {
-  display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 4px;
-  color: #444444;
-  text-decoration: none;
-}
-
-
-
-.language-option iconify-icon {
-  margin-right: 10px;
-  font-size: 20px;
-}
-
-.language-dropdown.show {
-  display: block;
-}
 
 /* Styles for flag icons in select dropdown */
 #select-league option {
@@ -802,7 +643,6 @@ body.dark-mode .language-option {
     justify-content: center;
     transform: translateY(-1px);
 }
-@media screen and (max-width: 550px) { .header .navigation { display: none; } }
 
         /* Enhanced Dark Mode Styles */
         .dark-mode .chart-wrapper {
@@ -910,55 +750,6 @@ body.dark-mode .language-option {
         }
 
  
-
-
-
-        .dark-mode #searchButton3 {
-            background-color: #0074d9;
-            color: #fff;
-        }
-
-
-        .dark-mode .header .button10 {
-            color: #aaa;
-        }
-
-        .dark-mode .header .button10:hover {
-            color: #2563eb;
-            background-color: #1a1a1a;
-        }
-
-        .dark-mode header a {
-            color: #aaa;
-        }
-
-        .dark-mode .header .logo img {
-            opacity: 0.9;
-            filter: brightness(0.9);
-        }
-
-        .dark-mode .language-button {
-            background-color: #0e0f0f;
-            color: #aaa;
-        }
-
-        .dark-mode .language-button:hover {
-            background-color: #1a1a1a;
-        }
-
-        .dark-mode .language-dropdown {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .dark-mode .language-option {
-            color: #e0e0e0;
-        }
-
-        .dark-mode .language-option:hover {
-            background-color: #252525;
-        }
 
         .dark-mode #search-bar::placeholder {
             color: #777;
@@ -3947,62 +3738,49 @@ function toggleDarkMode() {
 
     });
 
-
-function takeScreenshot() {
-const isDarkMode = document.body.classList.contains('dark-mode');
-const svg = document.getElementById('scatter-plot');
-const svgRect = svg.getBoundingClientRect();
-
-// Create a canvas with 2x resolution for higher quality
-const canvas = document.createElement('canvas');
-const scale = 2; // Increase resolution by 2x
-canvas.width = svgRect.width * scale;
-canvas.height = svgRect.height * scale;
-
-const ctx = canvas.getContext('2d');
-ctx.scale(scale, scale); 
-
-ctx.imageSmoothingEnabled = true;
-ctx.imageSmoothingQuality = 'high';
-
-ctx.fillStyle = isDarkMode ? '#2c2c2c' : '#FFFFFF';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-const svgImg = new Image();
-const svgData = new XMLSerializer().serializeToString(svg);
-const svgBlob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
-const url = URL.createObjectURL(svgBlob);
-
-const watermarkImg = new Image();
-watermarkImg.crossOrigin = "Anonymous";
-
-svgImg.onload = function() {
-    ctx.drawImage(svgImg, 0, 0, svgRect.width, svgRect.height);
-    watermarkImg.onload = function() {
-        ctx.save();
-        ctx.globalAlpha = 0.04;
-        
-        const watermarkWidth = svgRect.width * 0.3;
-        const watermarkHeight = (watermarkWidth / watermarkImg.width) * watermarkImg.height;
-        const x = (svgRect.width - watermarkWidth) / 2;
-        const y = (svgRect.height - watermarkHeight) / 2;
-        
-        ctx.drawImage(watermarkImg, x, y, watermarkWidth, watermarkHeight);
-        ctx.restore();
-        
-        const dataURL = canvas.toDataURL('image/png', 1.0);
-        const link = document.createElement('a');
-        link.download = 'DataMB Screenshot.png';
-        link.href = dataURL;
-        link.click();
-        URL.revokeObjectURL(url);
-    };
-    
-    watermarkImg.src = 'https://datamb.football/logo.png';
-};
-
-svgImg.src = url;
-}
+    function takeScreenshot() {
+            const chartContainer = document.querySelector('.chart-container');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            html2canvas(chartContainer, {
+                scale: 2, // Higher quality
+                backgroundColor: isDarkMode ? '#2c2c2c' : '#FFFFFF',
+                allowTaint: true,
+                useCORS: true,
+                logging: false
+            }).then(function(renderedCanvas) {
+                const finalCanvas = document.createElement('canvas');
+                finalCanvas.width = renderedCanvas.width;
+                finalCanvas.height = renderedCanvas.height;
+                const finalCtx = finalCanvas.getContext('2d');
+                finalCtx.drawImage(renderedCanvas, 0, 0);
+                
+                // Load the watermark
+                const watermarkImg = new Image();
+                watermarkImg.crossOrigin = "Anonymous";
+                
+                watermarkImg.onload = function() {
+                    const watermarkWidth = finalCanvas.width * 0.3;
+                    const watermarkHeight = (watermarkWidth / watermarkImg.width) * watermarkImg.height;
+                    
+                    const x = (finalCanvas.width - watermarkWidth) / 2;
+                    const y = (finalCanvas.height - watermarkHeight) / 2;
+                    
+                    finalCtx.save();
+                    finalCtx.globalAlpha = 0.04;
+                    finalCtx.drawImage(watermarkImg, x, y, watermarkWidth, watermarkHeight);
+                    finalCtx.restore();
+                    
+                    const dataURL = finalCanvas.toDataURL('image/png', 1.0);
+                    const link = document.createElement('a');
+                    link.download = 'DataMB Screenshot.png';
+                    link.href = dataURL;
+                    link.click();
+                };
+                watermarkImg.src = 'https://datamb.football/logo.png';
+            }).catch(function(error) {
+            });
+        }
 
 // Function to equalize season selector button widths
 function equalizeSeasonButtonWidths() {
