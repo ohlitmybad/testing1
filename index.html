@@ -3059,13 +3059,14 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                                .style("top", top + "px");
                     }
                     
-                    // On mobile, hide tooltip after 1 second
-                    if (window.innerWidth <= 768) {
-                        setTimeout(function() {
+                    // On mobile, hide tooltip after 2 seconds
+                    if (isMobileDevice()) {
+                        clearTimeout(window.tooltipTimeout); // Clear any existing timeout
+                        window.tooltipTimeout = setTimeout(function() {
                             tooltip.transition()
                                 .duration(200)
                                 .style("opacity", 0);
-                        }, 1000);
+                        }, 2000); // 2 seconds
                     }
                 })
                 .on("mouseout", function(d) {
@@ -3073,7 +3074,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                     const originalRadius = sizeMetric === "None" ? 8 : sizeScale(d[header.indexOf(sizeMetric)]);
                     
                     // Only hide tooltip on non-mobile devices (mobile has timeout)
-                    if (window.innerWidth > 768) {
+                    if (!isMobileDevice()) {
                         tooltip.transition()
                             .duration(500)
                             .style("opacity", 0);
