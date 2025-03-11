@@ -1646,7 +1646,15 @@ body.dark-mode #SFctr td {
                     if (metric.text.startsWith('CATEGORY:')) {
                         // This is a category header
                         option.className = 'metric-category-header';
-                        option.innerHTML = `<span data-i18n="${metric.dataI18n}">${metric.text.replace('CATEGORY: ', '')}</span>`;
+                        const span = document.createElement('span');
+                        span.setAttribute('data-i18n', metric.dataI18n);
+                        span.textContent = metric.text.replace('CATEGORY: ', '');
+                        option.appendChild(span);
+                        
+                        // Apply translation immediately if available
+                        if (window.currentTranslations && window.currentTranslations[metric.dataI18n]) {
+                            span.textContent = window.currentTranslations[metric.dataI18n];
+                        }
                     } else {
                         // This is a metric option
                         option.className = 'custom-select-option';
@@ -1654,7 +1662,32 @@ body.dark-mode #SFctr td {
                             option.classList.add('selected');
                         }
                         option.setAttribute('data-value', metric.text);
-                        option.innerHTML = `<span data-i18n="${metric.dataI18n}">${metric.text}</span>`;
+                        
+                        const span = document.createElement('span');
+                        span.setAttribute('data-i18n', metric.dataI18n);
+                        span.textContent = metric.text;
+                        option.appendChild(span);
+                        
+                        // Apply translation immediately if available
+                        if (window.currentTranslations && window.currentTranslations.metrics) {
+                            // Handle nested keys like "metrics.passes-per-90"
+                            const keys = metric.dataI18n.split('.');
+                            let translationValue = window.currentTranslations;
+                            let foundTranslation = true;
+                            
+                            for (const key of keys) {
+                                if (translationValue && translationValue[key]) {
+                                    translationValue = translationValue[key];
+                                } else {
+                                    foundTranslation = false;
+                                    break;
+                                }
+                            }
+                            
+                            if (foundTranslation) {
+                                span.textContent = translationValue;
+                            }
+                        }
                     }
                     
                     container.appendChild(option);
@@ -1740,7 +1773,29 @@ body.dark-mode #SFctr td {
                 trigger.classList.toggle('open');
                 const isOpen = trigger.classList.contains('open');
                 options.style.display = isOpen ? 'block' : 'none';
-                });
+                
+                // If opening the dropdown, ensure translations are applied to all options
+                if (isOpen && window.currentTranslations) {
+                    options.querySelectorAll('[data-i18n]').forEach(element => {
+                        const keys = element.getAttribute('data-i18n').split('.');
+                        let value = window.currentTranslations;
+                        let foundTranslation = true;
+                        
+                        for (const key of keys) {
+                            if (value && value[key]) {
+                                value = value[key];
+                            } else {
+                                foundTranslation = false;
+                                break;
+                            }
+                        }
+                        
+                        if (foundTranslation && typeof value === 'string') {
+                            element.textContent = value;
+                        }
+                    });
+                }
+            });
             
             // Handle option selection
             const optionElements = options.querySelectorAll('.custom-select-option, .metric-select-option');
@@ -3815,48 +3870,88 @@ function getBrowserLanguage() {
 return navigator.language.slice(0, 2);
 }
 
-function applyLanguage(language) {
-console.log(language);
-
-if (language === 'en') {
-  return;
+// Function to preload and pre-translate metric selectors
+function preloadMetricSelectors() {
+    // Only run if translations are available
+    if (!window.currentTranslations) return;
+    
+    // Get all metric selectors
+    const xOptions = document.getElementById('x-metric-options');
+    const yOptions = document.getElementById('y-metric-options');
+    const sizeOptions = document.getElementById('size-metric-options');
+    
+    // Apply translations to all metric options
+    [xOptions, yOptions, sizeOptions].forEach(container => {
+        if (!container) return;
+        
+        container.querySelectorAll('[data-i18n]').forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let value = window.currentTranslations;
+            let foundTranslation = true;
+            
+            for (const key of keys) {
+                if (value && value[key]) {
+                    value = value[key];
+                } else {
+                    foundTranslation = false;
+                    break;
+                }
+            }
+            
+            if (foundTranslation && typeof value === 'string') {
+                element.textContent = value;
+            }
+        });
+    });
 }
 
-fetch(`locales/${language}.json`)
-  .then(response => {
-    // Don't throw an error, just return null if response is not OK
-    return response.ok ? response.json() : null;
-  })
-  .then(translations => {
-    // Only proceed if translations exist
-    if (translations) {
-      // Store translations globally
-      window.currentTranslations = translations;
-      
-      // Apply translations to DOM elements
-      document.querySelectorAll('[data-i18n]').forEach(element => {
-        const keys = element.getAttribute('data-i18n').split('.');
-        let value = translations;
-        for (const key of keys) {
-          if (value === undefined || value === null) break;
-          value = value[key];
-        }
-        if (value) {
-          if (element.tagName === 'META') {
-          element.setAttribute('content', value);
-          } else if (element.tagName === 'INPUT') {
-          element.setAttribute('placeholder', value);
-      } else if (value.includes('<')) {
-          element.innerHTML = value;
-      } else {
-          element.textContent = value;
-      }          }
-      });
+// Modify the applyLanguage function to call preloadMetricSelectors
+function applyLanguage(language) {
+    console.log(language);
+
+    if (language === 'en') {
+        return;
     }
-  })
-  .catch(() => {
-    // Completely empty catch block to silently ignore any errors
-  });
+
+    fetch(`locales/${language}.json`)
+        .then(response => {
+            // Don't throw an error, just return null if response is not OK
+            return response.ok ? response.json() : null;
+        })
+        .then(translations => {
+            // Only proceed if translations exist
+            if (translations) {
+                // Store translations globally
+                window.currentTranslations = translations;
+                
+                // Apply translations to DOM elements
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const keys = element.getAttribute('data-i18n').split('.');
+                    let value = translations;
+                    for (const key of keys) {
+                        if (value === undefined || value === null) break;
+                        value = value[key];
+                    }
+                    if (value) {
+                        if (element.tagName === 'META') {
+                            element.setAttribute('content', value);
+                        } else if (element.tagName === 'INPUT') {
+                            element.setAttribute('placeholder', value);
+                        } else if (value.includes('<')) {
+                            element.innerHTML = value;
+                        } else {
+                            element.textContent = value;
+                        }
+                    }
+                });
+                
+                // Preload metric selectors with translations
+                setTimeout(preloadMetricSelectors, 100);
+            }
+        })
+        .catch(() => {
+            // Completely empty catch block to silently ignore any errors
+        });
 }
 
 const preferredLanguage = getPreferredLanguage();
