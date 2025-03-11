@@ -424,12 +424,12 @@
 /* Styles for custom league selector dropdown */
 .custom-select-container {
     position: relative;
-    width: 172px;
+    width: 175px;
 }
 
 /* Special width for age selector */
 .custom-select-container:has(#age-select-trigger) {
-    width: 130px;
+    width: 120px;
 }
 
 .metric-select-container {
@@ -482,7 +482,7 @@
 
 /* Make the league selector span 30px smaller */
 #league-select-trigger span {
-    max-width: calc(100% - 41px); /* 20px + 30px reduction */
+    max-width: calc(100% - 45px); /* 20px + 30px reduction */
 }
 
 .custom-select-trigger::after, .metric-select-trigger::after {
@@ -1071,6 +1071,25 @@ body.dark-mode #SFctr td {
 .dark-mode .season-selector {
     border-color: var(--border-color);
 }
+
+       
+
+        /* Disable text selection for SVG text elements */
+        svg text,
+        .x-label,
+        .y-label,
+        .team-label,
+        .player-name,
+        .x-axis text,
+        .y-axis text {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: none;
+        }
+
+   
 
     </style>
     
@@ -3045,7 +3064,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                             .style("stroke-width", 2);
                             
                         // Add team label
-                        addTeamLabel(d);
+                        addTeamLabel(d, false);
                     } else {
                         // Remove from clicked circles
                         clickedCircles.splice(index, 1);
@@ -3076,7 +3095,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 });
                 
                 if (teamData) {
-                    addTeamLabel(teamData);
+                    addTeamLabel(teamData, false);
                 }
             });
                 
@@ -3224,22 +3243,26 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                         });
                         
                         if (teamData) {
-                            // Add the label
-                            addTeamLabel(teamData);
-                            // Apply search match styling
-                            svg.select("." + labelClass).classed("search-match", true);
+                            // Add the label with isSearchMatch=true to bypass collision detection
+                            addTeamLabel(teamData, true);
+                            // Apply search match styling (now done inside addTeamLabel)
                         }
                     }
                 });
             } else {
                 // No matches found - reset to default state
-                // Remove all team labels that aren't for clicked circles
-                svg.selectAll(".team-label").each(function() {
-                    var label = d3.select(this);
-                    var teamName = label.text();
+                // Remove all team labels
+                svg.selectAll(".team-label").remove();
+                
+                // Re-add labels only for clicked teams, respecting collision detection
+                clickedCircles.forEach(function(teamName) {
+                    var teamData = filteredData.find(function(d) {
+                        return d[1] === teamName;
+                    });
                     
-                    if (!clickedCircles.includes(teamName)) {
-                        label.remove();
+                    if (teamData) {
+                        // Add the label with isSearchMatch=false to respect collision detection
+                        addTeamLabel(teamData, false);
                     }
                 });
                 
@@ -3290,13 +3313,18 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                     d3.select(this).interrupt();
                 });
                 
-            // Remove labels for teams that aren't clicked
-            svg.selectAll(".team-label").each(function() {
-                var label = d3.select(this);
-                var teamName = label.text();
+            // Remove all labels first
+            svg.selectAll(".team-label").remove();
+            
+            // Re-add labels only for clicked teams, respecting collision detection
+            clickedCircles.forEach(function(teamName) {
+                var teamData = filteredData.find(function(d) {
+                    return d[1] === teamName;
+                });
                 
-                if (!clickedCircles.includes(teamName)) {
-                    label.remove();
+                if (teamData) {
+                    // Add the label with isSearchMatch=false to respect collision detection
+                    addTeamLabel(teamData, false);
                 }
             });
         }
@@ -3376,7 +3404,7 @@ if (allSelected) {
 
     filteredData.forEach(function(d) {
 
-        addTeamLabel(d);
+        addTeamLabel(d, false);
 
     });
 
@@ -3580,7 +3608,7 @@ updateLeagueLegend(selectedLeague);
 
 
  
-        function addTeamLabel(d) {
+        function addTeamLabel(d, isSearchMatch) {
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
@@ -3630,59 +3658,64 @@ updateLeagueLegend(selectedLeague);
     var chosenPosition = null;
     var labelHeight = 12; // Approximate height based on font size
     
-    for (var i = 0; i < positions.length; i++) {
-        var pos = positions[i];
-        var labelX = x + pos.dx;
-        var labelY = y + pos.dy;
-        
-        // Calculate label bounds based on anchor
-        var labelBox = {
-            x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
-            y1: pos.dy < 0 ? labelY - labelHeight : labelY,
-            x2: pos.anchor === "start" ? labelX + labelWidth : (pos.anchor === "middle" ? labelX + labelWidth/2 : labelX),
-            y2: pos.dy < 0 ? labelY : labelY + labelHeight
-        };
-        
-        // Check for collisions
-        var hasCollision = false;
-        for (var j = 0; j < existingLabelBoxes.length; j++) {
-            var existing = existingLabelBoxes[j];
-            if (!(labelBox.x2 < existing.x1 || labelBox.x1 > existing.x2 || 
-                  labelBox.y2 < existing.y1 || labelBox.y1 > existing.y2)) {
-                hasCollision = true;
+    // If it's a search match, we'll always show the label regardless of collisions
+    if (!isSearchMatch) {
+        for (var i = 0; i < positions.length; i++) {
+            var pos = positions[i];
+            var labelX = x + pos.dx;
+            var labelY = y + pos.dy;
+            
+            // Calculate label bounds based on anchor
+            var labelBox = {
+                x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
+                y1: pos.dy < 0 ? labelY - labelHeight : labelY,
+                x2: pos.anchor === "start" ? labelX + labelWidth : (pos.anchor === "middle" ? labelX + labelWidth/2 : labelX),
+                y2: pos.dy < 0 ? labelY : labelY + labelHeight
+            };
+            
+            // Check for collisions
+            var hasCollision = false;
+            for (var j = 0; j < existingLabelBoxes.length; j++) {
+                var existing = existingLabelBoxes[j];
+                if (!(labelBox.x2 < existing.x1 || labelBox.x1 > existing.x2 || 
+                      labelBox.y2 < existing.y1 || labelBox.y1 > existing.y2)) {
+                    hasCollision = true;
+                    break;
+                }
+            }
+            
+            if (!hasCollision) {
+                chosenPosition = pos;
                 break;
             }
         }
         
-        if (!hasCollision) {
-            chosenPosition = pos;
-            break;
+        // If all positions have collisions, check if there are too many neighbors
+        // If so, skip this label entirely
+        if (!chosenPosition) {
+            // Count nearby labels (within a certain radius)
+            var radius = 50; // Adjust based on chart density
+            var neighborCount = 0;
+            
+            existingLabelBoxes.forEach(function(box) {
+                var centerX = (box.x1 + box.x2) / 2;
+                var centerY = (box.y1 + box.y2) / 2;
+                var distance = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
+                
+                if (distance < radius) {
+                    neighborCount++;
+                }
+            });
+            
+            // If too crowded, skip this label
+            if (neighborCount > 3) {
+                return;
+            }
         }
     }
     
-    // If all positions have collisions, check if there are too many neighbors
-    // If so, skip this label entirely
+    // Use the default right position if no non-colliding position was found or if it's a search match
     if (!chosenPosition) {
-        // Count nearby labels (within a certain radius)
-        var radius = 50; // Adjust based on chart density
-        var neighborCount = 0;
-        
-        existingLabelBoxes.forEach(function(box) {
-            var centerX = (box.x1 + box.x2) / 2;
-            var centerY = (box.y1 + box.y2) / 2;
-            var distance = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
-            
-            if (distance < radius) {
-                neighborCount++;
-            }
-        });
-        
-        // If too crowded, skip this label
-        if (neighborCount > 3) {
-            return;
-        }
-        
-        // Otherwise, use the default right position
         chosenPosition = positions[0];
     }
     
@@ -3698,6 +3731,11 @@ updateLeagueLegend(selectedLeague);
         .style("font-size", "12px")
         .style("font-weight", "500")
         .style("fill", "#333");
+    
+    // If it's a search match, add the search-match class
+    if (isSearchMatch) {
+        label.classed("search-match", true);
+    }
         
     // Add this label's bounding box to the collection for future labels
     var bbox = label.node().getBBox();
@@ -3767,47 +3805,69 @@ return navigator.language.slice(0, 2);
 }
 
 function applyLanguage(language) {
-console.log(language);
+  console.log(language);
 
-if (language === 'en') {
-  return;
-}
+  if (language === 'en') {
+    return;
+  }
+  
+  // Create an invisible overlay to prevent user interaction
+  const overlay = document.createElement('div');
+  overlay.id = 'translation-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.zIndex = '9999';
+  overlay.style.backgroundColor = 'transparent';
+  overlay.style.pointerEvents = 'all';
+  document.body.appendChild(overlay);
 
-fetch(`locales/${language}.json`)
-  .then(response => {
-    // Don't throw an error, just return null if response is not OK
-    return response.ok ? response.json() : null;
-  })
-  .then(translations => {
-    // Only proceed if translations exist
-    if (translations) {
-      // Store translations globally
-      window.currentTranslations = translations;
+  fetch(`locales/${language}.json`)
+    .then(response => {
+      // Don't throw an error, just return null if response is not OK
+      return response.ok ? response.json() : null;
+    })
+    .then(translations => {
+      // Only proceed if translations exist
+      if (translations) {
+        // Store translations globally
+        window.currentTranslations = translations;
+        
+        // Apply translations to DOM elements
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+          const keys = element.getAttribute('data-i18n').split('.');
+          let value = translations;
+          for (const key of keys) {
+            if (value === undefined || value === null) break;
+            value = value[key];
+          }
+          if (value) {
+            if (element.tagName === 'META') {
+            element.setAttribute('content', value);
+            } else if (element.tagName === 'INPUT') {
+            element.setAttribute('placeholder', value);
+        } else if (value.includes('<')) {
+            element.innerHTML = value;
+        } else {
+            element.textContent = value;
+        }          }
+        });
+      }
       
-      // Apply translations to DOM elements
-      document.querySelectorAll('[data-i18n]').forEach(element => {
-        const keys = element.getAttribute('data-i18n').split('.');
-        let value = translations;
-        for (const key of keys) {
-          if (value === undefined || value === null) break;
-          value = value[key];
-        }
-        if (value) {
-          if (element.tagName === 'META') {
-          element.setAttribute('content', value);
-          } else if (element.tagName === 'INPUT') {
-          element.setAttribute('placeholder', value);
-      } else if (value.includes('<')) {
-          element.innerHTML = value;
-      } else {
-          element.textContent = value;
-      }          }
-      });
-    }
-  })
-  .catch(() => {
-    // Completely empty catch block to silently ignore any errors
-  });
+      // Remove the overlay to allow user interaction again
+      if (overlay && overlay.parentNode) {
+        overlay.parentNode.removeChild(overlay);
+      }
+    })
+    .catch(() => {
+      // Remove the overlay even if there was an error
+      if (overlay && overlay.parentNode) {
+        overlay.parentNode.removeChild(overlay);
+      }
+      // Completely empty catch block to silently ignore any errors
+    });
 }
 
 const preferredLanguage = getPreferredLanguage();
