@@ -480,6 +480,11 @@
     line-height: normal; /* Ensure consistent line height */
 }
 
+/* Make the league selector span 30px smaller */
+#league-select-trigger span {
+    max-width: calc(100% - 41px); /* 20px + 30px reduction */
+}
+
 .custom-select-trigger::after, .metric-select-trigger::after {
     content: '';
     width: 6px;
@@ -3512,6 +3517,59 @@ updateLeagueLegend(selectedLeague);
                 }
                 
                 leagueText.textContent = displayName;
+                
+                // Add data-i18n attribute for translation
+                // Map the league name to the corresponding key in the translation files
+                var i18nKey = "";
+                switch(league) {
+                    case "Premier League": i18nKey = "leagues.premier"; break;
+                    case "La Liga": i18nKey = "leagues.la"; break;
+                    case "Bundesliga": i18nKey = "leagues.bundesliga"; break;
+                    case "Serie A": i18nKey = "leagues.seriea"; break;
+                    case "Ligue 1": i18nKey = "leagues.ligue1"; break;
+                    case "Primeira Liga": i18nKey = "leagues.primeiraliga"; break;
+                    case "Eredivisie": i18nKey = "leagues.eredivisie"; break;
+                    case "Scotland Premiership": i18nKey = "leagues.scotland"; break;
+                    case "Belgium Pro League": i18nKey = "leagues.belgium"; break;
+                    case "Swiss Super League": i18nKey = "leagues.switzerland"; break;
+                    case "Austrian Bundesliga": i18nKey = "leagues.austria"; break;
+                    case "Süper Lig": i18nKey = "leagues.turkey"; break;
+                    case "Denmark Superliga": i18nKey = "leagues.denmark"; break;
+                    case "Sweden Allsvenskan": i18nKey = "leagues.sweden"; break;
+                    case "Norway Eliteserien": i18nKey = "leagues.norway"; break;
+                    case "Croatia HNL": i18nKey = "leagues.croatia"; break;
+                    case "Serbia SuperLiga": i18nKey = "leagues.serbia"; break;
+                    case "Czech Fortuna Liga": i18nKey = "leagues.czechrepublic"; break;
+                    case "Brazil Serie A": i18nKey = "leagues.brazil"; break;
+                    case "Argentina Primera": i18nKey = "leagues.argentina"; break;
+                    case "Uruguay Primera": i18nKey = "leagues.uruguay"; break;
+                    case "Colombia": i18nKey = "leagues.colombia"; break;
+                    case "Chile": i18nKey = "leagues.chile"; break;
+                    case "Paraguay": i18nKey = "leagues.paraguay"; break;
+                    case "Ecuador": i18nKey = "leagues.ecuador"; break;
+                    case "Championship": i18nKey = "leagues.championship"; break;
+                    case "Segunda Division": i18nKey = "leagues.spain"; break;
+                    case "Serie B": i18nKey = "leagues.serieb"; break;
+                    case "Bundesliga 2": i18nKey = "leagues.bundesliga2"; break;
+                    case "Ligue 2": i18nKey = "leagues.ligue2"; break;
+                    case "LigaMX": i18nKey = "leagues.mexico"; break;
+                    case "MLS": i18nKey = "leagues.unitedstates"; break;
+                    case "K League 1": i18nKey = "leagues.korea"; break;
+                    case "J1 League": i18nKey = "leagues.japan"; break;
+                    case "Saudi Pro League": i18nKey = "leagues.saudiarabia"; break;
+                }
+                
+                if (i18nKey) {
+                    leagueText.setAttribute('data-i18n', i18nKey);
+                    
+                    // Apply translation immediately if available
+                    if (window.currentTranslations && window.currentTranslations.leagues) {
+                        const key = i18nKey.split('.')[1]; // Get the part after 'leagues.'
+                        if (window.currentTranslations.leagues[key]) {
+                            leagueText.textContent = window.currentTranslations.leagues[key];
+                        }
+                    }
+                }
                 
                 legendItem.appendChild(colorBox);
                 legendItem.appendChild(leagueText);
