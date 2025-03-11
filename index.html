@@ -1103,7 +1103,7 @@ body.dark-mode #SFctr td {
             
 }
         /* Disable text selection for SVG text elements */
-        svg text,
+        svg text, .legend,
         .x-label,
         .y-label,
         .team-label,
@@ -2029,6 +2029,8 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
                 
                 if (trigger && options && (trigger.contains(e.target) || options.contains(e.target))) {
                     clickedInsideDropdown = true;
+                    overlay.classList.remove('active');
+
                 }
             });
             
