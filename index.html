@@ -3811,20 +3811,40 @@ function applyLanguage(language) {
     return;
   }
   
-  // Create an invisible overlay to prevent user interaction
+  // More robust approach to prevent user interaction
+  // 1. Save current body overflow state
+  const originalOverflow = document.body.style.overflow;
+  // 2. Disable all pointer events on the body
+  document.body.style.overflow = 'hidden';
+  document.body.style.pointerEvents = 'none';
+  
+  // Create a full-screen overlay with higher z-index and visible on all devices
   const overlay = document.createElement('div');
   overlay.id = 'translation-overlay';
   overlay.style.position = 'fixed';
   overlay.style.top = '0';
   overlay.style.left = '0';
-  overlay.style.width = '100%';
-  overlay.style.height = '100%';
-  overlay.style.zIndex = '9999';
+  overlay.style.width = '100vw'; // Use viewport units
+  overlay.style.height = '100vh'; // Use viewport units
+  overlay.style.zIndex = '2147483647'; // Maximum z-index value
   overlay.style.backgroundColor = 'transparent';
   overlay.style.pointerEvents = 'all';
-	  overlay.style.touchAction = 'none'; // Disable touch events for mobile
-
+  overlay.style.touchAction = 'none'; // Disable touch events for mobile
+  overlay.style.webkitTapHighlightColor = 'transparent'; // Remove tap highlight on mobile
+  overlay.style.webkitTouchCallout = 'none'; // Prevent callout on mobile
+  overlay.style.webkitUserSelect = 'none'; // Prevent selection on mobile
   document.body.appendChild(overlay);
+
+  // Function to restore user interaction
+  const restoreInteraction = () => {
+    // Remove the overlay
+    if (overlay && overlay.parentNode) {
+      overlay.parentNode.removeChild(overlay);
+    }
+    // Restore original body state
+    document.body.style.overflow = originalOverflow;
+    document.body.style.pointerEvents = 'auto';
+  };
 
   fetch(`locales/${language}.json`)
     .then(response => {
@@ -3858,16 +3878,12 @@ function applyLanguage(language) {
         });
       }
       
-      // Remove the overlay to allow user interaction again
-      if (overlay && overlay.parentNode) {
-        overlay.parentNode.removeChild(overlay);
-      }
+      // Restore user interaction
+      restoreInteraction();
     })
     .catch(() => {
-      // Remove the overlay even if there was an error
-      if (overlay && overlay.parentNode) {
-        overlay.parentNode.removeChild(overlay);
-      }
+      // Restore user interaction even if there was an error
+      restoreInteraction();
       // Completely empty catch block to silently ignore any errors
     });
 }
