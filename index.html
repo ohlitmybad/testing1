@@ -518,6 +518,8 @@
     box-shadow: var(--shadow);
 }
 
+
+
 .dark-mode .metric-category-header {
             background-color: rgba(255, 252, 252, 0.05);
             color: rgba(255, 255, 255, 0.9);
@@ -922,7 +924,7 @@ body.dark-mode #SFctr td {
     color: var(--text-color);
     opacity: 0.8;
     font-weight: 500;
-    display: flex;
+    display: none;
     align-items: center;
     gap: 4px;
     transition: opacity 0.2s ease;
@@ -1073,9 +1075,15 @@ body.dark-mode #SFctr td {
 }
 
        
-
+.custom-select-option {
+    -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            
+}
         /* Disable text selection for SVG text elements */
-        svg text,
+        svg text, .legend,
         .x-label,
         .y-label,
         .team-label,
@@ -1732,7 +1740,7 @@ body.dark-mode #SFctr td {
                 trigger.classList.toggle('open');
                 const isOpen = trigger.classList.contains('open');
                 options.style.display = isOpen ? 'block' : 'none';
-            });
+                });
             
             // Handle option selection
             const optionElements = options.querySelectorAll('.custom-select-option, .metric-select-option');
@@ -1942,7 +1950,7 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
         document.addEventListener('click', function(e) {
             const triggers = document.querySelectorAll('.custom-select-trigger, .metric-select-trigger');
             const optionsContainers = document.querySelectorAll('.custom-select-options, .metric-select-options');
-            
+
             let clickedInsideDropdown = false;
             
             triggers.forEach(function(trigger, index) {
@@ -1950,6 +1958,7 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
                 
                 if (trigger && options && (trigger.contains(e.target) || options.contains(e.target))) {
                     clickedInsideDropdown = true;
+
                 }
             });
             
@@ -1960,6 +1969,8 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
                         optionsContainers[index].style.display = 'none';
                     }
                 });
+                
+
             }
         });
         
@@ -3805,87 +3816,47 @@ return navigator.language.slice(0, 2);
 }
 
 function applyLanguage(language) {
-  console.log(language);
+console.log(language);
 
-  if (language === 'en') {
-    return;
-  }
-  
-  // More robust approach to prevent user interaction
-  // 1. Save current body overflow state
-  const originalOverflow = document.body.style.overflow;
-  // 2. Disable all pointer events on the body
-  document.body.style.overflow = 'hidden';
-  document.body.style.pointerEvents = 'none';
-  
-  // Create a full-screen overlay with higher z-index and visible on all devices
-  const overlay = document.createElement('div');
-  overlay.id = 'translation-overlay';
-  overlay.style.position = 'fixed';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100vw'; // Use viewport units
-  overlay.style.height = '100vh'; // Use viewport units
-  overlay.style.zIndex = '2147483647'; // Maximum z-index value
-  overlay.style.backgroundColor = 'transparent';
-  overlay.style.pointerEvents = 'all';
-  overlay.style.touchAction = 'none'; // Disable touch events for mobile
-  overlay.style.webkitTapHighlightColor = 'transparent'; // Remove tap highlight on mobile
-  overlay.style.webkitTouchCallout = 'none'; // Prevent callout on mobile
-  overlay.style.webkitUserSelect = 'none'; // Prevent selection on mobile
-  document.body.appendChild(overlay);
+if (language === 'en') {
+  return;
+}
 
-  // Function to restore user interaction
-  const restoreInteraction = () => {
-    // Remove the overlay
-    if (overlay && overlay.parentNode) {
-      overlay.parentNode.removeChild(overlay);
-    }
-    // Restore original body state
-    document.body.style.overflow = originalOverflow;
-    document.body.style.pointerEvents = 'auto';
-  };
-
-  fetch(`locales/${language}.json`)
-    .then(response => {
-      // Don't throw an error, just return null if response is not OK
-      return response.ok ? response.json() : null;
-    })
-    .then(translations => {
-      // Only proceed if translations exist
-      if (translations) {
-        // Store translations globally
-        window.currentTranslations = translations;
-        
-        // Apply translations to DOM elements
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-          const keys = element.getAttribute('data-i18n').split('.');
-          let value = translations;
-          for (const key of keys) {
-            if (value === undefined || value === null) break;
-            value = value[key];
-          }
-          if (value) {
-            if (element.tagName === 'META') {
-            element.setAttribute('content', value);
-            } else if (element.tagName === 'INPUT') {
-            element.setAttribute('placeholder', value);
-        } else if (value.includes('<')) {
-            element.innerHTML = value;
-        } else {
-            element.textContent = value;
-        }          }
-        });
-      }
+fetch(`locales/${language}.json`)
+  .then(response => {
+    // Don't throw an error, just return null if response is not OK
+    return response.ok ? response.json() : null;
+  })
+  .then(translations => {
+    // Only proceed if translations exist
+    if (translations) {
+      // Store translations globally
+      window.currentTranslations = translations;
       
-      // Restore user interaction
-      restoreInteraction();
-    })
-    .catch(() => {
-      // Restore user interaction even if there was an error
-      restoreInteraction();
-      // Completely empty catch block to silently ignore any errors
-    });
+      // Apply translations to DOM elements
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const keys = element.getAttribute('data-i18n').split('.');
+        let value = translations;
+        for (const key of keys) {
+          if (value === undefined || value === null) break;
+          value = value[key];
+        }
+        if (value) {
+          if (element.tagName === 'META') {
+          element.setAttribute('content', value);
+          } else if (element.tagName === 'INPUT') {
+          element.setAttribute('placeholder', value);
+      } else if (value.includes('<')) {
+          element.innerHTML = value;
+      } else {
+          element.textContent = value;
+      }          }
+      });
+    }
+  })
+  .catch(() => {
+    // Completely empty catch block to silently ignore any errors
+  });
 }
 
 const preferredLanguage = getPreferredLanguage();
