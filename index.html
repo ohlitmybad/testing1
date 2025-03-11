@@ -3811,10 +3811,13 @@ function applyLanguage(language) {
     return;
   }
   
-  // Block user interaction immediately
+  // Create a variable to track if translations are complete
+  window.translationsComplete = false;
+  
+  // Block ALL interactions more aggressively
   document.body.style.pointerEvents = 'none';
   
-  // Create a simple overlay to block all interactions
+  // Create a full-screen overlay with absolute highest z-index
   const overlay = document.createElement('div');
   overlay.id = 'translation-overlay';
   overlay.style.position = 'fixed';
@@ -3822,8 +3825,36 @@ function applyLanguage(language) {
   overlay.style.left = '0';
   overlay.style.width = '100vw';
   overlay.style.height = '100vh';
-  overlay.style.zIndex = '2147483647';
+  overlay.style.zIndex = '2147483647'; // Maximum possible z-index
   overlay.style.backgroundColor = 'transparent';
+  
+  // Add event listeners to capture and prevent ALL events
+  const preventAll = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    return false;
+  };
+  
+  // Capture all possible interaction events
+  const events = [
+    'touchstart', 'touchmove', 'touchend', 'touchcancel',
+    'mousedown', 'mouseup', 'mousemove', 'click', 'dblclick',
+    'pointerdown', 'pointerup', 'pointermove', 'pointercancel',
+    'focus', 'blur', 'input', 'change', 'submit'
+  ];
+  
+  // Add all event listeners to the overlay
+  events.forEach(event => {
+    overlay.addEventListener(event, preventAll, { capture: true });
+    // Also add to document and body for extra protection
+    document.addEventListener(event, (e) => {
+      if (!window.translationsComplete) {
+        preventAll(e);
+      }
+    }, { capture: true });
+  });
+  
   document.body.appendChild(overlay);
 
   fetch(`locales/${language}.json`)
@@ -3862,19 +3893,22 @@ function applyLanguage(language) {
         console.log("No translations found for language:", language);
       }
       
-      // Wait a bit to ensure translations are fully applied
+      // Wait a bit longer to ensure translations are fully applied
       setTimeout(() => {
         console.log("Enabling user interaction after translations");
+        // Mark translations as complete
+        window.translationsComplete = true;
         // Remove the overlay
         if (overlay && overlay.parentNode) {
           overlay.parentNode.removeChild(overlay);
         }
         // Re-enable user interaction
         document.body.style.pointerEvents = 'auto';
-      }, 300); // Slightly longer delay to ensure everything is ready
+      }, 500); // Longer delay for mobile devices
     })
     .catch((error) => {
       console.error("Error loading translations:", error);
+      // Mark translations as complete even on error
       // Remove the overlay even if there was an error
       if (overlay && overlay.parentNode) {
         overlay.parentNode.removeChild(overlay);
