@@ -424,12 +424,12 @@
 /* Styles for custom league selector dropdown */
 .custom-select-container {
     position: relative;
-    width: 175px;
+    width: 172px;
 }
 
 /* Special width for age selector */
 .custom-select-container:has(#age-select-trigger) {
-    width: 120px;
+    width: 130px;
 }
 
 .metric-select-container {
@@ -482,7 +482,7 @@
 
 /* Make the league selector span 30px smaller */
 #league-select-trigger span {
-    max-width: calc(100% - 45px); /* 20px + 30px reduction */
+    max-width: calc(100% - 41px); /* 20px + 30px reduction */
 }
 
 .custom-select-trigger::after, .metric-select-trigger::after {
@@ -516,28 +516,6 @@
     z-index: 1000;
     display: none;
     box-shadow: var(--shadow);
-    /* Improve scrolling behavior */
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    /* Ensure dropdown stays above other content */
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
-}
-
-/* Add overlay when dropdown is open */
-.dropdown-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 999;
-    background-color: transparent;
-    display: none;
-}
-
-/* Show overlay when dropdown is open */
-.dropdown-overlay.active {
-    display: block;
 }
 
 .dark-mode .metric-category-header {
@@ -944,7 +922,7 @@ body.dark-mode #SFctr td {
     color: var(--text-color);
     opacity: 0.8;
     font-weight: 500;
-    display: none;
+    display: flex;
     align-items: center;
     gap: 4px;
     transition: opacity 0.2s ease;
@@ -1093,31 +1071,6 @@ body.dark-mode #SFctr td {
 .dark-mode .season-selector {
     border-color: var(--border-color);
 }
-
-       
-.custom-select-option {
-    -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            
-}
-        /* Disable text selection for SVG text elements */
-        svg text, .legend,
-        .x-label,
-        .y-label,
-        .team-label,
-        .player-name,
-        .x-axis text,
-        .y-axis text {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            pointer-events: none;
-        }
-
-   
 
     </style>
     
@@ -1760,52 +1713,7 @@ body.dark-mode #SFctr td {
                 trigger.classList.toggle('open');
                 const isOpen = trigger.classList.contains('open');
                 options.style.display = isOpen ? 'block' : 'none';
-                
-                // Manage overlay
-                let overlay = document.querySelector('.dropdown-overlay');
-                if (!overlay) {
-                    overlay = document.createElement('div');
-                    overlay.className = 'dropdown-overlay';
-                    document.body.appendChild(overlay);
-                    
-                    // Close all dropdowns when clicking the overlay
-                    overlay.addEventListener('click', function() {
-                        document.querySelectorAll('.custom-select-trigger.open, .metric-select-trigger.open').forEach(function(openTrigger) {
-                            openTrigger.classList.remove('open');
-                            const openOptions = openTrigger.nextElementSibling;
-                            if (openOptions) openOptions.style.display = 'none';
-                        });
-                        overlay.classList.remove('active');
-                    });
-                }
-                
-                if (isOpen) {
-                    overlay.classList.add('active');
-                } else {
-                    overlay.classList.remove('active');
-                }
             });
-            
-            // Prevent scroll propagation
-            options.addEventListener('wheel', function(e) {
-                e.stopPropagation();
-                
-                // Check if we're at the top or bottom of the dropdown
-                const scrollTop = this.scrollTop;
-                const scrollHeight = this.scrollHeight;
-                const height = this.clientHeight;
-                const delta = e.deltaY;
-                
-                // If we're at the top and trying to scroll up, or at the bottom and trying to scroll down, prevent default
-                if ((scrollTop <= 0 && delta < 0) || (scrollTop + height >= scrollHeight && delta > 0)) {
-                    e.preventDefault();
-                }
-            }, { passive: false });
-            
-            // Handle touch events for mobile
-            options.addEventListener('touchmove', function(e) {
-                e.stopPropagation();
-            }, { passive: false });
             
             // Handle option selection
             const optionElements = options.querySelectorAll('.custom-select-option, .metric-select-option');
@@ -2015,12 +1923,6 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
         document.addEventListener('click', function(e) {
             const triggers = document.querySelectorAll('.custom-select-trigger, .metric-select-trigger');
             const optionsContainers = document.querySelectorAll('.custom-select-options, .metric-select-options');
-            const overlay = document.querySelector('.dropdown-overlay');
-            
-            // If clicking on the overlay, it will handle closing itself
-            if (overlay && overlay.contains(e.target)) {
-                return;
-            }
             
             let clickedInsideDropdown = false;
             
@@ -2029,8 +1931,6 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
                 
                 if (trigger && options && (trigger.contains(e.target) || options.contains(e.target))) {
                     clickedInsideDropdown = true;
-                    overlay.classList.remove('active');
-
                 }
             });
             
@@ -2041,11 +1941,6 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
                         optionsContainers[index].style.display = 'none';
                     }
                 });
-                
-                // Hide overlay
-                if (overlay) {
-                    overlay.classList.remove('active');
-                }
             }
         });
         
@@ -3150,7 +3045,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                             .style("stroke-width", 2);
                             
                         // Add team label
-                        addTeamLabel(d, false);
+                        addTeamLabel(d);
                     } else {
                         // Remove from clicked circles
                         clickedCircles.splice(index, 1);
@@ -3181,7 +3076,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 });
                 
                 if (teamData) {
-                    addTeamLabel(teamData, false);
+                    addTeamLabel(teamData);
                 }
             });
                 
@@ -3329,26 +3224,22 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                         });
                         
                         if (teamData) {
-                            // Add the label with isSearchMatch=true to bypass collision detection
-                            addTeamLabel(teamData, true);
-                            // Apply search match styling (now done inside addTeamLabel)
+                            // Add the label
+                            addTeamLabel(teamData);
+                            // Apply search match styling
+                            svg.select("." + labelClass).classed("search-match", true);
                         }
                     }
                 });
             } else {
                 // No matches found - reset to default state
-                // Remove all team labels
-                svg.selectAll(".team-label").remove();
-                
-                // Re-add labels only for clicked teams, respecting collision detection
-                clickedCircles.forEach(function(teamName) {
-                    var teamData = filteredData.find(function(d) {
-                        return d[1] === teamName;
-                    });
+                // Remove all team labels that aren't for clicked circles
+                svg.selectAll(".team-label").each(function() {
+                    var label = d3.select(this);
+                    var teamName = label.text();
                     
-                    if (teamData) {
-                        // Add the label with isSearchMatch=false to respect collision detection
-                        addTeamLabel(teamData, false);
+                    if (!clickedCircles.includes(teamName)) {
+                        label.remove();
                     }
                 });
                 
@@ -3399,18 +3290,13 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                     d3.select(this).interrupt();
                 });
                 
-            // Remove all labels first
-            svg.selectAll(".team-label").remove();
-            
-            // Re-add labels only for clicked teams, respecting collision detection
-            clickedCircles.forEach(function(teamName) {
-                var teamData = filteredData.find(function(d) {
-                    return d[1] === teamName;
-                });
+            // Remove labels for teams that aren't clicked
+            svg.selectAll(".team-label").each(function() {
+                var label = d3.select(this);
+                var teamName = label.text();
                 
-                if (teamData) {
-                    // Add the label with isSearchMatch=false to respect collision detection
-                    addTeamLabel(teamData, false);
+                if (!clickedCircles.includes(teamName)) {
+                    label.remove();
                 }
             });
         }
@@ -3490,7 +3376,7 @@ if (allSelected) {
 
     filteredData.forEach(function(d) {
 
-        addTeamLabel(d, false);
+        addTeamLabel(d);
 
     });
 
@@ -3694,7 +3580,7 @@ updateLeagueLegend(selectedLeague);
 
 
  
-        function addTeamLabel(d, isSearchMatch) {
+        function addTeamLabel(d) {
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
@@ -3744,64 +3630,59 @@ updateLeagueLegend(selectedLeague);
     var chosenPosition = null;
     var labelHeight = 12; // Approximate height based on font size
     
-    // If it's a search match, we'll always show the label regardless of collisions
-    if (!isSearchMatch) {
-        for (var i = 0; i < positions.length; i++) {
-            var pos = positions[i];
-            var labelX = x + pos.dx;
-            var labelY = y + pos.dy;
-            
-            // Calculate label bounds based on anchor
-            var labelBox = {
-                x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
-                y1: pos.dy < 0 ? labelY - labelHeight : labelY,
-                x2: pos.anchor === "start" ? labelX + labelWidth : (pos.anchor === "middle" ? labelX + labelWidth/2 : labelX),
-                y2: pos.dy < 0 ? labelY : labelY + labelHeight
-            };
-            
-            // Check for collisions
-            var hasCollision = false;
-            for (var j = 0; j < existingLabelBoxes.length; j++) {
-                var existing = existingLabelBoxes[j];
-                if (!(labelBox.x2 < existing.x1 || labelBox.x1 > existing.x2 || 
-                      labelBox.y2 < existing.y1 || labelBox.y1 > existing.y2)) {
-                    hasCollision = true;
-                    break;
-                }
-            }
-            
-            if (!hasCollision) {
-                chosenPosition = pos;
+    for (var i = 0; i < positions.length; i++) {
+        var pos = positions[i];
+        var labelX = x + pos.dx;
+        var labelY = y + pos.dy;
+        
+        // Calculate label bounds based on anchor
+        var labelBox = {
+            x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
+            y1: pos.dy < 0 ? labelY - labelHeight : labelY,
+            x2: pos.anchor === "start" ? labelX + labelWidth : (pos.anchor === "middle" ? labelX + labelWidth/2 : labelX),
+            y2: pos.dy < 0 ? labelY : labelY + labelHeight
+        };
+        
+        // Check for collisions
+        var hasCollision = false;
+        for (var j = 0; j < existingLabelBoxes.length; j++) {
+            var existing = existingLabelBoxes[j];
+            if (!(labelBox.x2 < existing.x1 || labelBox.x1 > existing.x2 || 
+                  labelBox.y2 < existing.y1 || labelBox.y1 > existing.y2)) {
+                hasCollision = true;
                 break;
             }
         }
         
-        // If all positions have collisions, check if there are too many neighbors
-        // If so, skip this label entirely
-        if (!chosenPosition) {
-            // Count nearby labels (within a certain radius)
-            var radius = 50; // Adjust based on chart density
-            var neighborCount = 0;
-            
-            existingLabelBoxes.forEach(function(box) {
-                var centerX = (box.x1 + box.x2) / 2;
-                var centerY = (box.y1 + box.y2) / 2;
-                var distance = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
-                
-                if (distance < radius) {
-                    neighborCount++;
-                }
-            });
-            
-            // If too crowded, skip this label
-            if (neighborCount > 3) {
-                return;
-            }
+        if (!hasCollision) {
+            chosenPosition = pos;
+            break;
         }
     }
     
-    // Use the default right position if no non-colliding position was found or if it's a search match
+    // If all positions have collisions, check if there are too many neighbors
+    // If so, skip this label entirely
     if (!chosenPosition) {
+        // Count nearby labels (within a certain radius)
+        var radius = 50; // Adjust based on chart density
+        var neighborCount = 0;
+        
+        existingLabelBoxes.forEach(function(box) {
+            var centerX = (box.x1 + box.x2) / 2;
+            var centerY = (box.y1 + box.y2) / 2;
+            var distance = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
+            
+            if (distance < radius) {
+                neighborCount++;
+            }
+        });
+        
+        // If too crowded, skip this label
+        if (neighborCount > 3) {
+            return;
+        }
+        
+        // Otherwise, use the default right position
         chosenPosition = positions[0];
     }
     
@@ -3817,11 +3698,6 @@ updateLeagueLegend(selectedLeague);
         .style("font-size", "12px")
         .style("font-weight", "500")
         .style("fill", "#333");
-    
-    // If it's a search match, add the search-match class
-    if (isSearchMatch) {
-        label.classed("search-match", true);
-    }
         
     // Add this label's bounding box to the collection for future labels
     var bbox = label.node().getBBox();
