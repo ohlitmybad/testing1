@@ -3805,107 +3805,51 @@ return navigator.language.slice(0, 2);
 }
 
 function applyLanguage(language) {
-  console.log(language);
+console.log(language);
 
-  if (language === 'en') {
-    return;
-  }
+if (language === 'en') {
+  return;
+}
 
-  // Create a promise to track translation completion
-  return new Promise((resolve) => {
-    fetch(`locales/${language}.json`)
-      .then(response => {
-        // Don't throw an error, just return null if response is not OK
-        return response.ok ? response.json() : null;
-      })
-      .then(translations => {
-        // Only proceed if translations exist
-        if (translations) {
-          // Store translations globally
-          window.currentTranslations = translations;
-          
-          // Apply translations to DOM elements
-          document.querySelectorAll('[data-i18n]').forEach(element => {
-            const keys = element.getAttribute('data-i18n').split('.');
-            let value = translations;
-            for (const key of keys) {
-              if (value === undefined || value === null) break;
-              value = value[key];
-            }
-            if (value) {
-              if (element.tagName === 'META') {
-                element.setAttribute('content', value);
-              } else if (element.tagName === 'INPUT') {
-                element.setAttribute('placeholder', value);
-              } else if (value.includes('<')) {
-                element.innerHTML = value;
-              } else {
-                element.textContent = value;
-              }
-            }
-          });
-          
-          // Also update any open selectors or dropdown values
-          updateOpenSelectorsTranslation(translations);
+fetch(`locales/${language}.json`)
+  .then(response => {
+    // Don't throw an error, just return null if response is not OK
+    return response.ok ? response.json() : null;
+  })
+  .then(translations => {
+    // Only proceed if translations exist
+    if (translations) {
+      // Store translations globally
+      window.currentTranslations = translations;
+      
+      // Apply translations to DOM elements
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const keys = element.getAttribute('data-i18n').split('.');
+        let value = translations;
+        for (const key of keys) {
+          if (value === undefined || value === null) break;
+          value = value[key];
         }
-        resolve(); // Resolve the promise whether translations exist or not
-      })
-      .catch(() => {
-        // Resolve the promise even if there's an error
-        resolve();
+        if (value) {
+          if (element.tagName === 'META') {
+          element.setAttribute('content', value);
+          } else if (element.tagName === 'INPUT') {
+          element.setAttribute('placeholder', value);
+      } else if (value.includes('<')) {
+          element.innerHTML = value;
+      } else {
+          element.textContent = value;
+      }          }
       });
-  });
-}
-
-// Function to update translations in any open selectors
-function updateOpenSelectorsTranslation(translations) {
-  // Update select options that might already be rendered
-  document.querySelectorAll('select option, .dropdown-item').forEach(element => {
-    const i18nKey = element.getAttribute('data-i18n');
-    if (i18nKey) {
-      const keys = i18nKey.split('.');
-      let value = translations;
-      for (const key of keys) {
-        if (value === undefined || value === null) break;
-        value = value[key];
-      }
-      if (value) {
-        element.textContent = value;
-      }
     }
+  })
+  .catch(() => {
+    // Completely empty catch block to silently ignore any errors
   });
 }
 
-// Modify the language initialization to wait for translations
-function initializeLanguage() {
-  const language = getPreferredLanguage();
-  // Store the selected language
-  localStorage.setItem('preferredLanguage', language);
-  
-  // Temporarily disable user interaction
-  const overlay = document.createElement('div');
-  overlay.id = 'translation-overlay';
-  overlay.style.position = 'fixed';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100%';
-  overlay.style.height = '100%';
-  overlay.style.backgroundColor = 'transparent';
-  overlay.style.zIndex = '9999';
-  document.body.appendChild(overlay);
-  
-  // Apply language and remove overlay when done
-  applyLanguage(language).then(() => {
-    // Remove the overlay after translations are applied
-    const overlayElement = document.getElementById('translation-overlay');
-    if (overlayElement) {
-      overlayElement.remove();
-    }
-  });
-}
-
-// Call this function when the page loads
-document.addEventListener('DOMContentLoaded', initializeLanguage);
+const preferredLanguage = getPreferredLanguage();
+applyLanguage(preferredLanguage);
 
 
 function toggleDarkMode() {
