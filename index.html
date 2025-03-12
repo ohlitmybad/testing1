@@ -1512,7 +1512,7 @@ body.dark-mode #SFctr td {
     {text: "Through passes per 90", dataI18n: "metrics.through-passes-per-90"},
     {text: "Through pass completion %", dataI18n: "metrics.through-pass-completion-pct"},
     {text: "Through passes completed per 90", dataI18n: "metrics.through-passes-completed-per-90"},
-    {text: "Average pass length (m)", dataI18n: "metrics.average-pass-length-m"},
+    {text: "Average pass length (m)", dataI18n: "metrics.average-pass-length-(m)"},
     {text: "Backward passes per 90", dataI18n: "metrics.backward-passes-per-90"},
     {text: "Misplaced passes per 90", dataI18n: "metrics.misplaced-passes-per-90"},
     {text: "Forward pass ratio", dataI18n: "metrics.forward-pass-ratio"},
@@ -2067,7 +2067,7 @@ Promise.all(fetchPromises)
             jsonData.forEach(row => row.splice(2, 1));
 
             // 2. Delete specified columns
-            const columnsToDelete = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 46, 47, 48, 49, 55, 56, 57, 58, 59, 60, 61, 62, 70, 83, 85, 86, 87, 88, 89, 90, 91, 92, 97, 98, 99, 100,101,102,103,104,105,106,107,108,109,110,111,124,125,126,128,129,130,131,132,133,135,136,137,138,139,140,141];
+            const columnsToDelete = [27, 28, 29, 30, 40, 47, 48, 49, 55, 59, 61, 70, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 92, 105, 107, 123, 128];
             columnsToDelete.sort((a, b) => b - a); // Sort in descending order
             columnsToDelete.forEach(col => {
                 jsonData.forEach(row => row.splice(col, 1));
