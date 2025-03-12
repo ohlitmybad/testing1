@@ -1433,10 +1433,7 @@ body.dark-mode #SFctr td {
         </div>
 
         <div class="position-switcher-container">
-
-            <a href="https://datamb.football/proplotgk24/" target="_self" rel="noopener noreferrer" class="position-link">
-                <span>GK</span>
-            </a>
+                <span class="position-link active" style="user-select: none;">GK</span>
 
             <a href="https://datamb.football/proplotcb24/" target="_self" rel="noopener noreferrer" class="position-link">
                 <span>CB</span>
@@ -1444,10 +1441,9 @@ body.dark-mode #SFctr td {
             <a href="https://datamb.football/proplotfb24/" target="_self" rel="noopener noreferrer" class="position-link">
                 <span>FB</span>
             </a>
-         
-            <span class="position-link active" style="user-select: none;">CM</span>
-
-
+            <a href="https://datamb.football/proplotcm24/" target="_self" rel="noopener noreferrer" class="position-link">
+                <span>CM</span>
+            </a>
             <a href="https://datamb.football/proplotfw24/" target="_self" rel="noopener noreferrer" class="position-link">
                 <span>FW</span>
             </a>
@@ -1459,7 +1455,7 @@ body.dark-mode #SFctr td {
                     <span data-i18n="current">Current</span>
                 </a>
                 <div class="season-divider"></div>
-                <a href="https://datamb.football/proplotcm/" target="_self" rel="noopener noreferrer">
+                <a href="https://datamb.football/proplotgk/" target="_self" rel="noopener noreferrer">
                     <span data-i18n="previous">Previous</span>
                 </a>
             </div>
@@ -1483,140 +1479,81 @@ body.dark-mode #SFctr td {
             // Define custom metric order with categories
             const customMetricOrder = [
                 { text: "Minutes played", dataI18n: "minutes_played" },
-              
-
-
-    {text: "CATEGORY: Passing", dataI18n: "passing"},
-    {text: "Passes per 90", dataI18n: "metrics.passes-per-90"},
-    {text: "Pass completion %", dataI18n: "metrics.pass-completion-pct"},
-    {text: "Passes completed per 90", dataI18n: "metrics.passes-completed-per-90"},
-    {text: "Forward passes per 90", dataI18n: "metrics.forward-passes-per-90"},
-    {text: "Forward pass completion %", dataI18n: "metrics.forward-pass-completion-pct"},
-    {text: "Forward passes completed per 90", dataI18n: "metrics.forward-passes-completed-per-90"},
-    {text: "Short passes per 90", dataI18n: "metrics.short-passes-per-90"},
-    {text: "Short pass completion %", dataI18n: "metrics.short-pass-completion-pct"},
-    {text: "Short passes completed per 90", dataI18n: "metrics.short-passes-completed-per-90"},
-    {text: "Long passes per 90", dataI18n: "metrics.long-passes-per-90"},
-    {text: "Long pass accuracy %", dataI18n: "metrics.long-pass-accuracy-pct"},
-    {text: "Long passes completed per 90", dataI18n: "metrics.long-passes-completed-per-90"},
-    {text: "Progressive passes per 90", dataI18n: "metrics.progressive-passes-per-90"},
-    {text: "Progressive pass accuracy %", dataI18n: "metrics.progressive-pass-accuracy-pct"},
-    {text: "Progressive passes completed per 90", dataI18n: "metrics.progressive-passes-completed-per-90"},
-    {text: "Progressive passes (PAdj)", dataI18n: "metrics.progressive-passes-(padj)"},
-    {text: "Passes to final third per 90", dataI18n: "metrics.passes-to-final-third-per-90"},
-    {text: "Pass completion (to final third) %", dataI18n: "metrics.pass-completion-(to-final-third)-pct"},
-    {text: "Accurate passes to final third per 90", dataI18n: "metrics.accurate-passes-to-final-third-per-90"},
-    {text: "Passes to penalty box per 90", dataI18n: "metrics.passes-to-penalty-box-per-90"},
-    {text: "Pass completion (to penalty box) %", dataI18n: "metrics.pass-completion-(to-penalty-box)-pct"},
-    {text: "Accurate passes to penalty box per 90", dataI18n: "metrics.accurate-passes-to-penalty-box-per-90"},
-    {text: "Through passes per 90", dataI18n: "metrics.through-passes-per-90"},
-    {text: "Through pass completion %", dataI18n: "metrics.through-pass-completion-pct"},
-    {text: "Through passes completed per 90", dataI18n: "metrics.through-passes-completed-per-90"},
-    {text: "Average pass length (m)", dataI18n: "metrics.average-pass-length-(m)"},
-    {text: "Backward passes per 90", dataI18n: "metrics.backward-passes-per-90"},
-    {text: "Misplaced passes per 90", dataI18n: "metrics.misplaced-passes-per-90"},
-    {text: "Forward pass ratio", dataI18n: "metrics.forward-pass-ratio"},
-    {text: "Backward pass ratio", dataI18n: "metrics.backward-pass-ratio"},
-
-
-    {text: "CATEGORY: Possession", dataI18n: "possession"},
-    {text: "Passes received per 90", dataI18n: "metrics.passes-received-per-90"},
-    {text: "Touches per 90", dataI18n: "metrics.touches-per-90"},
-    {text: "Possessions lost per 90", dataI18n: "metrics.possessions-lost-per-90"},
-    {text: "Possessions won - lost per 90", dataI18n: "metrics.possessions-won---lost-per-90"},
-    {text: "Possession +/-", dataI18n: "metrics.possession-+/-"},
-    {text: "Duels per 90", dataI18n: "metrics.duels-per-90"},
-    {text: "Duels won %", dataI18n: "metrics.duels-won-pct"},
-    {text: "Duels won per 90", dataI18n: "metrics.duels-won-per-90"},
-    {text: "Progressive actions per 90", dataI18n: "metrics.progressive-actions-per-90"},
-    {text: "Progressive action rate", dataI18n: "metrics.progressive-action-rate"},
-  
-  
-    {text: "CATEGORY: Defending", dataI18n: "defending"},
-    {text: "Defensive duels per 90", dataI18n: "metrics.defensive-duels-per-90"},
-    {text: "Defensive duels won %", dataI18n: "metrics.defensive-duels-won-pct"},
-    {text: "Defensive duels won per 90", dataI18n: "metrics.defensive-duels-won-per-90"},
-    {text: "Sliding tackles per 90", dataI18n: "metrics.sliding-tackles-per-90"},
-    {text: "Sliding tackles (PAdj)", dataI18n: "metrics.sliding-tackles-(padj)"},
-    {text: "Interceptions per 90", dataI18n: "metrics.interceptions-per-90"},
-    {text: "Interceptions (PAdj)", dataI18n: "metrics.interceptions-(padj)"},
-    {text: "Possessions won per 90", dataI18n: "metrics.possessions-won-per-90"},
-    {text: "Aerial duels per 90", dataI18n: "metrics.aerial-duels-per-90"},
-    {text: "Aerial duels won %", dataI18n: "metrics.aerial-duels-won-pct"},
-    {text: "Aerial duels won per 90", dataI18n: "metrics.aerial-duels-won-per-90"},
-    {text: "Shots blocked per 90", dataI18n: "metrics.shots-blocked-per-90"},
-   
-
-    {text: "CATEGORY: Dribbling and Ball-Carrying", dataI18n: "dribbling"},
-    {text: "Dribbles attempted per 90", dataI18n: "metrics.dribbles-attempted-per-90"},
-    {text: "Dribble success rate %", dataI18n: "metrics.dribble-success-rate-pct"},
-    {text: "Successful dribbles per 90", dataI18n: "metrics.successful-dribbles-per-90"},
-    {text: "Dribbles per 100 touches", dataI18n: "metrics.dribbles-per-100-touches"},
-    {text: "Successful attacking actions per 90", dataI18n: "metrics.successful-attacking-actions-per-90"},
-    {text: "Offensive duels per 90", dataI18n: "metrics.offensive-duels-per-90"},
-    {text: "Offensive duels won %", dataI18n: "metrics.offensive-duels-won-pct"},
-    {text: "Offensive duels won per 90", dataI18n: "metrics.offensive-duels-won-per-90"},
-    {text: "Progressive carries per 90", dataI18n: "metrics.progressive-carries-per-90"},
-    {text: "Ball-carrying frequency", dataI18n: "metrics.ball-carrying-frequency"},
-    {text: "Accelerations per 90", dataI18n: "metrics.accelerations-per-90"},
-    {text: "Fouls suffered per 90", dataI18n: "metrics.fouls-suffered-per-90"},
- 
- 
-              
-    {text: "CATEGORY: Goal Scoring", dataI18n: "goal-scoring"},
-    {text: "Goals per 90", dataI18n: "metrics.goals-per-90"},
-    {text: "Non-penalty goals per 90", dataI18n: "metrics.non-penalty-goals-per-90"},
-    {text: "xG per 90", dataI18n: "metrics.xg-per-90"},
-    {text: "xG/Shot", dataI18n: "metrics.xg/shot"},
-    {text: "npxG per 90", dataI18n: "metrics.npxg-per-90"},
-    {text: "npxG/Shot", dataI18n: "metrics.npxg/shot"},
-    {text: "Goals per 100 touches", dataI18n: "metrics.goals-per-100-touches"},
-    {text: "xG per 100 touches", dataI18n: "metrics.xg-per-100-touches"},
-    {text: "Shot frequency", dataI18n: "metrics.shot-frequency"},
-    {text: "Shots per 90", dataI18n: "metrics.shots-per-90"},
-    {text: "Shots on target %", dataI18n: "metrics.shots-on-target-pct"},
-    {text: "Shots on target per 90", dataI18n: "metrics.shots-on-target-per-90"},
-    {text: "Goal conversion %", dataI18n: "metrics.goal-conversion-pct"},
-    {text: "Goals - xG per 90", dataI18n: "metrics.goals---xg-per-90"},
-    {text: "Headed goals per 90", dataI18n: "metrics.headed-goals-per-90"},
-    {text: "Touches in box per 90", dataI18n: "metrics.touches-in-box-per-90"},
-
-    {text: "CATEGORY: Goal Creation", dataI18n: "goal-creation"},
-    {text: "Assists per 90", dataI18n: "metrics.assists-per-90"},
-    {text: "xA per 90", dataI18n: "metrics.xa-per-90"},
-    {text: "xA per 100 passes", dataI18n: "metrics.xa-per-100-passes"},
-    {text: "Goals + Assists per 90", dataI18n: "metrics.goals-+-assists-per-90"},
-    {text: "NPG+A per 90", dataI18n: "metrics.npg+a-per-90"},
-    {text: "xG+xA per 90", dataI18n: "metrics.xg+xa-per-90"},
-    {text: "npxG+xA per 90", dataI18n: "metrics.npxg+xa-per-90"},
-    {text: "Key passes per 90", dataI18n: "metrics.key-passes-per-90"},
-    {text: "Chance creation ratio", dataI18n: "metrics.chance-creation-ratio"},
-    {text: "Assists - xA per 90", dataI18n: "metrics.assists---xa-per-90"},
-    {text: "Shot assists per 90", dataI18n: "metrics.shot-assists-per-90"},
-    {text: "Pre-assists per 90", dataI18n: "metrics.pre-assists-per-90"},
-    {text: "Crosses per 90", dataI18n: "metrics.crosses-per-90"},
-    {text: "Cross accuracy %", dataI18n: "metrics.cross-accuracy-pct"},
-    {text: "Accurate crosses per 90", dataI18n: "metrics.accurate-crosses-per-90"},
-    {text: "Crosses to box per 90", dataI18n: "metrics.crosses-to-box-per-90"},
-    {text: "Deep completions per 90", dataI18n: "metrics.deep-completions-per-90"},
-
-
-   
-    {text: "CATEGORY: Discipline", dataI18n: "disciplinary"},
-    {text: "Fouls per 90", dataI18n: "metrics.fouls-per-90"},
-    {text: "Yellow cards per 90", dataI18n: "metrics.yellow-cards-per-90"},
-    {text: "Red cards per 90", dataI18n: "metrics.red-cards-per-90"},
-  
-  
-    {text: "CATEGORY: Set Pieces", dataI18n: "set-pieces"},
-    {text: "Free kicks per 90", dataI18n: "metrics.free-kicks-per-90"},
-    {text: "Direct free kicks per 90", dataI18n: "metrics.direct-free-kicks-per-90"},
-    {text: "Direct free kicks oT %", dataI18n: "metrics.direct-free-kicks-ot-pct"},
-    {text: "Corners per 90", dataI18n: "metrics.corners-per-90"},
-    {text: "Penalties attempted", dataI18n: "metrics.penalties-attempted"},
-    {text: "Penalties scored", dataI18n: "metrics.penalties-scored"},
-    {text: "Penalty success rate %", dataI18n: "metrics.penalty-success-rate-pct"}
                 
+                // Goalkeeping
+                { text: "CATEGORY: Goalkeeping", dataI18n: "goalkeeping" },
+                { text: "Clean sheets", dataI18n: "metrics.clean-sheets" },
+                { text: "Save percentage %", dataI18n: "metrics.save-percentage-pct" },
+                { text: "Prevented goals", dataI18n: "metrics.prevented-goals" },
+                { text: "Prevented goals per 90", dataI18n: "metrics.prevented-goals-per-90" },
+                { text: "xG conceded", dataI18n: "metrics.xg-conceded" },
+                { text: "xG conceded per 90", dataI18n: "metrics.xg-conceded-per-90" },
+                { text: "Goals conceded", dataI18n: "metrics.goals-conceded" },
+                { text: "Goals conceded per 90", dataI18n: "metrics.goals-conceded-per-90" },
+                { text: "Shots conceded", dataI18n: "metrics.shots-conceded" },
+                { text: "Shots conceded per 90", dataI18n: "metrics.shots-conceded-per-90" },
+                { text: "Exits per 90", dataI18n: "metrics.exits-per-90" },
+                { text: "Saves per 90", dataI18n: "metrics.saves-per-90" },
+
+                // Defending
+                { text: "CATEGORY: Defending", dataI18n: "defending" },
+                { text: "Possessions won per 90", dataI18n: "metrics.possessions-won-per-90" },
+                { text: "Defensive duels per 90", dataI18n: "metrics.defensive-duels-per-90" },
+                { text: "Defensive duels won %", dataI18n: "metrics.defensive-duels-won-pct" },
+                { text: "Defensive duels won per 90", dataI18n: "metrics.defensive-duels-won-per-90" },
+                { text: "Aerial duels per 90", dataI18n: "metrics.aerial-duels-per-90" },
+                { text: "Aerial duels won %", dataI18n: "metrics.aerial-duels-won-pct" },
+                { text: "Aerial duels won per 90", dataI18n: "metrics.aerial-duels-won-per-90" },
+                { text: "Sliding tackles per 90", dataI18n: "metrics.sliding-tackles-per-90" },
+                { text: "Sliding tackles (PAdj)", dataI18n: "metrics.sliding-tackles-(padj)" },
+                { text: "Interceptions per 90", dataI18n: "metrics.interceptions-per-90" },
+                { text: "Interceptions (PAdj)", dataI18n: "metrics.interceptions-(padj)" },
+
+                // Passing
+                { text: "CATEGORY: Passing", dataI18n: "passing" },
+                { text: "Passes per 90", dataI18n: "metrics.passes-per-90" },
+                { text: "Pass completion %", dataI18n: "metrics.pass-completion-pct" },
+                { text: "Passes completed per 90", dataI18n: "metrics.passes-completed-per-90" },
+                { text: "Forward passes per 90", dataI18n: "metrics.forward-passes-per-90" },
+                { text: "Forward pass completion %", dataI18n: "metrics.forward-pass-completion-pct" },
+                { text: "Forward passes completed per 90", dataI18n: "metrics.forward-passes-completed-per-90" },
+                { text: "Short passes per 90", dataI18n: "metrics.short-passes-per-90" },
+                { text: "Short pass completion %", dataI18n: "metrics.short-pass-completion-pct" },
+                { text: "Short passes completed per 90", dataI18n: "metrics.short-passes-completed-per-90" },
+                { text: "Long passes per 90", dataI18n: "metrics.long-passes-per-90" },
+                { text: "Long pass accuracy %", dataI18n: "metrics.long-pass-accuracy-pct" },
+                { text: "Long passes completed per 90", dataI18n: "metrics.long-passes-completed-per-90" },
+                { text: "Passes to final third per 90", dataI18n: "metrics.passes-to-final-third-per-90" },
+                { text: "Pass completion (to final third) %", dataI18n: "metrics.pass-completion-(to-final-third)-pct" },
+                { text: "Accurate passes to final third per 90", dataI18n: "metrics.accurate-passes-to-final-third-per-90" },
+                { text: "Passes to penalty box per 90", dataI18n: "metrics.passes-to-penalty-box-per-90" },
+                { text: "Pass completion (to penalty box) %", dataI18n: "metrics.pass-completion-(to-penalty-box)-pct" },
+                { text: "Accurate passes to penalty box per 90", dataI18n: "metrics.accurate-passes-to-penalty-box-per-90" },
+                { text: "Through passes per 90", dataI18n: "metrics.through-passes-per-90" },
+                { text: "Through pass completion %", dataI18n: "metrics.through-pass-completion-pct" },
+                { text: "Through passes completed per 90", dataI18n: "metrics.through-passes-completed-per-90" },
+                { text: "Progressive passes per 90", dataI18n: "metrics.progressive-passes-per-90" },
+                { text: "Progressive pass accuracy %", dataI18n: "metrics.progressive-pass-accuracy-pct" },
+                { text: "Progressive passes completed per 90", dataI18n: "metrics.progressive-passes-completed-per-90" },
+                { text: "Forward pass ratio", dataI18n: "metrics.forward-pass-ratio" },
+                { text: "Misplaced passes per 90", dataI18n: "metrics.misplaced-passes-per-90" },
+                { text: "Average pass length (m)", dataI18n: "metrics.average-pass-length-(m)" },
+
+                // Possession
+                { text: "CATEGORY: Possession", dataI18n: "possession" },
+                { text: "Passes received per 90", dataI18n: "metrics.passes-received-per-90" },
+                { text: "Dribbles attempted per 90", dataI18n: "metrics.dribbles-attempted-per-90" },
+                { text: "Duels per 90", dataI18n: "metrics.duels-per-90" },
+                { text: "Duels won %", dataI18n: "metrics.duels-won-pct" },
+                { text: "Duels won per 90", dataI18n: "metrics.duels-won-per-90" },
+                { text: "Touches per 90", dataI18n: "metrics.touches-per-90" },
+                { text: "Possession +/-", dataI18n: "metrics.possession-+/-" },
+
+                // Discipline
+                { text: "CATEGORY: Discipline", dataI18n: "disciplinary" },
+                { text: "Fouls per 90", dataI18n: "metrics.fouls-per-90" },
+                { text: "Yellow cards per 90", dataI18n: "metrics.yellow-cards-per-90" },
+                { text: "Red cards per 90", dataI18n: "metrics.red-cards-per-90" }
             ];
 
             // Add "None" option only for size metric
@@ -2044,9 +1981,9 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
 let isFirstFileProcessed = false;
 
 const urls = [
-'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx',
-   'https://datamb.football/database/CURRENT/PRO2425/CM/CM.xlsx',
-'https://datamb.football/database/CURRENT/PRO2024/CM/CM.xlsx',
+'https://datamb.football/database/CURRENT/TOP72425/GK/GK.xlsx',
+   'https://datamb.football/database/CURRENT/PRO2425/GK/GK.xlsx',
+'https://datamb.football/database/CURRENT/PRO2024/GK/GK.xlsx',
 ];
 
 const fetchPromises = urls.map(url => fetch(url).then(response => response.arrayBuffer()));
@@ -2067,14 +2004,14 @@ Promise.all(fetchPromises)
             jsonData.forEach(row => row.splice(2, 1));
 
             // 2. Delete specified columns
-            const columnsToDelete = [27, 28, 29, 30, 40, 47, 48, 49, 55, 59, 61, 70, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 92, 105, 107, 123, 128];
+            const columnsToDelete = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 46, 47, 48, 49, 55, 56, 57, 58, 59, 60, 61, 62, 70, 83, 85, 86, 87, 88, 89, 90, 91, 92, 97, 98, 99, 100,101,102,103,104,105,106,107,108,109,110,111,124,125,126,128,129,130,131,132,133,135,136,137,138,139,140,141];
             columnsToDelete.sort((a, b) => b - a); // Sort in descending order
             columnsToDelete.forEach(col => {
                 jsonData.forEach(row => row.splice(col, 1));
             });
 
             // 3. Insert new columns and fill with appropriate values
-            if (url === 'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx' && !isFirstFileProcessed) {
+            if (url === 'https://datamb.football/database/CURRENT/TOP72425/GK/GK.xlsx' && !isFirstFileProcessed) {
                 // Include header only for the first file ('gk4.xlsx')
                 jsonData.forEach(row => row.unshift(null)); // Insert empty column at the beginning
                 jsonData[0][0] = "ID"; // Set header for the new column
@@ -2099,7 +2036,7 @@ Promise.all(fetchPromises)
             });
 
             // 5. Collect the transformed data (excluding header for non-first 'gk4.xlsx')
-            allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx' ? jsonData : jsonData.slice(1)));
+            allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72425/GK/GK.xlsx' ? jsonData : jsonData.slice(1)));
         });
 
 const leagues = {
