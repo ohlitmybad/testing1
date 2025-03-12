@@ -101,7 +101,7 @@
     "through-passes-per-90": "Passes en profondeur par 90",
     "through-pass-completion-pct": "% passes en profondeur réussies",
     "through-passes-completed-per-90": "Passes en profondeur réussies par 90",
-    "average-pass-length-m": "Longueur moyenne des passes (m)",
+    "average-pass-length-(m)": "Longueur moyenne des passes (m)",
     "backward-passes-per-90": "Passes vers l'arrière par 90",
     "misplaced-passes-per-90": "Passes ratées par 90",
     "forward-pass-ratio": "Ratio passes vers l'avant",
