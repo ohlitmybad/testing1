@@ -788,15 +788,20 @@ svg text.label{
 }
 
 
-.header {
-  font-family: system-ui;
-  padding: 20px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
+.header {
+            background-color: var(--header-bg);
+            display: flex;
+            padding: 20px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: relative;
+            font-family: system-ui;
+            top: 0;
+            z-index: 100;
+        }
+        
 .header .logo {
   display: flex;
   align-items: center;
