@@ -81,22 +81,21 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         transition: background-color 0.3s, color 0.3s;
         margin: 0;
         padding: 0;
-        min-width: 0; /* Remove fixed min-width */
-        overflow-x: hidden; /* Prevent horizontal scrolling */
+        min-width: 770px; /* Minimum width to match container */
+        overflow-x: auto; /* Enable horizontal scrolling when needed */
     }
 
     /* Add direct rule for dark mode body */
     body.dark-mode {
         background-color: #0e0f0f !important;
-        min-width: 0; /* Remove fixed min-width */
+        min-width: 770px; /* Ensure consistent min-width in dark mode */
     }
 
     .container {
         max-width: 880px;
-        width: 100%;
-        min-width: 0; /* Remove fixed min-width */
+        min-width: 770px; /* Add minimum width to prevent shrinking below SVG size */
         margin: 20px auto;
-        padding: 0 15px;
+        padding: 0 20px;
         box-sizing: border-box;
     }
 
@@ -105,13 +104,11 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         background-color: var(--container-bg);
         border-radius: 10px;
         box-shadow: var(--shadow);
-        padding: 12px 10px 20px;
+        padding: 12px 30px 20px;
         margin-bottom: 30px;
         position: relative;
         width: 100%;
-        min-width: 0;
-        box-sizing: border-box;
-        overflow: hidden; /* Prevent overflow */
+        min-width: 730px; /* Minimum width to accommodate the SVG */
     }
 
     /* Search input styling */
@@ -143,7 +140,6 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         color: var(--text-color);
         transition: border-color 0.2s;
         height: 40px;
-        width: 100%;
     }
 
     #searchInput1:focus {
@@ -404,22 +400,24 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         align-items: center;
         margin: 32px 0px -15px;
         width: 100%;
-        min-width: 0;
-        padding: 0;
-        box-sizing: border-box;
-        overflow: hidden;
-        position: relative; /* Add position relative */
+        min-width: 670px; /* Minimum width for radar container */
+        position: relative; /* Add relative positioning */
     }
 
     svg.radar {
         width: 100%;
         max-width: 700px;
-        min-width: 0;
+        min-width: 670px; /* Minimum width for SVG */
         height: auto;
         aspect-ratio: 1.44 / 1;
-        display: block;
-        margin: 0 auto;
-        transform-origin: center center;
+        display: block; /* Add display block */
+        margin: 0 auto; /* Center horizontally */
+    }
+
+    /* Add specific styling for the SVG group */
+    svg.radar > g {
+        transform-origin: center;
+        transform: translate(50%, 50%); /* Center the group */
     }
 
     /* Position switcher */
@@ -569,6 +567,19 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         line-height: 1.2;
     }
 
+    /* Add mobile-specific styling for similar table header */
+    @media screen and (max-width: 500px) {
+        .similar-table th {
+            font-size: 11px;
+            padding: 8px;
+            line-height: 1.1;
+        }
+        
+        .similar-table th span {
+            font-size: 11px;
+        }
+    }
+
     .similar-table td {
         padding: 7px 8px;
         text-align: center;
@@ -602,50 +613,18 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
     }
 
     /* Responsive adjustments */
-    @media screen and (max-width: 768px) {
-        .radar-container {
-            margin: 20px 0px -10px;
-            padding: 0;
-            width: 100vw; /* Use viewport width */
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
-        }
-        
-        svg.radar {
-            max-width: 100%;
-            transform: scale(0.85); /* Slightly smaller scale for mobile */
-            transform-origin: center center;
-        }
-
-        /* Update the SVG's inner group transform for mobile */
-        svg.radar g {
-            transform: translate(50%, 50%) scale(0.85);
-            transform-origin: center center;
-        }
-        
-        .container {
-            padding: 0;
-            width: 100%;
-            overflow-x: hidden;
-        }
-        
+    @media (max-width: 768px) {
         .chart-wrapper {
-            padding: 10px 0; /* Remove horizontal padding on mobile */
-            margin: 0;
-            border-radius: 0;
-            overflow: hidden;
+            padding: 15px;
         }
-    }
-
-    /* Add viewport meta tag for proper mobile scaling */
-    @media screen and (max-width: 768px) {
-        .chart-wrapper {
-            margin: 0;
-            border-radius: 0;
-            overflow: hidden;
+        
+        .position-switcher {
+            gap: 5px;
+        }
+        
+        .position-button {
+            padding: 6px 10px;
+            font-size: 12px;
         }
     }
 
@@ -1139,7 +1118,7 @@ xhr.send(null);
 
 let dataCSV = xhr.responseText;
 
-function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=function(_0x57077a,_0xde96b9){_0x57077a=_0x57077a-0x140;let _0x383e81=_0x4dcd69[_0x57077a];return _0x383e81;},_0x5707(_0xd20fa7,_0x4d36b5);}const _0xedf2b2=_0x5707;(function(_0x16e1b0,_0x125833){const _0x222c5a=_0x5707,_0x3f540c=_0x16e1b0();while(!![]){try{const _0x3105f2=parseInt(_0x222c5a(0x161))/0x1+parseInt(_0x222c5a(0x144))/0x2+parseInt(_0x222c5a(0x148))/0x3+-parseInt(_0x222c5a(0x155))/0x4+parseInt(_0x222c5a(0x141))/0x5*(-parseInt(_0x222c5a(0x145))/0x6)+-parseInt(_0x222c5a(0x157))/0x7+parseInt(_0x222c5a(0x14b))/0x8*(parseInt(_0x222c5a(0x159))/0x9);if(_0x3105f2===_0x125833)break;else _0x3f540c['push'](_0x3f540c['shift']());}catch(_0x450250){_0x3f540c['push'](_0x3f540c['shift']());}}}(_0x4dcd,0x1bc51));const dataLines=dataCSV[_0xedf2b2(0x160)]('\x0a'),searchButton=document[_0xedf2b2(0x142)]('searchButton'),searchInputModal=document[_0xedf2b2(0x142)](_0xedf2b2(0x14a)),searchInput=document[_0xedf2b2(0x142)](_0xedf2b2(0x143)),autocompleteBox=document[_0xedf2b2(0x142)](_0xedf2b2(0x162)),data1=dataLines[_0xedf2b2(0x146)](_0xb995bf=>{const _0x89300c=_0xedf2b2,[_0x5af128,_0x515bec]=_0x19546c[_0x89300c(0x160)](',');return{'name':_0x5af128,'link':_0x515bec};});function removeDiacritics(_0x3ed1af){const _0x202611=_0xedf2b2,_0x4b45cf={'ø':'o','Ø':'O','ı':'i'};return _0x3ed1af=_0x3ed1af[_0x202611(0x147)](/[øØıI]/g,_0x19f74a=>_0x4b45cf[_0x19f74a]),_0x3ed1af[_0x202611(0x15d)]('NFD')[_0x202611(0x147)](/[\u0300-\u036f]/g,'');}function search2(_0x1db14d){const _0x26c944=_0xedf2b2;autocompleteBox[_0x26c944(0x15e)]='';const _0x321867=removeDiacritics(_0x1db14d)[_0x26c944(0x147)](/[^\w\s]/g,'')[_0x26c944(0x149)](),_0x3ad89e=data1[_0x26c944(0x15c)](_0xb995bf=>{const _0x3866b0=_0x26c944,_0x2b7de7=removeDiacritics(_0xb995bf[_0x3866b0(0x14e)])['replace'](/[^\w\s]/g,'')[_0x3866b0(0x149)]();return _0x2b7de7['includes'](_0x321867);});if(_0x3ad89e[_0x26c944(0x163)]===0x0){autocompleteBox[_0x26c944(0x152)][_0x26c944(0x14c)]='none';return;}_0x3ad89e[_0x26c944(0x151)](_0x4b9def=>{const _0x31eeb1=_0x26c944,_0x505ab8=document[_0x31eeb1(0x14d)]('div'),_0x3a2d70=document[_0x31eeb1(0x14d)]('a');_0x3a2d70['href']=_0x4b9def[_0x31eeb1(0x154)],_0x3a2d70[_0x31eeb1(0x150)]=_0x4b9def[_0x31eeb1(0x14e)],_0x505ab8[_0x31eeb1(0x15b)](_0x3a2d70),autocompleteBox[_0x31eeb1(0x15b)](_0x505ab8);}),autocompleteBox['style'][_0x26c944(0x14c)]=_0x26c944(0x153);}searchButton[_0xedf2b2(0x156)](_0xedf2b2(0x14f),()=>{const _0x350b96=_0xedf2b2;searchInputModal['style'][_0x350b96(0x14c)]=_0x350b96(0x153);}),searchInput['addEventListener'](_0xedf2b2(0x158),()=>{const _0x122364=_0xedf2b2,_0x1aac33=searchInput['value'];_0x1aac33[_0x122364(0x140)]()===''?autocompleteBox[_0x122364(0x152)][_0x122364(0x14c)]='none':search2(_0x1aac33);}),document['addEventListener']('click',_0x17873a=>{const _0x2c2a21=_0xedf2b2;_0x17873a[_0x2c2a21(0x15a)]===searchInputModal&&(searchInputModal[_0x2c2a21(0x152)][_0x2c2a21(0x14c)]=_0x2c2a21(0x15f));});function _0x4dcd(){const _0x3abacf=['forEach','style','block','link','165476bdcaHI','addEventListener','430668iEzpyY','input','90cmGEmO','target','appendChild','filter','normalize','innerHTML','none','split','102625kyWWmb','autocompleteBox','length','trim','5KymJaR','getElementById','searchInput','423476PJmBDe','1170534HGXHHf','map','replace','60222cRWbFM','toLowerCase','searchInputModal','61832bbygIm','display','createElement','name','click','textContent'];_0x4dcd=function(){return _0x3abacf;};return _0x4dcd();}
+function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=function(_0x57077a,_0xde96b9){_0x57077a=_0x57077a-0x140;let _0x383e81=_0x4dcd69[_0x57077a];return _0x383e81;},_0x5707(_0xd20fa7,_0x4d36b5);}const _0xedf2b2=_0x5707;(function(_0x16e1b0,_0x125833){const _0x222c5a=_0x5707,_0x3f540c=_0x16e1b0();while(!![]){try{const _0x3105f2=parseInt(_0x222c5a(0x161))/0x1+parseInt(_0x222c5a(0x144))/0x2+parseInt(_0x222c5a(0x148))/0x3+-parseInt(_0x222c5a(0x155))/0x4+parseInt(_0x222c5a(0x141))/0x5*(-parseInt(_0x222c5a(0x145))/0x6)+-parseInt(_0x222c5a(0x157))/0x7+parseInt(_0x222c5a(0x14b))/0x8*(parseInt(_0x222c5a(0x159))/0x9);if(_0x3105f2===_0x125833)break;else _0x3f540c['push'](_0x3f540c['shift']());}catch(_0x450250){_0x3f540c['push'](_0x3f540c['shift']());}}}(_0x4dcd,0x1bc51));const dataLines=dataCSV[_0xedf2b2(0x160)]('\x0a'),searchButton=document[_0xedf2b2(0x142)]('searchButton'),searchInputModal=document[_0xedf2b2(0x142)](_0xedf2b2(0x14a)),searchInput=document[_0xedf2b2(0x142)](_0xedf2b2(0x143)),autocompleteBox=document[_0xedf2b2(0x142)](_0xedf2b2(0x162)),data1=dataLines[_0xedf2b2(0x146)](_0x19546c=>{const _0x89300c=_0xedf2b2,[_0x5af128,_0x515bec]=_0x19546c[_0x89300c(0x160)](',');return{'name':_0x5af128,'link':_0x515bec};});function removeDiacritics(_0x3ed1af){const _0x202611=_0xedf2b2,_0x4b45cf={'ø':'o','Ø':'O','ı':'i'};return _0x3ed1af=_0x3ed1af[_0x202611(0x147)](/[øØıI]/g,_0x19f74a=>_0x4b45cf[_0x19f74a]),_0x3ed1af[_0x202611(0x15d)]('NFD')[_0x202611(0x147)](/[\u0300-\u036f]/g,'');}function search2(_0x1db14d){const _0x26c944=_0xedf2b2;autocompleteBox[_0x26c944(0x15e)]='';const _0x321867=removeDiacritics(_0x1db14d)[_0x26c944(0x147)](/[^\w\s]/g,'')[_0x26c944(0x149)](),_0x3ad89e=data1[_0x26c944(0x15c)](_0xb995bf=>{const _0x3866b0=_0x26c944,_0x2b7de7=removeDiacritics(_0xb995bf[_0x3866b0(0x14e)])['replace'](/[^\w\s]/g,'')[_0x3866b0(0x149)]();return _0x2b7de7['includes'](_0x321867);});if(_0x3ad89e[_0x26c944(0x163)]===0x0){autocompleteBox[_0x26c944(0x152)][_0x26c944(0x14c)]='none';return;}_0x3ad89e[_0x26c944(0x151)](_0x4b9def=>{const _0x31eeb1=_0x26c944,_0x505ab8=document[_0x31eeb1(0x14d)]('div'),_0x3a2d70=document[_0x31eeb1(0x14d)]('a');_0x3a2d70['href']=_0x4b9def[_0x31eeb1(0x154)],_0x3a2d70[_0x31eeb1(0x150)]=_0x4b9def[_0x31eeb1(0x14e)],_0x505ab8[_0x31eeb1(0x15b)](_0x3a2d70),autocompleteBox[_0x31eeb1(0x15b)](_0x505ab8);}),autocompleteBox['style'][_0x26c944(0x14c)]=_0x26c944(0x153);}searchButton[_0xedf2b2(0x156)](_0xedf2b2(0x14f),()=>{const _0x350b96=_0xedf2b2;searchInputModal['style'][_0x350b96(0x14c)]=_0x350b96(0x153);}),searchInput['addEventListener'](_0xedf2b2(0x158),()=>{const _0x122364=_0xedf2b2,_0x1aac33=searchInput['value'];_0x1aac33[_0x122364(0x140)]()===''?autocompleteBox[_0x122364(0x152)][_0x122364(0x14c)]='none':search2(_0x1aac33);}),document['addEventListener']('click',_0x17873a=>{const _0x2c2a21=_0xedf2b2;_0x17873a[_0x2c2a21(0x15a)]===searchInputModal&&(searchInputModal[_0x2c2a21(0x152)][_0x2c2a21(0x14c)]=_0x2c2a21(0x15f));});function _0x4dcd(){const _0x3abacf=['forEach','style','block','link','165476bdcaHI','addEventListener','430668iEzpyY','input','90cmGEmO','target','appendChild','filter','normalize','innerHTML','none','split','102625kyWWmb','autocompleteBox','length','trim','5KymJaR','getElementById','searchInput','423476PJmBDe','1170534HGXHHf','map','replace','60222cRWbFM','toLowerCase','searchInputModal','61832bbygIm','display','createElement','name','click','textContent'];_0x4dcd=function(){return _0x3abacf;};return _0x4dcd();}
 
 
 
@@ -1178,7 +1157,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       
       <div class="radar-container">
         <svg class="radar">
-          <g transform="translate(379.77,225.77)"><g class="axisWrapper">
+          <g transform="translate(0,0)"><g class="axisWrapper">
   
     <g class="radar_label">
       <text class="label" data-type="Aerial%" data-idx="0" data-i18n="radar.short" transform="translate(-40 -196.04) scale(1.3) rotate(-1.7)">Short%</text>
@@ -1853,7 +1832,7 @@ function calculateEuclideanDifference(data1, data2) {
         const radarWrapper = svg.appendChild(
           document.createElementNS('http://www.w3.org/2000/svg', 'g')
         );
-        radarWrapper.setAttribute('transform', 'translate(379.77,225.77)');
+        radarWrapper.setAttribute('transform', 'translate(0,0)');
         radarWrapper.innerHTML = '';
       
         const data = [];
@@ -2012,7 +1991,9 @@ function updateSimilarPlayers(playerData) {
   // Use the last player's color class instead of the first one
   headerCell.classList.add(playerColor || colorClasses[colorIndex % colorClasses.length]);
   
-if (window.innerWidth < 768) {
+  // Add media query for mobile devices
+  const mediaQuery = window.matchMedia('(max-width: 500px)');
+  if (mediaQuery.matches) {
     headerCell.style.fontSize = "11px";
     headerCell.style.padding = "8px";
   }
