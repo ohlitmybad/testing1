@@ -88,7 +88,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
     /* Add direct rule for dark mode body */
     body.dark-mode {
         background-color: #0e0f0f !important;
-        min-width: 770px; /* Ensure consistent min-width in dark mode */
+        min-width: 0; /* Remove fixed min-width */
     }
 
     .container {
@@ -96,7 +96,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         width: 100%;
         min-width: 0; /* Remove fixed min-width */
         margin: 20px auto;
-        padding: 0 20px;
+        padding: 0 15px;
         box-sizing: border-box;
     }
 
@@ -105,12 +105,13 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         background-color: var(--container-bg);
         border-radius: 10px;
         box-shadow: var(--shadow);
-        padding: 12px 15px 20px; /* Reduce padding on mobile */
+        padding: 12px 10px 20px;
         margin-bottom: 30px;
         position: relative;
         width: 100%;
-        min-width: 0; /* Remove fixed min-width */
+        min-width: 0;
         box-sizing: border-box;
+        overflow: hidden; /* Prevent overflow */
     }
 
     /* Search input styling */
@@ -142,6 +143,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         color: var(--text-color);
         transition: border-color 0.2s;
         height: 40px;
+        width: 100%;
     }
 
     #searchInput1:focus {
@@ -402,17 +404,20 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         align-items: center;
         margin: 32px 0px -15px;
         width: 100%;
-        min-width: 0; /* Remove fixed min-width */
-        padding: 0 15px; /* Add padding for mobile */
+        min-width: 0;
+        padding: 0;
         box-sizing: border-box;
+        overflow: hidden; /* Prevent overflow */
     }
 
     svg.radar {
         width: 100%;
         max-width: 700px;
-        min-width: 0; /* Remove fixed min-width */
+        min-width: 0;
         height: auto;
         aspect-ratio: 1.44 / 1;
+        display: block; /* Ensure block display */
+        margin: 0 auto; /* Center the SVG */
     }
 
     /* Position switcher */
@@ -595,13 +600,16 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
     }
 
     /* Responsive adjustments */
-    @media (max-width: 768px) {
+    @media screen and (max-width: 768px) {
         .radar-container {
             margin: 20px 0px -10px;
+            padding: 0;
         }
         
         svg.radar {
             max-width: 100%;
+            transform: scale(0.9); /* Slightly scale down on mobile */
+            transform-origin: center center;
         }
         
         .container {
@@ -611,14 +619,21 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         .chart-wrapper {
             padding: 10px;
         }
-        
-        .position-switcher {
-            gap: 5px;
+
+        .search-controls {
+            width: 100%;
         }
-        
-        .position-button {
-            padding: 6px 10px;
-            font-size: 12px;
+
+        #searchInput1 {
+            width: 100%;
+        }
+    }
+
+    /* Add viewport meta tag for proper mobile scaling */
+    @media screen and (max-width: 768px) {
+        .chart-wrapper {
+            margin: 0 -10px; /* Negative margin to allow full width */
+            border-radius: 0; /* Remove border radius on mobile */
         }
     }
 
