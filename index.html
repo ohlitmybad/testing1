@@ -570,13 +570,18 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
     /* Add mobile-specific styling for similar table header */
     @media screen and (max-width: 768px) {
         .similar-table th {
-            font-size: 11px;
-            padding: 8px;
-            line-height: 1.1;
+            font-size: 9px !important;
+            padding: 6px !important;
+            line-height: 1.1 !important;
         }
         
         .similar-table th span {
-            font-size: 11px;
+            font-size: 9px !important;
+        }
+
+        .similar-table td {
+            font-size: 9px !important;
+            padding: 4px 6px !important;
         }
     }
 
