@@ -568,7 +568,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
     }
 
     /* Add mobile-specific styling for similar table header */
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 768px) {
         .similar-table th {
             font-size: 11px;
             padding: 8px;
@@ -787,7 +787,7 @@ svg text.label{
 }
 
 /* Responsive styles for position switcher */
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 768px) {
     .position-switcher-container {
         gap: 8px;
     }
@@ -1992,7 +1992,7 @@ function updateSimilarPlayers(playerData) {
   headerCell.classList.add(playerColor || colorClasses[colorIndex % colorClasses.length]);
   
   // Add media query for mobile devices
-  const mediaQuery = window.matchMedia('(max-width: 500px)');
+  const mediaQuery = window.matchMedia('(max-width: 768px)');
   if (mediaQuery.matches) {
     headerCell.style.fontSize = "11px";
     headerCell.style.padding = "8px";
