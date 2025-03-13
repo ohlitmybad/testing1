@@ -2094,6 +2094,164 @@ function updateSimilarPlayers(playerData) {
 
 
 </script>
+<div class="emptycontainer"></div>
 
+<div class="finalcontainer">
+
+<center><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
+crossorigin="anonymous"></script>
+<!-- radar page -->
+<ins class="adsbygoogle"
+style="display:inline-block;width:728px;height:90px"
+data-ad-client="ca-pub-7677714701428206"
+data-ad-slot="5336962902"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></center>
+<center><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
+crossorigin="anonymous"></script>
+<!-- radar page -->
+<ins class="adsbygoogle"
+style="display:inline-block;width:728px;height:90px"
+data-ad-client="ca-pub-7677714701428206"
+data-ad-slot="5336962902"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></center>
+</div>
+
+<script>
+// Function to scroll down a tiny bit
+function scrollDown() {
+window.scrollBy(0, 400); // Adjust the value (400) to change the scroll distance
+}
+
+// Function to scroll up a tiny bit
+function scrollUp() {
+window.scrollBy(0, -15); // Adjust the value (-10) to change the scroll distance
+}
+
+// Function to check if the device is mobile
+function isMobileDevice() {
+return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+}
+
+// Combine both actions with a small timer between them
+window.onload = function() {
+if (isMobileDevice()) {
+scrollDown();
+setTimeout(scrollUp, 100); // Adjust the delay time (100ms = 0.1 second)
+}
+};
+</script>
+
+<script>
+function setLanguage(language) {
+localStorage.setItem('preferredLanguage', language);
+const url = new URL(window.location.href);
+if (language === 'en') {
+url.searchParams.delete('lang');
+} else {
+url.searchParams.set('lang', language);
+}
+window.history.pushState({}, '', url);
+applyLanguage(language);
+}
+
+function getPreferredLanguage() {
+// PRIORITY 1: Check URL parameter first
+const urlParams = new URLSearchParams(window.location.search);
+const langParam = urlParams.get('lang');
+if (langParam) {
+return langParam;
+}
+// PRIORITY 2: Check localStorage
+const storedLang = localStorage.getItem('preferredLanguage');
+if (storedLang) {
+return storedLang;
+}
+// PRIORITY 3: Use browser language
+return getBrowserLanguage() || 'en';
+}
+
+function getBrowserLanguage() {
+return navigator.language.slice(0, 2);
+}
+
+function applyLanguage(language) {
+console.log(language);
+
+if (language === 'en') {
+return;
+}
+
+
+fetch(`locales/${language}.json`)
+.then(response => {
+// Don't throw an error, just return null if response is not OK
+return response.ok ? response.json() : null;
+})
+.then(translations => {
+// Only proceed if translations exist
+if (translations) {
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    const keys = element.getAttribute('data-i18n').split('.');
+    let value = translations;
+    for (const key of keys) {
+      if (value === undefined || value === null) break;
+      value = value[key];
+    }
+    if (value) {
+      if (element.tagName === 'META') {
+      element.setAttribute('content', value);
+  } else if (value.includes('<')) {
+      element.innerHTML = value;
+  } else {
+      element.textContent = value;
+  }          }
+  });
+  // REMOVE FOR PAGES WITH NO METADATA
+  document.querySelector('meta[name="language"]').setAttribute('content', language);
+}
+})
+.catch(() => {
+// Completely empty catch block to silently ignore any errors
+});
+}
+
+const preferredLanguage = getPreferredLanguage();
+applyLanguage(preferredLanguage);
+
+// BUTTON LANGUAGE SWITCHER REMOVE FOR PAGES WITH NO LANGUAGE SWITCHER
+document.addEventListener('DOMContentLoaded', function() {
+const languageButton = document.getElementById('languageButton');
+const languageDropdown = document.getElementById('languageDropdown');
+
+
+if (languageButton) {
+languageButton.addEventListener('click', function(e) {
+e.stopPropagation();
+languageDropdown.classList.toggle('show');
+});
+}
+
+document.querySelectorAll('.language-option').forEach(option => {
+option.addEventListener('click', function(e) {
+e.preventDefault();
+const lang = this.getAttribute('href').split('=')[1];
+setLanguage(lang);
+languageDropdown.classList.remove('show');
+});
+});
+
+document.addEventListener('click', function(event) {
+if (!event.target.closest('.language-switcher-container')) {
+if (languageDropdown) {
+  languageDropdown.classList.remove('show');
+}
+}
+});
+});
+</script>
 </body>
 </html>
