@@ -1985,9 +1985,7 @@ function updateSimilarPlayers(playerData) {
   // Use the last player's color class instead of the first one
   headerCell.classList.add(playerColor || colorClasses[colorIndex % colorClasses.length]);
   
-  // Add media query for mobile devices
-  const mediaQuery = window.matchMedia('(max-width: 500px)');
-  if (mediaQuery.matches) {
+if (window.innerWidth < 768) {
     headerCell.style.fontSize = "11px";
     headerCell.style.padding = "8px";
   }
