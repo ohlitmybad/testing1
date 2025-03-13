@@ -21,9 +21,9 @@
       var width = window.innerWidth;
       var viewportMeta = document.querySelector('meta[name="viewport"]');
       if (viewportMeta) {
-if (width < 715) {
+if (width < 750) {
 	      
-      var initialScale = width / 715;
+      var initialScale = width / 750;
 viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
 } else {
             var fixedScale = 1;
