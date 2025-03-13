@@ -407,7 +407,8 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         min-width: 0;
         padding: 0;
         box-sizing: border-box;
-        overflow: hidden; /* Prevent overflow */
+        overflow: hidden;
+        position: relative; /* Add position relative */
     }
 
     svg.radar {
@@ -416,8 +417,9 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         min-width: 0;
         height: auto;
         aspect-ratio: 1.44 / 1;
-        display: block; /* Ensure block display */
-        margin: 0 auto; /* Center the SVG */
+        display: block;
+        margin: 0 auto;
+        transform-origin: center center;
     }
 
     /* Position switcher */
@@ -604,36 +606,46 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         .radar-container {
             margin: 20px 0px -10px;
             padding: 0;
+            width: 100vw; /* Use viewport width */
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
         }
         
         svg.radar {
             max-width: 100%;
-            transform: scale(0.9); /* Slightly scale down on mobile */
+            transform: scale(0.85); /* Slightly smaller scale for mobile */
+            transform-origin: center center;
+        }
+
+        /* Update the SVG's inner group transform for mobile */
+        svg.radar g {
+            transform: translate(50%, 50%) scale(0.85);
             transform-origin: center center;
         }
         
         .container {
-            padding: 0 10px;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
         }
         
         .chart-wrapper {
-            padding: 10px;
-        }
-
-        .search-controls {
-            width: 100%;
-        }
-
-        #searchInput1 {
-            width: 100%;
+            padding: 10px 0; /* Remove horizontal padding on mobile */
+            margin: 0;
+            border-radius: 0;
+            overflow: hidden;
         }
     }
 
     /* Add viewport meta tag for proper mobile scaling */
     @media screen and (max-width: 768px) {
         .chart-wrapper {
-            margin: 0 -10px; /* Negative margin to allow full width */
-            border-radius: 0; /* Remove border radius on mobile */
+            margin: 0;
+            border-radius: 0;
+            overflow: hidden;
         }
     }
 
