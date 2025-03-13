@@ -108,7 +108,9 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         margin-bottom: 30px;
         position: relative;
         width: 100%;
-        min-width: 730px; /* Minimum width to accommodate the SVG */
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     /* Search input styling */
@@ -398,26 +400,24 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 32px 0px -15px;
+        margin: 32px auto;
         width: 100%;
-        min-width: 670px; /* Minimum width for radar container */
-        position: relative; /* Add relative positioning */
+        max-width: 700px;
+        position: relative;
     }
 
     svg.radar {
         width: 100%;
-        max-width: 700px;
-        min-width: 670px; /* Minimum width for SVG */
         height: auto;
-        aspect-ratio: 1.44 / 1;
-        display: block; /* Add display block */
-        margin: 0 auto; /* Center horizontally */
+        max-width: 700px;
+        display: block;
+        margin: 0 auto;
     }
 
     /* Add specific styling for the SVG group */
     svg.radar > g {
         transform-origin: center;
-        transform: translate(50%, 50%); /* Center the group */
+        transform: translate(50%, 50%);
     }
 
     /* Position switcher */
