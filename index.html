@@ -2631,6 +2631,28 @@ var data = rows.slice(1).map(function(row) {
  </script>
 
 <script>
+
+    // Global translation helper function
+    function getTranslation(key, defaultText) {
+        // Split the key into parts (e.g., "tooltip.xg-line-title" -> ["tooltip", "xg-line-title"])
+        const keys = key.split('.');
+        
+        // Try to find the translation in the current language
+        try {
+            let currentTranslations = window.currentTranslations || {};
+            for (const k of keys) {
+                if (currentTranslations && currentTranslations[k]) {
+                    currentTranslations = currentTranslations[k];
+                } else {
+                    return defaultText;
+                }
+            }
+            return currentTranslations;
+        } catch (e) {
+            return defaultText;
+        }
+    }
+    
   function setLanguage(language) {
     localStorage.setItem('preferredLanguage', language);
     const url = new URL(window.location.href);
