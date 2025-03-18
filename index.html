@@ -73,7 +73,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         box-sizing: border-box;
     }
 
-    body, html {
+    body {
         font-family: 'Inter', sans-serif;
         background-color: var(--background-color);
         color: var(--text-color);
@@ -566,7 +566,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         border-spacing: 0;
         border-radius: 10px;
         overflow: hidden;
-        margin-top: 39px;
+        margin-top: 1px;
         margin-bottom: 23px;
         box-shadow: var(--shadow);
         
@@ -615,98 +615,257 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         border-right: 1px solid rgba(255, 255, 255, 0.05); /* Match metrics table border in dark mode */
     }
 
+/* Color classes for radar chart */
+.result-color-1 {
+  color: #3062FB !important;
+  stroke: #3062FB;
+  fill: #3062FB;
+  fill-opacity: 0;
+}
+.result-color-2 {
+  color: #F62681 !important;
+  stroke: #F62681;
+  fill: #F62681;
+  fill-opacity: 0;
+}
+.result-color-3 {
+  color: #55d149 !important;
+  stroke: #55d149;
+  fill: #55d149;
+  fill-opacity: 0;
+}
+.result-color-4 {
+  color: #FFCF5F !important;
+  stroke: #FFCF5F;
+  fill: #FFCF5F;
+  fill-opacity: 0;
+}
+.result-color-5 {
+  color: rgb(153, 50, 204) !important;
+  stroke: rgb(153, 50, 204);
+  fill: rgb(153, 50, 204);
+  fill-opacity: 0;
+}
+.result-color-6 {
+  color: rgb(255, 140, 0) !important;
+  stroke: rgb(255, 140, 0);
+  fill: rgb(255, 140, 0);
+  fill-opacity: 0;
+}
+.result-color-7 {
+  color: rgb(255, 0, 0) !important;
+  stroke: rgb(255, 0, 0);
+  fill: rgb(255, 0, 0);
+  fill-opacity: 0;
+}
+.result-color-8 {
+  color: rgb(135, 206, 235) !important;
+  stroke: rgb(135, 206, 235);
+  fill: rgb(135, 206, 235);
+  fill-opacity: 0;
+}
 
-    /* Color classes for radar chart */
-    .result-color-blue {
-        color: #3062FB !important;
-        stroke: #3062FB;
-        fill: #3062FB;
-        fill-opacity: 0;
-    }
 
-    .result-color-pink {
-        color: #F62681 !important;
-        stroke: #F62681;
-        fill: #F62681;
-        fill-opacity: 0;
-    }
+.result-color-9 {
+  color: rgb(240, 128, 128) !important;
+  stroke: rgb(240, 128, 128);
+  fill: rgb(240, 128, 128);
+  fill-opacity: 0;
+}
 
-    .result-color-orange {
-        color: #55d149 !important;
-        stroke: #55d149;
-        fill: #55d149;
-        fill-opacity: 0;
-    }
+.result-color-10 {
+  color: rgb(30, 144, 255) !important;
+  stroke: rgb(30, 144, 255);
+  fill: rgb(30, 144, 255);
+  fill-opacity: 0;
+}
 
-    .result-color-green {
-        color: #FFCF5F !important;
-        stroke: #FFCF5F;
-        fill: #FFCF5F;
-        fill-opacity: 0;
-    }
 
-    .result-color-bleu {
-        color: #900C3F !important;
-        stroke: #900C3F;
-        fill: #900C3F;
-        fill-opacity: 0;
-    }
+.result-color-11 {
+    color: rgb(144, 238, 144) !important;
+    stroke: rgb(144, 238, 144);
+    fill: rgb(144, 238, 144);
+    fill-opacity: 0;
+}
 
-    .result-color-rose {
-        color: #F09710 !important;
-        stroke: #F09710;
-        fill: #F09710;
-        fill-opacity: 0;
-    }
 
-    /* Additional color classes */
-    .result-color-1, .result-color-7, .result-color-13, .result-color-19,
-    .result-color-25, .result-color-31, .result-color-37, .result-color-43 {
-        color: #3062FB !important;
-        stroke: #3062FB;
-        fill: #3062FB;
-        fill-opacity: 0;
-    }
+.result-color-12 {
+  color: rgb(246, 38, 129) !important;
+  stroke: rgb(246, 38, 129);
+  fill: rgb(246, 38, 129);
+  fill-opacity: 0;
+}
 
-    .result-color-2, .result-color-8, .result-color-14, .result-color-20,
-    .result-color-26, .result-color-32, .result-color-38, .result-color-44 {
-        color: #F62681 !important;
-        stroke: #F62681;
-        fill: #F62681;
-        fill-opacity: 0;
-    }
+.result-color-13 {
+  color: rgb(255, 69, 0) !important;
+  stroke: rgb(255, 69, 0);
+  fill: rgb(255, 69, 0);
+  fill-opacity: 0;
+}
+.result-color-14 {
+  color: rgb(70, 130, 180) !important;
+  stroke: rgb(70, 130, 180);
+  fill: rgb(70, 130, 180);
+  fill-opacity: 0;
+}
 
-    .result-color-3, .result-color-9, .result-color-15, .result-color-21,
-    .result-color-27, .result-color-33, .result-color-39, .result-color-45 {
-        color: #55d149 !important;
-        stroke: #55d149;
-        fill: #55d149;
-        fill-opacity: 0;
-    }
+.result-color-15 {
+  color: rgb(208, 32, 144) !important;
+  stroke: rgb(208, 32, 144);
+  fill: rgb(208, 32, 144);
+  fill-opacity: 0;
+}
 
-    .result-color-4, .result-color-10, .result-color-16, .result-color-22,
-    .result-color-28, .result-color-34, .result-color-40, .result-color-46 {
-        color: #FFCF5F !important;
-        stroke: #FFCF5F;
-        fill: #FFCF5F;
-        fill-opacity: 0;
-    }
+.result-color-16 {
+  color: rgb(60, 179, 113) !important;
+  stroke: rgb(60, 179, 113);
+  fill: rgb(60, 179, 113);
+  fill-opacity: 0;
+}
 
-    .result-color-5, .result-color-11, .result-color-17, .result-color-23,
-    .result-color-29, .result-color-35, .result-color-41, .result-color-47 {
-        color: #900C3F !important;
-        stroke: #900C3F;
-        fill: #900C3F;
-        fill-opacity: 0;
-    }
 
-    .result-color-6, .result-color-12, .result-color-18, .result-color-24,
-    .result-color-30, .result-color-36, .result-color-42, .result-color-48 {
-        color: #F09710 !important;
-        stroke: #F09710;
-        fill: #F09710;
-        fill-opacity: 0;
-    }
+.result-color-17 {
+  color: rgb(220, 20, 60) !important;
+  stroke: rgb(220, 20, 60);
+  fill: rgb(220, 20, 60);
+  fill-opacity: 0;
+}
+
+
+
+.result-color-18 {
+  color: rgb(255, 223, 60) !important;
+  stroke: rgb(255, 223, 60);
+  fill: rgb(255, 223, 60);
+  fill-opacity: 0;
+}
+
+
+.result-color-19 {
+  color: rgb(238, 130, 238) !important;
+  stroke: rgb(238, 130, 238);
+  fill: rgb(238, 130, 238);
+  fill-opacity: 0;
+}
+
+.result-color-20 {
+  color: rgb(147, 112, 219) !important;
+  stroke: rgb(147, 112, 219);
+  fill: rgb(147, 112, 219);
+  fill-opacity: 0;
+}
+
+
+
+.result-color-21 {
+  color: rgb(34, 139, 34) !important;
+  stroke: rgb(34, 139, 34);
+  fill: rgb(34, 139, 34);
+  fill-opacity: 0;
+}
+
+.result-color-22 {
+  color: rgb(255, 198, 0) !important;
+  stroke: rgb(255, 198, 0);
+  fill: rgb(255, 198, 0);
+  fill-opacity: 0;
+}
+
+
+
+
+.result-color-23 {
+  color: rgb(255, 99, 71) !important;
+  stroke: rgb(255, 99, 71);
+  fill: rgb(255, 99, 71);
+  fill-opacity: 0;
+}
+.result-color-24 {
+  color: rgb(65, 105, 225) !important;
+  stroke: rgb(65, 105, 225);
+  fill: rgb(65, 105, 225);
+  fill-opacity: 0;
+}
+.result-color-25 {
+  color: rgb(255, 215, 0) !important;
+  stroke: rgb(255, 215, 0);
+  fill: rgb(255, 215, 0);
+  fill-opacity: 0;
+}
+
+
+.result-color-26 {
+  color: rgb(0, 206, 209) !important;
+  stroke: rgb(0, 206, 209);
+  fill: rgb(0, 206, 209);
+  fill-opacity: 0;
+}
+.result-color-27 {
+  color: rgb(197, 142, 255) !important;
+  stroke: rgb(197, 142, 255);
+  fill: rgb(197, 142, 255);
+  fill-opacity: 0;
+}
+.result-color-28 {
+  color: rgb(46, 139, 87) !important;
+  stroke: rgb(46, 139, 87);
+  fill: rgb(46, 139, 87);
+  fill-opacity: 0;
+}
+.result-color-29 {
+  color: rgb(255, 105, 180) !important;
+  stroke: rgb(255, 105, 180);
+  fill: rgb(255, 105, 180);
+  fill-opacity: 0;
+}
+.result-color-30 {
+  color: rgb(255, 165, 0) !important;
+  stroke: rgb(255, 165, 0);
+  fill: rgb(255, 165, 0);
+  fill-opacity: 0;
+}
+.result-color-31 {
+  color: rgb(255, 207, 95) !important;
+  stroke: rgb(255, 207, 95);
+  fill: rgb(255, 207, 95);
+  fill-opacity: 0;
+}
+.result-color-32 {
+  color: rgb(255, 182, 193) !important;
+  stroke: rgb(255, 182, 193);
+  fill: rgb(255, 182, 193);
+  fill-opacity: 0;
+}
+.result-color-33 {
+  color: rgb(102, 205, 170) !important;
+  stroke: rgb(102, 205, 170);
+  fill: rgb(102, 205, 170);
+  fill-opacity: 0;
+}
+.result-color-34 {
+  color: rgb(48, 98, 251) !important;
+  stroke: rgb(48, 98, 251);
+  fill: rgb(48, 98, 251);
+  fill-opacity: 0;
+}
+.result-color-35 {
+  color: rgb(186, 85, 211) !important;
+  stroke: rgb(186, 85, 211);
+  fill: rgb(186, 85, 211);
+  fill-opacity: 0;
+}
+.result-color-36 {
+  color: rgb(123, 104, 238) !important;
+  stroke: rgb(123, 104, 238);
+  fill: rgb(123, 104, 238);
+  fill-opacity: 0;
+}
+.result-color-37 {
+  color: rgb(0, 128, 128) !important;
+  stroke: rgb(0, 128, 128);
+  fill: rgb(0, 128, 128);
+  fill-opacity: 0;
+}
 
 svg text.label{
     fill: #bcbcbc;
@@ -802,8 +961,7 @@ svg text.label{
             z-index: 100;
         }
 
- 
-        
+   
 .header .logo {
   display: flex;
   align-items: center;
@@ -995,6 +1153,7 @@ body.dark-mode .language-option {
 }
 
 
+
 .language-switcher-container {
   position: relative;
   display: none;
@@ -1049,7 +1208,13 @@ body.dark-mode .language-option {
 .language-dropdown.show {
   display: block;
 }
-
+img {
+    width: 38px;
+    margin-left: 10px;
+    margin-bottom: 8px;
+    opacity: 0.64;
+   }
+       
 
 </style>
 </defs>
@@ -1201,11 +1366,12 @@ body.dark-mode .language-option {
   <line x1="0" y1="0" x2="182.73258666666666" y2="-52.67472" stroke="#D3D3D3" stroke-width="1" transform="translate(-182.7209384, 52.480128)"></line>
   <line x1="0" y1="0" x2="154.67849333333334" y2="109.91788799999999" stroke="#D3D3D3" stroke-width="1" transform="translate(-154.6883792222, -110.017215488)"></line>
   
-  
+
   <g class="radarWrapper"></g>
   </g></g>
         </svg>
       </div>
+      <img src="https://datamb.football/logo.png" alt="Logo">
       <div id="insertHere"></div>
 
       
@@ -1597,7 +1763,7 @@ function calculateEuclideanDifference(data1, data2) {
   return Math.sqrt(difference);
 }
 
-      const colorClasses = ['result-color-blue', 'result-color-pink', 'result-color-orange', 'result-color-green', 'result-color-bleu', 'result-color-rose', 'result-color-1', 'result-color-2', 'result-color-3', 'result-color-4', 'result-color-5', 'result-color-6', 'result-color-7', 'result-color-8', 'result-color-9', 'result-color-10', 'result-color-11', 'result-color-12', 'result-color-13', 'result-color-14', 'result-color-15', 'result-color-16', 'result-color-17', 'result-color-18', 'result-color-19', 'result-color-20', 'result-color-21', 'result-color-22', 'result-color-23', 'result-color-24', 'result-color-25', 'result-color-26', 'result-color-27', 'result-color-28', 'result-color-29', 'result-color-30', 'result-color-31', 'result-color-32', 'result-color-33', 'result-color-34', 'result-color-35', 'result-color-36', 'result-color-37', 'result-color-38', 'result-color-39', 'result-color-40', 'result-color-41', 'result-color-42', 'result-color-43', 'result-color-44', 'result-color-45', 'result-color-46', 'result-color-47', 'result-color-48'];
+      const colorClasses = ['result-color-1', 'result-color-2', 'result-color-3', 'result-color-4', 'result-color-5', 'result-color-6', 'result-color-7', 'result-color-8', 'result-color-9', 'result-color-10', 'result-color-11', 'result-color-12', 'result-color-13', 'result-color-14', 'result-color-15', 'result-color-16', 'result-color-17', 'result-color-18', 'result-color-19', 'result-color-20', 'result-color-21', 'result-color-22', 'result-color-23', 'result-color-24', 'result-color-25', 'result-color-26', 'result-color-27', 'result-color-28', 'result-color-29', 'result-color-30', 'result-color-31', 'result-color-32', 'result-color-33', 'result-color-34', 'result-color-35', 'result-color-36', 'result-color-37'];
       
       let searchResults = []; // Declare the search results variable
       
@@ -2197,49 +2363,53 @@ function toggleDarkMode() {
   }
   
   function takeScreenshot() {
-      const chartContainer = document.querySelector('.chart-wrapper');
-      const isDarkMode = document.body.classList.contains('dark-mode');
-      
-      html2canvas(chartContainer, {
-          scale: 2, // Higher quality
-          backgroundColor: isDarkMode ? '#2c2c2c' : '#FFFFFF',
-          allowTaint: true,
-          useCORS: true,
-          logging: false
-      }).then(function(renderedCanvas) {
-          const finalCanvas = document.createElement('canvas');
-          finalCanvas.width = renderedCanvas.width;
-          finalCanvas.height = renderedCanvas.height;
-          const finalCtx = finalCanvas.getContext('2d');
-          finalCtx.drawImage(renderedCanvas, 0, 0);
-          
-          // Load the watermark
-          const watermarkImg = new Image();
-          watermarkImg.crossOrigin = "Anonymous";
-          
-          watermarkImg.onload = function() {
-              const watermarkWidth = finalCanvas.width * 0.3;
-              const watermarkHeight = (watermarkWidth / watermarkImg.width) * watermarkImg.height;
-              
-              const x = (finalCanvas.width - watermarkWidth) / 2;
-              const y = (finalCanvas.height - watermarkHeight) / 2;
-              
-              finalCtx.save();
-              finalCtx.globalAlpha = 0.04;
-              finalCtx.drawImage(watermarkImg, x, y, watermarkWidth, watermarkHeight);
-              finalCtx.restore();
-              
-              const dataURL = finalCanvas.toDataURL('image/png', 1.0);
-              const link = document.createElement('a');
-              link.download = 'DataMB Screenshot.png';
-              link.href = dataURL;
-              link.click();
-          };
-          watermarkImg.src = 'https://datamb.football/logo.png';
-      }).catch(function(error) {
-      });
+  const chartContainer = document.querySelector('.chart-wrapper');
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  
+  // Find the horizontal line element
+  const horizontalLine = chartContainer.querySelector('.similar-table');
+  
+  // If the horizontal line exists, calculate its position
+  let captureHeight;
+  if (horizontalLine) {
+    // Get the hr's position relative to the chart container
+    const hrRect = horizontalLine.getBoundingClientRect();
+    const containerRect = chartContainer.getBoundingClientRect();
+    // Calculate the hr's position from the top of the container
+    captureHeight = hrRect.top - containerRect.top;
   }
   
+  html2canvas(chartContainer, {
+    scale: 2,
+    backgroundColor: isDarkMode ? '#2c2c2c' : '#FFFFFF',
+    allowTaint: true,
+    useCORS: true,
+    logging: false,
+    onclone: function(documentClone, element) {
+      // Shift SVGs left in the cloned element
+      const svgElements = element.querySelectorAll('svg');
+      svgElements.forEach(svg => {
+        svg.style.transform = 'translateX(-18px)';
+      });
+    },
+    height: captureHeight // Set the capture height to stop at the horizontal line
+  }).then(canvas => {
+    // Convert canvas to data URL
+    const imageData = canvas.toDataURL('image/png');
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = imageData;
+    link.download = 'chart-screenshot.png';
+    
+    // Append to body, trigger download, then remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }).catch(error => {
+    console.error('Error taking screenshot:', error);
+  });
+}
 </script>
    <center>
       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
