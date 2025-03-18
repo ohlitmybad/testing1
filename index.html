@@ -2372,41 +2372,58 @@ function toggleDarkMode() {
       polygon.style.fill = polygon.style.fill ? '' : 'none'; // Toggle the filling
     });
   }
-  
   function takeScreenshot() {
   const chartContainer = document.querySelector('.chart-wrapper');
   const isDarkMode = document.body.classList.contains('dark-mode');
   
   // Find the horizontal line element
-  const horizontalLine = chartContainer.querySelector('.similar-table');
+  const similarTable = chartContainer.querySelector('.similar-table');
   
-  // If the horizontal line exists, calculate its position
+  // Calculate capture dimensions
   let captureHeight;
-  if (horizontalLine) {
-    // Get the hr's position relative to the chart container
-    const hrRect = horizontalLine.getBoundingClientRect();
+  if (similarTable) {
     const containerRect = chartContainer.getBoundingClientRect();
-    // Calculate the hr's position from the top of the container
-    captureHeight = hrRect.top - containerRect.top;
+    const tableRect = similarTable.getBoundingClientRect();
+    captureHeight = tableRect.top - containerRect.top;
   }
   
-  html2canvas(chartContainer, {
+  // Create a clone of the chart container for screenshot
+  const cloneContainer = chartContainer.cloneNode(true);
+  
+  // Create a wrapper with fixed dimensions to serve as our "viewport"
+  const fakeViewport = document.createElement('div');
+  fakeViewport.style.position = 'absolute';
+  fakeViewport.style.left = '-9999px'; // Position off-screen
+  fakeViewport.style.top = '0';
+  fakeViewport.style.width = '700px'; // Standard width
+  fakeViewport.style.height = '1400px'; // Standard height
+  fakeViewport.style.overflow = 'hidden';
+  
+  // Add the clone to our fake viewport
+  fakeViewport.appendChild(cloneContainer);
+  document.body.appendChild(fakeViewport);
+  
+  // Reset any transformations on SVGs
+  const svgElements = cloneContainer.querySelectorAll('svg');
+  svgElements.forEach(svg => {
+    svg.style.transform = 'none';
+  });
+  
+  html2canvas(cloneContainer, {
     scale: 2,
     backgroundColor: isDarkMode ? '#2c2c2c' : '#FFFFFF',
     allowTaint: true,
     useCORS: true,
     logging: false,
-    onclone: function(documentClone, element) {
-      // Shift SVGs left in the cloned element
-      const svgElements = element.querySelectorAll('svg');
-      svgElements.forEach(svg => {
-        svg.style.transform = 'translateX(-18px)';
-      });
-    },
-    height: captureHeight // Set the capture height to stop at the horizontal line
+    height: captureHeight,
+    windowWidth: 1200, // Set a fixed viewport width
+    windowHeight: 800, // Set a fixed viewport height
   }).then(canvas => {
     // Convert canvas to data URL
     const imageData = canvas.toDataURL('image/png');
+    
+    // Clean up the fake viewport
+    document.body.removeChild(fakeViewport);
     
     // Create download link
     const link = document.createElement('a');
@@ -2419,6 +2436,10 @@ function toggleDarkMode() {
     document.body.removeChild(link);
   }).catch(error => {
     console.error('Error taking screenshot:', error);
+    // Clean up on error
+    if (document.body.contains(fakeViewport)) {
+      document.body.removeChild(fakeViewport);
+    }
   });
 }
 </script>
