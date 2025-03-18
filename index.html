@@ -525,44 +525,23 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         transform: translateX(20px);
     }
 
+    /* Dark mode toggle */
     .dark-mode-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--container-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            z-index: 100;
-            transition: background-color 0.3s;
-        }
-
-
-        .dark-mode-toggle.mobile-only {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-        }
-
-        .dark-mode-toggle.pc-only {
-            position: relative;
-            bottom: auto;
-            right: auto;
-        }
-
-        .pc-only {
-            display: flex;
-        }
-
-        .mobile-only {
-            display: none;
-        }
-
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--container-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        transition: background-color 0.3s;
+    }
 
     .toggle-icon::before {
         font-family: "Ionicons";
@@ -636,7 +615,21 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         border-right: 1px solid rgba(255, 255, 255, 0.05); /* Match metrics table border in dark mode */
     }
 
-
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .chart-wrapper {
+            padding: 15px;
+        }
+        
+        .position-switcher {
+            gap: 5px;
+        }
+        
+        .position-button {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+    }
 
     /* Color classes for radar chart */
     .result-color-blue {
@@ -746,7 +739,7 @@ svg text.label{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 11px;
+    gap: 10px;
     margin: 0px auto 20px;
     max-width: 700px;
     flex-wrap: wrap;
@@ -1270,15 +1263,12 @@ body.dark-mode .language-option {
         <a href="https://datamb.football/teamradars/" target="_self" rel="noopener noreferrer" class="position-link">
             <span data-i18n="buttons.team">Team</span>
         </a>
-        <div class="dark-mode-toggle pc-only" onclick="toggleDarkMode()">
-          <div class="toggle-icon"></div>
-      </div>
     </div>
   </div>
   
-  <div class="dark-mode-toggle mobile-only" onclick="toggleDarkMode()">
+  <div class="dark-mode-toggle" onclick="toggleDarkMode()">
     <div class="toggle-icon"></div>
-</div>
+  </div>
 
 <script>
 
