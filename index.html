@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<meta name="viewport" content="width=device-width, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="robots" content="noindex">
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
@@ -65,9 +65,12 @@
         font-family: 'Inter', sans-serif;
         color: var(--text-color);
         line-height: 1.6;
-        transition: background-color 0.3s, color 0.3s;
         margin: 0;
         padding: 0;
+        width: 470px;
+        overflow-x: hidden;
+        position: relative;
+        min-height: 100vh;
     }
 
 #matchingNames {
@@ -669,22 +672,20 @@ position: absolute;
     }
 
     img {
-            width: 31px;
-top: -400px;
-pointer-events: none;
-z-index: 40000; 
-left: -953px;
-opacity: .8;
-        }
+    width: 38px;
+    margin-left: 10px;
+    margin-bottom: 8px;
+    opacity: 0.64;
+   }
 
 
-        .screenshotcontainer {
-            margin-left: 8px;
-        }
+ 
         
 
 .finalcontainer {
-  width: 100%; 
+  width: 470px;
+  margin: 0 auto;
+  position: relative;
 }
 .emptycontainer {
     height: 65px;
@@ -714,19 +715,13 @@ margin-left: 0%;
 
 
   
-  
-svg.radar {
-  width: 420px;
-  height: 435px;
-}
-
 
 
 
 .dark-mode-toggle {
         position: fixed;
         bottom: 20px;
-        right: 20px;
+        right: 10px;
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -740,24 +735,7 @@ svg.radar {
         transition: background-color 0.3s;
     }
 
-	
- .button-10 {
- 
-  position: absolute;
-    top: 400px;
-    left: 410px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-        background-color: var(--button-color);
-        color: var(--button-text);
-        border: none;
-        border-radius: 6px;
-        height: 36px;
-        width: 36px;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
+/* Removed old button-10 style */
     
     .screenshot-button:hover {
         background-color: #2980b9;
@@ -827,7 +805,7 @@ body.dark-mode button:hover {
     gap: 10px;
     max-width: 700px;
     flex-wrap: wrap;
-    padding: 10px 10px;
+    padding: 10px 11px;
 
 }
 
@@ -896,8 +874,8 @@ body.dark-mode button:hover {
         color: var(--text-color);
         transition: border-color 0.2s;
         height: 20px;
-        margin-left: 7px;
-        width: 382px;
+        margin-left: 10px;
+        width: 377px;
         max-width: 100%;
     }
 
@@ -936,6 +914,61 @@ body.dark-mode button:hover {
       border-color: var(--primary-color);    }
 
 
+
+      .chart-wrapper img {
+    width: 38px;
+    margin-left: 10px;
+    margin-bottom: 8px;
+    opacity: 0.64;
+   }
+
+
+svg.radar {
+  height: 391px;
+  width: 391px;
+  display: block; /* Add display block */
+  margin: 0 auto; /* Center the radar chart */
+}
+
+/* Add specific styling for the SVG group */
+svg.radar > g {
+    transform-origin: center;
+    transform: translate(50%, 50%); /* Center the group */
+}
+
+.logo-screenshot-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.logo-screenshot-container img {
+  width: 38px;
+  opacity: 0.64;
+  margin: 0;
+}
+
+.button-10 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--button-color);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  height: 36px;
+  width: 36px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-right: 10px;
+  position: static;
+}
+
 </style>
 </defs>
 	
@@ -960,96 +993,104 @@ body.dark-mode button:hover {
 
 <body>
   <div class="position-switcher-container">
-    <span class="position-link active" style="user-select: none;">
+
+    <a href="https://datamb.football/appgk/" target="_top" rel="noopener noreferrer" class="position-link">
         <span>GK</span>
-    </span>
-    <a href="https://datamb.football/centrebacks/" target="_self" rel="noopener noreferrer" class="position-link">
-        <span>CB</span>
     </a>
-    <a href="https://datamb.football/fullbacks/" target="_self" rel="noopener noreferrer" class="position-link">
+        <span class="position-link active" style="user-select: none;">
+      <span>CB</span>
+  </span>
+
+    <a href="https://datamb.football/appfb/" target="_top" rel="noopener noreferrer" class="position-link">
         <span>FB</span>
     </a>
-    <a href="https://datamb.football/midfielders/" target="_self" rel="noopener noreferrer" class="position-link">
+    <a href="https://datamb.football/appcm/" target="_top" rel="noopener noreferrer" class="position-link">
         <span>CM</span>
     </a>
-    <a href="https://datamb.football/wingers/" target="_self" rel="noopener noreferrer" class="position-link">
+    <a href="https://datamb.football/appfw/" target="_top" rel="noopener noreferrer" class="position-link">
         <span>FW</span>
     </a>
-    <a href="https://datamb.football/strikers/" target="_self" rel="noopener noreferrer" class="position-link">
+    <a href="https://datamb.football/appst/" target="_top" rel="noopener noreferrer" class="position-link">
         <span>ST</span>
     </a>
 </div>
-  <div class="searchcontainer">
-    <input type="text" id="searchInput1" class="search-bar" placeholder="Enter centreback name..." />
-    <input type="button" id="searchButton1" value="+" /></div>
-    <div class="dark-mode-toggle" onclick="toggleDarkMode()"><div class="toggle-icon"></div></div></div>
-    <div class="screenshotcontainer">
-      <div id="matchingNames"></div>
-	<div id="resultsTable"></div>  
-  <div class="maxcontainer">
-  <div class="toggle-container2">
-    <img src="https://datamb.football/logo.png" alt="Logo">
-  </div>
-  <button onclick="takeScreenshot()" class="button-10"><div class="icon2"></div></button>
 
+  
+  <div class="search-container">
+    <div class="search-controls">
+      <input type="text" id="searchInput1" class="search-bar" data-i18n="search.placeholder2" placeholder="Enter name of centreback..." />
+      <button id="searchButton1">+</button>
+    </div>
+    <div id="matchingNames"></div>
   </div>
 
 
-  <svg class="radar"><g transform="translate(223,225.77)"><g class="axisWrapper">
-    <g class="radar_label">
-        <text class="label" data-type="Aerial%" data-idx="0" transform="translate(-30.60 -154.8) rotate(-2)">Aerial%</text>
-    </g>
-    
-    <g class="radar_label">
-        <text class="label" data-type="Long%" data-idx="6" transform="matrix(0.5, -0.86, 0.86, 0.5, -142.96, -69.54) rotate(5.5)">Duel%</text>
-    </g>
-    
-    <g class="radar_label">
-        <text class="label" data-type="Passes" data-idx="5" transform="matrix(-0.38, -0.93, 0.93, -0.38, -138.23, 80.82) rotate(3.87)">Def Actions</text>
-    </g>
-    
-    <g class="radar_label">
-        <text class="label" data-type="Exits" data-idx="4" transform="translate(-104.53 139) rotate(20.3)">Prog Passes</text>
-    </g>
-    
-    <g class="radar_label">
-        <text class="label" data-type="Aerial" data-idx="3" transform="translate(53.06 162.66) rotate(-28.32)">Fwd Pass%</text>
-    </g>
-    
-    <g class="radar_label">
-        <text class="label" data-type="Def Actions" data-idx="2" transform="translate(160.20 3.45) rotate(100.11)">Passes</text>
-    </g>
-    
-    <g class="radar_label">
-        <text class="label" data-type="Shotstopping" data-idx="1" transform="translate(97.10 -129.22) rotate(51.09)">Carrying</text>
-    </g>
-    
-    
+  <div id="resultsTable"></div>
   
-  
-  <circle class="blackCircle" r="150" style="fill:none; stroke:#D3D3D3; stroke-width:1;"></circle>
-  <circle class="gridCircle" r="150" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-  <circle class="gridCircle" r="128" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-  <circle class="gridCircle" r="90" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-  <circle class="gridCircle" r="60" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-  <circle class="gridCircle" r="30" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle></g>
-                                  
+  <div class="radar-container" style="display: flex; justify-content: center; width: 100%; margin-top: 20px;">
+    <svg class="radar">
+      <g transform="translate(0,0)"><g class="axisWrapper">
+
+<g class="radar_label">
+  <text class="label" data-type="Aerial%" data-idx="0" data-i18n="radar.short" transform="translate(-35 -170.5) scale(1.13) rotate(-1.7)">Short%</text>
+</g>
+
+<g class="radar_label">
+  <text class="label" data-type="Long%" data-idx="6" data-i18n="radar.long" transform="matrix(0.57, -0.97, 0.97, 0.57, -156.7, -76.55) rotate(3.5)">Long%</text>
+</g>
+
+<g class="radar_label">
+  <text class="label" data-type="Passes" data-idx="5" data-i18n="radar.passes" transform="matrix(-0.43, -1.052, 1.052, -0.43, -154.8, 75.25) rotate(3.87)">Passes</text>
+</g>
+
+<g class="radar_label">
+  <text class="label" data-type="Exits" data-idx="4" data-i18n="radar.exits" transform="translate(-87.06 162.75) scale(1.13) rotate(20)">Exits</text>
+</g>
+
+<g class="radar_label">
+  <text class="label" data-type="Aerial" data-idx="3" data-i18n="radar.aerial" transform="translate(68.54 170.9) scale(1.13) rotate(-29)">Aerial</text>
+</g>
+
+<g class="radar_label">
+  <text class="label" data-type="Def Actions" data-idx="2" data-i18n="radar.defActions" transform="translate(174.1 -7.22) scale(1.13) rotate(99.11)">Def Actions</text>
+</g>
+
+<g class="radar_label">
+  <text class="label" data-type="Shotstopping" data-idx="1" data-i18n="radar.shotstopping" transform="translate(105.77 -145.78) scale(1.13) rotate(53.49)">Shot-stopping</text>
+</g>
+
+
+<circle class="blackCircle" r="165" style="fill:none; stroke:#D3D3D3; stroke-width:1;"></circle>
+<circle class="gridCircle" r="165" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+<circle class="gridCircle" r="139" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+<circle class="gridCircle" r="104" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+<circle class="gridCircle" r="70" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+<circle class="gridCircle" r="35" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+
+
+<line x1="0" y1="0" x2="8.11" y2="164.74" stroke="#D3D3D3" stroke-width="1" transform="translate(-8.11, -164.74)"></line>
+<line x1="0" y1="0" x2="-123.52" y2="109.77" stroke="#D3D3D3" stroke-width="1" transform="translate(123.25, -109.77)"></line>
+<line x1="0" y1="0" x2="-162.88" y2="-28.1" stroke="#D3D3D3" stroke-width="1" transform="translate(163.09, 28.04)"></line>
+<line x1="0" y1="0" x2="-79.86" y2="-145.15" stroke="#D3D3D3" stroke-width="1" transform="translate(79.86, 144.53)"></line>
+<line x1="0" y1="0" x2="63.48" y2="-152.91" stroke="#D3D3D3" stroke-width="1" transform="translate(-63.48, 152.47)"></line>
+<line x1="0" y1="0" x2="158.9" y2="-45.8" stroke="#D3D3D3" stroke-width="1" transform="translate(-158.89, 45.63)"></line>
+<line x1="0" y1="0" x2="134.5" y2="95.58" stroke="#D3D3D3" stroke-width="1" transform="translate(-134.51, -95.67)"></line>
+
+
+<g class="radarWrapper"></g>
+</g></g>
+      </svg>
+    </div>
     
-   
-  <line x1="0" y1="0" x2="7.37" y2="149.57" stroke="#D3D3D3" stroke-width="1" transform="translate(-7.36, -149.8)"></line>
-  <line x1="0" y1="0" x2="-112.26" y2="99.60" stroke="#D3D3D3" stroke-width="1" transform="translate(112.11, -99.6)"></line>
-  <line x1="0" y1="0" x2="-147.68" y2="-25.48" stroke="#D3D3D3" stroke-width="1" transform="translate(147.82, 25.44)"></line>
-  <line x1="0" y1="0" x2="-72.34" y2="-131.68" stroke="#D3D3D3" stroke-width="1" transform="translate(72.34, 131.4)"></line>
-  <line x1="0" y1="0" x2="57.50" y2="-138.88" stroke="#D3D3D3" stroke-width="1" transform="translate(-57.53, 138.51)"></line>
-  <line x1="0" y1="0" x2="144.16" y2="-41.52" stroke="#D3D3D3" stroke-width="1" transform="translate(-144.14, 41.48)"></line>
-  <line x1="0" y1="0" x2="122.14" y2="86.58" stroke="#D3D3D3" stroke-width="1" transform="translate(-122.357, -86.768)"></line>
-  
-  
-  
-  <g class="radarWrapper"></g>
-  </g></g>    
-  <div id="insertHere"></div>
-</div>
+    <div class="logo-screenshot-container">
+      <img src="https://datamb.football/logo.png" alt="Logo">
+      <button onclick="takeScreenshot()" class="button-10"><div class="icon2"></div></button>
+    </div>
+    
+    <div id="insertHere"></div>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+      <div class="toggle-icon"></div>
+    </div>
 
 <script>
    
@@ -1308,9 +1349,9 @@ matchingNames.forEach(function(name) {
                 matchingNamesContainer.style.display = "block";
                 matchingNamesContainer.style.padding = "8px";
                 matchingNamesContainer.style.position = "relative";
-                matchingNamesContainer.style.left = "1.9px";
+                matchingNamesContainer.style.left = "13.3px";
                 matchingNamesContainer.style.zIndex = "9999"; // Set a high z-index value
-                matchingNamesContainer.style.width = "392px";
+                matchingNamesContainer.style.width = "377px"; // Match the width of the search input
                 matchingNamesContainer.style.maxHeight = "267px"; // Limit height for long lists
                 matchingNamesContainer.style.overflowY = "auto"; // Enable scrolling if content exceeds height
           
@@ -1497,21 +1538,21 @@ const combResults = dataArray[teamIndex].join(', ');
 
 
 
-const outerRadius = 150;
+const outerRadius = 130;
 const center = [0, 0];
 const angles = [0, 2 * Math.PI / 7, 4 * Math.PI / 7, 6 * Math.PI / 7, 8 * Math.PI / 7, 10 * Math.PI / 7, 12 * Math.PI / 7];
 
 function axisValueToCartesian(axis, value) {
 let angle = angles[axis - 1];
 angle += (2 * Math.PI / 7) * 0.2;
-const x = 150 * value * Math.cos(angle);
-const y = 150 * value * Math.sin(angle);
+const x = 130 * value * Math.cos(angle);
+const y = 130 * value * Math.sin(angle);
 return { x, y };
 }
 
 const svg = document.querySelector('.radar');
 const radarWrapper = svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
-radarWrapper.setAttribute('transform', 'translate(223,225.77)');
+radarWrapper.setAttribute('transform', 'translate(0,0)');
 radarWrapper.innerHTML = '';
 
 const data = [];
