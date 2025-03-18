@@ -104,7 +104,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         background-color: var(--container-bg);
         border-radius: 10px;
         box-shadow: var(--shadow);
-        padding: 12px 30px 20px;
+        padding: 12px 14px 20px;
         margin-bottom: 30px;
         position: relative;
         width: 100%;
@@ -306,7 +306,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         border-spacing: 0;
         border-radius: 10px;
         overflow: hidden;
-        margin-top: 15px;
+        margin-top: 10px;
         box-shadow: var(--shadow);
         table-layout: fixed; /* Ensure fixed table layout */
         max-width: 100%; /* Prevent overflow */
@@ -567,7 +567,7 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         border-radius: 10px;
         overflow: hidden;
         margin-top: 39px;
-        margin-bottom: 10px;
+        margin-bottom: 23px;
         box-shadow: var(--shadow);
         
     }
@@ -615,21 +615,6 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         border-right: 1px solid rgba(255, 255, 255, 0.05); /* Match metrics table border in dark mode */
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .chart-wrapper {
-            padding: 15px;
-        }
-        
-        .position-switcher {
-            gap: 5px;
-        }
-        
-        .position-button {
-            padding: 6px 10px;
-            font-size: 12px;
-        }
-    }
 
     /* Color classes for radar chart */
     .result-color-blue {
@@ -740,10 +725,9 @@ svg text.label{
     justify-content: center;
     align-items: center;
     gap: 10px;
-    margin: 0px auto 20px;
     max-width: 700px;
     flex-wrap: wrap;
-    padding: 0 15px;
+
 }
 
 .position-link {
@@ -1222,8 +1206,8 @@ body.dark-mode .language-option {
   </g></g>
         </svg>
       </div>
-      
       <div id="insertHere"></div>
+
       
       <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color); opacity: 0.5;">
       
@@ -1235,36 +1219,36 @@ body.dark-mode .language-option {
             <span class="toggle-slider"></span>
           </label>
         </div>
+        <div class="position-switcher-container">
+          <span class="position-link active" style="user-select: none;">
+              <span>GK</span>
+          </span>
+          <a href="https://datamb.football/centrebacks/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>CB</span>
+          </a>
+          <a href="https://datamb.football/fullbacks/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>FB</span>
+          </a>
+          <a href="https://datamb.football/midfielders/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>CM</span>
+          </a>
+          <a href="https://datamb.football/wingers/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>FW</span>
+          </a>
+          <a href="https://datamb.football/strikers/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>ST</span>
+          </a>
+          <a href="https://datamb.football/teamradars/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span data-i18n="buttons.team">Team</span>
+          </a>
+    </div>
         
         <button onclick="takeScreenshot()" class="btn btn-outline btn-icon"><iconify-icon icon="ion:camera" style="color: var(--text-color); font-size: 18px;"></iconify-icon></button>
       </div>
       
     </div>
 
-      <div class="position-switcher-container">
-        <span class="position-link active" style="user-select: none;">
-            <span>GK</span>
-        </span>
-        <a href="https://datamb.football/centrebacks/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>CB</span>
-        </a>
-        <a href="https://datamb.football/fullbacks/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>FB</span>
-        </a>
-        <a href="https://datamb.football/midfielders/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>CM</span>
-        </a>
-        <a href="https://datamb.football/wingers/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>FW</span>
-        </a>
-        <a href="https://datamb.football/strikers/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>ST</span>
-        </a>
-        <a href="https://datamb.football/teamradars/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span data-i18n="buttons.team">Team</span>
-        </a>
-    </div>
-  </div>
+      
   
   <div class="dark-mode-toggle" onclick="toggleDarkMode()">
     <div class="toggle-icon"></div>
