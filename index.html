@@ -418,13 +418,43 @@ text {
 
 
 .x-cell {
-  position: absolute;
-left: 380px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-left: 10px;
+  width: 30px;
 }
 
+.x-button {
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.x-button:hover {
+  background-color: #e0e0e0;
+}
+
+.dark-mode .x-button {
+  background-color: #333333;
+  color: #f2f2f2;
+}
+
+.dark-mode .x-button:hover {
+  background-color: #444444;
+}
 
 td {
     display: flex;
+    align-items: center;
 }
   th {
     font-weight: normal;
@@ -454,6 +484,7 @@ table {
 margin-top: 0%;
 margin-left: 0%;
   table-layout: auto;
+  margin-left:14px;
  
 }
 
@@ -461,6 +492,7 @@ margin-left: 0%;
   left: 78px;
   width: 350px;
   text-align: center;
+  margin-left: 80px;
 
 }
 
@@ -706,7 +738,7 @@ svg.radar > g {
 .logo-screenshot-container img {
   width: 38px;
   opacity: 0.64;
-  margin: 0;
+  margin-left: 5px;
 }
 
 .button-10 {
@@ -1214,10 +1246,7 @@ const th = document.createElement('th');
 th.textContent = headerNames[i];
 headerRow.appendChild(th);
 }
-// Add a separate table header for the "x" column
-const xHeader = document.createElement('th');
-xHeader.textContent = '';
-headerRow.appendChild(xHeader);
+// We don't need a separate header for the x button anymore
 table.appendChild(headerRow);
 }
 
@@ -1226,6 +1255,16 @@ table.appendChild(headerRow);
 
 const teamData = dataArray[teamIndex];
 const dataRow = document.createElement('tr');
+dataRow.style.display = 'flex';
+dataRow.style.alignItems = 'center';
+dataRow.style.position = 'relative';
+
+// Create a container for player data
+const playerDataContainer = document.createElement('div');
+playerDataContainer.style.display = 'flex';
+playerDataContainer.style.alignItems = 'center';
+playerDataContainer.style.flexGrow = '1';
+
 for (let i = 1; i <= 11; i++) {
 if (i === 1 || i === 2 || i === 3 || i === 11) {
 const td = document.createElement('td');
@@ -1235,9 +1274,11 @@ td.textContent = teamData[i] + ' min';
 td.textContent = teamData[i] + ',';
 }
 td.classList.add(color);
-dataRow.appendChild(td);
+playerDataContainer.appendChild(td);
 }
 }
+
+dataRow.appendChild(playerDataContainer);
 
 // Add a separate table cell for the "x" column
 const xCell = document.createElement('td');
@@ -1261,7 +1302,7 @@ xButton.addEventListener('click', function () {
   if (remainingRows.length > 0) {
       // Get the last player's name from the last row
       const lastRow = remainingRows[remainingRows.length - 1];
-      const lastPlayerName = lastRow.firstChild.textContent.split(',')[0];
+      const lastPlayerName = lastRow.querySelector('td:first-child').textContent.split(',')[0];
       
       // Update similar players for the last remaining player
       const lastPlayerData = dataArray.find(player => player[1] === lastPlayerName);
