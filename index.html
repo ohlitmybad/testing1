@@ -489,11 +489,10 @@ margin-left: 0%;
 }
 
 .similar-table {
-  left: 78px;
-  width: 350px;
+  width: 300px;
   text-align: center;
-  margin-left: 80px;
-
+  margin: 0;
+  flex-grow: 1;
 }
 
 
@@ -739,6 +738,7 @@ svg.radar > g {
   width: 38px;
   opacity: 0.64;
   margin-left: 5px;
+  flex-shrink: 0;
 }
 
 .button-10 {
@@ -755,6 +755,7 @@ svg.radar > g {
   transition: background-color 0.2s;
   margin-right: 10px;
   position: static;
+  flex-shrink: 0;
 }
 </style>
 </defs>
@@ -869,6 +870,7 @@ svg.radar > g {
     
     <div class="logo-screenshot-container">
       <img src="https://datamb.football/logo.png" alt="Logo">
+      <div id="similarPlayersContainer"></div>
       <button onclick="takeScreenshot()" class="button-10"><div class="icon2"></div></button>
     </div>
     
@@ -1436,11 +1438,6 @@ createTableForTeam1();
 
 
 
-const similarPlayersContainer = document.createElement("div");
-similarPlayersContainer.id = "similarPlayersContainer";
-const insertHere = document.getElementById("insertHere");
-insertHere.appendChild(similarPlayersContainer);
-
 let colorIndex = 0; // Initialize color index
 
 searchButton1.addEventListener("click", function() {
@@ -1488,6 +1485,10 @@ function updateSimilarPlayers(playerData) {
 
   const similarPlayerTable = document.createElement("table");
   similarPlayerTable.classList.add("similar-table");
+  
+  // Set width and alignment for the table
+  similarPlayerTable.style.width = "100%";
+  similarPlayerTable.style.textAlign = "center";
 
   const headerRow = document.createElement("tr");
   const headerCell = document.createElement("th");
