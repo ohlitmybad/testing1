@@ -67,12 +67,10 @@ body.dark-mode {
   padding: 0 20px;
   box-sizing: border-box;
 }
-@media (hover: none) {
-  .container {
-    max-width: 95%;
-  }
-}
 
+.touch .container {
+  max-width: 95%;
+}
 	
 /* Ensure the chart wrapper doesn't shrink below a minimum width */
 .chart-wrapper {
@@ -2560,6 +2558,11 @@ function toggleDarkMode() {
     }
   });
 }
+
+if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+  document.documentElement.classList.add("touch");
+}
+
 </script>
 
 </body>
