@@ -10,6 +10,27 @@
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 
+<script>
+  (function() {
+     var width = window.innerWidth;
+ 
+     // Find the viewport meta tag
+     var viewportMeta = document.querySelector('meta[name="viewport"]');
+     if (viewportMeta) {
+         if (width < 701) {
+             var initialScale = width / 701;
+ 
+             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', maximum-scale=' + initialScale + ', user-scalable=no');
+         } else {
+             var fixedScale = 1;
+ 
+             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + fixedScale + ', maximum-scale=' + fixedScale + ', user-scalable=no');
+         }
+     } 
+ })();
+ 
+ </script>
+
 <defs>
 <style> :root {
   --primary-color: #3498db;
