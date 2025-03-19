@@ -2492,11 +2492,8 @@ function toggleDarkMode() {
   function takeScreenshot() {
   const chartWrapper = document.querySelector('.chart-wrapper');
   const isDarkMode = document.body.classList.contains('dark-mode');
-  
   chartWrapper.classList.add('screenshot-capture');
-  
-  const similarPlayersContainer = document.getElementById('similarPlayersContainer');
-  
+    
   const options = {
     scale: 2, 
     backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
@@ -2506,17 +2503,13 @@ function toggleDarkMode() {
     onclone: function(clonedDocument) {
       const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
       const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
-      
       if (clonedSimilarContainer) {
         clonedSimilarContainer.style.display = 'none';
       }
-      
       const horizontalLine = clonedWrapper.querySelector('hr');
       if (horizontalLine) horizontalLine.style.display = 'none';
-      
       const toggleControls = clonedWrapper.querySelector('.toggle-controls');
       if (toggleControls) toggleControls.style.display = 'none';
-      
       const radar = clonedWrapper.querySelector('.radar');
       if (radar) {
         radar.style.display = 'block';
@@ -2525,29 +2518,16 @@ function toggleDarkMode() {
     }
   };
   
-  // Create the screenshot
   html2canvas(chartWrapper, options).then(canvas => {
-    // Convert canvas to data URL
     const imageUrl = canvas.toDataURL('image/png');
-    
-    // Create a temporary link element to trigger download
     const downloadLink = document.createElement('a');
     downloadLink.href = imageUrl;
     downloadLink.download = 'DataMB Screenshot.png';
-    
-    // Append to body, click, and remove
-    document.body.appendChild(downloadLink);
+        document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    
-    // Remove temporary class
-    chartWrapper.classList.remove('screenshot-capture');
+        chartWrapper.classList.remove('screenshot-capture');
   }).catch(error => {
-    console.error('Screenshot failed:', error);
-    chartWrapper.classList.remove('screenshot-capture');
-    
-    // Show error to user
-    alert('Screenshot failed. Please try again.');
   });
 }
 
