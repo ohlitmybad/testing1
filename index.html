@@ -2,7 +2,7 @@
 <html>
 <head>	
 
-  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="viewport" user-scalable=no">
 	<meta name="robots" content="noindex">
 
 	<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -10,26 +10,7 @@
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
 
-<script>
-  (function() {
-     var width = window.innerWidth;
- 
-     // Find the viewport meta tag
-     var viewportMeta = document.querySelector('meta[name="viewport"]');
-     if (viewportMeta) {
-         if (width < 701) {
-             var initialScale = width / 701;
- 
-             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', maximum-scale=' + initialScale + ', user-scalable=no');
-         } else {
-             var fixedScale = 1;
- 
-             viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + fixedScale + ', maximum-scale=' + fixedScale + ', user-scalable=no');
-         }
-     } 
- })();
- 
- </script>
+
 
 <defs>
 <style> :root {
@@ -87,6 +68,12 @@ body.dark-mode {
   padding: 0 20px;
   box-sizing: border-box;
 }
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 670px;
+  }
+}
+	
 /* Ensure the chart wrapper doesn't shrink below a minimum width */
 .chart-wrapper {
   background-color: var(--container-bg);
