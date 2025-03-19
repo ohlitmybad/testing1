@@ -1006,7 +1006,7 @@ body.dark-mode #SFctr td {
       </div>
       
     </div>
-
+  </div>
       
   
   <div class="dark-mode-toggle" onclick="toggleDarkMode()">
@@ -2519,14 +2519,38 @@ function toggleDarkMode() {
   };
   
   html2canvas(chartWrapper, options).then(canvas => {
-    const imageUrl = canvas.toDataURL('image/png');
-    const downloadLink = document.createElement('a');
-    downloadLink.href = imageUrl;
-    downloadLink.download = 'DataMB Screenshot.png';
-        document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-        chartWrapper.classList.remove('screenshot-capture');
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = canvas.width;
+    finalCanvas.height = canvas.height;
+    const finalCtx = finalCanvas.getContext('2d');
+    
+    finalCtx.drawImage(canvas, 0, 0);
+    
+    const watermarkImg = new Image();
+    watermarkImg.crossOrigin = "Anonymous";
+    watermarkImg.src = 'https://datamb.football/logo.png';
+    
+    watermarkImg.onload = function() {
+      const watermarkWidth = 80;
+      const watermarkHeight = (watermarkWidth / watermarkImg.width) * watermarkImg.height;
+      const x = 20;
+      const y = finalCanvas.height - watermarkHeight - 20;
+      
+      finalCtx.save();
+      finalCtx.globalAlpha = 0.8;
+      finalCtx.drawImage(watermarkImg, x, y, watermarkWidth, watermarkHeight);
+      finalCtx.restore();
+      
+      const imageUrl = finalCanvas.toDataURL('image/png');
+      const downloadLink = document.createElement('a');
+      downloadLink.href = imageUrl;
+      downloadLink.download = 'DataMB Screenshot.png';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    };
+
+    chartWrapper.classList.remove('screenshot-capture');
   }).catch(error => {
   });
 }
