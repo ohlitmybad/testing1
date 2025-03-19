@@ -1803,15 +1803,19 @@ body.dark-mode .league-selector:focus {
         if (i === 1) {
           th.style.width = '18%'; // Name column gets more space
           th.style.textAlign = 'center'; // Center align the header
-        } else if (i >= 4 && i <= 10) {
+        } else if (i === 3) {
           th.style.width = '7%'; // Numeric columns get less space
+        }
+        else if (i === 2) {
+          th.style.width = '10%'; // Numeric columns get less space
+          
         }
         headerRow.appendChild(th);
       }
       // Add a separate table header for the "x" column
       const xHeader = document.createElement('th');
       xHeader.textContent = '';
-      xHeader.style.width = '5%'; // X column gets minimal space
+      xHeader.style.width = '3%'; // X column gets minimal space
       headerRow.appendChild(xHeader);
           table.appendChild(headerRow);
         }
@@ -1863,6 +1867,13 @@ body.dark-mode .league-selector:focus {
             `;
           }
         }
+        if (i === 2) {
+          td.style.whiteSpace = 'normal'; /* Allow text to wrap */
+
+
+
+        }
+
         
         // Apply special styling to the minutes column
         if (i === 11) {
@@ -1882,7 +1893,7 @@ body.dark-mode .league-selector:focus {
       xButton.style.color = '#999';
       xButton.style.fontSize = '14px';
       xButton.style.cursor = 'pointer';
-      xButton.style.width = '24px';
+      xButton.style.width = '4px';
       xButton.style.height = '24px';
       xButton.style.borderRadius = '50%';
       xButton.style.display = 'flex';
