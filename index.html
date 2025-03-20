@@ -1,54 +1,332 @@
-
 <!DOCTYPE html>
-<html>
 <head>
-    <meta name="viewport" content="width=device-width, user-scalable=no"">
-	<meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@DataMB_">
-  <meta name="twitter:title" content="DataMB Chat">
-  <meta name="twitter:description" content="">
-  <meta name="twitter:image" content="https://i.imgur.com/oHUXt6a.png">
-  <meta property="og:image" content="https://i.imgur.com/oHUXt6a.png">
-	<meta name="robots" content="noindex">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.535, user-scalable=no"">
+    <meta name="robots" content="noindex">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
+    <style>
 
-<title>DataMB Chat</title>
-	
-	<style>
-       body, html {
-            margin: 0;
-            padding: 0;
+  
+.rank-bar-fill {
+            background-color: rgba(0, 110, 255, 0.835);
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 20px;
         }
 
-		#positionSelect {
-position: absolute;
-top: 50px;
-Left: 1%;
-    display: block;
-    margin: 0 auto;
-width: 200px; /* Adjust the width as needed */
-    font-size: 15px;
-    padding: 10px;
-    border: none;
-    background-color: #3498db; /* Button background color */
-    color: #fff; /* Button text color */
-    border-radius: 12px; /* Adjust to make the button rounder */
-    cursor: pointer;
+        body {
+          zoom: 119.2%; /* Adjust the percentage as needed */
+    font-family: Arial, Helvetica, sans-serif; /* Use Font1 as the primary font */
+    font-size: 14.7px;
+    color: #000000c4;
+    scrollbar-width: none; /* Firefox */
+    margin-left: 17.5px;
+    margin-top:0.2px;
+        background: #fff;
 }
 
-		@media (max-width: 768px) { /* Adjust the max-width value as needed */
-  .navigation a.button {
-    display: none;
+.selectors-container {
+  gap: 14px; /* Adjust the value to increase or decrease the spacing */
+display: flex;
+align-items: center;
+flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+/* Style for selectors */
+select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+
+@media screen and (max-width: 900px) {
+.metric-selector {
+width: auto; /* Allow width to be determined by content */
+min-width: 0px; /* Set minimum width */
+}
+
+#position, #league, #age {
+width: auto;
+min-width: 0px;
+}
+#age {
+margin-right: 35px;  
+}
+}
+
+
+
+.toggle-button {
+  position: absolute;
+  left: 704px;
+  top: 23.8px;
+  width: 20px; /* Set width */
+}
+
+/* Hide the default checkbox */
+.toggle-button input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Style the custom checkbox */
+.toggle-button label {
+  display: inline-block;
+  width: 20px; /* Set width */
+  height: 20px; /* Set height */
+  background-color: #ccc;
+  border-radius: 50%; /* Make it round */
+  cursor: pointer;
+  position: absolute;
+}
+
+/* Style the checked state of the custom checkbox */
+.toggle-button input[type="checkbox"]:checked + label {
+  background-color: #8be31e;
+}
+
+/* Style the slider inside the custom checkbox */
+.toggle-button label::before {
+  content: "";
+  position: absolute;
+  width: 12px; /* Set width of the slider */
+  height: 12px; /* Set height of the slider */
+  background-color: white;
+  border-radius: 50%; /* Make it round */
+  left: 20%; /* Adjust position */
+  top: 20%; /* Adjust position */
+  transition: transform 0.3s ease;
+}
+
+/* Style the slider when checkbox is checked */
+.toggle-button input[type="checkbox"]:checked + label::before {
+  transform:scale(0.88)
+}
+
+
+/* Existing CSS for toggleSortingButton */
+.toggle-button:hover::after {
+  content: "Per 90 : Yes / No"; /* Text to display */
+  position: absolute;
+  top: 26px; /* Adjust as needed */
+  left: -30px;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  color: #fff; /* Text color */
+  padding: 4px 8px; /* Padding around the text */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 10px; /* Adjust font size as needed */
+  white-space: nowrap; /* Prevent line breaks */
+}
+
+
+.metric-selector {
+    width: 280px;
+	margin-left: 4px;
+}
+
+.metric-selector.with-toggle {
+    width: 246.8px;
+		margin-left: 4px;
+}
+
+/* Style for the table rows */
+td {
+    width: 300px;
+}
+
+.rank-bar {
+            background-color: rgb(213, 213, 213);
+            border: 1px solid #fff;
+            border-radius: 20px;
+            height: 17.1px;
+            width: 385px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+th {
+    width: 50px;
+}
+
+body {
+          zoom: 124.2%; /* Adjust the percentage as needed */
+          overflow: hidden;
+    scrollbar-width: none; /* Firefox */
+        background: #fff;
+}
+
+.result-container {
+	            max-height: 65.2vh; /* Adjust the height based on your content */
+
+            overflow-y: auto; /* Enable vertical scrolling for metrics */
+            margin-bottom: 11px; /* Optional: Add margin for spacing */
+        }
+        @media only screen and (max-width: 900px) {
+    /* Apply styles for screens smaller than 768px (typical mobile devices) */
+    .result-container {
+        max-height: 87.5vh; /* Adjusted height for mobile */
+	margin-bottom: 18px; /* Optional: Add margin for spacing */
+
+    }
+}
+
+
+
+.smaller-text {
+    font-size: 79%; /* or adjust with specific size like 80% or 0.8em */
+}
+
+body.dark-mode,
+body.dark-mode * {
+  color: #f2f2f2;
+}
+
+body.dark-mode {
+  background-color: #0F0F0E;
+}
+
+body.dark-mode .tooltip {
+  color: #000000;
+  background-color: #f9f9f9;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+body.dark-mode .rank-bar {
+    background-color: rgb(239, 239, 239);
+border: 1px solid #000000;
+}
+
+body.dark-mode th {
+  color: #f2f2f2;
+}
+
+body.dark-mode select,
+body.dark-mode input {
+  color: #f2f2f2;
+  background-color: #333333;
+}
+
+.dark-mode-toggle {
+    position: absolute;
+  left: 735px;
+  top: 23.7px;
+}
+
+.dark-mode-toggle {
+  width: 21px;
+  height: 21px;
+  background-color: #f2f2f2;
+  border-radius: 50%;  /* This makes it a perfect circle */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+.dark-mode-toggle .toggle-icon::before {
+  content: "\f467";; /* Moon icon */
+  font-family: "Ionicons";
+  font-size: 20px;
+}
+
+body.dark-mode .dark-mode-toggle {
+  background-color: #333333;
+}
+
+body.dark-mode .dark-mode-toggle .toggle-icon::before {
+  content: "\f3b0"; /* Sun icon */
+  font-family: "Ionicons";
+  font-size: 13px;
+}
+
+body.dark-mode button {
+  color: #f2f2f2;
+  background-color: #333333;
+}
+
+
+@media only screen and (max-width: 900px) {
+  body {
+    zoom: 100%; /* Reset zoom level for mobile devices */
   }
 
-		
-  /* Adjust the height for mobile devices */
-  @media (max-width: 768px) {
-    #fullbackIframe {
-      height: 1870px; /* Set the desired height for mobile devices */
-    }
-  }}
+  .toggle-button {
+  left: 94.2%;
+  top: 19px;
+}
 
-  #SFctr {
+.dark-mode-toggle {
+display: none;
+}
+
+.rank-bar {
+            width: 320px;
+        }
+
+        /* Style for the table rows */
+td {
+    width: 365px;
+}
+.half-spacing {
+    margin-bottom: 0.5em; /* Adjust as needed */
+  }
+
+  /* Existing CSS for toggleSortingButton */
+.toggle-button:hover::after {
+  display: none;
+}
+
+.metric-selector {
+    width: 256.4px; /* Adjust the width as needed */
+    margin-left: 0px;
+}
+
+	.metric-selector.with-toggle {
+    width: 224.8px;
+		margin-left: 0px;
+}
+
+}
+#toggleSort {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-left: 0.7px; /* Adjust this value to reduce the gap */
+    margin-right: 0.7px; /* Adjust this value to reduce the gap */
+}
+
+#toggleSort:not(:checked)::before {
+    content: "\f262";
+    font-family: "Ionicons";
+}
+
+#toggleSort:checked::before {
+    content: "\f25f";
+    font-family: "Ionicons";
+}
+
+
+
+#SFctr {
 	font-family: Arial, Helvetica, sans-serif !important;
   margin-left: 20px;
 
@@ -87,73 +365,819 @@ width: 200px; /* Adjust the width as needed */
   top: -15px;
 }
 
-    </style>
 
-
-
-
-	
+	    
+	    
+   </style>
 </head>
-
-
 <body>
- <script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
+    <script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
 
-	<label for="positionSelect"></label>
-    <select id="positionSelect">
-        <option value="goalkeeper">DataMB Chat</option>
-        <option value="centreback">DataMB Viz Chat</option>
-        <option value="fullback">Guide</option>
+    <div class="selectors-container">
+    <select id="metric" class="metric-selector">
+    </select><input type="checkbox" id="toggleSort" style="display: none;">
+    <select id="position">
+        <option value="Goalkeeper" data-i18n="positions.goalkeeper">Goalkeeper</option>
+        <option value="Centre-back" data-i18n="positions.centreback">Centre-back</option>
+        <option value="Full-back" data-i18n="positions.fullback">Full-back</option>
+        <option value="Midfielder" data-i18n="positions.midfielder">Midfielder</option>
+        <option value="Winger" data-i18n="positions.winger">Winger</option>
+        <option value="Striker" data-i18n="positions.striker">Striker</option>
+        <option value="All" data-i18n="positions.all">All positions</option>
     </select>
-<br>
-<!-- HTML -->
-<iframe id="goalkeeperIframe" data-src="aHR0cHM6Ly9hcHAteGJ6Z2R5d25ucng3dXJubTQyNGRhei5zdHJlYW1saXQuYXBwLz9lbWJlZD10cnVl" height="900" style="width:100%;border:none;"></iframe>
-<iframe id="centrebackIframe" data-src="aHR0cHM6Ly90YWxrZGF0YXZpei0yZWk1N255ZGVyaWFwcHVoMnZrZ2RiYi5zdHJlYW1saXQuYXBwLz9lbWJlZD10cnVl" height="1290" style="width:100%;border:none;"></iframe>
-<iframe id="fullbackIframe" data-src="aHR0cHM6Ly9kYXRhbWIuZm9vdGJhbGwvY2hhdGd1aWRl" height="1060" style="width:100%;border:none;"></iframe>
+    <select id="league">
+      <option value="Premier League" data-i18n="leagues.premierLeague">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+      <option value="La Liga" data-i18n="leagues.laLiga">🇪🇸 La Liga</option>
+      <option value="Bundesliga" data-i18n="leagues.bundesliga">🇩🇪 Bundesliga</option>
+      <option value="Serie A" data-i18n="leagues.serieA">🇮🇹 Serie A</option> 
+      <option value="Ligue 1" data-i18n="leagues.ligue1">🇫🇷 Ligue 1</option>
+      <option value="Liga Portugal" data-i18n="leagues.ligaPortugal">🇵🇹 Liga Portugal</option>
+      <option value="Eredivisie" data-i18n="leagues.eredivisie">🇳🇱 Eredivisie</option>
+      <option value="Top 5 Leagues" data-i18n="leagues.top5">🇪🇺 Top 5 Leagues</option>
+      <option value="Top 7 Leagues" data-i18n="leagues.top7">🇪🇺 Top 7 Leagues</option>
+      <option value="Belgium Pro League" data-i18n="leagues.belgium">🇧🇪 Belgium</option>
+        <option value="Scotland Premiership" data-i18n="leagues.scotland">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland</option>
+        <option value="Austrian Bundesliga" data-i18n="leagues.austria">🇦🇹 Austria</option>
+        <option value="Swiss Super League" data-i18n="leagues.switzerland">🇨🇭 Switzerland</option>      
+        <option value="Süper Lig" data-i18n="leagues.turkey">🇹🇷 Türkiye</option>
+        <option value="Denmark Superliga" data-i18n="leagues.denmark">🇩🇰 Denmark</option>
+        <option value="Sweden Allsvenskan" data-i18n="leagues.sweden">🇸🇪 Sweden</option>
+        <option value="Norway Eliteserien" data-i18n="leagues.norway">🇳🇴 Norway</option>
+        <option value="Croatia HNL" data-i18n="leagues.croatia">🇭🇷 Croatia</option>
+        <option value="Serbia SuperLiga" data-i18n="leagues.serbia">🇷🇸 Serbia</option>
+        <option value="Czech Fortuna Liga" data-i18n="leagues.czech">🇨🇿 Czech Republic</option>
+        <option value="Poland" data-i18n="leagues.poland">🇵🇱 Poland</option>
+        <option value="Ukraine" data-i18n="leagues.ukraine">🇺🇦 Ukraine</option>
+        <option value="Russia" data-i18n="leagues.russia">🇷🇺 Russia</option>
+        <option value="Greece" data-i18n="leagues.greece">🇬🇷 Greece</option>
+        <option value="Israel" data-i18n="leagues.israel">🇮🇱 Israel</option>
+        <option value="J1 League" data-i18n="leagues.japan">🇯🇵 Japan</option>
+        <option value="K League 1" data-i18n="leagues.korea">🇰🇷 Korea</option>
+        <option value="Saudi Pro League" data-i18n="leagues.saudiArabia">🇸🇦 Saudi Arabia</option>
+        <option value="MLS" data-i18n="leagues.usa">🇺🇸 United States</option>
+        <option value="LigaMX" data-i18n="leagues.mexico">🇲🇽 Mexico</option>
+        <option value="Brazil Serie A" data-i18n="leagues.brazil">🇧🇷 Brazil</option>
+        <option value="Argentina Primera" data-i18n="leagues.argentina">🇦🇷 Argentina</option>
+        <option value="Uruguay Primera" data-i18n="leagues.uruguay">🇺🇾 Uruguay</option>
+        <option value="Chile" data-i18n="leagues.chile">🇨🇱 Chile</option>
+        <option value="Colombia" data-i18n="leagues.colombia">🇨🇴 Colombia</option>
+        <option value="Ecuador" data-i18n="leagues.ecuador">🇪🇨 Ecuador</option>
+        <option value="Paraguay" data-i18n="leagues.paraguay">🇵🇾 Paraguay</option>
+        <option value="Championship" data-i18n="leagues.championship">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
+        <option value="Segunda Division" data-i18n="leagues.segundaDivision">🇪🇸 Spain Segunda</option>
+        <option value="Serie B" data-i18n="leagues.serieB">🇮🇹 Serie B</option>
+        <option value="Bundesliga 2" data-i18n="leagues.bundesliga2">🇩🇪 2. Bundesliga</option>
+        <option value="Ligue 2" data-i18n="leagues.ligue2">🇫🇷 Ligue 2</option> 
+      <option value="No Top 7" data-i18n="leagues.noTop7">🌍 Outside Top 7</option>
+      <option value="South America" data-i18n="leagues.southAmerica">🌎 South America</option>
+      <option value="Scandinavia" data-i18n="leagues.scandinavia">🌍 Scandinavia</option>
+      <option value="Eastern Europe" data-i18n="leagues.easternEurope">🌍 Eastern Europe</option>
+      <option value="All Leagues" data-i18n="leagues.allLeagues">🌍 All Leagues</option>
+</select>
+    <select id="age">
+        <option value="" data-i18n="age.all">Age</option>
+        <option value="17">U17</option>
+        <option value="18">U18</option>
+        <option value="19">U19</option>
+        <option value="20">U20</option>
+        <option value="21">U21</option>
+        <option value="22">U22</option>
+        <option value="23">U23</option>
+        <option value="24">U24</option>
+        <option value="25">U25</option>
+        <option value="26">U26</option>
+        <option value="27">U27</option>
+        <option value="28">U28</option>
+        <option value="29">U29</option>
+        <option value="30">U30</option>
+        <option value="35">U35</option>
+    </select><div class="toggle-button">
+        <input type="checkbox" id="toggleMetrics" checked> <!-- Add checked attribute here -->
+          <label for="toggleMetrics"></label></div>
+      </div><br><div class="half-spacing"></div>
+      <div class="result-container">
+        <table id="playerTable" style="display: none;">
+            <tr><th id="metricHeader"></th></tr>
+        </table>
+    </div>
 
-<script>
-function _0x23d1(_0x44c47b,_0x19240a){const _0x242b13=_0x242b();return _0x23d1=function(_0x23d11b,_0x36fc1a){_0x23d11b=_0x23d11b-0x162;let _0x386ce6=_0x242b13[_0x23d11b];return _0x386ce6;},_0x23d1(_0x44c47b,_0x19240a);}(function(_0x559e3e,_0x580a4){const _0x4b08c6=_0x23d1,_0x9dccab=_0x559e3e();while(!![]){try{const _0x219360=-parseInt(_0x4b08c6(0x16d))/0x1*(-parseInt(_0x4b08c6(0x173))/0x2)+parseInt(_0x4b08c6(0x171))/0x3*(-parseInt(_0x4b08c6(0x164))/0x4)+-parseInt(_0x4b08c6(0x16c))/0x5*(-parseInt(_0x4b08c6(0x163))/0x6)+-parseInt(_0x4b08c6(0x165))/0x7*(-parseInt(_0x4b08c6(0x172))/0x8)+-parseInt(_0x4b08c6(0x167))/0x9*(-parseInt(_0x4b08c6(0x168))/0xa)+parseInt(_0x4b08c6(0x170))/0xb+-parseInt(_0x4b08c6(0x16a))/0xc;if(_0x219360===_0x580a4)break;else _0x9dccab['push'](_0x9dccab['shift']());}catch(_0x3aefb9){_0x9dccab['push'](_0x9dccab['shift']());}}}(_0x242b,0xbcecc));function decodeAndSetIframeSource(){const _0x1de338=_0x23d1,_0x261331=document[_0x1de338(0x169)](_0x1de338(0x166));_0x261331[_0x1de338(0x16e)](_0x3f820f=>{const _0x5af8ab=_0x1de338,_0x551ce5=_0x3f820f[_0x5af8ab(0x16b)](_0x5af8ab(0x162)),_0x54d167=atob(_0x551ce5);_0x3f820f[_0x5af8ab(0x16f)]=_0x54d167;});}function _0x242b(){const _0x39ae12=['querySelectorAll','40551816mDeuee','getAttribute','22355HbdpQD','100489SaRWzk','forEach','src','9094613KRLHIF','138759XqWOFI','4808QsDXXh','12GRYotq','data-src','1698AQDWne','24eSWrji','16261SpidSZ','iframe','3055851znyqtN','10giggYO'];_0x242b=function(){return _0x39ae12;};return _0x242b();}decodeAndSetIframeSource();
-</script>
+    <script>
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://datamb.football/database/INDEX.csv', false); // false for synchronous request
+xhr.send(null);
+let data = xhr.responseText;	
+let extraHeaderRow = 'Player,Team,League,Position,Age,Performance Index,Minutes played,Possessions won per 90,Defensive duels per 90,Aerial duels per 90,Sliding tackles per 90,Sliding tackles (PAdj),Shots blocked per 90,Interceptions per 90,Interceptions (PAdj),Successful attacking actions per 90,Goals per 90,Non-penalty goals per 90,xG per 90,Headed goals per 90,Shots per 90,Assists per 90,Crosses per 90,Crosses to box per 90,Dribbles attempted per 90,Offensive duels per 90,Touches in box per 90,Progressive carries per 90,Accelerations per 90,Fouls suffered per 90,Passes per 90,Forward passes per 90,Short passes per 90,Long passes per 90,Average pass length (m),xA per 90,Shot assists per 90,Key passes per 90,Passes to final third per 90,Passes to penalty box per 90,Through passes per 90,Deep completions per 90,Progressive passes per 90,Shots conceded per 90,Clean sheets,xG conceded per 90,Prevented goals per 90,Exits per 90,Defensive duels won %,Aerial duels won %,Shots on target %,Goal conversion %,Cross accuracy %,Dribble success rate %,Offensive duels won %,Pass completion %,Forward pass completion %,Short pass completion %,Long pass accuracy %,Pass completion (to final third) %,Pass completion (to penalty box) %,Through pass completion %,Progressive pass accuracy %,Save percentage %,Free kicks per 90,Direct free kicks per 90,Direct free kicks oT %,Corners per 90,Penalties attempted,Penalty success rate %,Matches played,Duels per 90,Duels won %,Possession +/-,Forward pass ratio,xA per 100 passes,Chance creation ratio,Inaccurate passes %,Goals + Assists per 90,NPG+A per 90,xG+xA per 90,xG/Shot,Goals - xG per 90,Goals per xG,Assists - xA per 90,Assists per xA,Successful dribbles per 90,Shots on target per 90,Accurate crosses per 90,Offensive duels won per 90,Defensive duels won per 90,Aerial duels won per 90,Passes completed per 90,Forward passes completed per 90,Short passes completed per 90,Long passes completed per 90,Accurate passes to final third per 90,Accurate passes to pen box per 90,Through passes completed per 90,Progressive passes completed per 90,Misplaced passes per 90,Saves per 90,Possessions lost per 90,Possessions won - lost per 90,Progressive actions per 90,Duels won per 90,Minutes per match,Backward pass ratio,Penalties scored,npxG per 90,npxG/Shot,npxG+xA per 90,Touches per 90,Progressive action rate,Progressive passes (PAdj),Ball-carrying frequency,xG per 100 touches,Shot frequency,Dribbles per 100 touches,Goals per 100 touches,Passes received per 90,Backward passes per 90,Pre-assists per 90';
+data = extraHeaderRow + '\n' + data;
 
 
- <script>
-    const positionSelect = document.getElementById("positionSelect");
-    const goalkeeperIframe = document.getElementById("goalkeeperIframe");
-    const centrebackIframe = document.getElementById("centrebackIframe");
-    const fullbackIframe = document.getElementById("fullbackIframe");
+let originalDataArray = data.split('\n').map(row => row.split(','));
 
-    // Function to hide all iframes
-    function hideAllIframes() {
-        goalkeeperIframe.style.display = "none";
-        centrebackIframe.style.display = "none";
-        fullbackIframe.style.display = "none";
-    }
+const playerTable = document.getElementById('playerTable');
+const metricSelect = document.getElementById('metric');
+const positionSelect = document.getElementById('position');
+const leagueSelect = document.getElementById('league');
+const ageInput = document.getElementById('age');
+const metricHeader = document.getElementById('metricHeader');
+const toggleButton = document.getElementById('toggleMetrics');
+const toggleSortButton = document.getElementById('toggleSort'); // New button for toggling sort order
 
-    // Function to display the selected iframe
-    function displaySelectedIframe() {
-        const selectedOption = positionSelect.value;
+let isToggled = false;
+let isAscending = false; // New state variable for sort order
+let currentDataArray = originalDataArray; // Initially set to original data
 
-        if (selectedOption === "goalkeeper") {
-            hideAllIframes();
-            goalkeeperIframe.style.display = "block";
-        } else if (selectedOption === "centreback") {
-            hideAllIframes();
-            centrebackIframe.style.display = "block";
-        } else if (selectedOption === "fullback") {
-            hideAllIframes();
-            fullbackIframe.style.display = "block";
+const customMetricOrder = [
+ 
+    { text: "Performance Index", i18n: "metrics.performanceIndex" },
+    { text: "Minutes played", i18n: "metrics.minutesPlayed" },
+    { text: "Matches played", i18n: "metrics.matchesPlayed" },
+    { text: "Minutes per match", i18n: "metrics.minutesPerMatch" },
+
+    // Goal Scoring
+    { text: "CATEGORY: Goal Scoring", i18n: "categories.goalScoring" },
+    { text: "Goals per 90", i18n: "metrics.goalsPerNinety" },
+    { text: "Non-penalty goals per 90", i18n: "metrics.nonPenaltyGoals" },
+    { text: "xG per 90", i18n: "metrics.xgPerNinety" },
+    { text: "xG/Shot", i18n: "metrics.xgPerShot" },
+    { text: "npxG per 90", i18n: "metrics.npxgPerNinety" },
+    { text: "npxG/Shot", i18n: "metrics.npxgPerShot" },
+    { text: "Goals per 100 touches", i18n: "metrics.goalsPerTouches" },
+    { text: "xG per 100 touches", i18n: "metrics.xgPerTouches" },
+    { text: "Shot frequency", i18n: "metrics.shotFrequency" },
+    { text: "Shots per 90", i18n: "metrics.shotsPerNinety" },
+    { text: "Shots on target %", i18n: "metrics.shotsOnTarget" },
+    { text: "Shots on target per 90", i18n: "metrics.shotsOnTargetPerNinety" },
+    { text: "Goal conversion %", i18n: "metrics.goalConversion" },
+    { text: "Goals - xG per 90", i18n: "metrics.goalsMinusXg" },
+    { text: "Goals per xG", i18n: "metrics.goalsPerXg" },
+    { text: "Headed goals per 90", i18n: "metrics.headedGoals" },
+    { text: "Touches in box per 90", i18n: "metrics.touchesInBox" },
+
+    // Goal Creation
+    { text: "CATEGORY: Goal Creation", i18n: "categories.goalCreation" },
+    { text: "Assists per 90", i18n: "metrics.assistsPerNinety" },
+    { text: "xA per 90", i18n: "metrics.xaPerNinety" },
+    { text: "xA per 100 passes", i18n: "metrics.xaPerPasses" },
+    { text: "Goals + Assists per 90", i18n: "metrics.goalsAndAssists" },
+    { text: "NPG+A per 90", i18n: "metrics.npGoalsAndAssists" },
+    { text: "xG+xA per 90", i18n: "metrics.xgAndXa" },
+    { text: "npxG+xA per 90", i18n: "metrics.npxgAndXa" },
+    { text: "Key passes per 90", i18n: "metrics.keyPasses" },
+    { text: "Chance creation ratio", i18n: "metrics.chanceCreation" },
+    { text: "Assists - xA per 90", i18n: "metrics.assistsMinusXa" },
+    { text: "Assists per xA", i18n: "metrics.assistsPerXa" },
+    { text: "Shot assists per 90", i18n: "metrics.shotAssists" },
+    { text: "Pre-assists per 90", i18n: "metrics.preAssists" },
+    { text: "Crosses per 90", i18n: "metrics.crosses" },
+    { text: "Cross accuracy %", i18n: "metrics.crossAccuracy" },
+    { text: "Accurate crosses per 90", i18n: "metrics.accurateCrosses" },
+    { text: "Crosses to box per 90", i18n: "metrics.crossesToBox" },
+    { text: "Deep completions per 90", i18n: "metrics.deepCompletions" },
+
+    // Dribbling and Ball-Carrying
+    { text: "CATEGORY: Dribbling and Ball-Carrying", i18n: "categories.dribbling" },
+    { text: "Dribbles attempted per 90", i18n: "metrics.dribblesAttempted" },
+    { text: "Dribble success rate %", i18n: "metrics.dribbleSuccess" },
+    { text: "Successful dribbles per 90", i18n: "metrics.successfulDribbles" },
+    { text: "Dribbles per 100 touches", i18n: "metrics.dribblesPerTouches" },
+    { text: "Successful attacking actions per 90", i18n: "metrics.attackingActions" },
+    { text: "Offensive duels per 90", i18n: "metrics.offensiveDuels" },
+    { text: "Offensive duels won %", i18n: "metrics.offensiveDuelsWon" },
+    { text: "Offensive duels won per 90", i18n: "metrics.offensiveDuelsWonPerNinety" },
+    { text: "Progressive carries per 90", i18n: "metrics.progressiveCarries" },
+    { text: "Ball-carrying frequency", i18n: "metrics.ballCarrying" },
+    { text: "Accelerations per 90", i18n: "metrics.accelerations" },
+    { text: "Fouls suffered per 90", i18n: "metrics.foulsSuffered" },
+
+    // Passing
+    { text: "CATEGORY: Passing", i18n: "categories.passing" },
+    { text: "Passes per 90", i18n: "metrics.passes" },
+    { text: "Pass completion %", i18n: "metrics.passCompletion" },
+    { text: "Passes completed per 90", i18n: "metrics.passesCompleted" },
+    { text: "Forward passes per 90", i18n: "metrics.forwardPasses" },
+    { text: "Forward pass completion %", i18n: "metrics.forwardPassCompletion" },
+    { text: "Forward passes completed per 90", i18n: "metrics.forwardPassesCompleted" },
+    { text: "Short passes per 90", i18n: "metrics.shortPasses" },
+    { text: "Short pass completion %", i18n: "metrics.shortPassCompletion" },
+    { text: "Short passes completed per 90", i18n: "metrics.shortPassesCompleted" },
+    { text: "Long passes per 90", i18n: "metrics.longPasses" },
+    { text: "Long pass accuracy %", i18n: "metrics.longPassAccuracy" },
+    { text: "Long passes completed per 90", i18n: "metrics.longPassesCompleted" },
+    { text: "Progressive passes per 90", i18n: "metrics.progressivePasses" },
+    { text: "Progressive pass accuracy %", i18n: "metrics.progressivePassAccuracy" },
+    { text: "Progressive passes completed per 90", i18n: "metrics.progressivePassesCompleted" },
+    { text: "Progressive passes (PAdj)", i18n: "metrics.progressivePassesAdj" },
+    { text: "Passes to final third per 90", i18n: "metrics.passesToFinalThird" },
+    { text: "Pass completion (to final third) %", i18n: "metrics.passCompletionFinalThird" },
+    { text: "Accurate passes to final third per 90", i18n: "metrics.accuratePassesFinalThird" },
+    { text: "Passes to penalty box per 90", i18n: "metrics.passesToBox" },
+    { text: "Pass completion (to penalty box) %", i18n: "metrics.passCompletionToBox" },
+    { text: "Accurate passes to pen box per 90", i18n: "metrics.accuratePassesToBox" },
+    { text: "Through passes per 90", i18n: "metrics.throughPasses" },
+    { text: "Through pass completion %", i18n: "metrics.throughPassCompletion" },
+    { text: "Through passes completed per 90", i18n: "metrics.throughPassesCompleted" },
+    { text: "Average pass length (m)", i18n: "metrics.averagePassLength" },
+    { text: "Backward passes per 90", i18n: "metrics.backwardPasses" },
+    { text: "Misplaced passes per 90", i18n: "metrics.misplacedPasses" },
+    { text: "Forward pass ratio", i18n: "metrics.forwardPassRatio" },
+    { text: "Backward pass ratio", i18n: "metrics.backwardPassRatio" },
+
+    // Possession
+    { text: "CATEGORY: Possession", i18n: "categories.possession" },
+    { text: "Passes received per 90", i18n: "metrics.passesReceived" },
+    { text: "Touches per 90", i18n: "metrics.touches" },
+    { text: "Possessions lost per 90", i18n: "metrics.possessionsLost" },
+    { text: "Possessions won - lost per 90", i18n: "metrics.possessionsBalance" },
+    { text: "Possession +/-", i18n: "metrics.possessionPlusMinus" },
+    { text: "Duels per 90", i18n: "metrics.duels" },
+    { text: "Duels won %", i18n: "metrics.duelsWon" },
+    { text: "Duels won per 90", i18n: "metrics.duelsWonPerNinety" },
+    { text: "Progressive actions per 90", i18n: "metrics.progressiveActions" },
+    { text: "Progressive action rate", i18n: "metrics.progressiveActionRate" },
+
+    // Defending
+    { text: "CATEGORY: Defending", i18n: "categories.defending" },
+    { text: "Defensive duels per 90", i18n: "metrics.defensiveDuels" },
+    { text: "Defensive duels won %", i18n: "metrics.defensiveDuelsWon" },
+    { text: "Defensive duels won per 90", i18n: "metrics.defensiveDuelsWonPerNinety" },
+    { text: "Sliding tackles per 90", i18n: "metrics.slidingTackles" },
+    { text: "Sliding tackles (PAdj)", i18n: "metrics.slidingTacklesAdj" },
+    { text: "Interceptions per 90", i18n: "metrics.interceptions" },
+    { text: "Interceptions (PAdj)", i18n: "metrics.interceptionsAdj" },
+    { text: "Possessions won per 90", i18n: "metrics.possessionsWon" },
+    { text: "Aerial duels per 90", i18n: "metrics.aerialDuels" },
+    { text: "Aerial duels won %", i18n: "metrics.aerialDuelsWon" },
+    { text: "Aerial duels won per 90", i18n: "metrics.aerialDuelsWonPerNinety" },
+    { text: "Shots blocked per 90", i18n: "metrics.shotsBlocked" },
+
+    // Goalkeeping
+    { text: "CATEGORY: Goalkeeping", i18n: "categories.goalkeeping" },
+    { text: "Saves per 90", i18n: "metrics.saves" },
+    { text: "Save percentage %", i18n: "metrics.savePercentage" },
+    { text: "Prevented goals per 90", i18n: "metrics.preventedGoals" },
+    { text: "Shots conceded per 90", i18n: "metrics.shotsConceded" },
+    { text: "xG conceded per 90", i18n: "metrics.xgConceded" },
+    { text: "Clean sheets", i18n: "metrics.cleanSheets" },
+    { text: "Exits per 90", i18n: "metrics.exits" },
+
+    // Set Pieces
+    { text: "CATEGORY: Set Pieces", i18n: "categories.setPieces" },
+    { text: "Free kicks per 90", i18n: "metrics.freeKicks" },
+    { text: "Direct free kicks per 90", i18n: "metrics.directFreeKicks" },
+    { text: "Direct free kicks oT %", i18n: "metrics.directFreeKicksOnTarget" },
+    { text: "Corners per 90", i18n: "metrics.corners" },
+    { text: "Penalties attempted", i18n: "metrics.penaltiesAttempted" },
+    { text: "Penalties scored", i18n: "metrics.penaltiesScored" },
+    { text: "Penalty success rate %", i18n: "metrics.penaltySuccessRate" }
+];
+
+const columnIndexMap = {};
+originalDataArray[0].forEach((name, index) => {
+    columnIndexMap[name] = index;
+});
+
+metricSelect.innerHTML = ''; // Clear existing options
+
+customMetricOrder.forEach(metric => {
+    const option = document.createElement('option');
+    if (metric.text.startsWith("CATEGORY: ")) {
+        option.textContent = metric.text.replace("CATEGORY: ", "");
+        option.disabled = true;
+        option.style.fontWeight = "bold";
+        option.style.color = "#aaa";
+        option.setAttribute('data-i18n', metric.i18n);
+    } else {
+        const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
+        const index = currentDataArray[0].indexOf(metricName);
+        if (index !== -1) {
+            option.value = index;
+            option.textContent = metricName;
+            option.setAttribute('data-i18n', metric.i18n);
         }
     }
+    metricSelect.appendChild(option);
+});
 
-    // Add an event listener to the dropdown menu
-    positionSelect.addEventListener("change", function () {
-        // Display the selected iframe
-        displaySelectedIframe();
+// Set column 61 as the default selection
+metricSelect.value = "5";
+
+leagueSelect.querySelector('option[value="Top 5 Leagues"]').disabled = true;
+leagueSelect.querySelector('option[value="Top 7 Leagues"]').disabled = true;
+leagueSelect.querySelector('option[value="All Leagues"]').disabled = true;
+leagueSelect.querySelector('option[value="No Top 7"]').disabled = true;
+positionSelect.querySelector('option[value="All"]').disabled = true;
+leagueSelect.querySelector('option[value="South America"]').disabled = true;
+    leagueSelect.querySelector('option[value="Eastern Europe"]').disabled = true;
+    leagueSelect.querySelector('option[value="Scandinavia"]').disabled = true;
+metricSelect.dispatchEvent(new Event('change'));
+
+toggleButton.addEventListener('change', toggleData);
+toggleSortButton.addEventListener('click', toggleSortOrder); // New event listener for sort order toggle
+metricSelect.addEventListener('change', () => {
+    isAscending = false; // Reset to default descending order
+    filterTable(); // Reapply filtering and sorting
+});positionSelect.addEventListener('change', filterTable);
+leagueSelect.addEventListener('change', filterTable);
+ageInput.addEventListener('input', filterTable);
+
+function toggleSortOrder() {
+    isAscending = !isAscending; // Toggle sort order
+    filterTable(); // Reapply filtering and sorting
+}
+
+function toggleData() {
+    isToggled = !isToggled; // Toggle the state
+    const currentMetricValue = metricSelect.value;
+
+    if (isToggled) {
+        currentDataArray = originalDataArray.map((row, index) => {
+            if (index === 0) {
+                return row.map((cell, cellIndex) => {
+                    if (![11, 14, 34, 44, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63].includes(cellIndex)) {
+                        return cell.replace(' per 90', '');
+                    } else {
+                        return cell; // Keep other cells unchanged
+                    }
+                });
+            } else {
+                const minutesPlayed = parseFloat(row[6]);
+                return row.map((cell, cellIndex) => {
+                    if (cellIndex > 4 && ![5, 6, 11, 14, 34, 44, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 66, 68, 69, 70, 72, 73, 74, 75, 76, 81, 83, 85, 106, 107, 108, 110, 113, 114, 115, 116, 117, 118, 119].includes(cellIndex)) {
+                        if ([18, 35, 45, 46, 80, 82, 84, 109, 111].includes(cellIndex)) {
+                            return (cell * minutesPlayed / 90).toFixed(1);
+                        } else {
+                            return Math.round(cell * minutesPlayed / 90);
+                        }
+                    } else {
+                        return cell; // Keep other cells unchanged
+                    }
+                });
+            }
+        });
+
+        metricSelect.innerHTML = ''; // Clear existing options
+        customMetricOrder.forEach(metric => {
+            const option = document.createElement('option');
+            if (metric.text.startsWith("CATEGORY: ")) {
+                option.textContent = metric.text.replace("CATEGORY: ", "");
+                option.disabled = true;
+                option.style.fontWeight = "bold";
+                option.style.color = "#aaa";
+                option.setAttribute('data-i18n', metric.i18n);
+            } else {
+                const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
+                const index = currentDataArray[0].indexOf(metricName);
+                if (index !== -1) {
+                    option.value = index;
+                    option.textContent = metricName;
+                    option.setAttribute('data-i18n', metric.i18n);
+                }
+            }
+            metricSelect.appendChild(option);
+        });
+    } else {
+        currentDataArray = originalDataArray;
+    }
+
+    currentDataArray = currentDataArray.map(row => {
+        if (parseFloat(row[16]) === 0 && parseFloat(row[18]) === 0) {
+            row[82] = '';
+        }
+        return row;
     });
 
-    // Hide all iframes except the first one initially
-    hideAllIframes();
-    goalkeeperIframe.style.display = "block";
+    currentDataArray = currentDataArray.map(row => {
+        if (parseFloat(row[21]) === 0 && parseFloat(row[35]) === 0) {
+            row[84] = '';
+        }
+        return row;
+    });
+
+    metricSelect.innerHTML = '';
+    customMetricOrder.forEach(metric => {
+        const option = document.createElement('option');
+        if (metric.text.startsWith("CATEGORY: ")) {
+            option.textContent = metric.text.replace("CATEGORY: ", "");
+            option.disabled = true;
+            option.style.fontWeight = "bold";
+            option.style.color = "#aaa";
+            option.setAttribute('data-i18n', metric.i18n);
+        } else {
+            const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
+            const index = currentDataArray[0].indexOf(metricName);
+            if (index !== -1) {
+                option.value = index;
+                option.textContent = metricName;
+                option.setAttribute('data-i18n', metric.i18n);
+            }
+        }
+        metricSelect.appendChild(option);
+    });
+    metricSelect.value = currentMetricValue;
+    handleSelectorsChange();
+    
+    // Reapply internationalization after toggling
+    const preferredLanguage = getPreferredLanguage();
+    applyLanguage(preferredLanguage);
+    
+    filterTable(); // Ensure filtering is always applied
+}
+
+function filterTable() {
+    let filteredData = currentDataArray.slice(1); // Exclude header row
+    const metricIndex = metricSelect.value;
+    const position = positionSelect.value;
+    const league = leagueSelect.value;
+    const age = ageInput.value;
+
+    if (metricIndex === '') {
+        metricHeader.style.display = 'none';
+    } else {
+        metricHeader.style.display = '';
+        // Sort by selected metric
+        if (isAscending) {
+            filteredData.sort((a, b) => parseFloat(a[metricIndex]) - parseFloat(b[metricIndex]));
+        } else {
+            filteredData.sort((a, b) => parseFloat(b[metricIndex]) - parseFloat(a[metricIndex]));
+        }    
+    }
+
+    filteredData = filteredData.filter(row => row[metricIndex] !== '');
+
+    filteredData = filteredData.map(row => {
+    if (parseFloat(row[16]) === 0 && parseFloat(row[18]) === 0) {
+        const targetColumn = isToggled ? 82 : 82;  // Adjust index if needed based on toggling
+        row[targetColumn] = '';
+    }
+    return row;
+});
+
+    filteredData = filteredData.map(row => {
+        if (parseFloat(row[16]) === 0 || parseFloat(row[18]) === 0) {
+            row[83] = '';
+        }
+        return row;
+    });
+
+
+    filteredData = filteredData.map(row => {
+    if (parseFloat(row[21]) === 0 && parseFloat(row[35]) === 0) {
+        const targetColumn = isToggled ? 84 : 84;  // Adjust index if needed based on toggling
+        row[targetColumn] = '';
+    }
+    return row;
+});
+
+    filteredData = filteredData.map(row => {
+        if (parseFloat(row[35]) === 0 || parseFloat(row[21]) === 0) {
+            row[85] = '';
+        }
+        return row;
+    });
+
+
+
+    filteredData = filteredData.map(row => {
+        if (parseFloat(row[18]) === 0 || parseFloat(row[20]) === 0) {
+            row[81] = '';
+        }
+        return row;
+    });
+
+
+    filteredData = filteredData.map(row => {
+        if (parseFloat(row[18]) === 0 || parseFloat(row[20]) === 0) {
+            row[110] = '';
+        }
+        return row;
+    });
+
+
+    if (position === 'All') {
+        // Filter out duplicates and select all players
+        const uniquePlayers = {};
+        filteredData = filteredData.filter(row => {
+            const key = `${row[0]} ${row[1]}`; // Assuming the first column contains player names
+            if (!uniquePlayers[key]) {
+                uniquePlayers[key] = true;
+                return true;
+            }
+            return false;
+        });
+    } else if (position !== '') {
+        // Filter by selected position
+        filteredData = filteredData.filter(row => row[3] === position);
+    }
+
+    if (league === 'Top 5 Leagues') {
+        // Filter data to include only players from the top 5 leagues
+        filteredData = filteredData.filter(row =>
+            ['Premier League', 'Bundesliga', 'La Liga', 'Ligue 1', 'Serie A'].includes(row[2])
+        );
+    } else if (league === 'Top 7 Leagues') {
+        // Filter data to include only players from the top 7 leagues
+        filteredData = filteredData.filter(row =>
+            ['Premier League', 'Bundesliga', 'La Liga', 'Ligue 1', 'Serie A', 'Eredivisie', 'Liga Portugal'].includes(row[2])
+        );
+    } else if (league === 'No Top 7') {
+        // Filter data to include only players from the top 7 leagues
+        filteredData = filteredData.filter(row =>
+            ['Greece','Poland','Ukraine','Russia','Israel','Ecuador','Paraguay','Chile','Colombia','Belgium Pro League', 'Scotland Premiership', 'Austrian Bundesliga', 'Swiss Super League', 'Süper Lig', 'Denmark Superliga', 'Sweden Allsvenskan', 'Norway Eliteserien', 'Croatia HNL', 'Serbia SuperLiga', 'Czech Fortuna Liga', 'Saudi Pro League', 'J1 League', 'K League 1', 'MLS', 'LigaMX', 'Brazil Serie A', 'Argentina Primera', 'Uruguay Primera', 'Championship', 'Segunda Division', 'Serie B', 'Bundesliga 2', 'Ligue 2', ].includes(row[2])
+        );
+    } else if (league === 'All Leagues') {
+        // Filter data to include only players from the top 7 leagues
+        filteredData = filteredData.filter(row =>
+            ['Greece','Poland','Ukraine','Russia','Israel','Ecuador','Paraguay','Chile','Colombia','Premier League', 'Bundesliga', 'La Liga', 'Ligue 1', 'Serie A', 'Eredivisie', 'Liga Portugal', 'Belgium Pro League', 'Scotland Premiership', 'Austrian Bundesliga', 'Swiss Super League', 'Süper Lig', 'Denmark Superliga', 'Sweden Allsvenskan', 'Norway Eliteserien', 'Croatia HNL', 'Serbia SuperLiga', 'Czech Fortuna Liga', 'Saudi Pro League', 'J1 League', 'K League 1', 'MLS', 'LigaMX', 'Brazil Serie A', 'Argentina Primera', 'Uruguay Primera', 'Championship', 'Segunda Division', 'Serie B', 'Bundesliga 2', 'Ligue 2'].includes(row[2])
+        );
+    } else if (league === 'South America') {
+        // Filter data to include only players from the top 7 leagues
+        filteredData = filteredData.filter(row =>
+            [      "Brazil Serie A",
+      "Argentina Primera",
+      "Uruguay Primera",
+      "Colombia",
+      "Chile",
+      "Paraguay",
+      "Ecuador",].includes(row[2])
+        );
+    } else if (league === 'Scandinavia') {
+        // Filter data to include only players from the top 7 leagues
+        filteredData = filteredData.filter(row =>
+            [   "Norway Eliteserien",
+      "Denmark Superliga",
+      "Sweden Allsvenskan"].includes(row[2])
+        );
+    } else if (league === 'Eastern Europe') {
+        // Filter data to include only players from the top 7 leagues
+        filteredData = filteredData.filter(row =>
+            [      "Czech Fortuna Liga",
+      "Serbia SuperLiga",
+      "Croatia HNL",
+      "Russia",
+      "Ukraine",
+      "Poland"].includes(row[2])
+        );
+    } else if (league !== '') {
+        // Filter data based on selected league
+        filteredData = filteredData.filter(row => row[2] === league);
+    }
+
+    if (age !== '') {
+    filteredData = filteredData.filter(row => row[4] <= age + 1);
+}
+
+
+    displayTable(filteredData);
+}
+
+function displayTable(data) {
+    // Clear existing table
+    playerTable.innerHTML = '';
+
+    if (metricSelect.value === '') {
+        playerTable.style.display = 'none'; // Hide the table if no metric is selected
+        return; // Exit the function
+    } else {
+        playerTable.style.display = ''; // Show the table if a metric is selected
+    }
+
+    // Sort the data first to ensure consistency in ranking
+    // Sort data based on the current sorting order
+    if (isAscending) {
+        data.sort((a, b) => parseFloat(a[metricSelect.value]) - parseFloat(b[metricSelect.value]));
+    } else {
+        data.sort((a, b) => parseFloat(b[metricSelect.value]) - parseFloat(a[metricSelect.value]));
+    }
+    let previousValue = null;
+    let previousIndex = 0;
+    let previousRankBarWidth = 100;
+    let previousRakim = 100;
+    let maxValue = Math.max(...data.map(row => parseFloat(row[metricSelect.value])));
+let minValue = Math.min(...data.map(row => parseFloat(row[metricSelect.value])));
+
+
+    // Add table data
+    data.forEach((row, index) => {
+    let rankBarWidth;
+    let rakim;
+    if (row[metricSelect.value] === previousValue) {
+        // If the current value is equal to the previous one, keep the same index and rank bar width
+        rankBarWidth = previousRankBarWidth;
+        rakim = previousRakim;
+    } else {
+        // If not tied, calculate rank bar width and index
+        if (row[metricSelect.value] === '0') {
+            rankBarWidth = 0;
+            rakim = 0;
+     } else {
+    if (metricSelect.value === "46" || metricSelect.value === "84" || metricSelect.value === "73" || metricSelect.value === "82" || metricSelect.value === "103") {
+        // Get min and max values from the entire dataset
+        const allValues = data.map(r => parseFloat(r[metricSelect.value]));
+        const minValue = Math.min(...allValues);
+        const maxValue = Math.max(...allValues);
+        const totalRange = maxValue - minValue;
+        
+        const value = parseFloat(row[metricSelect.value]);
+        // Scale from minValue (smallest bar) to maxValue (largest bar)
+        rankBarWidth = Math.max(((value - minValue) / totalRange * 100), 1.5);
+        rakim = ((data.length - index) / data.length) * 100;
+    } else if (metricSelect.value === "5") {
+        rankBarWidth = parseFloat(row[metricSelect.value]) * 100 / 99;
+        rakim = ((data.length - index) / data.length) * 100;
+    } else {
+        rankBarWidth = Math.max(((parseFloat(row[metricSelect.value])) / (maxValue) * 100), 1.5);
+        rakim = ((data.length - index) / data.length) * 100;
+    }
+}
+        previousValue = row[metricSelect.value];
+        previousIndex = index;
+        previousRankBarWidth = rankBarWidth;
+        previousRakim = rakim;
+    }
+
+    let red, green, blue;
+        if (isAscending) {
+            // Invert colors for ascending order: lower values are red, higher values are green
+            red = Math.round((255 * (1 - Math.pow(((100-rakim) / 100), 1.3))));
+            green = Math.round(100-rakim);
+            blue = Math.round((255 * Math.pow(((100-rakim) / 100), 1.3)));
+        } else {
+            // Default color logic for descending order: higher values are red, lower values are green
+            red = Math.round((255 * (1 - Math.pow((rakim / 100), 1.3))));
+            green = Math.round(rakim);
+            blue = Math.round((255 * Math.pow((rakim / 100), 1.3)));
+        }
+        const alpha = 0.835;
+        const color = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${previousIndex + 1}. ${row[0]}&nbsp;<span class="smaller-text">(${row[1]}, ${Math.round(row[4])})</span></td>
+            <th>${row[metricSelect.value]}</th>
+            <th>
+                <div class="rank-bar">
+                    <div class="rank-bar-fill" style="width: ${rankBarWidth}%; background-color: ${color}"></div>
+                </div>
+            </th>
+        `;
+        playerTable.appendChild(tr);
+    });
+}
+
+function handleSelectorsChange() {
+    const selectedMetricIndex = parseInt(metricSelect.value);
+    const selectedPosition = positionSelect.value;
+    const selectedLeague = leagueSelect.value;
+    const metricOptions = metricSelect.querySelectorAll('option');
+    const metricSelector = document.querySelector('.metric-selector');
+
+    // Show or hide the toggleSortButton and adjust metric selector width
+    if (selectedMetricIndex === 43 || selectedMetricIndex === 45 || selectedMetricIndex === 82 || selectedMetricIndex === 83 || selectedMetricIndex === 84 || selectedMetricIndex === 85) {
+        toggleSortButton.style.display = 'inline-block';
+        metricSelector.classList.add('with-toggle');
+    } else {
+        toggleSortButton.style.display = 'none';
+        metricSelector.classList.remove('with-toggle');
+    }
+
+    if (selectedMetricIndex === 5) {
+        leagueSelect.querySelector('option[value="Top 5 Leagues"]').disabled = true;
+        leagueSelect.querySelector('option[value="Top 7 Leagues"]').disabled = true;
+        positionSelect.querySelector('option[value="All"]').disabled = true;
+        leagueSelect.querySelector('option[value="No Top 7"]').disabled = true;
+        leagueSelect.querySelector('option[value="All Leagues"]').disabled = true;
+        leagueSelect.querySelector('option[value="South America"]').disabled = true;
+        leagueSelect.querySelector('option[value="Eastern Europe"]').disabled = true;
+        leagueSelect.querySelector('option[value="Scandinavia"]').disabled = true;
+    } else {
+        leagueSelect.querySelector('option[value="Top 5 Leagues"]').disabled = false;
+        leagueSelect.querySelector('option[value="Top 7 Leagues"]').disabled = false;
+        positionSelect.querySelector('option[value="All"]').disabled = false;
+        leagueSelect.querySelector('option[value="No Top 7"]').disabled = false;
+        leagueSelect.querySelector('option[value="All Leagues"]').disabled = false;
+        leagueSelect.querySelector('option[value="South America"]').disabled = false;
+        leagueSelect.querySelector('option[value="Eastern Europe"]').disabled = false;
+        leagueSelect.querySelector('option[value="Scandinavia"]').disabled = false;
+    }
+
+    if (selectedPosition === 'All' || (selectedLeague === 'Top 5 Leagues' || selectedLeague === 'Top 7 Leagues' || selectedLeague === 'No Top 7' || selectedLeague === 'All Leagues' || selectedLeague === 'South America' || selectedLeague === 'Scandinavia' || selectedLeague === 'Eastern Europe')) {
+        metricOptions[0].disabled = true;
+        if (selectedMetricIndex === 0) {
+            metricSelect.value = "1";
+            filterTable();
+        }
+    } else {
+        metricOptions[0].disabled = false;
+    }
+}
+
+// Add event listener for all selectors
+metricSelect.addEventListener('change', handleSelectorsChange);
+positionSelect.addEventListener('change', handleSelectorsChange);
+leagueSelect.addEventListener('change', handleSelectorsChange);
+
+
+// Initial display
+filterTable();
+
 </script>
+	
+<script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    // Check for saved dark mode preference on page load
+    document.addEventListener('DOMContentLoaded', (event) => {
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+    });
+</script>
+
+<div class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <span class="toggle-icon"></span>
+  </div>
+  
+<script>
+
+  
+  function getPreferredLanguage() {
+    // PRIORITY 1: Check URL parameter first
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+    if (langParam) {
+      return langParam;
+    }
+    // PRIORITY 2: Check localStorage
+    const storedLang = localStorage.getItem('preferredLanguage');
+    if (storedLang) {
+      return storedLang;
+    }
+    // PRIORITY 3: Use browser language
+    return getBrowserLanguage() || 'en';
+  }
+
+  function getBrowserLanguage() {
+    return navigator.language.slice(0, 2);
+  }
+
+  function applyLanguage(language) {
+    console.log(language);
+
+    if (language === 'en') {
+      return;
+    }
+
+    
+    fetch(`locales/${language}.json`)
+      .then(response => {
+        // Don't throw an error, just return null if response is not OK
+        return response.ok ? response.json() : null;
+      })
+      .then(translations => {
+        // Only proceed if translations exist
+        if (translations) {
+          document.querySelectorAll('[data-i18n]').forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let value = translations;
+            for (const key of keys) {
+              if (value === undefined || value === null) break;
+              value = value[key];
+            }
+            if (value) {
+              if (element.tagName === 'OPTION' && element.parentElement.id === 'metric') {
+                const metricKey = element.getAttribute('data-i18n');
+                const originalMetric = customMetricOrder.find(m => m.i18n === metricKey);
+                
+                // Only add "per 90" if not toggled AND the original metric includes "per 90"
+                const shouldAddPerNinety = !isToggled && originalMetric && originalMetric.text.includes('per 90');
+                
+                // Get the translated version of "per 90" or use default English version
+                const per90Translation = translations.common && translations.common.per90 ? 
+                                        translations.common.per90 : " per 90";
+                
+                element.textContent = value + (shouldAddPerNinety ? per90Translation : '');
+            }
+              else if (element.tagName === 'META') {
+              element.setAttribute('content', value);
+          } else if (value.includes('<')) {
+              element.innerHTML = value;
+          } else {
+              element.textContent = value;
+          }          }
+          });
+        }
+      })
+      .catch(() => {
+        // Completely empty catch block to silently ignore any errors
+      });
+  }
+  
+  const preferredLanguage = getPreferredLanguage();
+  applyLanguage(preferredLanguage);
+  
+    </script>
+    
 </body>
 </html>
