@@ -935,6 +935,12 @@ function search3(query) {
   // Function to translate position names
   function translatePosition(position) {
     const currentLang = getPreferredLanguage();    
+    
+    // If language is English, return the original position
+    if (currentLang === 'en') {
+      return position;
+    }
+    
     const positionKey = position.toLowerCase();
     
     if (cachedTranslations[currentLang] && 
@@ -942,7 +948,10 @@ function search3(query) {
         cachedTranslations[currentLang].positions[positionKey]) {
       return cachedTranslations[currentLang].positions[positionKey];
     }
-      }
+    
+    // Return original position if translation not found
+    return position;
+  }
 
   function applyLanguage(language) {
     console.log(language);
