@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,6 +51,12 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
         }
 
 /* GENERAL */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 
 
@@ -591,6 +598,7 @@ body.dark-mode .search-input-container {
         flex-wrap: wrap;
         line-height: 1;
         font-size: 16px;
+        animation: fadeIn 0.5s ease;
         
       }
      
@@ -605,6 +613,7 @@ body.dark-mode .search-input-container {
         flex-wrap: wrap;
         line-height: 1;
         font-size: 16px;
+        animation: fadeIn 0.8s ease;
         
       }
 
@@ -613,8 +622,16 @@ body.dark-mode .search-input-container {
         flex-basis: calc((100% - 140px) / 2);
         margin: 20px;
         text-align: center;
+        opacity: 0;
+        animation: fadeIn 0.5s ease forwards;
       }
 
+      .button-wrapper:nth-child(1) { animation-delay: 0.1s; }
+      .button-wrapper:nth-child(2) { animation-delay: 0.2s; }
+      .button-wrapper:nth-child(3) { animation-delay: 0.3s; }
+      .button-wrapper:nth-child(4) { animation-delay: 0.4s; }
+      .button-wrapper:nth-child(5) { animation-delay: 0.5s; }
+      .button-wrapper:nth-child(6) { animation-delay: 0.6s; }
 
   .button-wrapper a {
                     text-decoration: none;
@@ -637,15 +654,6 @@ body.dark-mode .search-input-container {
         overflow: hidden;
         border: 1px solid transparent;
       }
-
-      @media screen and (max-width: 850px) {
-        .button {
-
-        font-size: 20px;
-  
-      }
-}
-
      
       /* Add styles for position-specific images */
       .button-icon {
@@ -654,6 +662,8 @@ body.dark-mode .search-input-container {
         left: -3px;
         width: 365px;
         height: 200px;
+        transition: all 0.5s ease;
+        z-index: 0;
         opacity: 0.7;
       }
      
@@ -752,6 +762,26 @@ body.dark-mode .search-input-container {
 
 
 
+.button:hover {
+  transform: translateY(-5px) rotateY(5deg);
+}
+
+/* Additional smooth transitions */
+* {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Particles for dark mode */
+.dark-mode #particles-js {
+  opacity: 0.7;
+}     @media screen and (max-width: 850px) {
+        .button {
+
+        font-size: 20px;
+  
+      }
+}
+
     </style>
 
 
@@ -792,6 +822,10 @@ body.dark-mode .search-input-container {
   gtag('config', 'G-PSBMXX80EF');
 </script>
 
+<!-- Add particle.js library -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<div id="particles-js" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
 
 <div class="search-input-modal" id="searchInputModal">
   <div class="search-input-container">
@@ -816,6 +850,121 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
 
 </script>
 
+<script>
+// Initialize particles.js
+document.addEventListener('DOMContentLoaded', function() {
+  particlesJS('particles-js', {
+    "particles": {
+      "number": {
+        "value": 80,
+        "density": {
+          "enable": true,
+          "value_area": 800
+        }
+      },
+      "color": {
+        "value": "#3498db"
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 0,
+          "color": "#000000"
+        },
+      },
+      "opacity": {
+        "value": 0.3,
+        "random": false,
+        "anim": {
+          "enable": false,
+          "speed": 1,
+          "opacity_min": 0.1,
+          "sync": false
+        }
+      },
+      "size": {
+        "value": 3,
+        "random": true,
+        "anim": {
+          "enable": false,
+          "speed": 40,
+          "size_min": 0.1,
+          "sync": false
+        }
+      },
+      "line_linked": {
+        "enable": true,
+        "distance": 150,
+        "color": "#3498db",
+        "opacity": 0.2,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 2,
+        "direction": "none",
+        "random": false,
+        "straight": false,
+        "out_mode": "out",
+        "bounce": false,
+        "attract": {
+          "enable": false,
+          "rotateX": 600,
+          "rotateY": 1200
+        }
+      }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "grab"
+        },
+        "onclick": {
+          "enable": true,
+          "mode": "push"
+        },
+        "resize": true
+      },
+      "modes": {
+        "grab": {
+          "distance": 140,
+          "line_linked": {
+            "opacity": 0.6
+          }
+        },
+        "push": {
+          "particles_nb": 4
+        }
+      }
+    },
+    "retina_detect": true
+  });
+
+  // Apply dark mode to particles
+  function updateParticlesColor() {
+    const isDarkMode = document.body.classList.contains('dark-mode');
+    const color = isDarkMode ? '#ffffff' : '#3498db';
+    const opacity = isDarkMode ? 0.2 : 0.3;
+    
+    if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
+      window.pJSDom[0].pJS.particles.color.value = color;
+      window.pJSDom[0].pJS.particles.line_linked.color = color;
+      window.pJSDom[0].pJS.particles.opacity.value = opacity;
+      window.pJSDom[0].pJS.particles.line_linked.opacity = opacity - 0.1;
+      window.pJSDom[0].pJS.fn.particlesRefresh();
+    }
+  }
+
+  // Call initially and add to dark mode toggle
+  const originalToggleDarkMode = window.toggleDarkMode;
+  window.toggleDarkMode = function() {
+    originalToggleDarkMode();
+    updateParticlesColor();
+  };
+});
+</script>
 
   <body>
 
@@ -911,7 +1060,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             </a>
         </div>
     </div>
-<br>
 <br>
 <div align="center">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
