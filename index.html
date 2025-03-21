@@ -571,6 +571,7 @@ Cursor: pointer;
     const url = new URL(window.location.href);
     if (language === 'en') {
       url.searchParams.delete('lang');
+      applyLanguage(xx);
     } else {
       url.searchParams.set('lang', language);
     }
@@ -676,4 +677,3 @@ Cursor: pointer;
 
 </body>
 </html>
-
