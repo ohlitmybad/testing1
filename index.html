@@ -861,13 +861,14 @@ color: black;
             const link = document.createElement('a');
             link.href = item.link;
             
-            // Create display text with position if available
-            if (item.position) {
-                const translatedPosition = translatePosition(item.position);
-                link.textContent = `${item.name} (${translatedPosition})`;
-            } else {
-                link.textContent = item.name;
-            }
+            const positionMatch = item.name.match(/\((.*?)\)/);
+                const position = positionMatch[1].trim();
+                const nameWithoutPosition = item.name.replace(/\s*\(.*?\)\s*/, '').trim();
+                
+                const translatedPosition = translatePosition(position);
+                
+                link.textContent = `${nameWithoutPosition} (${translatedPosition || position})`;
+            
             
             listItem.appendChild(link);
             autocompleteBox2.appendChild(listItem);
@@ -924,11 +925,10 @@ color: black;
 
   // Global variable to store loaded translations
   let cachedTranslations = {};
-
-  // Function to translate position names using cached translations
+  
+  // Function to translate position names
   function translatePosition(position) {
-    const currentLang = getPreferredLanguage();
-    
+    const currentLang = getPreferredLanguage();    
     const positionKey = position.toLowerCase();
     
     if (cachedTranslations[currentLang] && 
@@ -936,7 +936,7 @@ color: black;
         cachedTranslations[currentLang].positions[positionKey]) {
       return cachedTranslations[currentLang].positions[positionKey];
     }
-  }
+      }
 
   function applyLanguage(language) {
     console.log(language);
@@ -1021,4 +1021,3 @@ color: black;
 
 </body>
 </html>
-
