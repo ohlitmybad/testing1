@@ -18,4 +18,12 @@
     "contact": "Contact",
     "about": "À propos"
   }
+"positions": {
+  "goalkeeper": "Gardien",
+  "centre-back": "Défenseur",
+  "full-back": "Latéral",
+  "midfielder": "Milieu",
+  "winger": "Ailier",
+  "striker": "Buteur"
 } 
+  }
