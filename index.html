@@ -574,9 +574,9 @@ Cursor: pointer;
       applyLanguage('xx');
     } else {
       url.searchParams.set('lang', language);
+          applyLanguage(language);
     }
     window.history.pushState({}, '', url);
-    applyLanguage(language);
   }
   
   function getPreferredLanguage() {
