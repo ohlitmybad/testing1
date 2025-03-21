@@ -17,5 +17,14 @@
     "privacy": "Privacy",
     "contact": "Contact",
     "about": "About"
-  }
+  },
+  "positions": {
+  "goalkeeper": "Goalkeeper",
+  "centre-back": "Centre-back",
+  "full-back": "Full-back",
+  "midfielder": "Midfielder",
+  "winger": "Winger",
+  "striker": "Striker",
+  "team": "Team"
+} 
 } 
