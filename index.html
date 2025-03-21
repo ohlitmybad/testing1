@@ -816,75 +816,81 @@ color: black;
 <script>
 
 
-  const xhr2 = new XMLHttpRequest();
-  xhr2.open('GET', 'https://datamb.football/database/searchbar.csv', false); // false for synchronous request
-  xhr2.send(null);
+
+const xhr2 = new XMLHttpRequest();
+xhr2.open('GET', 'https://datamb.football/database/searchbar.csv', false); // false for synchronous request
+xhr2.send(null);
+
+let dataCSV2 = xhr2.responseText;
+
+  const dataLines2 = dataCSV2.split('\n');
+  const searchInput2 = document.getElementById('searchInput2');
+  const autocompleteBox2 = document.getElementById('autocompleteBox2');
   
-  let dataCSV2 = xhr2.responseText;
-  
-    const dataLines2 = dataCSV2.split('\n');
-    const searchInput2 = document.getElementById('searchInput2');
-    const autocompleteBox2 = document.getElementById('autocompleteBox2');
-    
-    // Convert CSV data to an array of objects
-    const data11 = dataLines2.map(line => {
-        const [name, link] = line.split(',');
-        return { name, link };
+  // Convert CSV data to an array of objects
+  const data11 = dataLines2.map(line => {
+      const [name, link] = line.split(',');
+      return { name, link };
+  });
+
+function removeDiacritics(str) {
+    const charMap = {
+        'ø': 'o',
+        'Ø': 'O',
+        'ı': 'i',
+    };
+    str = str.replace(/[øØı]/g, match => charMap[match]);
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function search3(query) {
+    autocompleteBox2.innerHTML = '';
+    const sanitizedQuery = removeDiacritics(query).replace(/[^\w\s]/g, '').toLowerCase();
+
+    const filteredData2 = data11.filter(item => {
+      const sanitizedItem = removeDiacritics(item.name).replace(/[^\w\s]/g, '').toLowerCase();
+      return sanitizedItem.includes(sanitizedQuery);
     });
-  
-  function removeDiacritics(str) {
-      const charMap = {
-          'ø': 'o',
-          'Ø': 'O',
-          'ı': 'i',
-      };
-      str = str.replace(/[øØı]/g, match => charMap[match]);
-      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  }
-    
-    function search3(query) {
-        autocompleteBox2.innerHTML = '';
-        const sanitizedQuery = removeDiacritics(query).replace(/[^\w\s]/g, '').toLowerCase();
-    
-        const filteredData2 = data11.filter(item => {
-          const sanitizedItem = removeDiacritics(item.name).replace(/[^\w\s]/g, '').toLowerCase();
-          return sanitizedItem.includes(sanitizedQuery);
-        });
-    
-        if (filteredData2.length === 0) {
-            autocompleteBox2.style.display = 'none';
-            return;
-        }
-    
-        filteredData2.forEach(item => {
-            const listItem = document.createElement('div');
-            const link = document.createElement('a');
-            link.href = item.link;
-            
-            const positionMatch = item.name.match(/\((.*?)\)/);
-                const position = positionMatch[1].trim();
-                const nameWithoutPosition = item.name.replace(/\s*\(.*?\)\s*/, '').trim();
-                
-                const translatedPosition = translatePosition(position);
-                
-                link.textContent = `${nameWithoutPosition} (${translatedPosition || position})`;
-            
-            
-            listItem.appendChild(link);
-            autocompleteBox2.appendChild(listItem);
-        });
-    
-        autocompleteBox2.style.display = 'block';
+
+    if (filteredData2.length === 0) {
+        autocompleteBox2.style.display = 'none';
+        return;
     }
-    
-    searchInput2.addEventListener('input', () => {
-        const query = searchInput2.value;
-        if (query.trim() === '') {
-            autocompleteBox2.style.display = 'none';
+
+    filteredData2.forEach(item => {
+        const listItem = document.createElement('div');
+        const link = document.createElement('a');
+        link.href = item.link;
+        
+        // Extract player name and position
+        const match = item.name.match(/(.*)\s+\((.*)\)/);
+        if (match) {
+            const playerName = match[1];
+            const position = match[2];
+            // Translate the position using the existing translation system
+            const translatedPosition = translatePosition(position);
+            // Reconstruct the display text
+            link.textContent = `${playerName} (${translatedPosition})`;
         } else {
-            search3(query);
+            // Fallback if pattern doesn't match
+            link.textContent = item.name;
         }
+        
+        listItem.appendChild(link);
+        autocompleteBox2.appendChild(listItem);
     });
+
+    autocompleteBox2.style.display = 'block';
+}
+  
+  searchInput2.addEventListener('input', () => {
+      const query = searchInput2.value;
+      if (query.trim() === '') {
+          autocompleteBox2.style.display = 'none';
+      } else {
+          search3(query);
+      }
+  });
     </script>
 
 
