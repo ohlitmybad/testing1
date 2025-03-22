@@ -127,6 +127,72 @@ opacity: .92;
   <p class="metric-definition"><strong>• Confirmed graph types : </strong>Scatter plot, Horizontal bar chart, Vertical bar chart, Pie chart, 3D plot, Distribution histogram. Radar charts can sometimes be obtained but are more tricky, and no consistent prompt has been found yet. You can also specify modifications (comparisons, filters, colours, sizes...).</p><br>
 </div>
 </div>
+
+<script>
+
+  
+  function getPreferredLanguage() {
+    // PRIORITY 1: Check URL parameter first
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+    if (langParam) {
+      return langParam;
+    }
+    // PRIORITY 2: Check localStorage
+    const storedLang = localStorage.getItem('preferredLanguage');
+    if (storedLang) {
+      return storedLang;
+    }
+    // PRIORITY 3: Use browser language
+    return getBrowserLanguage() || 'en';
+  }
+
+  function getBrowserLanguage() {
+    return navigator.language.slice(0, 2);
+  }
+
+  function applyLanguage(language) {
+    console.log(language);
+
+    if (language === 'en') {
+      return;
+    }
+
+    
+    fetch(`locales/${language}.json`)
+      .then(response => {
+        // Don't throw an error, just return null if response is not OK
+        return response.ok ? response.json() : null;
+      })
+      .then(translations => {
+        // Only proceed if translations exist
+        if (translations) {
+          document.querySelectorAll('[data-i18n]').forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let value = translations;
+            for (const key of keys) {
+              if (value === undefined || value === null) break;
+              value = value[key];
+            }
+            if (value) {
+              if (element.tagName === 'META') {
+              element.setAttribute('content', value);
+          } else if (value.includes('<')) {
+              element.innerHTML = value;
+          } else {
+              element.textContent = value;
+          }          }
+          });
+        }
+      })
+      .catch(() => {
+        // Completely empty catch block to silently ignore any errors
+      });
+  }
+  
+  const preferredLanguage = getPreferredLanguage();
+  applyLanguage(preferredLanguage);
+  
+    </script>
 </body>
 </html>
-
