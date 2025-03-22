@@ -2270,6 +2270,7 @@ color: #ffffff
               
               const leagueSelectSpan = document.createElement("span");
               leagueSelectSpan.textContent = "All Leagues";
+              seasonSelectSpan.setAttribute("data-i18n", "league_all");
               leagueSelectTrigger.appendChild(leagueSelectSpan);
               
               const leagueSelectOptions = document.createElement("div");
@@ -2487,12 +2488,14 @@ color: #ffffff
                 
                 const optionSpan = document.createElement("span");
                 optionSpan.textContent = option.text;
+                optionSpan.setAttribute("data-i18n", "age_" + option.value);
                 customOption.appendChild(optionSpan);
                 
                 // Add standard option to hidden select
                 const selectOption = document.createElement("option");
                 selectOption.value = option.value;
                 selectOption.textContent = option.text;
+                selectOption.setAttribute("data-i18n", "age_" + option.value);
                 if (index === 0) selectOption.selected = true;
                 ageSelect.appendChild(selectOption);
                 
@@ -2506,7 +2509,8 @@ color: #ffffff
                   
                   // Update trigger text
                   ageSelectSpan.textContent = option.text;
-                  
+                  ageSelectSpan.setAttribute("data-i18n", "age_" + option.value);
+              
                   // Update hidden select
                   ageSelect.value = option.value;
                   const event = new Event("change");
@@ -2903,4 +2907,3 @@ function toggleDarkMode() {
 
 </body>
 </html>
-
