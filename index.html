@@ -1504,6 +1504,12 @@ function updateSimilarPlayers(playerData) {
 
   similarPlayerTable.appendChild(similarPlayerRow);
   similarPlayersContainer.appendChild(similarPlayerTable);
+  
+  // Explicitly translate the newly added elements
+  if (window.translations) {
+    const translatable = similarPlayerTable.querySelectorAll('[data-i18n]');
+    translatable.forEach(element => translateElement(element, window.translations));
+  }
 }
 
 }) })
