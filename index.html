@@ -1620,8 +1620,11 @@ function translateElement(element, translations) {
   }
 }
 
+
 const preferredLanguage = getPreferredLanguage();
-applyLanguage(preferredLanguage);
+document.addEventListener('DOMContentLoaded', function() {
+  applyLanguage(preferredLanguage);
+});
     </script>
 	    
 <script>async function takeScreenshot() {
