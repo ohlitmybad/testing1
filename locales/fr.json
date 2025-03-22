@@ -1,17 +1,5 @@
 {
-  "search": {
-    "placeholder2": "Chercher un défenseur central..."
-  },
-  "radar": {
-    "a": "% Aérien",
-    "b": "% Duels",
-    "c": "Actions Déf",
-    "d": "Passes Prog",
-    "e": "Passes Av%",
-    "f": "Passes",
-    "g": "Courses"
-  },
-  "similar": {
-    "to": "Données similaires à"
+  "guide": {
+    "content": "<div class=\"warning\">\n  <p>• <strong>Trouvez votre nom d'utilisateur :</strong> DataMB Pro > Gérer le compte > \"Vous êtes maintenant connecté en tant que [votre nom d'utilisateur]\"</p>\n  <p>• <strong>Bêta :</strong> L'accès anticipé gratuit ne sera offert que pour une durée limitée et ne représente pas le produit final\n</p>\n    <p>• <strong>Limite de requêtes :</strong> 10 requêtes réussies DataMB Chat et 10 requêtes réussies DataMB Viz Chat par utilisateur et par jour</p>\n</p>\n</div>\n\n  <div class=\"metric\">\n   \n    <p class=\"metric-definition\"><strong>• Ensemble de données :</strong> 🇪🇺 Top 5 Championnats 24-25, minimum 800 minutes jouées.</p><br>\n  <p class=\"metric-definition\"><strong>• LLM :</strong> OpenAI GPT-4o et GPT-4o Mini</p><br>\n  <p class=\"metric-definition\"><strong>• DataMB Chat :</strong> Conversationnel, conçu pour des réponses textuelles (\"Qui est le meilleur à...\", \"Parlez-moi de...\", \"Classez...\", etc.). Non conçu pour créer des visuels.</p><br>\n  <p class=\"metric-definition\"><strong>• DataMB Viz Chat : </strong>Conçu pour fournir des réponses visuelles en traçant des graphiques et des diagrammes (\"Tracez...\", \"Graphique à barres...\", \"Diagramme circulaire...\", etc.). Non conçu pour répondre avec du texte.</p><br>\n</div>\n  <div class=\"metric\">\n  <p class=\"metric-definition\">• Pour afficher les visuels après une requête, cliquez sur \"Charger les visuels\". Si vous rencontrez une erreur pendant la requête, cliquez quand même sur \"Charger les visuels\", car il est possible qu'ils aient été générés malgré l'erreur.</p><br>\n\n  <p class=\"metric-definition\">• L'Agent IA peut être assez délicat et affichera souvent des erreurs si la requête n'est pas tout à fait correcte ou hors de sa portée. Assurez-vous que la requête est précise et aussi exacte que possible.</p><br>\n\n\n<p class=\"metric-definition\">• Comme le modèle GPT sur lequel il a été construit, il peut également produire des informations erronées lorsqu'il ne parvient pas à trouver la bonne réponse. Nous ne garantissons pas que les réponses seront toujours correctes.</p><br>\n\n<p class=\"metric-definition\">• Pour rechercher des joueurs, nous vous conseillons d'utiliser l'initiale du prénom + le nom de famille (ex : E. Haaland), sauf pour les joueurs brésiliens et portugais (ex : Bernardo Silva).</p>\n\n</div>\n\n   <div class=\"metric\">\n    <p class=\"metric-definition\"><strong>• Métriques :</strong> Pour afficher les colonnes et voir toutes les métriques des joueurs, tapez \"df.columns\" dans DataMB Chat. Les informations sur les équipes et les championnats peuvent également être interrogées ; l'IA utilisera les métriques des joueurs</p><br>\n  <p class=\"metric-definition\"><strong>• Opérations confirmées :</strong> Comparaison (joueurs, équipes, championnats...), Classement (joueurs, équipes, championnats...), Tri/Filtrage, Addition/Soustraction, Multiplication/Division, Moyennes, Comptage, Percentiles (pas aussi systématiquement), Indice de classement moyen.</p><br>\n  <p class=\"metric-definition\"><strong>• Types de graphiques confirmés : </strong>Nuage de points, Diagramme à barres horizontal, Diagramme à barres vertical, Diagramme circulaire, Graphique 3D, Histogramme de distribution. Les graphiques en radar peuvent parfois être obtenus mais sont plus délicats, et aucune requête cohérente n'a encore été trouvée. Vous pouvez également spécifier des modifications (comparaisons, filtres, couleurs, tailles...).</p><br>\n</div>"
   }
-} 
+}
