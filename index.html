@@ -1,1215 +1,2216 @@
 <!DOCTYPE html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.535, user-scalable=no"">
-    <meta name="robots" content="noindex">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
-    <style>
+  <meta name="language" content="en">
+  <link rel="canonical" href="https://datamb.football/wingers/" />
+  <link rel="alternate" hreflang="x-default" href="https://datamb.football/wingers/" />  
+  <link rel="alternate" hreflang="en" href="https://datamb.football/wingers/?lang=en" />
+  <link rel="alternate" hreflang="fr" href="https://datamb.football/wingers/?lang=fr" />
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
+  <title data-i18n="meta.title">DataMB | Compare Wingers</title>
+  <meta property="og:image" content="https://datamb.football/vignettes/fw.png">
+  <meta name="description" data-i18n="meta.description" content="Compare winger and attacking midfielder statistics in the Top 7 Leagues. Visualize player performance. Find similar profiles. Use our radar tool to compare goals; assists; xG and xA; dribbles; progressive runs; key passes and more for wingers in Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@DataMB_">
+  <meta name="twitter:title" content="DataMB | Compare Wingers">
+  <meta name="twitter:description" content="Radar Comparison Tool">
+  <meta name="twitter:image" content="https://datamb.football/vignettes/fw.png">
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+  (function() {
+      var width = window.innerWidth;
+      var viewportMeta = document.querySelector('meta[name="viewport"]');
+      if (viewportMeta) {
+if (width < 770) {
+	      
+      var initialScale = width / 770;
+viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+} else {
+            var fixedScale = 1;
+	viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + fixedScale + ', user-scalable=no');
 
-  
-.rank-bar-fill {
-            background-color: rgba(0, 110, 255, 0.835);
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            border-radius: 20px;
-        }
+  }
+    } 
+})();
+</script>
 
-        body {
-          zoom: 119.2%; /* Adjust the percentage as needed */
-    font-family: Arial, Helvetica, sans-serif; /* Use Font1 as the primary font */
-    font-size: 14.7px;
-    color: #000000c4;
-    scrollbar-width: none; /* Firefox */
-    margin-left: 17.5px;
-    margin-top:0.2px;
-        background: #fff;
+<defs>
+<style> :root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --background-color: #f5f7fa;
+  --container-bg: #ffffff;
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --hover-color: #f0f0f0;
+  --button-color: #3498db;
+  --button-text: #ffffff;
+  --header-bg: #ffffff;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --table-bg: #f2f2f2;
+}
+.dark-mode {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --background-color: #0e0f0f;
+  --container-bg: #1a1a1a;
+  --text-color: #e0e0e0;
+  --border-color: #333333;
+  --hover-color: #252525;
+  --button-color: #2980b9;
+  --button-text: #ffffff;
+  --header-bg: #0e0f0f;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  --table-bg: #333333;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 0;
+  padding: 0;
+  min-width: 770px;
+  overflow-x: auto;
+}
+body.dark-mode {
+  background-color: #0e0f0f !important;
+  min-width: 770px;
+}
+.container {
+  max-width: 880px;
+  min-width: 770px;
+  margin: 20px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+/* Ensure the chart wrapper doesn't shrink below a minimum width */
+.chart-wrapper {
+  background-color: var(--container-bg);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 12px 14px 20px;
+  margin-bottom: 30px;
+  position: relative;
+  width: 100%;
+  min-width: 730px;
 }
 
-.selectors-container {
-  gap: 14px; /* Adjust the value to increase or decrease the spacing */
-display: flex;
-align-items: center;
-flex-wrap: nowrap; /* Prevent wrapping */
+
+/* Radar chart styling */
+.radar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 32px 0px -15px;
+  width: 100%;
+  min-width: 670px;
+  position: relative;
+}
+svg.radar {
+  width: 100%;
+  max-width: 700px;
+  min-width: 670px;
+  height: 485px;
+  display: block;
+  margin: 0 auto;
+}
+/* Add specific styling for the SVG group */
+svg.radar > g {
+  transform-origin: center;
+  transform: translate(50%, 50%);
 }
 
-/* Style for selectors */
-select {
-    padding: 8px 12px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* Search input styling */
+.search-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+  width: 70%;
+  min-width: 500px;
+  position: relative;
+}
+/* Container for search and dropdown */
+.search-container {
+  position: relative;
+  margin-bottom: 15px;
+  min-width: 500px;
+}
+#searchInput1 {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  transition: border-color 0.2s;
+  height: 40px;
+}
+#searchInput1:focus {
+  border-color: var(--primary-color);
+}
+#searchInput1::placeholder {
+  color: #999;
+}
+#searchButton1 {
+  background-color: var(--button-color);
+  color: var(--button-text) !important;
+  border: none;
+  border-radius: 6px;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 18px;
+  font-weight: bold;
+}
+#searchButton1:hover {
+  background-color: #2980b9;
+}
+body.dark-mode #searchButton1:hover {
+  background-color: #2980b9;
+}
+body.dark-mode #searchButton1 {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+/* Button styles for screenshot */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--button-color);
+  color: var(--button-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  height: 36px;
+  box-sizing: border-box;
+}
+.btn:hover {
+  background-color: #2980b9;
+}
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+.btn-outline:hover {
+  background-color: var(--hover-color);
+}
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 6px;
+}
+.icon2::before {
+  font-family: "Ionicons";
+  content: "\f147";
+ /* Camera icon from Ionicons */
+  font-size: 18px;
+  color: var(--button-text);
+}
+/* Matching names dropdown styling */
+#matchingNames {
+  flex: 1;
+  background-color: var(--container-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  scrollbar-width: thin;
+  scrollbar-color: #c4c4c4 #f1f1f1;
+  z-index: 9999;
+  max-height: 267px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  min-height: 0;
+}
+/* When matchingNames is empty, maintain spacing */
+#matchingNames:empty {
+  margin-bottom: 0;
+  min-height: 0;
+  display: none !important;
+}
+.name {
+  padding: 9px 12px;
+  font-size: 15px;
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease-in-out;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+.name:hover {
+  background-color: var(--hover-color);
+}
+.fullName {
+  font-weight: bold;
+  margin-right: 6px;
+}
+.age, .team {
+  color: #777777;
+  margin-right: 4px;
+}
+.dark-mode .age, .dark-mode .team, .dark-mode .fullName {
+  color: var(--text-color);
+}
+/* Table styling */
+.metrics-table {
+  width: 100%;
+  background-color: var(--container-bg);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: var(--shadow);
+  table-layout: fixed;
+  max-width: 100%;
+}
+.metrics-table th {
+  color: var(--text-color);
+  padding: 10px;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid var(--border-color);
+  line-height: 1.2;
+}
+.dark-mode .metrics-table th {
+  color: #aeaeae;
+}
+/* Match the first header with the first column styling */
+.metrics-table th:first-child {
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: center;
+  width: 20%;
+}
+.metrics-table td {
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.2s;
+  line-height: 1.2;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Give more breathing room to the first column (name) */
+.metrics-table td:first-child {
+  padding: 12px 15px;
+  text-align: center;
+  white-space: normal;
+  width: 30%;
+  overflow: visible;
+  text-overflow: clip;
+  height: auto;
+  min-height: 50px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+.metrics-table tr:last-child td {
+  border-bottom: none;
+}
+@media (hover: hover) {
+  .metrics-table tr:hover td {
+    background-color: var(--hover-color);
+  }
 }
 
-
-
-@media screen and (max-width: 900px) {
-.metric-selector {
-width: auto; /* Allow width to be determined by content */
-min-width: 0px; /* Set minimum width */
+/* X button styling */
+.metrics-table td button {
+  background-color: transparent;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
-
-#position, #league, #age {
-width: auto;
-min-width: 0px;
+.metrics-table td button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #666;
 }
-#age {
-margin-right: 35px;  
+/* Dark mode specific table styling */
+.dark-mode .metrics-table {
+  background-color: var(--container-bg);
 }
+.dark-mode .metrics-table th {
+  background-color: rgba(255, 255, 255, 0.03);
 }
-
-#age {
-max-width: 71px;
+.dark-mode .metrics-table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
-#position {
-max-width: 122px;
+.dark-mode .metrics-table td button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #aaa;
 }
-
-#league {
-max-width: 163px;
+/* Position switcher */
+.position-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
-
-
-.toggle-button {
-  position: absolute;
-  left: 704px;
-  top: 23.8px;
-  width: 20px; /* Set width */
+.position-button {
+  padding: 8px 16px;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-
-/* Hide the default checkbox */
-.toggle-button input[type="checkbox"] {
+.position-button:hover {
+  background-color: var(--hover-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+/* Toggle controls */
+.toggle-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.toggle-container {
+  display: flex;
+  align-items: center;
+}
+.toggle-label {
+  font-size: 14px;
+  margin-right: 10px;
+}
+.toggle-checkbox {
+  width: 40px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+}
+.toggle-checkbox input {
   opacity: 0;
   width: 0;
   height: 0;
 }
-
-/* Style the custom checkbox */
-.toggle-button label {
-  display: inline-block;
-  width: 20px; /* Set width */
-  height: 20px; /* Set height */
-  background-color: #ccc;
-  border-radius: 50%; /* Make it round */
-  cursor: pointer;
+.toggle-slider {
   position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
 }
-
-/* Style the checked state of the custom checkbox */
-.toggle-button input[type="checkbox"]:checked + label {
-  background-color: #8be31e;
-}
-
-/* Style the slider inside the custom checkbox */
-.toggle-button label::before {
+.toggle-slider:before {
   content: "";
   position: absolute;
-  width: 12px; /* Set width of the slider */
-  height: 12px; /* Set height of the slider */
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  bottom: 2px;
   background-color: white;
-  border-radius: 50%; /* Make it round */
-  left: 20%; /* Adjust position */
-  top: 20%; /* Adjust position */
-  transition: transform 0.3s ease;
+  transition: 0.4s;
+  border-radius: 50%;
 }
-
-/* Style the slider when checkbox is checked */
-.toggle-button input[type="checkbox"]:checked + label::before {
-  transform:scale(0.88)
+input:checked + .toggle-slider {
+  background-color: var(--primary-color);
 }
-
-
-/* Existing CSS for toggleSortingButton */
-.toggle-button:hover::after {
-  content: attr(data-tooltip); /* Use the data-tooltip attribute instead of hardcoded text */
-  position: absolute;
-  top: 26px; /* Adjust as needed */
-  left: -30px;
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
-  color: #fff; /* Text color */
-  padding: 4px 8px; /* Padding around the text */
-  border-radius: 5px; /* Rounded corners */
-  font-size: 10px; /* Adjust font size as needed */
-  white-space: nowrap; /* Prevent line breaks */
+input:checked + .toggle-slider:before {
+  transform: translateX(20px);
 }
-
-
-.metric-selector {
-    width: 280px;
-	margin-left: 4px;
-}
-
-.metric-selector.with-toggle {
-    width: 246.8px;
-		margin-left: 4px;
-}
-
-/* Style for the table rows */
-td {
-    width: 300px;
-}
-
-.rank-bar {
-            background-color: rgb(213, 213, 213);
-            border: 1px solid #fff;
-            border-radius: 20px;
-            height: 17.1px;
-            width: 385px;
-            margin-bottom: 5px;
-            position: relative;
-        }
-
-th {
-    width: 50px;
-}
-
-body {
-          zoom: 124.2%; /* Adjust the percentage as needed */
-          overflow: hidden;
-    scrollbar-width: none; /* Firefox */
-        background: #fff;
-}
-
-.result-container {
-	            max-height: 65.2vh; /* Adjust the height based on your content */
-
-            overflow-y: auto; /* Enable vertical scrolling for metrics */
-            margin-bottom: 11px; /* Optional: Add margin for spacing */
-        }
-        @media only screen and (max-width: 900px) {
-    /* Apply styles for screens smaller than 768px (typical mobile devices) */
-    .result-container {
-        max-height: 87.5vh; /* Adjusted height for mobile */
-	margin-bottom: 18px; /* Optional: Add margin for spacing */
-
-    }
-}
-
-
-
-.smaller-text {
-    font-size: 79%; /* or adjust with specific size like 80% or 0.8em */
-}
-
-body.dark-mode,
-body.dark-mode * {
-  color: #f2f2f2;
-}
-
-body.dark-mode {
-  background-color: #0F0F0E;
-}
-
-body.dark-mode .tooltip {
-  color: #000000;
-  background-color: #f9f9f9;
-  border: solid;
-  border-width: 1px;
-  border-radius: 5px;
-  padding: 10px;
-  font-size: 12px;
-}
-
-body.dark-mode .rank-bar {
-    background-color: rgb(239, 239, 239);
-border: 1px solid #000000;
-}
-
-body.dark-mode th {
-  color: #f2f2f2;
-}
-
-body.dark-mode select,
-body.dark-mode input {
-  color: #f2f2f2;
-  background-color: #333333;
-}
-
+/* Dark mode toggle */
 .dark-mode-toggle {
-    position: absolute;
-  left: 735px;
-  top: 23.7px;
-}
-
-.dark-mode-toggle {
-  width: 21px;
-  height: 21px;
-  background-color: #f2f2f2;
-  border-radius: 50%;  /* This makes it a perfect circle */
-  cursor: pointer;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--container-bg);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  z-index: 100;
+  transition: background-color 0.3s;
 }
-
-
-
-.dark-mode-toggle .toggle-icon::before {
-  content: "\f467";; /* Moon icon */
+.toggle-icon::before {
   font-family: "Ionicons";
+  content: "\f467";
+  font-size: 30px;
+  color: var(--text-color);
+}
+.dark-mode .toggle-icon::before {
+  content: "\f3b0";
   font-size: 20px;
 }
 
-body.dark-mode .dark-mode-toggle {
-  background-color: #333333;
-}
+@media (hover: none) and (pointer: coarse) {
+      .similar-text, .player-text {
+        font-size: 8px !important;
+        line-height: 1 !important;
+        font-weight: 500 !important;
+      }
+    }
 
-body.dark-mode .dark-mode-toggle .toggle-icon::before {
-  content: "\f3b0"; /* Sun icon */
-  font-family: "Ionicons";
-  font-size: 13px;
-}
-
-body.dark-mode button {
-  color: #f2f2f2;
-  background-color: #333333;
-}
-
-
-@media only screen and (max-width: 900px) {
-  body {
-    zoom: 100%; /* Reset zoom level for mobile devices */
-  }
-
-
-  .toggle-button {
-  left: 94.2%;
-  top: 19px;
-}
-
-.dark-mode-toggle {
-display: none;
-}
-
-.rank-bar {
-            width: 320px;
-        }
-
-        /* Style for the table rows */
-td {
-    width: 365px;
-}
-.half-spacing {
-    margin-bottom: 0.5em; /* Adjust as needed */
-  }
-
-  /* Existing CSS for toggleSortingButton */
-.toggle-button:hover::after {
-  display: none;
-}
-
-.metric-selector {
-    width: 256.4px; /* Adjust the width as needed */
-    margin-left: 0px;
-}
-
-	.metric-selector.with-toggle {
-    width: 224.8px;
-		margin-left: 0px;
-}
-
-}
-#toggleSort {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    position: relative;
-    display: inline-block;
-    text-align: center;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    vertical-align: middle;
-    margin-left: 0.7px; /* Adjust this value to reduce the gap */
-    margin-right: 0.7px; /* Adjust this value to reduce the gap */
-}
-
-#toggleSort:not(:checked)::before {
-    content: "\f262";
-    font-family: "Ionicons";
-}
-
-#toggleSort:checked::before {
-    content: "\f25f";
-    font-family: "Ionicons";
-}
-
-    body.dark-mode #SFctr {
-        color: #ffffff !important
-        }
-        
-        
-        #SFctr input {
-            background-color: #ffffff !important;
-        color:#000000 !important;
-        border: 1px solid #c2c2c2 !important
-        }
-
-#SFctr {
-	font-family: Arial, Helvetica, sans-serif !important;
-	color: #000000 !important;
-
-
-}
-
-	    @media only screen and (min-width: 900px) {
-
-#SFctr {
-		      transform: scale(0.808);
-  transform-origin: top left; /* Adjust the origin point if needed */
-		    
-	    }
- }
-	    
-#SFusrlogpst strong:first-child {
-  font-size: 0px;
-}
-
-#SFusrlogpst input[type="checkbox"],
-#SFusrlogpwd input[type="checkbox"],
-#SFusrlogpst i,
-#SFusrlogpwd i {
-  display: none !important;
-}
-
-#SFctr .SFfrm input[type="text"],
-#SFctr .SFfrm input[type="password"],
-#SFctr .SFfrm button {
-  border-radius: 6px;
-}
-
-#SFusrlogpwd strong {
-  visibility: hidden; /* Hide the original text */
-  position: relative;
-}
-
-#SFusrlogpwd strong::after {
-  content: "Forgot Password?"; /* Add the new text */
-  visibility: visible;
-  position: absolute;
+/* Similar players table */
+.similar-table {
+  width: 100%;
+  background-color: var(--container-bg);
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
-  font-weight: 400;
-  left: 80px;
-  white-space: nowrap; /* Prevent text from wrapping */
-  top: -15px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1px;
+  margin-bottom: 27px;
+  box-shadow: var(--shadow);
+}
+.similar-table th {
+  color: var(--text-color);
+  padding: 10px;
+  font-size: 13.8px;
+  text-align: center;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid var(--border-color);
+  line-height: 1.2;
+}
+.similar-table td {
+  padding: 7px 8px;
+  text-align: center;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  line-height: 1.2;
+}
+.similar-table td:last-child {
+  border-right: none;
+}
+.similar-table td:hover {
+  background-color: var(--hover-color);
+}
+/* Dark mode specific similar table styling */
+.dark-mode .similar-table {
+  background-color: var(--container-bg);
+}
+.dark-mode .similar-table th {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.dark-mode .similar-table td {
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+/* Color classes for radar chart */
+.result-color-1 {
+  color: #3062FB !important;
+  stroke: #3062FB;
+  fill: #3062FB;
+  fill-opacity: 0;
+}
+.result-color-2 {
+  color: #F62681 !important;
+  stroke: #F62681;
+  fill: #F62681;
+  fill-opacity: 0;
+}
+.result-color-3 {
+  color: #55d149 !important;
+  stroke: #55d149;
+  fill: #55d149;
+  fill-opacity: 0;
+}
+.result-color-4 {
+  color: #FFCF5F !important;
+  stroke: #FFCF5F;
+  fill: #FFCF5F;
+  fill-opacity: 0;
+}
+.result-color-5 {
+  color: rgb(153, 50, 204) !important;
+  stroke: rgb(153, 50, 204);
+  fill: rgb(153, 50, 204);
+  fill-opacity: 0;
+}
+.result-color-6 {
+  color: rgb(255, 140, 0) !important;
+  stroke: rgb(255, 140, 0);
+  fill: rgb(255, 140, 0);
+  fill-opacity: 0;
+}
+.result-color-7 {
+  color: rgb(30, 144, 255) !important;
+  stroke: rgb(30, 144, 255);
+  fill: rgb(30, 144, 255);
+  fill-opacity: 0;
+}
+.result-color-8 {
+  color: rgb(240, 128, 128) !important;
+  stroke: rgb(240, 128, 128);
+  fill: rgb(240, 128, 128);
+  fill-opacity: 0;
+}
+.result-color-9 {
+  color: rgb(144, 238, 144) !important;
+  stroke: rgb(144, 238, 144);
+  fill: rgb(144, 238, 144);
+  fill-opacity: 0;
+}
+.result-color-10 {
+  color: rgb(135, 206, 235) !important;
+  stroke: rgb(135, 206, 235);
+  fill: rgb(135, 206, 235);
+  fill-opacity: 0;
+}
+.result-color-11 {
+  color: rgb(246, 38, 129) !important;
+  stroke: rgb(246, 38, 129);
+  fill: rgb(246, 38, 129);
+  fill-opacity: 0;
+}
+.result-color-12 {
+  color: rgb(255, 69, 0) !important;
+  stroke: rgb(255, 69, 0);
+  fill: rgb(255, 69, 0);
+  fill-opacity: 0;
+}
+.result-color-13 {
+  color: rgb(60, 179, 113) !important;
+  stroke: rgb(60, 179, 113);
+  fill: rgb(60, 179, 113);
+  fill-opacity: 0;
+}
+.result-color-14 {
+  color: rgb(138, 40, 165) !important;
+  stroke: rgb(138, 40, 165);
+  fill: rgb(138, 40, 165);
+  fill-opacity: 0;
+}
+.result-color-15 {
+  color: rgb(70, 130, 180) !important;
+  stroke: rgb(70, 130, 180);
+  fill: rgb(70, 130, 180);
+  fill-opacity: 0;
+}
+.result-color-16 {
+  color: rgb(208, 32, 144) !important;
+  stroke: rgb(208, 32, 144);
+  fill: rgb(208, 32, 144);
+  fill-opacity: 0;
+}
+.result-color-17 {
+  color: rgb(220, 20, 60) !important;
+  stroke: rgb(220, 20, 60);
+  fill: rgb(220, 20, 60);
+  fill-opacity: 0;
+}
+.result-color-18 {
+  color: rgb(255, 223, 60) !important;
+  stroke: rgb(255, 223, 60);
+  fill: rgb(255, 223, 60);
+  fill-opacity: 0;
+}
+.result-color-19 {
+  color: rgb(238, 130, 238) !important;
+  stroke: rgb(238, 130, 238);
+  fill: rgb(238, 130, 238);
+  fill-opacity: 0;
+}
+.result-color-20 {
+  color: rgb(147, 112, 219) !important;
+  stroke: rgb(147, 112, 219);
+  fill: rgb(147, 112, 219);
+  fill-opacity: 0;
+}
+.result-color-21 {
+  color: rgb(34, 139, 34) !important;
+  stroke: rgb(34, 139, 34);
+  fill: rgb(34, 139, 34);
+  fill-opacity: 0;
+}
+.result-color-22 {
+  color: rgb(255, 198, 0) !important;
+  stroke: rgb(255, 198, 0);
+  fill: rgb(255, 198, 0);
+  fill-opacity: 0;
+}
+.result-color-23 {
+  color: rgb(255, 99, 71) !important;
+  stroke: rgb(255, 99, 71);
+  fill: rgb(255, 99, 71);
+  fill-opacity: 0;
+}
+.result-color-24 {
+  color: rgb(65, 105, 225) !important;
+  stroke: rgb(65, 105, 225);
+  fill: rgb(65, 105, 225);
+  fill-opacity: 0;
+}
+.result-color-25 {
+  color: rgb(255, 215, 0) !important;
+  stroke: rgb(255, 215, 0);
+  fill: rgb(255, 215, 0);
+  fill-opacity: 0;
+}
+.result-color-26 {
+  color: rgb(0, 206, 209) !important;
+  stroke: rgb(0, 206, 209);
+  fill: rgb(0, 206, 209);
+  fill-opacity: 0;
+}
+.result-color-27 {
+  color: rgb(197, 142, 255) !important;
+  stroke: rgb(197, 142, 255);
+  fill: rgb(197, 142, 255);
+  fill-opacity: 0;
+}
+.result-color-28 {
+  color: rgb(46, 139, 87) !important;
+  stroke: rgb(46, 139, 87);
+  fill: rgb(46, 139, 87);
+  fill-opacity: 0;
+}
+.result-color-29 {
+  color: rgb(255, 105, 180) !important;
+  stroke: rgb(255, 105, 180);
+  fill: rgb(255, 105, 180);
+  fill-opacity: 0;
+}
+.result-color-30 {
+  color: rgb(255, 165, 0) !important;
+  stroke: rgb(255, 165, 0);
+  fill: rgb(255, 165, 0);
+  fill-opacity: 0;
+}
+.result-color-31 {
+  color: rgb(255, 207, 95) !important;
+  stroke: rgb(255, 207, 95);
+  fill: rgb(255, 207, 95);
+  fill-opacity: 0;
+}
+.result-color-32 {
+  color: rgb(255, 182, 193) !important;
+  stroke: rgb(255, 182, 193);
+  fill: rgb(255, 182, 193);
+  fill-opacity: 0;
+}
+.result-color-33 {
+  color: rgb(102, 205, 170) !important;
+  stroke: rgb(102, 205, 170);
+  fill: rgb(102, 205, 170);
+  fill-opacity: 0;
+}
+.result-color-34 {
+  color: rgb(48, 98, 251) !important;
+  stroke: rgb(48, 98, 251);
+  fill: rgb(48, 98, 251);
+  fill-opacity: 0;
+}
+.result-color-35 {
+  color: rgb(186, 85, 211) !important;
+  stroke: rgb(186, 85, 211);
+  fill: rgb(186, 85, 211);
+  fill-opacity: 0;
+}
+.result-color-36 {
+  color: rgb(123, 104, 238) !important;
+  stroke: rgb(123, 104, 238);
+  fill: rgb(123, 104, 238);
+  fill-opacity: 0;
+}
+.result-color-37 {
+  color: rgb(0, 128, 128) !important;
+  stroke: rgb(0, 128, 128);
+  fill: rgb(0, 128, 128);
+  fill-opacity: 0;
+}
+svg text.label{
+  fill: #bcbcbc;
+}
+/* Add specific styling for resultsTable to reduce space */
+#resultsTable {
+  margin-top: -8px;
+  padding-top: 0;
+}
+/* Position Switcher styling */
+.position-switcher-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  max-width: 700px;
+  flex-wrap: wrap;
+}
+.position-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  min-width: 40px;
+  width: 50px;
+ /* Fixed width for all position buttons */
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  text-decoration: none;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 14px;
+}
+/* Add specific width for Team button */
+.position-link:last-child {
+  width: 70px;
+}
+.position-link:hover {
+  background-color: var(--hover-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.position-link.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+/* Dark mode styles for position switcher */
+.dark-mode .position-link {
+  border-color: var(--border-color);
+}
+.dark-mode .position-link.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.header {
+  background-color: var(--header-bg);
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  position: relative;
+  font-family: system-ui;
+  top: 0;
+  z-index: 100;
+}
+.header .logo {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+ /* Push logo to the left */
+}
+.header .logo img {
+  height: 34px;
+  width: auto;
+  opacity: 0.84;
+}
+.header .logo-text {
+  margin-left: 10px;
+  font-size: 23px;
+  font-weight: 600;
+  transform: translateY(-1.1px);
+ /* Move logo text slightly higher */
+}
+.header .navigation {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-2px);
 }
 
 
-	    
-	    
-   </style>
+.header .button10 {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: #333;
+  line-height: 1.6;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  font-size: 1.1rem;
+}
+.header .button10:hover {
+  background-color: #f0f0f0;
+  color: #2563eb;
+}
+/* Group search and language buttons */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+header a {
+  color: black;
+  text-decoration: none;
+}
+body.dark-mode .header .button10 {
+  color: #aeaeae;
+}
+body.dark-mode .header .button10:hover {
+  color: #2563eb;
+  background-color: #ffffff;
+}
+body.dark-mode header a {
+  color: #aeaeae;
+}
+body.dark-mode .header .logo img {
+  opacity: 0.88;
+}
+.search-input-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+.search-input-container {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  z-index: 1000;
+}
+#searchInput {
+  width: 370px;
+  padding: 12px;
+  border: 3px solid #ccc;
+  border-radius: 4px;
+  font-size: 18.3px;
+  outline: none;
+  height: 50px;
+  color: #000000;
+  background-color: #fff;
+  ;
+}
+#autocompleteBox {
+  width: 370px;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: #fff;
+}
+#autocompleteBox ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#autocompleteBox li {
+  margin: 0;
+  padding: 5px;
+}
+#autocompleteBox {
+  line-height: 2;
+  text-align: center !important;
+}
+#autocompleteBox a {
+  text-decoration: none;
+  font-family: Arial, sans-serif;
+  text-align: center !important;
+  color: #333 !important;
+  cursor: pointer;
+}
+#autocompleteBox li:hover {
+  background-color: #f0f0f0;
+}
+#searchButton {
+  padding: 8.5px;
+ /* Reduced from 10px */
+  background-color: #0074d9;
+  color: #fff;
+  border: none;
+  width: 34px;
+ /* Reduced from 40px */
+  height: 34px;
+ /* Reduced from 40px */
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 17px;
+ /* Reduced from 20px */
+}
+body.dark-mode .language-button {
+  background-color: #0F0F0E;
+  color: #aeaeae;
+}
+body.dark-mode .language-button:hover {
+  background-color: #0F0F0E;
+  color: #aeaeae;
+}
+body.dark-mode .language-dropdown {
+  background: #e8e6e6;
+}
+body.dark-mode .language-option {
+  color: #000000;
+}
+.language-switcher-container {
+  position: relative;
+  display: inline-block;
+}
+.language-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  color: #444444;
+  display: flex;
+  align-items: center;
+  font-size: 17px;
+}
+.language-button iconify-icon {
+  font-size: 24px;
+  opacity: 0.7;
+}
+.language-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 10px;
+  width: 200px;
+  z-index: 1000;
+}
+.language-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #444444;
+  text-decoration: none;
+}
+.language-option iconify-icon {
+  margin-right: 10px;
+  font-size: 20px;
+}
+.language-dropdown.show {
+  display: block;
+}
+.chart-wrapper img {
+  width: 38px;
+  margin-left: 10px;
+  margin-bottom: 8px;
+  opacity: 0.69;
+}
+
+
+</style>
+</defs>
+	
+
+
+
+
+<header class="header">
+  <div class="logo">
+    <a href="https://datamb.football">
+        <img src="https://datamb.football/logo.png" alt="Player comparisons. Radar comparison tool. Visualise and compare midfielder statistics from the top 7 leagues : Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga"/></a>
+    <div class="logo-text"><a href="https://datamb.football">&nbsp;Radars</a></div>
+  </div>
+  <nav class="navigation">
+    <a href="https://datamb.football/" class="button10" data-i18n="header.home">Home</a>
+    <a href="https://datamb.football/join" class="button10" data-i18n="header.pro">Pro</a>
+    <a href="https://datamb.football/guide" class="button10" data-i18n="header.guide">Guide</a>
+  </nav>
+  <div class="header-right">
+  <div class="search-container1">
+    <button id="searchButton"><iconify-icon icon="ion:search-outline"></iconify-icon></button>
+</div>
+  <div class="language-switcher-container">
+    <button class="language-button" id="languageButton">
+      <iconify-icon icon="heroicons:globe-alt"></iconify-icon>
+    </button>
+        <div class="language-dropdown" id="languageDropdown">
+      <a href="?lang=en" class="language-option"><iconify-icon icon="flag:gb-4x3"></iconify-icon>English</a>
+      <a href="?lang=fr" class="language-option"><iconify-icon icon="flag:fr-4x3"></iconify-icon>Français</a>
+    </div>
+  </div></div>
+</header>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
+     crossorigin="anonymous"></script>
+
 </head>
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSBMXX80EF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PSBMXX80EF');
+</script>
+
+
+<div class="search-input-modal" id="searchInputModal">
+  <div class="search-input-container">
+      <input type="text" id="searchInput" data-i18n="search.placeholder" placeholder="Enter a team or player name...">
+      <div id="autocompleteBox"></div>
+  </div>
+</div>
+
+
+<script>
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://datamb.football/database/searchbar.csv', false); // false for synchronous request
+  xhr.send(null);
+  
+  let dataCSV = xhr.responseText;
+  
+  function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=function(_0x57077a,_0xde96b9){_0x57077a=_0x57077a-0x140;let _0x383e81=_0x4dcd69[_0x57077a];return _0x383e81;},_0x5707(_0xd20fa7,_0x4d36b5);}const _0xedf2b2=_0x5707;(function(_0x16e1b0,_0x125833){const _0x222c5a=_0x5707,_0x3f540c=_0x16e1b0();while(!![]){try{const _0x3105f2=parseInt(_0x222c5a(0x161))/0x1+parseInt(_0x222c5a(0x144))/0x2+parseInt(_0x222c5a(0x148))/0x3+-parseInt(_0x222c5a(0x155))/0x4+parseInt(_0x222c5a(0x141))/0x5*(-parseInt(_0x222c5a(0x145))/0x6)+-parseInt(_0x222c5a(0x157))/0x7+parseInt(_0x222c5a(0x14b))/0x8*(parseInt(_0x222c5a(0x159))/0x9);if(_0x3105f2===_0x125833)break;else _0x3f540c['push'](_0x3f540c['shift']());}catch(_0x450250){_0x3f540c['push'](_0x3f540c['shift']());}}}(_0x4dcd,0x1bc51));const dataLines=dataCSV[_0xedf2b2(0x160)]('\x0a'),searchButton=document[_0xedf2b2(0x142)]('searchButton'),searchInputModal=document[_0xedf2b2(0x142)](_0xedf2b2(0x14a)),searchInput=document[_0xedf2b2(0x142)](_0xedf2b2(0x143)),autocompleteBox=document[_0xedf2b2(0x142)](_0xedf2b2(0x162)),data1=dataLines[_0xedf2b2(0x146)](_0x19546c=>{const _0x89300c=_0xedf2b2,[_0x5af128,_0x515bec]=_0x19546c[_0x89300c(0x160)](',');return{'name':_0x5af128,'link':_0x515bec};});function removeDiacritics(_0x3ed1af){const _0x202611=_0xedf2b2,_0x4b45cf={'ø':'o','Ø':'O','ı':'i'};return _0x3ed1af=_0x3ed1af[_0x202611(0x147)](/[øØıI]/g,_0x19f74a=>_0x4b45cf[_0x19f74a]),_0x3ed1af[_0x202611(0x15d)]('NFD')[_0x202611(0x147)](/[\u0300-\u036f]/g,'');}function search2(_0x1db14d){const _0x26c944=_0xedf2b2;autocompleteBox[_0x26c944(0x15e)]='';const _0x321867=removeDiacritics(_0x1db14d)[_0x26c944(0x147)](/[^\w\s]/g,'')[_0x26c944(0x149)](),_0x3ad89e=data1[_0x26c944(0x15c)](_0xb995bf=>{const _0x3866b0=_0x26c944,_0x2b7de7=removeDiacritics(_0xb995bf[_0x3866b0(0x14e)])['replace'](/[^\w\s]/g,'')[_0x3866b0(0x149)]();return _0x2b7de7['includes'](_0x321867);});if(_0x3ad89e[_0x26c944(0x163)]===0x0){autocompleteBox[_0x26c944(0x152)][_0x26c944(0x14c)]='none';return;}_0x3ad89e[_0x26c944(0x151)](_0x4b9def=>{const _0x31eeb1=_0x26c944,_0x505ab8=document[_0x31eeb1(0x14d)]('div'),_0x3a2d70=document[_0x31eeb1(0x14d)]('a');_0x3a2d70['href']=_0x4b9def[_0x31eeb1(0x154)],_0x3a2d70[_0x31eeb1(0x150)]=_0x4b9def[_0x31eeb1(0x14e)],_0x505ab8[_0x31eeb1(0x15b)](_0x3a2d70),autocompleteBox[_0x31eeb1(0x15b)](_0x505ab8);}),autocompleteBox['style'][_0x26c944(0x14c)]=_0x26c944(0x153);}searchButton[_0xedf2b2(0x156)](_0xedf2b2(0x14f),()=>{const _0x350b96=_0xedf2b2;searchInputModal['style'][_0x350b96(0x14c)]=_0x350b96(0x153);}),searchInput['addEventListener'](_0xedf2b2(0x158),()=>{const _0x122364=_0xedf2b2,_0x1aac33=searchInput['value'];_0x1aac33[_0x122364(0x140)]()===''?autocompleteBox[_0x122364(0x152)][_0x122364(0x14c)]='none':search2(_0x1aac33);}),document['addEventListener']('click',_0x17873a=>{const _0x2c2a21=_0xedf2b2;_0x17873a[_0x2c2a21(0x15a)]===searchInputModal&&(searchInputModal[_0x2c2a21(0x152)][_0x2c2a21(0x14c)]=_0x2c2a21(0x15f));});function _0x4dcd(){const _0x3abacf=['forEach','style','block','link','165476bdcaHI','addEventListener','430668iEzpyY','input','90cmGEmO','target','appendChild','filter','normalize','innerHTML','none','split','102625kyWWmb','autocompleteBox','length','trim','5KymJaR','getElementById','searchInput','423476PJmBDe','1170534HGXHHf','map','replace','60222cRWbFM','toLowerCase','searchInputModal','61832bbygIm','display','createElement','name','click','textContent'];_0x4dcd=function(){return _0x3abacf;};return _0x4dcd();}
+   
+  </script>
+
 <body>
-    <script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
-    <div class="selectors-container">
-    <select id="metric" class="metric-selector">
-    </select><input type="checkbox" id="toggleSort" style="display: none;">
-    <select id="position">
-        <option value="Goalkeeper" data-i18n="positions.goalkeeper">Goalkeeper</option>
-        <option value="Centre-back" data-i18n="positions.centreback">Centre-back</option>
-        <option value="Full-back" data-i18n="positions.fullback">Full-back</option>
-        <option value="Midfielder" data-i18n="positions.midfielder">Midfielder</option>
-        <option value="Winger" data-i18n="positions.winger">Winger</option>
-        <option value="Striker" data-i18n="positions.striker">Striker</option>
-        <option value="All" data-i18n="positions.all">All positions</option>
-    </select>
-    <select id="league">
-      <option value="Premier League" data-i18n="leagues.premierLeague">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-      <option value="La Liga" data-i18n="leagues.laLiga">🇪🇸 La Liga</option>
-      <option value="Bundesliga" data-i18n="leagues.bundesliga">🇩🇪 Bundesliga</option>
-      <option value="Serie A" data-i18n="leagues.serieA">🇮🇹 Serie A</option> 
-      <option value="Ligue 1" data-i18n="leagues.ligue1">🇫🇷 Ligue 1</option>
-      <option value="Liga Portugal" data-i18n="leagues.ligaPortugal">🇵🇹 Liga Portugal</option>
-      <option value="Eredivisie" data-i18n="leagues.eredivisie">🇳🇱 Eredivisie</option>
-      <option value="Top 5 Leagues" data-i18n="leagues.top5">🇪🇺 Top 5 Leagues</option>
-      <option value="Top 7 Leagues" data-i18n="leagues.top7">🇪🇺 Top 7 Leagues</option>
-      <option value="Belgium Pro League" data-i18n="leagues.belgium">🇧🇪 Belgium</option>
-        <option value="Scotland Premiership" data-i18n="leagues.scotland">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland</option>
-        <option value="Austrian Bundesliga" data-i18n="leagues.austria">🇦🇹 Austria</option>
-        <option value="Swiss Super League" data-i18n="leagues.switzerland">🇨🇭 Switzerland</option>      
-        <option value="Süper Lig" data-i18n="leagues.turkey">🇹🇷 Türkiye</option>
-        <option value="Denmark Superliga" data-i18n="leagues.denmark">🇩🇰 Denmark</option>
-        <option value="Sweden Allsvenskan" data-i18n="leagues.sweden">🇸🇪 Sweden</option>
-        <option value="Norway Eliteserien" data-i18n="leagues.norway">🇳🇴 Norway</option>
-        <option value="Croatia HNL" data-i18n="leagues.croatia">🇭🇷 Croatia</option>
-        <option value="Serbia SuperLiga" data-i18n="leagues.serbia">🇷🇸 Serbia</option>
-        <option value="Czech Fortuna Liga" data-i18n="leagues.czech">🇨🇿 Czech Republic</option>
-        <option value="Poland" data-i18n="leagues.poland">🇵🇱 Poland</option>
-        <option value="Ukraine" data-i18n="leagues.ukraine">🇺🇦 Ukraine</option>
-        <option value="Russia" data-i18n="leagues.russia">🇷🇺 Russia</option>
-        <option value="Greece" data-i18n="leagues.greece">🇬🇷 Greece</option>
-        <option value="Israel" data-i18n="leagues.israel">🇮🇱 Israel</option>
-        <option value="J1 League" data-i18n="leagues.japan">🇯🇵 Japan</option>
-        <option value="K League 1" data-i18n="leagues.korea">🇰🇷 Korea</option>
-        <option value="Saudi Pro League" data-i18n="leagues.saudiArabia">🇸🇦 Saudi Arabia</option>
-        <option value="MLS" data-i18n="leagues.usa">🇺🇸 MLS</option>
-        <option value="LigaMX" data-i18n="leagues.mexico">🇲🇽 Mexico</option>
-        <option value="Brazil Serie A" data-i18n="leagues.brazil">🇧🇷 Brazil</option>
-        <option value="Argentina Primera" data-i18n="leagues.argentina">🇦🇷 Argentina</option>
-        <option value="Uruguay Primera" data-i18n="leagues.uruguay">🇺🇾 Uruguay</option>
-        <option value="Chile" data-i18n="leagues.chile">🇨🇱 Chile</option>
-        <option value="Colombia" data-i18n="leagues.colombia">🇨🇴 Colombia</option>
-        <option value="Ecuador" data-i18n="leagues.ecuador">🇪🇨 Ecuador</option>
-        <option value="Paraguay" data-i18n="leagues.paraguay">🇵🇾 Paraguay</option>
-        <option value="Championship" data-i18n="leagues.championship">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
-        <option value="Segunda Division" data-i18n="leagues.segundaDivision">🇪🇸 Spain Segunda</option>
-        <option value="Serie B" data-i18n="leagues.serieB">🇮🇹 Serie B</option>
-        <option value="Bundesliga 2" data-i18n="leagues.bundesliga2">🇩🇪 2. Bundesliga</option>
-        <option value="Ligue 2" data-i18n="leagues.ligue2">🇫🇷 Ligue 2</option> 
-      <option value="No Top 7" data-i18n="leagues.noTop7">🌍 Outside Top 7</option>
-      <option value="South America" data-i18n="leagues.southAmerica">🌎 South America</option>
-      <option value="Scandinavia" data-i18n="leagues.scandinavia">🌍 Scandinavia</option>
-      <option value="Eastern Europe" data-i18n="leagues.easternEurope">🌍 Eastern Europe</option>
-      <option value="All Leagues" data-i18n="leagues.allLeagues">🌍 All Leagues</option>
-</select>
-    <select id="age">
-        <option value="" data-i18n="age.all">Age</option>
-        <option value="17">U17</option>
-        <option value="18">U18</option>
-        <option value="19">U19</option>
-        <option value="20">U20</option>
-        <option value="21">U21</option>
-        <option value="22">U22</option>
-        <option value="23">U23</option>
-        <option value="24">U24</option>
-        <option value="25">U25</option>
-        <option value="26">U26</option>
-        <option value="27">U27</option>
-        <option value="28">U28</option>
-        <option value="29">U29</option>
-        <option value="30">U30</option>
-        <option value="35">U35</option>
-    </select><div class="toggle-button" data-i18n="toggles.per90" data-tooltip="Per 90 : Yes / No">
-        <input type="checkbox" id="toggleMetrics" checked> <!-- Add checked attribute here -->
-          <label for="toggleMetrics"></label></div>
-      </div><br><div class="half-spacing"></div>
-      <div class="result-container">
-        <table id="playerTable" style="display: none;">
-            <tr><th id="metricHeader"></th></tr>
-        </table>
+
+  <center>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
+     crossorigin="anonymous"></script>
+<!-- radarplotsearch -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7677714701428206"
+     data-ad-slot="6673239737"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></center>
+
+
+
+  <div class="container">
+      <div class="search-container">
+        <div class="search-controls">
+          <input type="text" id="searchInput1" class="search-bar" data-i18n="search.placeholder2" placeholder="Enter name of winger..." />
+          <button id="searchButton1">+</button>
+        </div>
+        <div id="matchingNames"></div>
+      </div>
+
+    <div class="chart-wrapper">
+
+      <div id="resultsTable"></div>
+      
+      <div class="radar-container">
+        <svg class="radar">
+          <g><g class="axisWrapper">
+  
+            <g class="radar_label">
+              <text class="label" data-type="Aerial%" data-idx="0" data-i18n="radar.keyPasses" transform="translate(-60 -196.04) scale(1.3) rotate(-1.7)">Key Passes</text>
+          </g>
+          
+          <g class="radar_label">
+              <text class="label" data-type="Long%" data-idx="6" data-i18n="radar.assists" transform="matrix(0.65, -1.118, 1.118, 0.65, -184.21, -84.03) rotate(5.5)">Assists</text>
+          </g>
+          
+          <g class="radar_label">
+              <text class="label" data-type="Passes" data-idx="5" data-i18n="radar.xgxa" transform="matrix(-0.494, -1.209, 1.209, -0.494, -181, 82) rotate(5)">xG+xA</text>
+          </g>
+          
+          <g class="radar_label">
+              <text class="label" data-type="Exits" data-idx="4" data-i18n="radar.npg" transform="translate(-101.5 190.16) scale(1.3) rotate(21)">NPG</text>
+          </g>
+          
+          <g class="radar_label">
+              <text class="label" data-type="Aerial" data-idx="3" data-i18n="radar.dribbles" transform="translate(71.82 206.54) scale(1.3) rotate(-31)">Dribbles</text>
+          </g>
+          
+          <g class="radar_label">
+              <text class="label" data-type="Def Actions" data-idx="2" data-i18n="radar.carries" transform="translate(200.22 6.30) scale(1.3) rotate(99.11)">Carries</text>
+          </g>
+          
+          <g class="radar_label">
+              <text class="label" data-type="Shotstopping" data-idx="1" data-i18n="radar.attActions" transform="translate(125.64 -163.65) scale(1.3) rotate(52.49)">Att Actions</text>
+          </g>
+  
+  
+  <circle class="blackCircle" r="190" style="fill:none; stroke:#D3D3D3; stroke-width:1;"></circle>
+  <circle class="gridCircle" r="190" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="160" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="120" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="80" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="40" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+
+   
+  <line x1="0" y1="0" x2="9.33" y2="189.4543362" stroke="#D3D3D3" stroke-width="1" transform="translate(-9.33, -189.4543362)"></line>
+  <line x1="0" y1="0" x2="-142.0538533333333" y2="126.24" stroke="#D3D3D3" stroke-width="1" transform="translate(141.74184, -126.24)"></line>
+  <line x1="0" y1="0" x2="-187.31589333333332" y2="-32.31413333333333" stroke="#D3D3D3" stroke-width="1" transform="translate(187.5574112, 32.2528)"></line>
+  <line x1="0" y1="0" x2="-91.84497333333333" y2="-166.92245333333333" stroke="#D3D3D3" stroke-width="1" transform="translate(91.84497333333333, 166.21328)"></line>
+  <line x1="0" y1="0" x2="72.99733333333333" y2="-175.84917333333335" stroke="#D3D3D3" stroke-width="1" transform="translate(-72.99997333333334, 175.334068)"></line>
+  <line x1="0" y1="0" x2="182.73258666666666" y2="-52.67472" stroke="#D3D3D3" stroke-width="1" transform="translate(-182.7209384, 52.480128)"></line>
+  <line x1="0" y1="0" x2="154.67849333333334" y2="109.91788799999999" stroke="#D3D3D3" stroke-width="1" transform="translate(-154.6883792222, -110.017215488)"></line>
+  
+
+  <g class="radarWrapper"></g>
+  </g></g>
+        </svg>
+      </div>
+      <img src="https://datamb.football/logo.png" alt="DataMB - Compare and visualize player performance">
+      <div id="insertHere"></div>
+
+      
+      <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color); opacity: 0.5;">
+      
+      <div class="toggle-controls">
+        <div class="toggle-container">
+          <label class="toggle-label"></label>
+          <label class="toggle-checkbox">
+            <input type="checkbox" id="toggleButton" onclick="toggleFilling()" unchecked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="position-switcher-container">
+          <a href="https://datamb.football/keepers/" target="_self" rel="noopener noreferrer" class="position-link">
+            <span>GK</span>
+        </a>
+          <a href="https://datamb.football/centrebacks/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>CB</span>
+          </a>
+          <a href="https://datamb.football/fullbacks/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>FB</span>
+          </a>
+          <a href="https://datamb.football/midfielders/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>CM</span>
+          </a>
+      
+          <span class="position-link active" style="user-select: none;">
+            <span>FW</span>
+        </span>
+          <a href="https://datamb.football/strikers/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span>ST</span>
+          </a>
+          <a href="https://datamb.football/teamradars/" target="_self" rel="noopener noreferrer" class="position-link">
+              <span data-i18n="buttons.team">Team</span>
+          </a>
+    </div>
+        
+        <button onclick="takeScreenshot()" class="btn btn-outline btn-icon"><iconify-icon icon="ion:camera" style="color: var(--text-color); font-size: 18px;"></iconify-icon></button>
+      </div>
+      
     </div>
 
-    <script>
-const xhr = new XMLHttpRequest();
-xhr.open('GET', 'https://datamb.football/database/INDEX.csv', false); // false for synchronous request
-xhr.send(null);
-let data = xhr.responseText;	
-let extraHeaderRow = 'Player,Team,League,Position,Age,Performance Index,Minutes played,Possessions won per 90,Defensive duels per 90,Aerial duels per 90,Sliding tackles per 90,Sliding tackles (PAdj),Shots blocked per 90,Interceptions per 90,Interceptions (PAdj),Successful attacking actions per 90,Goals per 90,Non-penalty goals per 90,xG per 90,Headed goals per 90,Shots per 90,Assists per 90,Crosses per 90,Crosses to box per 90,Dribbles attempted per 90,Offensive duels per 90,Touches in box per 90,Progressive carries per 90,Accelerations per 90,Fouls suffered per 90,Passes per 90,Forward passes per 90,Short passes per 90,Long passes per 90,Average pass length (m),xA per 90,Shot assists per 90,Key passes per 90,Passes to final third per 90,Passes to penalty box per 90,Through passes per 90,Deep completions per 90,Progressive passes per 90,Shots conceded per 90,Clean sheets,xG conceded per 90,Prevented goals per 90,Exits per 90,Defensive duels won %,Aerial duels won %,Shots on target %,Goal conversion %,Cross accuracy %,Dribble success rate %,Offensive duels won %,Pass completion %,Forward pass completion %,Short pass completion %,Long pass accuracy %,Pass completion (to final third) %,Pass completion (to penalty box) %,Through pass completion %,Progressive pass accuracy %,Save percentage %,Free kicks per 90,Direct free kicks per 90,Direct free kicks oT %,Corners per 90,Penalties attempted,Penalty success rate %,Matches played,Duels per 90,Duels won %,Possession +/-,Forward pass ratio,xA per 100 passes,Chance creation ratio,Inaccurate passes %,Goals + Assists per 90,NPG+A per 90,xG+xA per 90,xG/Shot,Goals - xG per 90,Goals per xG,Assists - xA per 90,Assists per xA,Successful dribbles per 90,Shots on target per 90,Accurate crosses per 90,Offensive duels won per 90,Defensive duels won per 90,Aerial duels won per 90,Passes completed per 90,Forward passes completed per 90,Short passes completed per 90,Long passes completed per 90,Accurate passes to final third per 90,Accurate passes to pen box per 90,Through passes completed per 90,Progressive passes completed per 90,Misplaced passes per 90,Saves per 90,Possessions lost per 90,Possessions won - lost per 90,Progressive actions per 90,Duels won per 90,Minutes per match,Backward pass ratio,Penalties scored,npxG per 90,npxG/Shot,npxG+xA per 90,Touches per 90,Progressive action rate,Progressive passes (PAdj),Ball-carrying frequency,xG per 100 touches,Shot frequency,Dribbles per 100 touches,Goals per 100 touches,Passes received per 90,Backward passes per 90,Pre-assists per 90';
-data = extraHeaderRow + '\n' + data;
+      </div>
+  
+  <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <div class="toggle-icon"></div>
+  </div>
+
+<script>
 
 
-let originalDataArray = data.split('\n').map(row => row.split(','));
+const allData1 = [];
+  const allData2 = [];
+  let allDataAsString = '';
+  
 
-const playerTable = document.getElementById('playerTable');
-const metricSelect = document.getElementById('metric');
-const positionSelect = document.getElementById('position');
-const leagueSelect = document.getElementById('league');
-const ageInput = document.getElementById('age');
-const metricHeader = document.getElementById('metricHeader');
-const toggleButton = document.getElementById('toggleMetrics');
-const toggleSortButton = document.getElementById('toggleSort'); // New button for toggling sort order
-
-let isToggled = false;
-let isAscending = false; // New state variable for sort order
-let currentDataArray = originalDataArray; // Initially set to original data
-
-const customMetricOrder = [
- 
-    { text: "Performance Index", i18n: "metrics.performanceIndex" },
-    { text: "Minutes played", i18n: "metrics.minutesPlayed" },
-    { text: "Matches played", i18n: "metrics.matchesPlayed" },
-    { text: "Minutes per match", i18n: "metrics.minutesPerMatch" },
-
-    // Goal Scoring
-    { text: "CATEGORY: Goal Scoring", i18n: "categories.goalScoring" },
-    { text: "Goals per 90", i18n: "metrics.goalsPerNinety" },
-    { text: "Non-penalty goals per 90", i18n: "metrics.nonPenaltyGoals" },
-    { text: "xG per 90", i18n: "metrics.xgPerNinety" },
-    { text: "xG/Shot", i18n: "metrics.xgPerShot" },
-    { text: "npxG per 90", i18n: "metrics.npxgPerNinety" },
-    { text: "npxG/Shot", i18n: "metrics.npxgPerShot" },
-    { text: "Goals per 100 touches", i18n: "metrics.goalsPerTouches" },
-    { text: "xG per 100 touches", i18n: "metrics.xgPerTouches" },
-    { text: "Shot frequency", i18n: "metrics.shotFrequency" },
-    { text: "Shots per 90", i18n: "metrics.shotsPerNinety" },
-    { text: "Shots on target %", i18n: "metrics.shotsOnTarget" },
-    { text: "Shots on target per 90", i18n: "metrics.shotsOnTargetPerNinety" },
-    { text: "Goal conversion %", i18n: "metrics.goalConversion" },
-    { text: "Goals - xG per 90", i18n: "metrics.goalsMinusXg" },
-    { text: "Goals per xG", i18n: "metrics.goalsPerXg" },
-    { text: "Headed goals per 90", i18n: "metrics.headedGoals" },
-    { text: "Touches in box per 90", i18n: "metrics.touchesInBox" },
-
-    // Goal Creation
-    { text: "CATEGORY: Goal Creation", i18n: "categories.goalCreation" },
-    { text: "Assists per 90", i18n: "metrics.assistsPerNinety" },
-    { text: "xA per 90", i18n: "metrics.xaPerNinety" },
-    { text: "xA per 100 passes", i18n: "metrics.xaPerPasses" },
-    { text: "Goals + Assists per 90", i18n: "metrics.goalsAndAssists" },
-    { text: "NPG+A per 90", i18n: "metrics.npGoalsAndAssists" },
-    { text: "xG+xA per 90", i18n: "metrics.xgAndXa" },
-    { text: "npxG+xA per 90", i18n: "metrics.npxgAndXa" },
-    { text: "Key passes per 90", i18n: "metrics.keyPasses" },
-    { text: "Chance creation ratio", i18n: "metrics.chanceCreation" },
-    { text: "Assists - xA per 90", i18n: "metrics.assistsMinusXa" },
-    { text: "Assists per xA", i18n: "metrics.assistsPerXa" },
-    { text: "Shot assists per 90", i18n: "metrics.shotAssists" },
-    { text: "Pre-assists per 90", i18n: "metrics.preAssists" },
-    { text: "Crosses per 90", i18n: "metrics.crosses" },
-    { text: "Cross accuracy %", i18n: "metrics.crossAccuracy" },
-    { text: "Accurate crosses per 90", i18n: "metrics.accurateCrosses" },
-    { text: "Crosses to box per 90", i18n: "metrics.crossesToBox" },
-    { text: "Deep completions per 90", i18n: "metrics.deepCompletions" },
-
-    // Dribbling and Ball-Carrying
-    { text: "CATEGORY: Dribbling and Ball-Carrying", i18n: "categories.dribbling" },
-    { text: "Dribbles attempted per 90", i18n: "metrics.dribblesAttempted" },
-    { text: "Dribble success rate %", i18n: "metrics.dribbleSuccess" },
-    { text: "Successful dribbles per 90", i18n: "metrics.successfulDribbles" },
-    { text: "Dribbles per 100 touches", i18n: "metrics.dribblesPerTouches" },
-    { text: "Successful attacking actions per 90", i18n: "metrics.attackingActions" },
-    { text: "Offensive duels per 90", i18n: "metrics.offensiveDuels" },
-    { text: "Offensive duels won %", i18n: "metrics.offensiveDuelsWon" },
-    { text: "Offensive duels won per 90", i18n: "metrics.offensiveDuelsWonPerNinety" },
-    { text: "Progressive carries per 90", i18n: "metrics.progressiveCarries" },
-    { text: "Ball-carrying frequency", i18n: "metrics.ballCarrying" },
-    { text: "Accelerations per 90", i18n: "metrics.accelerations" },
-    { text: "Fouls suffered per 90", i18n: "metrics.foulsSuffered" },
-
-    // Passing
-    { text: "CATEGORY: Passing", i18n: "categories.passing" },
-    { text: "Passes per 90", i18n: "metrics.passes" },
-    { text: "Pass completion %", i18n: "metrics.passCompletion" },
-    { text: "Passes completed per 90", i18n: "metrics.passesCompleted" },
-    { text: "Forward passes per 90", i18n: "metrics.forwardPasses" },
-    { text: "Forward pass completion %", i18n: "metrics.forwardPassCompletion" },
-    { text: "Forward passes completed per 90", i18n: "metrics.forwardPassesCompleted" },
-    { text: "Short passes per 90", i18n: "metrics.shortPasses" },
-    { text: "Short pass completion %", i18n: "metrics.shortPassCompletion" },
-    { text: "Short passes completed per 90", i18n: "metrics.shortPassesCompleted" },
-    { text: "Long passes per 90", i18n: "metrics.longPasses" },
-    { text: "Long pass accuracy %", i18n: "metrics.longPassAccuracy" },
-    { text: "Long passes completed per 90", i18n: "metrics.longPassesCompleted" },
-    { text: "Progressive passes per 90", i18n: "metrics.progressivePasses" },
-    { text: "Progressive pass accuracy %", i18n: "metrics.progressivePassAccuracy" },
-    { text: "Progressive passes completed per 90", i18n: "metrics.progressivePassesCompleted" },
-    { text: "Progressive passes (PAdj)", i18n: "metrics.progressivePassesAdj" },
-    { text: "Passes to final third per 90", i18n: "metrics.passesToFinalThird" },
-    { text: "Pass completion (to final third) %", i18n: "metrics.passCompletionFinalThird" },
-    { text: "Accurate passes to final third per 90", i18n: "metrics.accuratePassesFinalThird" },
-    { text: "Passes to penalty box per 90", i18n: "metrics.passesToBox" },
-    { text: "Pass completion (to penalty box) %", i18n: "metrics.passCompletionToBox" },
-    { text: "Accurate passes to pen box per 90", i18n: "metrics.accuratePassesToBox" },
-    { text: "Through passes per 90", i18n: "metrics.throughPasses" },
-    { text: "Through pass completion %", i18n: "metrics.throughPassCompletion" },
-    { text: "Through passes completed per 90", i18n: "metrics.throughPassesCompleted" },
-    { text: "Average pass length (m)", i18n: "metrics.averagePassLength" },
-    { text: "Backward passes per 90", i18n: "metrics.backwardPasses" },
-    { text: "Misplaced passes per 90", i18n: "metrics.misplacedPasses" },
-    { text: "Forward pass ratio", i18n: "metrics.forwardPassRatio" },
-    { text: "Backward pass ratio", i18n: "metrics.backwardPassRatio" },
-
-    // Possession
-    { text: "CATEGORY: Possession", i18n: "categories.possession" },
-    { text: "Passes received per 90", i18n: "metrics.passesReceived" },
-    { text: "Touches per 90", i18n: "metrics.touches" },
-    { text: "Possessions lost per 90", i18n: "metrics.possessionsLost" },
-    { text: "Possessions won - lost per 90", i18n: "metrics.possessionsBalance" },
-    { text: "Possession +/-", i18n: "metrics.possessionPlusMinus" },
-    { text: "Duels per 90", i18n: "metrics.duels" },
-    { text: "Duels won %", i18n: "metrics.duelsWon" },
-    { text: "Duels won per 90", i18n: "metrics.duelsWonPerNinety" },
-    { text: "Progressive actions per 90", i18n: "metrics.progressiveActions" },
-    { text: "Progressive action rate", i18n: "metrics.progressiveActionRate" },
-
-    // Defending
-    { text: "CATEGORY: Defending", i18n: "categories.defending" },
-    { text: "Defensive duels per 90", i18n: "metrics.defensiveDuels" },
-    { text: "Defensive duels won %", i18n: "metrics.defensiveDuelsWon" },
-    { text: "Defensive duels won per 90", i18n: "metrics.defensiveDuelsWonPerNinety" },
-    { text: "Sliding tackles per 90", i18n: "metrics.slidingTackles" },
-    { text: "Sliding tackles (PAdj)", i18n: "metrics.slidingTacklesAdj" },
-    { text: "Interceptions per 90", i18n: "metrics.interceptions" },
-    { text: "Interceptions (PAdj)", i18n: "metrics.interceptionsAdj" },
-    { text: "Possessions won per 90", i18n: "metrics.possessionsWon" },
-    { text: "Aerial duels per 90", i18n: "metrics.aerialDuels" },
-    { text: "Aerial duels won %", i18n: "metrics.aerialDuelsWon" },
-    { text: "Aerial duels won per 90", i18n: "metrics.aerialDuelsWonPerNinety" },
-    { text: "Shots blocked per 90", i18n: "metrics.shotsBlocked" },
-
-    // Goalkeeping
-    { text: "CATEGORY: Goalkeeping", i18n: "categories.goalkeeping" },
-    { text: "Saves per 90", i18n: "metrics.saves" },
-    { text: "Save percentage %", i18n: "metrics.savePercentage" },
-    { text: "Prevented goals per 90", i18n: "metrics.preventedGoals" },
-    { text: "Shots conceded per 90", i18n: "metrics.shotsConceded" },
-    { text: "xG conceded per 90", i18n: "metrics.xgConceded" },
-    { text: "Clean sheets", i18n: "metrics.cleanSheets" },
-    { text: "Exits per 90", i18n: "metrics.exits" },
-
-    // Set Pieces
-    { text: "CATEGORY: Set Pieces", i18n: "categories.setPieces" },
-    { text: "Free kicks per 90", i18n: "metrics.freeKicks" },
-    { text: "Direct free kicks per 90", i18n: "metrics.directFreeKicks" },
-    { text: "Direct free kicks oT %", i18n: "metrics.directFreeKicksOnTarget" },
-    { text: "Corners per 90", i18n: "metrics.corners" },
-    { text: "Penalties attempted", i18n: "metrics.penaltiesAttempted" },
-    { text: "Penalties scored", i18n: "metrics.penaltiesScored" },
-    { text: "Penalty success rate %", i18n: "metrics.penaltySuccessRate" }
+  
+  const urls1 = [
+  'https://datamb.football/database/CURRENT/RATOP72425/FW/FW.xlsx',
+  
+  
 ];
 
-const columnIndexMap = {};
-originalDataArray[0].forEach((name, index) => {
-    columnIndexMap[name] = index;
-});
-
-metricSelect.innerHTML = ''; // Clear existing options
-
-customMetricOrder.forEach(metric => {
-    const option = document.createElement('option');
-    if (metric.text.startsWith("CATEGORY: ")) {
-        option.textContent = metric.text.replace("CATEGORY: ", "");
-        option.disabled = true;
-        option.style.fontWeight = "bold";
-        option.style.color = "#aaa";
-        option.setAttribute('data-i18n', metric.i18n);
-    } else {
-        const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
-        const index = currentDataArray[0].indexOf(metricName);
-        if (index !== -1) {
-            option.value = index;
-            option.textContent = metricName;
-            option.setAttribute('data-i18n', metric.i18n);
-        }
-    }
-    metricSelect.appendChild(option);
-});
-
-// Set column 61 as the default selection
-metricSelect.value = "5";
-
-leagueSelect.querySelector('option[value="Top 5 Leagues"]').disabled = true;
-leagueSelect.querySelector('option[value="Top 7 Leagues"]').disabled = true;
-leagueSelect.querySelector('option[value="All Leagues"]').disabled = true;
-leagueSelect.querySelector('option[value="No Top 7"]').disabled = true;
-positionSelect.querySelector('option[value="All"]').disabled = true;
-leagueSelect.querySelector('option[value="South America"]').disabled = true;
-    leagueSelect.querySelector('option[value="Eastern Europe"]').disabled = true;
-    leagueSelect.querySelector('option[value="Scandinavia"]').disabled = true;
-metricSelect.dispatchEvent(new Event('change'));
-
-toggleButton.addEventListener('change', toggleData);
-toggleSortButton.addEventListener('click', toggleSortOrder); // New event listener for sort order toggle
-metricSelect.addEventListener('change', () => {
-    isAscending = false; // Reset to default descending order
-    filterTable(); // Reapply filtering and sorting
-});positionSelect.addEventListener('change', filterTable);
-leagueSelect.addEventListener('change', filterTable);
-ageInput.addEventListener('input', filterTable);
-
-function toggleSortOrder() {
-    isAscending = !isAscending; // Toggle sort order
-    filterTable(); // Reapply filtering and sorting
-}
-
-function toggleData() {
-    isToggled = !isToggled; // Toggle the state
-    const currentMetricValue = metricSelect.value;
-
-    if (isToggled) {
-        currentDataArray = originalDataArray.map((row, index) => {
-            if (index === 0) {
-                return row.map((cell, cellIndex) => {
-                    if (![11, 14, 34, 44, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63].includes(cellIndex)) {
-                        return cell.replace(' per 90', '');
-                    } else {
-                        return cell; // Keep other cells unchanged
-                    }
-                });
-            } else {
-                const minutesPlayed = parseFloat(row[6]);
-                return row.map((cell, cellIndex) => {
-                    if (cellIndex > 4 && ![5, 6, 11, 14, 34, 44, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 66, 68, 69, 70, 72, 73, 74, 75, 76, 81, 83, 85, 106, 107, 108, 110, 113, 114, 115, 116, 117, 118, 119].includes(cellIndex)) {
-                        if ([18, 35, 45, 46, 80, 82, 84, 109, 111].includes(cellIndex)) {
-                            return (cell * minutesPlayed / 90).toFixed(1);
-                        } else {
-                            return Math.round(cell * minutesPlayed / 90);
-                        }
-                    } else {
-                        return cell; // Keep other cells unchanged
-                    }
-                });
-            }
-        });
-
-        metricSelect.innerHTML = ''; // Clear existing options
-        customMetricOrder.forEach(metric => {
-            const option = document.createElement('option');
-            if (metric.text.startsWith("CATEGORY: ")) {
-                option.textContent = metric.text.replace("CATEGORY: ", "");
-                option.disabled = true;
-                option.style.fontWeight = "bold";
-                option.style.color = "#aaa";
-                option.setAttribute('data-i18n', metric.i18n);
-            } else {
-                const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
-                const index = currentDataArray[0].indexOf(metricName);
-                if (index !== -1) {
-                    option.value = index;
-                    option.textContent = metricName;
-                    option.setAttribute('data-i18n', metric.i18n);
-                }
-            }
-            metricSelect.appendChild(option);
-        });
-    } else {
-        currentDataArray = originalDataArray;
-    }
-
-    currentDataArray = currentDataArray.map(row => {
-        if (parseFloat(row[16]) === 0 && parseFloat(row[18]) === 0) {
-            row[82] = '';
-        }
-        return row;
-    });
-
-    currentDataArray = currentDataArray.map(row => {
-        if (parseFloat(row[21]) === 0 && parseFloat(row[35]) === 0) {
-            row[84] = '';
-        }
-        return row;
-    });
-
-    metricSelect.innerHTML = '';
-    customMetricOrder.forEach(metric => {
-        const option = document.createElement('option');
-        if (metric.text.startsWith("CATEGORY: ")) {
-            option.textContent = metric.text.replace("CATEGORY: ", "");
-            option.disabled = true;
-            option.style.fontWeight = "bold";
-            option.style.color = "#aaa";
-            option.setAttribute('data-i18n', metric.i18n);
-        } else {
-            const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
-            const index = currentDataArray[0].indexOf(metricName);
-            if (index !== -1) {
-                option.value = index;
-                option.textContent = metricName;
-                option.setAttribute('data-i18n', metric.i18n);
-            }
-        }
-        metricSelect.appendChild(option);
-    });
-    metricSelect.value = currentMetricValue;
-    handleSelectorsChange();
-    
-    // Reapply internationalization after toggling
-    const preferredLanguage = getPreferredLanguage();
-    applyLanguage(preferredLanguage);
-    
-    filterTable(); // Ensure filtering is always applied
-}
-
-function filterTable() {
-    let filteredData = currentDataArray.slice(1); // Exclude header row
-    const metricIndex = metricSelect.value;
-    const position = positionSelect.value;
-    const league = leagueSelect.value;
-    const age = ageInput.value;
-
-    if (metricIndex === '') {
-        metricHeader.style.display = 'none';
-    } else {
-        metricHeader.style.display = '';
-        // Sort by selected metric
-        if (isAscending) {
-            filteredData.sort((a, b) => parseFloat(a[metricIndex]) - parseFloat(b[metricIndex]));
-        } else {
-            filteredData.sort((a, b) => parseFloat(b[metricIndex]) - parseFloat(a[metricIndex]));
-        }    
-    }
-
-    filteredData = filteredData.filter(row => row[metricIndex] !== '');
-
-    filteredData = filteredData.map(row => {
-    if (parseFloat(row[16]) === 0 && parseFloat(row[18]) === 0) {
-        const targetColumn = isToggled ? 82 : 82;  // Adjust index if needed based on toggling
-        row[targetColumn] = '';
-    }
-    return row;
-});
-
-    filteredData = filteredData.map(row => {
-        if (parseFloat(row[16]) === 0 || parseFloat(row[18]) === 0) {
-            row[83] = '';
-        }
-        return row;
-    });
-
-
-    filteredData = filteredData.map(row => {
-    if (parseFloat(row[21]) === 0 && parseFloat(row[35]) === 0) {
-        const targetColumn = isToggled ? 84 : 84;  // Adjust index if needed based on toggling
-        row[targetColumn] = '';
-    }
-    return row;
-});
-
-    filteredData = filteredData.map(row => {
-        if (parseFloat(row[35]) === 0 || parseFloat(row[21]) === 0) {
-            row[85] = '';
-        }
-        return row;
-    });
-
-
-
-    filteredData = filteredData.map(row => {
-        if (parseFloat(row[18]) === 0 || parseFloat(row[20]) === 0) {
-            row[81] = '';
-        }
-        return row;
-    });
-
-
-    filteredData = filteredData.map(row => {
-        if (parseFloat(row[18]) === 0 || parseFloat(row[20]) === 0) {
-            row[110] = '';
-        }
-        return row;
-    });
-
-
-    if (position === 'All') {
-        // Filter out duplicates and select all players
-        const uniquePlayers = {};
-        filteredData = filteredData.filter(row => {
-            const key = `${row[0]} ${row[1]}`; // Assuming the first column contains player names
-            if (!uniquePlayers[key]) {
-                uniquePlayers[key] = true;
-                return true;
-            }
-            return false;
-        });
-    } else if (position !== '') {
-        // Filter by selected position
-        filteredData = filteredData.filter(row => row[3] === position);
-    }
-
-    if (league === 'Top 5 Leagues') {
-        // Filter data to include only players from the top 5 leagues
-        filteredData = filteredData.filter(row =>
-            ['Premier League', 'Bundesliga', 'La Liga', 'Ligue 1', 'Serie A'].includes(row[2])
-        );
-    } else if (league === 'Top 7 Leagues') {
-        // Filter data to include only players from the top 7 leagues
-        filteredData = filteredData.filter(row =>
-            ['Premier League', 'Bundesliga', 'La Liga', 'Ligue 1', 'Serie A', 'Eredivisie', 'Liga Portugal'].includes(row[2])
-        );
-    } else if (league === 'No Top 7') {
-        // Filter data to include only players from the top 7 leagues
-        filteredData = filteredData.filter(row =>
-            ['Greece','Poland','Ukraine','Russia','Israel','Ecuador','Paraguay','Chile','Colombia','Belgium Pro League', 'Scotland Premiership', 'Austrian Bundesliga', 'Swiss Super League', 'Süper Lig', 'Denmark Superliga', 'Sweden Allsvenskan', 'Norway Eliteserien', 'Croatia HNL', 'Serbia SuperLiga', 'Czech Fortuna Liga', 'Saudi Pro League', 'J1 League', 'K League 1', 'MLS', 'LigaMX', 'Brazil Serie A', 'Argentina Primera', 'Uruguay Primera', 'Championship', 'Segunda Division', 'Serie B', 'Bundesliga 2', 'Ligue 2', ].includes(row[2])
-        );
-    } else if (league === 'All Leagues') {
-        // Filter data to include only players from the top 7 leagues
-        filteredData = filteredData.filter(row =>
-            ['Greece','Poland','Ukraine','Russia','Israel','Ecuador','Paraguay','Chile','Colombia','Premier League', 'Bundesliga', 'La Liga', 'Ligue 1', 'Serie A', 'Eredivisie', 'Liga Portugal', 'Belgium Pro League', 'Scotland Premiership', 'Austrian Bundesliga', 'Swiss Super League', 'Süper Lig', 'Denmark Superliga', 'Sweden Allsvenskan', 'Norway Eliteserien', 'Croatia HNL', 'Serbia SuperLiga', 'Czech Fortuna Liga', 'Saudi Pro League', 'J1 League', 'K League 1', 'MLS', 'LigaMX', 'Brazil Serie A', 'Argentina Primera', 'Uruguay Primera', 'Championship', 'Segunda Division', 'Serie B', 'Bundesliga 2', 'Ligue 2'].includes(row[2])
-        );
-    } else if (league === 'South America') {
-        // Filter data to include only players from the top 7 leagues
-        filteredData = filteredData.filter(row =>
-            [      "Brazil Serie A",
-      "Argentina Primera",
-      "Uruguay Primera",
-      "Colombia",
-      "Chile",
-      "Paraguay",
-      "Ecuador",].includes(row[2])
-        );
-    } else if (league === 'Scandinavia') {
-        // Filter data to include only players from the top 7 leagues
-        filteredData = filteredData.filter(row =>
-            [   "Norway Eliteserien",
-      "Denmark Superliga",
-      "Sweden Allsvenskan"].includes(row[2])
-        );
-    } else if (league === 'Eastern Europe') {
-        // Filter data to include only players from the top 7 leagues
-        filteredData = filteredData.filter(row =>
-            [      "Czech Fortuna Liga",
-      "Serbia SuperLiga",
-      "Croatia HNL",
-      "Russia",
-      "Ukraine",
-      "Poland"].includes(row[2])
-        );
-    } else if (league !== '') {
-        // Filter data based on selected league
-        filteredData = filteredData.filter(row => row[2] === league);
-    }
-
-    if (age !== '') {
-    filteredData = filteredData.filter(row => row[4] <= age + 1);
-}
-
-
-    displayTable(filteredData);
-}
-
-function displayTable(data) {
-    // Clear existing table
-    playerTable.innerHTML = '';
-
-    if (metricSelect.value === '') {
-        playerTable.style.display = 'none'; // Hide the table if no metric is selected
-        return; // Exit the function
-    } else {
-        playerTable.style.display = ''; // Show the table if a metric is selected
-    }
-
-    // Sort the data first to ensure consistency in ranking
-    // Sort data based on the current sorting order
-    if (isAscending) {
-        data.sort((a, b) => parseFloat(a[metricSelect.value]) - parseFloat(b[metricSelect.value]));
-    } else {
-        data.sort((a, b) => parseFloat(b[metricSelect.value]) - parseFloat(a[metricSelect.value]));
-    }
-    let previousValue = null;
-    let previousIndex = 0;
-    let previousRankBarWidth = 100;
-    let previousRakim = 100;
-    let maxValue = Math.max(...data.map(row => parseFloat(row[metricSelect.value])));
-let minValue = Math.min(...data.map(row => parseFloat(row[metricSelect.value])));
-
-
-    // Add table data
-    data.forEach((row, index) => {
-    let rankBarWidth;
-    let rakim;
-    if (row[metricSelect.value] === previousValue) {
-        // If the current value is equal to the previous one, keep the same index and rank bar width
-        rankBarWidth = previousRankBarWidth;
-        rakim = previousRakim;
-    } else {
-        // If not tied, calculate rank bar width and index
-        if (row[metricSelect.value] === '0') {
-            rankBarWidth = 0;
-            rakim = 0;
-     } else {
-    if (metricSelect.value === "46" || metricSelect.value === "84" || metricSelect.value === "73" || metricSelect.value === "82" || metricSelect.value === "103") {
-        // Get min and max values from the entire dataset
-        const allValues = data.map(r => parseFloat(r[metricSelect.value]));
-        const minValue = Math.min(...allValues);
-        const maxValue = Math.max(...allValues);
-        const totalRange = maxValue - minValue;
-        
-        const value = parseFloat(row[metricSelect.value]);
-        // Scale from minValue (smallest bar) to maxValue (largest bar)
-        rankBarWidth = Math.max(((value - minValue) / totalRange * 100), 1.5);
-        rakim = ((data.length - index) / data.length) * 100;
-    } else if (metricSelect.value === "5") {
-        rankBarWidth = parseFloat(row[metricSelect.value]) * 100 / 99;
-        rakim = ((data.length - index) / data.length) * 100;
-    } else {
-        rankBarWidth = Math.max(((parseFloat(row[metricSelect.value])) / (maxValue) * 100), 1.5);
-        rakim = ((data.length - index) / data.length) * 100;
-    }
-}
-        previousValue = row[metricSelect.value];
-        previousIndex = index;
-        previousRankBarWidth = rankBarWidth;
-        previousRakim = rakim;
-    }
-
-    let red, green, blue;
-        if (isAscending) {
-            // Invert colors for ascending order: lower values are red, higher values are green
-            red = Math.round((255 * (1 - Math.pow(((100-rakim) / 100), 1.3))));
-            green = Math.round(100-rakim);
-            blue = Math.round((255 * Math.pow(((100-rakim) / 100), 1.3)));
-        } else {
-            // Default color logic for descending order: higher values are red, lower values are green
-            red = Math.round((255 * (1 - Math.pow((rakim / 100), 1.3))));
-            green = Math.round(rakim);
-            blue = Math.round((255 * Math.pow((rakim / 100), 1.3)));
-        }
-        const alpha = 0.835;
-        const color = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${previousIndex + 1}. ${row[0]}&nbsp;<span class="smaller-text">(${row[1]}, ${Math.round(row[4])})</span></td>
-            <th>${row[metricSelect.value]}</th>
-            <th>
-                <div class="rank-bar">
-                    <div class="rank-bar-fill" style="width: ${rankBarWidth}%; background-color: ${color}"></div>
-                </div>
-            </th>
-        `;
-        playerTable.appendChild(tr);
-    });
-}
-
-function handleSelectorsChange() {
-    const selectedMetricIndex = parseInt(metricSelect.value);
-    const selectedPosition = positionSelect.value;
-    const selectedLeague = leagueSelect.value;
-    const metricOptions = metricSelect.querySelectorAll('option');
-    const metricSelector = document.querySelector('.metric-selector');
-
-    // Show or hide the toggleSortButton and adjust metric selector width
-    if (selectedMetricIndex === 43 || selectedMetricIndex === 45 || selectedMetricIndex === 82 || selectedMetricIndex === 83 || selectedMetricIndex === 84 || selectedMetricIndex === 85) {
-        toggleSortButton.style.display = 'inline-block';
-        metricSelector.classList.add('with-toggle');
-    } else {
-        toggleSortButton.style.display = 'none';
-        metricSelector.classList.remove('with-toggle');
-    }
-
-    if (selectedMetricIndex === 5) {
-        leagueSelect.querySelector('option[value="Top 5 Leagues"]').disabled = true;
-        leagueSelect.querySelector('option[value="Top 7 Leagues"]').disabled = true;
-        positionSelect.querySelector('option[value="All"]').disabled = true;
-        leagueSelect.querySelector('option[value="No Top 7"]').disabled = true;
-        leagueSelect.querySelector('option[value="All Leagues"]').disabled = true;
-        leagueSelect.querySelector('option[value="South America"]').disabled = true;
-        leagueSelect.querySelector('option[value="Eastern Europe"]').disabled = true;
-        leagueSelect.querySelector('option[value="Scandinavia"]').disabled = true;
-    } else {
-        leagueSelect.querySelector('option[value="Top 5 Leagues"]').disabled = false;
-        leagueSelect.querySelector('option[value="Top 7 Leagues"]').disabled = false;
-        positionSelect.querySelector('option[value="All"]').disabled = false;
-        leagueSelect.querySelector('option[value="No Top 7"]').disabled = false;
-        leagueSelect.querySelector('option[value="All Leagues"]').disabled = false;
-        leagueSelect.querySelector('option[value="South America"]').disabled = false;
-        leagueSelect.querySelector('option[value="Eastern Europe"]').disabled = false;
-        leagueSelect.querySelector('option[value="Scandinavia"]').disabled = false;
-    }
-
-    if (selectedPosition === 'All' || (selectedLeague === 'Top 5 Leagues' || selectedLeague === 'Top 7 Leagues' || selectedLeague === 'No Top 7' || selectedLeague === 'All Leagues' || selectedLeague === 'South America' || selectedLeague === 'Scandinavia' || selectedLeague === 'Eastern Europe')) {
-        metricOptions[0].disabled = true;
-        if (selectedMetricIndex === 0) {
-            metricSelect.value = "1";
-            filterTable();
-        }
-    } else {
-        metricOptions[0].disabled = false;
-    }
-}
-
-// Add event listener for all selectors
-metricSelect.addEventListener('change', handleSelectorsChange);
-positionSelect.addEventListener('change', handleSelectorsChange);
-leagueSelect.addEventListener('change', handleSelectorsChange);
-
-
-// Initial display
-filterTable();
-
-</script>
-	
-<script>
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-    
-    // Check for saved dark mode preference on page load
-    document.addEventListener('DOMContentLoaded', (event) => {
-      if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-      }
-    });
-</script>
-
-<div class="dark-mode-toggle" onclick="toggleDarkMode()">
-    <span class="toggle-icon"></span>
-  </div>
+const urls2 = [
+'https://datamb.football/database/OLD/RATOP72324/FW/FW.xlsx',
+];
   
-<script>
-
   
-  function getPreferredLanguage() {
-    // PRIORITY 1: Check URL parameter first
-    const urlParams = new URLSearchParams(window.location.search);
-    const langParam = urlParams.get('lang');
-    if (langParam) {
-      return langParam;
-    }
-    // PRIORITY 2: Check localStorage
-    const storedLang = localStorage.getItem('preferredLanguage');
-    if (storedLang) {
-      return storedLang;
-    }
-    // PRIORITY 3: Use browser language
-    return getBrowserLanguage() || 'en';
-  }
+  const fetchPromises1 = urls1.map(url => fetch(url).then(response => response.arrayBuffer()));
+  const fetchPromises2 = urls2.map(url => fetch(url).then(response => response.arrayBuffer()));
+  
+  function processAndStoreData1(dataArray) {
+      // Unique ID counter
+      let uniqueIdCounter = 1;
+  
+      dataArray.forEach(data => {
+          const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+  
+          // Exclude header row
+          const dataWithoutHeader = jsonData.slice(1);
+  
+          // Perform transformations and add unique ID
+          dataWithoutHeader.forEach(row => {
+              // Generate unique ID and shift columns
+              row.unshift(`${uniqueIdCounter++}`);
+  
+              // Shift columns as needed
+              row[15] = `${row[1]} 23/24`;
+              row[14] = (row[9] * row[10]) / 100;  // Equivalent formula
+              row[16] = (row[7] + row[12]);  // Equivalent formula
 
-  function getBrowserLanguage() {
-    return navigator.language.slice(0, 2);
-  }
 
-  function applyLanguage(language) {
-    console.log(language);
-
-    if (language === 'en') {
-      return;
-    }
-
-    
-    fetch(`locales/${language}.json`)
-      .then(response => {
-        // Don't throw an error, just return null if response is not OK
-        return response.ok ? response.json() : null;
-      })
-      .then(translations => {
-        // Only proceed if translations exist
-        if (translations) {
-          document.querySelectorAll('[data-i18n]').forEach(element => {
-            const keys = element.getAttribute('data-i18n').split('.');
-            let value = translations;
-            for (const key of keys) {
-              if (value === undefined || value === null) break;
-              value = value[key];
-            }
-            if (value) {
-              if (element.tagName === 'OPTION' && element.parentElement.id === 'metric') {
-                const metricKey = element.getAttribute('data-i18n');
-                const originalMetric = customMetricOrder.find(m => m.i18n === metricKey);
-                
-                // Only add "per 90" if not toggled AND the original metric includes "per 90"
-                const shouldAddPerNinety = !isToggled && originalMetric && originalMetric.text.includes('per 90');
-                
-                // Get the translated version of "per 90" or use default English version
-                const per90Translation = translations.common && translations.common.per90 ? 
-                                        translations.common.per90 : " per 90";
-                
-                element.textContent = value + (shouldAddPerNinety ? per90Translation : '');
-            }
-              else if (element.tagName === 'META') {
-              element.setAttribute('content', value);
-          } else if (value.includes('<')) {
-              element.innerHTML = value;
-          } else if (element.classList.contains('toggle-button')) {
-              element.setAttribute('data-tooltip', value);
-          } else {
-              element.textContent = value;
-          }          }
+              // Reorder columns
+              const reorderedRow = [
+                  row[0],
+                  row[15],
+                  row[2],
+                  row[3],
+                  row[11],
+                  row[14],
+                  row[6],
+                  row[16],
+                  row[8],
+                  row[13],
+                  row[5],
+                  row[4]
+              ];
+  
+              allData1.push(reorderedRow);
           });
-        }
-      })
-      .catch(() => {
-        // Completely empty catch block to silently ignore any errors
+      });
+  
+      // Extract values from columns 4, 5, 6, 7, 8, 9, and 10
+      const columnsToConvert = [4, 5, 6, 7, 8, 9, 10];
+      const columnValues = columnsToConvert.map(col => allData1.map(row => parseFloat(row[col])));
+  
+      // Calculate percentiles
+      const percentiles = columnValues.map(values => {
+          const sorted = [...values].sort((a, b) => a - b);
+          return values.map(value => {
+              const rank = sorted.indexOf(value) + 1;
+              return (rank / sorted.length);
+          });
+      });
+  
+      // Replace original values with percentiles
+      allData1.forEach((row, rowIndex) => {
+          columnsToConvert.forEach((col, colIndex) => {
+              row[col] = percentiles[colIndex][rowIndex].toFixed(3);
+          });
       });
   }
+
+  function processAndStoreData(dataArray) {
+      // Unique ID counter
+      let uniqueIdCounter = 1;
   
-  const preferredLanguage = getPreferredLanguage();
-  applyLanguage(preferredLanguage);
+      dataArray.forEach(data => {
+          const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
   
-    </script>
+          // Exclude header row
+          const dataWithoutHeader = jsonData.slice(1);
+  
+          // Perform transformations and add unique ID
+          dataWithoutHeader.forEach(row => {
+              // Generate unique ID and shift columns
+              row.unshift(`${uniqueIdCounter++}`);
+  
+              // Shift columns as needed
+  
+              row[15] = `${row[1]} 24/25`;
+              row[14] = (row[9] * row[10]) / 100;  // Equivalent formula
+              row[16] = (row[7] + row[12]);  // Equivalent formula
+
+
+              // Reorder columns
+              const reorderedRow = [
+                  row[0],
+                  row[15],
+                  row[2],
+                  row[3],
+                  row[11],
+                  row[14],
+                  row[6],
+                  row[16],
+                  row[8],
+                  row[13],
+                  row[5],
+                  row[4]
+              ];
+  
+              allData2.push(reorderedRow);
+          });
+      });
+  
     
+        // Extract values from columns 4, 5, 6, 7, 8, 9, and 10
+        const columnsToConvert = [4, 5, 6, 7, 8, 9, 10];
+        const columnValues = columnsToConvert.map(col => allData2.map(row => parseFloat(row[col])));
+    
+        // Calculate percentiles
+        const percentiles = columnValues.map(values => {
+            const sorted = [...values].sort((a, b) => a - b);
+            return values.map(value => {
+                const rank = sorted.indexOf(value) + 1;
+                return (rank / sorted.length);
+            });
+        });
+    
+        // Replace original values with percentiles
+        allData2.forEach((row, rowIndex) => {
+            columnsToConvert.forEach((col, colIndex) => {
+                row[col] = percentiles[colIndex][rowIndex].toFixed(3);
+            });
+        });
+    }
+    
+    Promise.all(fetchPromises1)
+        .then(responses => {
+            processAndStoreData(responses);
+    
+        
+            // Fetch and process the remaining files
+            Promise.all(fetchPromises2)
+                .then(responses2 => {
+                    processAndStoreData1(responses2);
+    
+                    // Concatenate intermediate data with new data
+                    const finalData = allData2.concat(allData1);
+    
+                                   // Reset and assign new unique IDs
+                                   finalData.forEach((row, index) => {
+                                      row[0] = `${index + 1}`;
+                                  });
+                                  
+                                  finalData.forEach(row => {
+                                      allDataAsString += row.join(',') + '\n';
+                                  });
+                  
+                  
+                                  const inputLines = allDataAsString.trim().split('\n');
+                  const outputLines = [];
+              
+              // Process each line
+              for (const line of inputLines) {
+                  // Split the line by comma
+                const parts = line.split(',');
+              
+                // Extract the desired fields
+                const name = parts[1];
+                const age = parts[3];
+                const club = parts[2];
+              
+                // Create the formatted string
+                const outputLine = `${name},${age},${club}`;
+              
+                // Add the formatted string to the output array
+                outputLines.push(outputLine);
+              }
+              
+              
+              
+                  const names = outputLines;
+                      const searchInput = document.getElementById('searchInput1');
+                      searchInput.setAttribute("autocomplete", "off");
+               const matchingNamesContainer = document.getElementById("matchingNames");
+              const searchButton = document.getElementById("searchButton");
+              
+              
+              
+              
+              function isMobileDevice() {
+                const userAgent = navigator.userAgent;
+                return /Android|iPhone/i.test(userAgent);
+              }
+              
+              function updateMatchingNames() {
+                const searchQuery = removeSpecialChars(searchInput.value.toLowerCase());
+              
+                // Preprocess searchQuery once
+                const searchQueryNormalized = removeSpecialChars(searchQuery);
+              
+                // Filter names and teams efficiently
+                const matchingNames = names.filter(name => {
+                  const [fullName, team, age] = name.split(",");
+                  const normalizedFullName = removeSpecialChars(fullName.toLowerCase());
+                  const normalizedTeam = removeSpecialChars(team.toLowerCase());
+              
+                  // Check if both fullName and team match the query
+                  return normalizedFullName.includes(searchQueryNormalized) || normalizedTeam.includes(searchQueryNormalized);
+                });
+              
+                matchingNamesContainer.innerHTML = "";
+              
+                if (searchQuery === "" || matchingNames.length === 0) {
+                  matchingNamesContainer.style.display = "none";
+                  return;
+                }
+              
+                matchingNames.forEach(name => {
+                  const [fullName, team, age] = name.split(",");
+              
+                  const nameElement = document.createElement("div");
+                  nameElement.classList.add("name");
+              
+                  nameElement.innerHTML = `
+                  <span class="fullName">${fullName}</span>
+                  <span class="age"> (${age}, </span>
+                  <span class="team">${team})</span>
+                `;
+                
+                  // Add event listener to handle selection
+                  nameElement.addEventListener("click", () => {
+                    searchInput.value = fullName + "," + team + "," + age; // Set full query as input value
+                    const enterKeyEvent = new KeyboardEvent("keyup", { key: "Enter" });
+                    searchInput.dispatchEvent(enterKeyEvent); // Dispatch Enter key event
+                  });
+              
+
+                  matchingNamesContainer.appendChild(nameElement);
+                              });
+                            
+                              if (searchQuery === "" && matchingNames.length === 0) {
+                                matchingNamesContainer.style.display = "none";
+                              } else {
+                                const searchInputWidth = searchInput.offsetWidth;
+                                matchingNamesContainer.style.display = "block";
+                                matchingNamesContainer.style.padding = "8px";
+                                matchingNamesContainer.style.position = "relative";
+                                matchingNamesContainer.style.zIndex = "9999"; // Set a high z-index value
+                                matchingNamesContainer.style.width = searchInputWidth + "px";
+                                matchingNamesContainer.style.maxHeight = "267px"; // Limit height for long lists
+                                matchingNamesContainer.style.overflowY = "auto"; // Enable scrolling if content exceeds height
+                          
+                                matchingNamesContainer.style.border = "1px solid #e0e0e0"; // Light gray border
+                              }
+                             
+                              if (searchQuery === "") {
+                                matchingNamesContainer.style.display = "none";
+                              }
+                            }
+              
+              searchInput.addEventListener("input", updateMatchingNames);
+              searchInput.addEventListener("keyup", function(event) {
+                if (event.key === "Enter") {
+                  searchButton1.click(); // Trigger the search button click event
+                } else if (event.key === "Backspace") {
+                  updateMatchingNames();
+                }
+              });
+
+
+    
+            const csvData = allDataAsString;
+            let dataArray = csvData.trim().split('\n').map(line => line.split(','));
+            
+
+
+function calculateEuclideanDifference(data1, data2) {
+  let difference = 0;
+  for (let i = 4; i <= 10; i++) {
+    const metric1 = parseFloat(data1[i]);
+    const metric2 = parseFloat(data2[i]);
+    difference += Math.pow(metric1 - metric2, 2);
+  }
+  return Math.sqrt(difference);
+}
+
+      const colorClasses = ['result-color-1', 'result-color-2', 'result-color-3', 'result-color-4', 'result-color-5', 'result-color-6', 'result-color-7', 'result-color-8', 'result-color-9', 'result-color-10', 'result-color-11', 'result-color-12', 'result-color-13', 'result-color-14', 'result-color-15', 'result-color-16', 'result-color-17', 'result-color-18', 'result-color-19', 'result-color-20', 'result-color-21', 'result-color-22', 'result-color-23', 'result-color-24', 'result-color-25', 'result-color-26', 'result-color-27', 'result-color-28', 'result-color-29', 'result-color-30', 'result-color-31', 'result-color-32', 'result-color-33', 'result-color-34', 'result-color-35', 'result-color-36', 'result-color-37'];
+      
+      let searchResults = []; // Declare the search results variable
+      
+      
+      function removeSpecialChars(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f\s]/g, '') 
+        .replace(/Ø/g, 'O')
+        .replace(/ø/g, 'o')
+        .replace(/ı/g, 'i');
+      }
+      function search(query) {
+        const queryParts = query.split(',').map(part => part.trim()); // Split the query by commas and trim whitespace
+        const name = queryParts[0]; // Extract the name part
+        let age, team;
+        
+        // Extract age and team if they exist
+        if (queryParts.length > 1) {
+          age = queryParts[1].trim(); // Trim any leading or trailing spaces
+          if (queryParts.length > 2) {
+            team = queryParts[2].trim(); // Trim any leading or trailing spaces
+          }
+        }
+      
+      
+        const results = dataArray.filter(data => {
+          const normalizedName = removeSpecialChars(data[1].toLowerCase());
+          const normalizedTeam = removeSpecialChars(data[2].toLowerCase());
+          const normalizedAge = data[3].trim().toLowerCase(); // Trim any leading or trailing spaces
+      
+
+      
+          // Check if the name matches
+          const nameMatches = normalizedName.includes(removeSpecialChars(name.toLowerCase()));
+      
+          // Check if the age matches (or if age is not provided)
+          const ageMatches = !age || normalizedAge === removeSpecialChars(age.toLowerCase());
+      
+          // Check if the team matches (or if team is not provided)
+          const teamMatches = !team || normalizedTeam === removeSpecialChars(team.toLowerCase());
+      
+          // Return true if name matches and either age or team matches
+          return nameMatches && ageMatches && teamMatches;
+        });
+      
+        return results;
+      }
+      
+      
+      function createTable(teamName, teamIndex, color) {
+      const resultsTable = document.getElementById('resultsTable');
+      const headerNames = [
+      '',
+      '<span data-i18n="table.percentiles">Percentiles</span>',
+      '',
+      '<span data-i18n="table.age">Age</span>',
+      '<span data-i18n="table.progCarries">Prog. carries</span>',
+      '<span data-i18n="table.dribbles">Dribbles</span>',
+      '<span data-i18n="table.npg">Non-penalty goals</span>',
+      '<span data-i18n="table.xgxa">xG + xA</span>',
+      '<span data-i18n="table.assists">Assists</span>',
+      '<span data-i18n="table.keyPasses">Key passes</span>',
+      '<span data-i18n="table.attActions">Att. actions</span>',
+      '<span data-i18n="table.minutes">Minutes played</span>',
+    ];
+  
+    
+      
+      
+        // Check if table headers exist
+        const headersExist = resultsTable.querySelector('th') !== null;
+      
+        const table = headersExist ? resultsTable.querySelector('table') : document.createElement('table');
+        table.classList.add('metrics-table');
+      
+        if (!headersExist) {
+          // Create the table header
+          const headerRow = document.createElement('tr');
+         
+      for (let i = 1; i < headerNames.length; i++) {
+        const th = document.createElement('th');
+        th.innerHTML = headerNames[i];
+        // Set specific widths for columns
+        if (i === 1) {
+          th.style.width = '17%'; // Name column gets more space
+          th.style.textAlign = 'center'; // Center align the header
+        } else if (i === 3) {
+          th.style.width = '7%'; // Numeric columns get less space
+        }
+      else if (i === 2) {
+          th.style.width = '10%'; // Numeric columns get less space
+        }
+        headerRow.appendChild(th);
+      }
+      // Add a separate table header for the "x" column
+      const xHeader = document.createElement('th');
+      xHeader.textContent = '';
+      xHeader.style.width = '4%'; // X column gets minimal space
+      headerRow.appendChild(xHeader);
+          table.appendChild(headerRow);
+        }
+      
+      
+      
+      const teamData = dataArray[teamIndex];
+      const dataRow = document.createElement('tr');
+      for (let i = 1; i < teamData.length; i++) {
+        const td = document.createElement('td');
+        if (i >= 4 && i <= 10) {
+          const value = parseFloat(teamData[i]) * 100;
+          td.textContent = value.toFixed(1);
+          td.style.fontWeight = '500'; // Make percentile values slightly bolder
+        } else {
+          td.textContent = teamData[i];
+        }
+        td.classList.add(color);
+        
+        // Apply special styling to the first cell (name column)
+        if (i === 1) {
+          td.style.textAlign = 'center'; /* Center align the text */
+          td.style.whiteSpace = 'normal'; /* Allow text to wrap */
+          td.style.overflow = 'visible';
+          td.style.textOverflow = 'clip';
+          td.style.minHeight = '50px'; /* Increase minimum height */
+          td.style.height = 'auto';
+          td.style.verticalAlign = 'top';
+          
+          // Format the name cell to display name and team more clearly
+          const nameText = teamData[i];
+          
+        }
+        if (i === 2) {
+          td.style.whiteSpace = 'normal'; /* Allow text to wrap */
+
+
+
+        }
+
+        // Apply special styling to the minutes column
+        if (i === 11) {
+          td.style.fontSize = '11px';
+          td.style.color = '#777';
+        }
+        
+        dataRow.appendChild(td);
+      }
+      
+      // Add a separate table cell for the "x" column
+      // Add a separate table cell for the "x" column
+      const xCell = document.createElement('td');
+      const xButton = document.createElement('button');
+      xButton.textContent = 'x';
+      xButton.style.backgroundColor = 'transparent';
+      xButton.style.border = 'none';
+      xButton.style.color = '#999';
+      xButton.style.fontSize = '14px';
+      xButton.style.cursor = 'pointer';
+      xButton.style.width = '4px';
+      xButton.style.height = '24px';
+      xButton.style.borderRadius = '50%';
+      xButton.style.display = 'flex';
+      xButton.style.alignItems = 'center';
+      xButton.style.justifyContent = 'center';
+      xButton.style.transition = 'all 0.2s';
+      xButton.addEventListener('click', function () {
+        dataRow.remove(); // Remove the corresponding row from the table
+        const radarPolygons = document.querySelectorAll(`.radarPolygon.${color}`);
+        const radarLines = document.querySelectorAll(`.radarLines.${color}`);
+        const radarCircles = document.querySelectorAll(`.radarCircle.${color}`);
+      
+        radarPolygons.forEach((polygon) => polygon.remove()); // Remove radar polygons with the specified color
+        radarLines.forEach((line) => line.remove()); // Remove radar lines with the specified color
+        radarCircles.forEach((circle) => circle.remove()); // Remove radar circles with the specified color
+        const remainingRows = document.querySelectorAll('.metrics-table tr:not(:first-child)');
+
+    
+        if (remainingRows.length > 0) {
+            const lastRow = remainingRows[remainingRows.length - 1];
+            const lastPlayerName = lastRow.firstChild.textContent.split(',')[0];
+            const lastPlayerData = dataArray.find(player => player[1] === lastPlayerName);
+            if (lastPlayerData) {
+                updateSimilarPlayers(lastPlayerData);
+            }
+        } else {
+            const similarPlayersContainer = document.getElementById('similarPlayersContainer');
+            if (similarPlayersContainer) {
+                similarPlayersContainer.innerHTML = '';
+            }
+        }
+      });
+      
+      xCell.appendChild(xButton);
+      dataRow.appendChild(xCell);
+      
+      table.appendChild(dataRow);
+      
+        if (!headersExist) {
+          resultsTable.appendChild(table);
+        }
+      
+      
+        const combResults = dataArray[teamIndex].join(', ');
+      
+        const outerRadius = 190;
+        const center = [0, 0];
+        const angles = [
+          0,
+          (2 * Math.PI) / 7,
+          (4 * Math.PI) / 7,
+          (6 * Math.PI) / 7,
+          (8 * Math.PI) / 7,
+          (10 * Math.PI) / 7,
+          (12 * Math.PI) / 7
+        ];
+      
+        function axisValueToCartesian(axis, value) {
+          let angle = angles[axis - 1];
+          angle += (2 * Math.PI / 7) * 0.2;
+          const x = 190 * value * Math.cos(angle);
+          const y = 190 * value * Math.sin(angle);
+          return { x, y };
+        }
+      
+        const svg = document.querySelector('.radar');
+        const radarWrapper = svg.appendChild(
+          document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        );
+        radarWrapper.innerHTML = '';
+      
+        const data = [];
+        const rowCols = combResults.split(',');
+        for (let i = 4; i < 11; i++) {
+          data.push({ axis: i - 3, value: parseFloat(rowCols[i]) });
+        }
+      
+        const points = data
+          .map(({ axis, value }) => {
+            const { x, y } = axisValueToCartesian(axis, value);
+            return `${x},${y}`;
+          })
+          .join(' ');
+      
+        const polyline = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'polyline'
+        );
+        polyline.setAttribute('class', `radarLines ${color}`);
+        polyline.setAttribute('points', `${points} ${points.split(' ')[0]}`);
+        polyline.setAttribute('stroke-width', '3');
+        polyline.setAttribute('fill', 'none');
+        radarWrapper.appendChild(polyline);
+      
+        const polygon = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'polygon'
+        );
+        polygon.setAttribute('class', `radarPolygon ${color}`);
+        polygon.setAttribute('points', points);
+        polygon.style.fillOpacity = '0.2';
+        radarWrapper.appendChild(polygon);
+      
+        data.forEach(({ axis, value }) => {
+          const { x, y } = axisValueToCartesian(axis, value);
+          const circle = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'circle'
+          );
+          circle.setAttribute('class', `radarCircle ${color}`);
+          circle.style.fillOpacity = '0.86';
+          circle.setAttribute('r', '6');
+          circle.setAttribute('cx', x);
+          circle.setAttribute('cy', y);
+          radarWrapper.appendChild(circle);
+        });
+      }
+
+        const teamNames = new Set();
+      
+      
+      function createTableForTeam1() {
+        const searchInput = document.getElementById('searchInput1');
+        const searchButton = document.getElementById('searchButton1');
+        const resultsTable = document.getElementById('resultsTable');
+        const teamNamesList = document.createElement('ul');
+        teamNamesList.style.fontFamily = 'Arial, sans-serif';
+        teamNamesList.style.listStyleType = 'none';
+        teamNamesList.style.paddingLeft = '9px';
+        teamNamesList.style.margin = '0';
+        teamNamesList.style.padding = '0';
+        resultsTable.appendChild(teamNamesList);
+        let searchCounter = 0;
+      
+        searchButton.addEventListener('click', function () {
+          const searchQuery = searchInput.value;
+          const results = search(searchQuery);
+      
+          // Reset the toggle state before performing a new search
+          const radarPolygons = document.querySelectorAll('.radarPolygon');
+          radarPolygons.forEach(polygon => {
+            polygon.style.fill = '';
+          });
+      
+          if (results) {
+            const teamId = parseInt(results[0]);
+            const teamName =
+              results[1] + ' (' + results[2] + ', ' + results[3] + ') - ' + results[11] + ' min';
+            const color = colorClasses[searchCounter % colorClasses.length];
+      
+            createTable(teamName, teamId - 1, color);
+      
+            searchCounter++;
+          }
+        });
+      }
+      
+      createTableForTeam1();
+      
+      const similarPlayersContainer = document.createElement("div");
+similarPlayersContainer.id = "similarPlayersContainer";
+const insertHere = document.getElementById("insertHere");
+insertHere.appendChild(similarPlayersContainer);
+
+let colorIndex = 0; // Initialize color index
+
+searchButton1.addEventListener("click", function() {
+  const searchQuery = searchInput.value;
+  const searchedPlayer = search(searchQuery);
+
+  if (searchedPlayer.length > 0) {
+      const searchedPlayerData = searchedPlayer[0];
+      updateSimilarPlayers(searchedPlayerData);
+      colorIndex++;
+  }
+
+  searchInput.value = '';
+  
+  // Clear and reset the matching names container
+  matchingNamesContainer.innerHTML = "";
+  matchingNamesContainer.style.border = "none";
+  matchingNamesContainer.style.padding = "0";
+});
+
+function updateSimilarPlayers(playerData) {
+  const searchedPlayerIndex = parseInt(playerData[0]) - 1;
+  const similarPlayers = [];
+  
+  // Find the color class of the LAST player from their row in the table
+  const playerRows = document.querySelectorAll('.metrics-table tr:not(:first-child)');
+  let playerColor = '';
+  if (playerRows.length > 0) {
+      const lastPlayerRow = playerRows[playerRows.length - 1];
+      const lastPlayerCell = lastPlayerRow.querySelector('td:first-child');
+      // Get all color classes from the element
+      const classes = Array.from(lastPlayerCell.classList);
+      // Find the color class (starts with 'result-color-')
+      playerColor = classes.find(cls => cls.startsWith('result-color-'));
+  }
+  
+  for (let i = 0; i < dataArray.length; i++) {
+      if (i !== searchedPlayerIndex) {
+          const difference = calculateEuclideanDifference(playerData, dataArray[i]);
+          similarPlayers.push({ index: i, difference: difference });
+      }
+  }
+
+  similarPlayers.sort((a, b) => a.difference - b.difference);
+  const mostSimilarPlayers = similarPlayers.slice(0, 5);
+
+  const similarPlayersContainer = document.getElementById('similarPlayersContainer');
+  similarPlayersContainer.innerHTML = ''; // Clear existing content
+
+  const similarPlayerTable = document.createElement("table");
+  similarPlayerTable.classList.add("similar-table");
+
+  const headerRow = document.createElement("tr");
+  const headerCell = document.createElement("th");
+  headerCell.setAttribute("colspan", "5");
+  headerCell.innerHTML = `<span data-i18n="similar.to" class="similar-text">Similar data to</span> <span class="player-text">${playerData[1]}</span>`;
+
+  
+  // Use the last player's color class instead of the first one
+  headerCell.classList.add(playerColor || colorClasses[colorIndex % colorClasses.length]);
+  
+  // Add media query for mobile devices
+  const mediaQuery = window.matchMedia('(max-width: 500px)');
+  if (mediaQuery.matches) {
+    headerCell.style.fontSize = "11px";
+    headerCell.style.padding = "8px";
+  }
+  
+  headerRow.appendChild(headerCell);
+  similarPlayerTable.appendChild(headerRow);
+
+  const similarPlayerRow = document.createElement("tr");
+
+  for (let i = 0; i < mostSimilarPlayers.length; i++) {
+      const playerIndex = mostSimilarPlayers[i].index;
+      const playerName = dataArray[playerIndex][1];
+      
+      const playerCell = document.createElement("td");
+      playerCell.textContent = playerName;
+      playerCell.style.fontSize = "12px";
+      playerCell.style.padding = "7px 8px";
+      playerCell.style.cursor = "pointer";
+      playerCell.style.transition = "background-color 0.2s";
+      playerCell.style.borderRight = "1px solid rgba(0, 0, 0, 0.05)";
+      playerCell.style.lineHeight = "1.2";
+
+      playerCell.addEventListener("click", function() {
+          const searchInput = document.getElementById('searchInput1');
+          const searchButton = document.getElementById('searchButton1');
+          searchInput.value = playerName;
+          searchButton.click();
+      });
+
+      similarPlayerRow.appendChild(playerCell);
+  }
+
+  similarPlayerTable.appendChild(similarPlayerRow);
+  similarPlayersContainer.appendChild(similarPlayerTable);
+}
+
+}) })
+    .catch(error => {
+        console.error('Error fetching or processing data:', error);
+    });
+  
+</script>
+	  
+<script>
+
+  
+
+ function setLanguage(language) {
+    localStorage.setItem('preferredLanguage', language);
+    const url = new URL(window.location.href);
+    if (language === 'en') {
+      url.searchParams.delete('lang');
+      applyLanguage('xx');
+    } else {
+      url.searchParams.set('lang', language);
+      applyLanguage(language);
+    }
+    window.history.pushState({}, '', url);
+  }
+
+function getPreferredLanguage() {
+// PRIORITY 1: Check URL parameter first
+const urlParams = new URLSearchParams(window.location.search);
+const langParam = urlParams.get('lang');
+if (langParam) {
+return langParam;
+}
+// PRIORITY 2: Check localStorage
+const storedLang = localStorage.getItem('preferredLanguage');
+if (storedLang) {
+return storedLang;
+}
+// PRIORITY 3: Use browser language
+return getBrowserLanguage() || 'en';
+}
+
+function getBrowserLanguage() {
+return navigator.language.slice(0, 2);
+}
+
+function applyLanguage(language) {
+console.log(language);
+
+if (language === 'en') {
+return;
+}
+
+
+fetch(`locales/${language}.json`)
+.then(response => {
+  return response.ok ? response.json() : null;
+})
+.then(translations => {
+  // Only proceed if translations exist
+  if (translations) {
+      window.currentTranslations = translations;
+          window.translations = translations;
+      
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      translateElement(element, translations);
+    });
+    
+    document.querySelector('meta[name="language"]').setAttribute('content', language);
+    
+    if (!window.translationObserver) {
+      window.translationObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach(function(node) {
+              if (node.nodeType === 1) { // Element node
+                if (node.hasAttribute && node.hasAttribute('data-i18n')) {
+                  translateElement(node, translations);
+                }
+                const elements = node.querySelectorAll ? node.querySelectorAll('[data-i18n]') : [];
+                elements.forEach(function(element) {
+                  translateElement(element, translations);
+                });
+              }
+            });
+          }
+        });
+      });
+      
+      window.translationObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
+  }
+})
+.catch(() => {
+});
+}
+
+// Helper function to translate a single element
+function translateElement(element, translations) {
+  const keys = element.getAttribute('data-i18n').split('.');
+  let value = translations;
+  
+  for (const key of keys) {
+    if (value === undefined || value === null) break;
+    value = value[key];
+  }
+  
+  if (value) {
+    if (element.tagName === 'META') {
+      element.setAttribute('content', value);
+    } else if (element.tagName === 'INPUT') {
+      element.setAttribute('placeholder', value);
+    } else if (value.includes('<')) {
+      element.innerHTML = value;
+    } else {
+      element.textContent = value;
+    }
+  }
+}
+
+const preferredLanguage = getPreferredLanguage();
+applyLanguage(preferredLanguage);
+
+// BUTTON LANGUAGE SWITCHER REMOVE FOR PAGES WITH NO LANGUAGE SWITCHER
+document.addEventListener('DOMContentLoaded', function() {
+const languageButton = document.getElementById('languageButton');
+const languageDropdown = document.getElementById('languageDropdown');
+
+
+if (languageButton) {
+languageButton.addEventListener('click', function(e) {
+  e.stopPropagation();
+  languageDropdown.classList.toggle('show');
+});
+}
+
+document.querySelectorAll('.language-option').forEach(option => {
+option.addEventListener('click', function(e) {
+  e.preventDefault();
+  const lang = this.getAttribute('href').split('=')[1];
+  setLanguage(lang);
+  languageDropdown.classList.remove('show');
+});
+});
+
+document.addEventListener('click', function(event) {
+if (!event.target.closest('.language-switcher-container')) {
+  if (languageDropdown) {
+    languageDropdown.classList.remove('show');
+  }
+}
+});
+});
+
+
+function toggleDarkMode() {
+      const body = document.querySelector("body");
+      body.classList.toggle("dark-mode");
+      
+      const isDarkMode = body.classList.contains("dark-mode");
+      localStorage.setItem("darkMode", isDarkMode);
+      
+  }
+  
+  document.addEventListener('DOMContentLoaded', function() {
+      const storedDarkMode = localStorage.getItem("darkMode");
+      
+      if (storedDarkMode === "true") {
+          const body = document.querySelector("body");
+          body.classList.add("dark-mode");
+      }
+      
+
+  });
+
+  function toggleFilling() {
+    const radarPolygons = document.querySelectorAll('.radarPolygon');
+    radarPolygons.forEach(polygon => {
+      polygon.style.fill = polygon.style.fill ? '' : 'none'; // Toggle the filling
+    });
+  }
+
+  function takeScreenshot() {
+  const chartWrapper = document.querySelector('.chart-wrapper');
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  chartWrapper.classList.add('screenshot-capture');
+    
+  const options = {
+    scale: 2, 
+    backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+    allowTaint: true,
+    useCORS: true,
+    logging: false,
+    onclone: function(clonedDocument) {
+      const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+      const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+      if (clonedSimilarContainer) {
+        clonedSimilarContainer.style.display = 'none';
+      }
+      const horizontalLine = clonedWrapper.querySelector('hr');
+      if (horizontalLine) horizontalLine.style.display = 'none';
+      const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+      if (toggleControls) toggleControls.style.display = 'none';
+      const radar = clonedWrapper.querySelector('.radar');
+      if (radar) {
+        radar.style.display = 'block';
+        radar.style.margin = '0 auto';
+      }
+    }
+  };
+  
+  html2canvas(chartWrapper, options).then(canvas => {
+    const imageUrl = canvas.toDataURL('image/png');
+    const downloadLink = document.createElement('a');
+    downloadLink.href = imageUrl;
+    downloadLink.download = 'DataMB Screenshot.png';
+        document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+        chartWrapper.classList.remove('screenshot-capture');
+  }).catch(error => {
+  });
+}
+</script>
+   <center>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
+           crossorigin="anonymous"></script>
+      <!-- radarplotsearch -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-7677714701428206"
+           data-ad-slot="6673239737"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script></center>
 </body>
 </html>
