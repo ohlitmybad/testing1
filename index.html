@@ -1520,72 +1520,9 @@ console.error('Error fetching or processing data:', error);
 
 
 </script>
-	  
-<script>async function takeScreenshot() {
-  const chartContainer = document.querySelector('.screenshotcontainer');
-  const isDarkMode = document.body.classList.contains('dark-mode');
-  
-  try {
-    const canvas = await html2canvas(chartContainer, {
-scale: 2, 
-backgroundColor: isDarkMode ? '#0F0F0E' : '#FFFFFF',
-useCORS: true,
-logging: false,
-      foreignObjectRendering: false,
-      onclone: function(clonedDoc) {
-        const similarPlayersContainer = clonedDoc.getElementById('similarPlayersContainer');
-        if (similarPlayersContainer) {
-          similarPlayersContainer.style.display = 'none';
-        }
-        
-        const positionSwitcher = clonedDoc.querySelector('.position-switcher-container');
-        const searchContainer = clonedDoc.querySelector('.search-container');
-        if (positionSwitcher) positionSwitcher.style.display = 'none';
-        if (searchContainer) searchContainer.style.display = 'none';
 
-        const radarSVG = clonedDoc.querySelector('.radar');
-      if (radarSVG) {
-        radarSVG.style.display = 'block';
-        radarSVG.style.margin = '0 auto';
-        const svgGroup = radarSVG.querySelector('g');
-        if (svgGroup) {
-          svgGroup.setAttribute('transform', 'translate(195.5, 195.5)');
-        }
-      }
-      }
-    });
-    
-    canvas.toBlob(blob => {
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'DataMB Screenshot.png';
-      link.click();
-    }, 'image/png');
-    
-  } catch (error) {
-  }
-}
+<script>
 
-  // Function to toggle dark mode
-  function toggleDarkMode() {
-    const body = document.querySelector("body");
-    body.classList.toggle("dark-mode");
-
-    // Store the user's preference in local storage
-    const isDarkMode = body.classList.contains("dark-mode");
-    localStorage.setItem("darkMode", isDarkMode);
-  }
-
-  // Check if user has a stored preference for dark mode
-  const storedDarkMode = localStorage.getItem("darkMode");
-
-  if (storedDarkMode === "true") {
-    const body = document.querySelector("body");
-    body.classList.add("dark-mode");
-  }
-
-
-   
 function getPreferredLanguage() {
 // PRIORITY 1: Check URL parameter first
 const urlParams = new URLSearchParams(window.location.search);
@@ -1685,6 +1622,73 @@ function translateElement(element, translations) {
 
 const preferredLanguage = getPreferredLanguage();
 applyLanguage(preferredLanguage);
+    </script>
+	    
+<script>async function takeScreenshot() {
+  const chartContainer = document.querySelector('.screenshotcontainer');
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  
+  try {
+    const canvas = await html2canvas(chartContainer, {
+scale: 2, 
+backgroundColor: isDarkMode ? '#0F0F0E' : '#FFFFFF',
+useCORS: true,
+logging: false,
+      foreignObjectRendering: false,
+      onclone: function(clonedDoc) {
+        const similarPlayersContainer = clonedDoc.getElementById('similarPlayersContainer');
+        if (similarPlayersContainer) {
+          similarPlayersContainer.style.display = 'none';
+        }
+        
+        const positionSwitcher = clonedDoc.querySelector('.position-switcher-container');
+        const searchContainer = clonedDoc.querySelector('.search-container');
+        if (positionSwitcher) positionSwitcher.style.display = 'none';
+        if (searchContainer) searchContainer.style.display = 'none';
+
+        const radarSVG = clonedDoc.querySelector('.radar');
+      if (radarSVG) {
+        radarSVG.style.display = 'block';
+        radarSVG.style.margin = '0 auto';
+        const svgGroup = radarSVG.querySelector('g');
+        if (svgGroup) {
+          svgGroup.setAttribute('transform', 'translate(195.5, 195.5)');
+        }
+      }
+      }
+    });
+    
+    canvas.toBlob(blob => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'DataMB Screenshot.png';
+      link.click();
+    }, 'image/png');
+    
+  } catch (error) {
+  }
+}
+
+  // Function to toggle dark mode
+  function toggleDarkMode() {
+    const body = document.querySelector("body");
+    body.classList.toggle("dark-mode");
+
+    // Store the user's preference in local storage
+    const isDarkMode = body.classList.contains("dark-mode");
+    localStorage.setItem("darkMode", isDarkMode);
+  }
+
+  // Check if user has a stored preference for dark mode
+  const storedDarkMode = localStorage.getItem("darkMode");
+
+  if (storedDarkMode === "true") {
+    const body = document.querySelector("body");
+    body.classList.add("dark-mode");
+  }
+
+
+   
 
 </script></div></div>
 <center>
