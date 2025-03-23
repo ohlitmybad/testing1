@@ -1910,20 +1910,12 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   const offset = 100; // Adjust this value to change when the active state updates
         
                   if (rect.top <= offset && rect.bottom >= offset) {
-                    // Remove active class from all nav items
-                    navLinks.forEach(link => link.parentElement.classList.remove('active'));
                     
                     // Find and activate corresponding nav link
                     const correspondingLink = document.querySelector(`.nav-container a[href="#${subSection.id}"]`);
                     if (correspondingLink) {
                       // Add active class to the link and its parent items
                       let currentElement = correspondingLink.parentElement;
-                      while (currentElement && !currentElement.classList.contains('nav-container')) {
-                        if (currentElement.tagName === 'LI') {
-                          currentElement.classList.add('active');
-                        }
-                        currentElement = currentElement.parentElement;
-                      }
                     }
                   }
                 });
