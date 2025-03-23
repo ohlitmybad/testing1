@@ -1912,16 +1912,26 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
         
                   if (rect.top <= offset && rect.bottom >= offset) {
                     // Remove active class from all nav items
-                    navLinks.forEach(link => link.parentElement.classList.remove('active'));
+                    document.querySelectorAll('.nav-container li').forEach(li => {
+                      li.classList.remove('active');
+                      li.classList.remove('target-active');
+                      li.classList.remove('ancestor-active');
+                    });
                     
                     // Find and activate corresponding nav link
                     const correspondingLink = document.querySelector(`.nav-container a[href="#${subSection.id}"]`);
                     if (correspondingLink) {
                       // Add active class to the link and its parent items
-                      let currentElement = correspondingLink.parentElement;
+                      if (correspondingLink.parentElement) {
+                        correspondingLink.parentElement.classList.add('active');
+                        correspondingLink.parentElement.classList.add('target-active');
+                      }
+                      
+                      let currentElement = correspondingLink.parentElement ? correspondingLink.parentElement.parentElement : null;
                       while (currentElement && !currentElement.classList.contains('nav-container')) {
                         if (currentElement.tagName === 'LI') {
                           currentElement.classList.add('active');
+                          currentElement.classList.add('ancestor-active');
                         }
                         currentElement = currentElement.parentElement;
                       }
@@ -1936,13 +1946,24 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   e.preventDefault();
                   
                   // Remove active class from all links' parent li elements
-                  navLinks.forEach(l => l.parentElement.classList.remove('active'));
+                  document.querySelectorAll('.nav-container li').forEach(li => {
+                    li.classList.remove('active');
+                    li.classList.remove('target-active');
+                    li.classList.remove('ancestor-active');
+                  });
                   
-                  // Add active class to clicked link's parent li and all its parent li elements
-                  let currentElement = this.parentElement;
-                  while (currentElement && currentElement.classList.contains('nav-container') === false) {
+                  // Add active class to clicked link's parent li
+                  if (this.parentElement) {
+                    this.parentElement.classList.add('active');
+                    this.parentElement.classList.add('target-active');
+                  }
+                  
+                  // Add active class to all parent li elements
+                  let currentElement = this.parentElement ? this.parentElement.parentElement : null;
+                  while (currentElement && !currentElement.classList.contains('nav-container')) {
                     if (currentElement.tagName === 'LI') {
                       currentElement.classList.add('active');
+                      currentElement.classList.add('ancestor-active');
                     }
                     currentElement = currentElement.parentElement;
                   }
@@ -1979,13 +2000,26 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   }
                   
                   // Update navigation state
-                  navLinks.forEach(link => link.parentElement.classList.remove('active'));
+                  document.querySelectorAll('.nav-container li').forEach(li => {
+                    li.classList.remove('active');
+                    li.classList.remove('target-active');
+                    li.classList.remove('ancestor-active');
+                  });
+                  
                   const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
                   if (matchingNavLink) {
-                    let currentElement = matchingNavLink.parentElement;
+                    // Add active class to the link's parent
+                    if (matchingNavLink.parentElement) {
+                      matchingNavLink.parentElement.classList.add('active');
+                      matchingNavLink.parentElement.classList.add('target-active');
+                    }
+                    
+                    // Add active class to all parent li elements
+                    let currentElement = matchingNavLink.parentElement ? matchingNavLink.parentElement.parentElement : null;
                     while (currentElement && !currentElement.classList.contains('nav-container')) {
                       if (currentElement.tagName === 'LI') {
                         currentElement.classList.add('active');
+                        currentElement.classList.add('ancestor-active');
                       }
                       currentElement = currentElement.parentElement;
                     }
