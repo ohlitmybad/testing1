@@ -2165,15 +2165,8 @@ function reattachEventListeners() {
     oldLink.addEventListener('click', function(e) {
       e.preventDefault();
       
-      // Remove active class from all links' parent li elements
-      navLinks.forEach(l => l.parentElement.classList.remove('active'));
       
       // Add active class to clicked link's parent li and all its parent li elements
-      let currentElement = this.parentElement;
-      while (currentElement && currentElement.classList.contains('nav-container') === false) {
-        if (currentElement.tagName === 'LI') {
-          currentElement.classList.add('active');
-        }
         currentElement = currentElement.parentElement;
       }
       
