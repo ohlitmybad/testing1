@@ -123,34 +123,24 @@
      transition: max-height 0.5s ease, visibility 0.5s ease;
      padding-left: 15px;
 }
+
 /* Show nested items when parent is hovered or has active class */
- .nav-container ul li:hover > ul, .nav-container ul li.active > ul {
-     max-height: 0;
-     visibility: hidden;
-     overflow: hidden;
-}
-/* Only show submenus for specifically targeted active elements */
-.nav-container ul li.target-active > ul,
-.nav-container ul li.ancestor-active > ul {
+.nav-container ul li:hover > ul, .nav-container ul li.active > ul {
      max-height: 1000px;
      visibility: visible;
-     overflow: visible;
      transition: max-height 0.3s ease, visibility 0s;
+     transition-delay: 0.27s;
+    /* Increased from 0s to 0.5s */
 }
 /* Show second level when parent is hovered or has active class */
  .nav-container ul ul li:hover > ul, .nav-container ul ul li.active > ul {
-     max-height: 0;
-     visibility: hidden;
-     overflow: hidden;
-}
-/* Only show nested submenus for specifically targeted elements */
-.nav-container ul ul li.target-active > ul,
-.nav-container ul ul li.ancestor-active > ul {
      max-height: 1000px;
      visibility: visible;
-     overflow: visible;
      transition: max-height 0.3s ease, visibility 0s;
+     transition-delay: 0.27s;
+    /* Increased from 0s to 0.5s */
 }
+
 /* Add longer delay for hiding after hover */
  .nav-container ul li > ul {
      transition-delay: 0.8s;
@@ -1904,137 +1894,196 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
               const navLinks = document.querySelectorAll('.nav-container a');
               const allLinks = document.querySelectorAll('a[href^="#"]');
               const sections = document.querySelectorAll('.section');
-              const navContainer = document.querySelector('.nav-container');
-              const menuToggle = document.querySelector('.menu-toggle');
-              
-              // Helper function to add active classes to an element and its parents
-              function setActiveClasses(element) {
-                if (!element) return;
-                
-                // Add active classes to the element
-                element.classList.add('active');
-                element.classList.add('target-active');
-                
-                // Add active classes to parent elements
-                let currentElement = element.parentElement;
-                while (currentElement && !currentElement.classList.contains('nav-container')) {
-                  if (currentElement.tagName === 'LI') {
-                    currentElement.classList.add('active');
-                    currentElement.classList.add('ancestor-active');
-                  }
-                  currentElement = currentElement.parentElement;
-                }
-              }
-              
-              // Helper function to clear all active classes
-              function clearActiveClasses() {
-                document.querySelectorAll('.nav-container li').forEach(li => {
-                  li.classList.remove('active');
-                  li.classList.remove('target-active');
-                  li.classList.remove('ancestor-active');
-                });
-              }
-              
-              // Function to navigate to a section
-              function handleNavigation(target) {
-                // Hide all sections first
-                sections.forEach(section => section.classList.remove('active'));
-                
-                // Find and show the target section
-                const targetElement = document.getElementById(target);
-                if (!targetElement) return;
-                
-                const parentSection = targetElement.closest('.section');
-                if (parentSection) {
-                  parentSection.classList.add('active');
-                }
-                
-                // Update navigation state
-                clearActiveClasses();
-                
-                const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
-                if (matchingNavLink) {
-                  setActiveClasses(matchingNavLink.parentElement);
-                }
-                
-                // Scroll behavior
-                if (window.innerWidth <= 768) {
-                  setTimeout(() => {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                    setTimeout(() => {
-                      window.scrollBy({ top: -85, behavior: 'instant' });
-                    }, 400);
-                  }, 300);
-                } else {
-                  const headerOffset = 85;
-                  const elementPosition = targetElement.getBoundingClientRect().top;
-                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                  window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-                }
-              }
-              
-              // Track section visibility on scroll
+        
+              // Add scroll event listener to track section visibility
               window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY;
+        
+                // Find all section headings (h3) within the active section
                 const activeSection = document.querySelector('.section.active');
                 if (!activeSection) return;
-                
+        
                 const subSections = activeSection.querySelectorAll('div[id]');
+                
+                // Check which subsection is currently in view
                 subSections.forEach(subSection => {
                   const rect = subSection.getBoundingClientRect();
-                  if (rect.top <= 100 && rect.bottom >= 100) {
-                    clearActiveClasses();
+                  const offset = 100; // Adjust this value to change when the active state updates
+        
+                  if (rect.top <= offset && rect.bottom >= offset) {
+                    // Remove active class from all nav items
+                    document.querySelectorAll('.nav-container li').forEach(li => {
+                      li.classList.remove('active');
+                      li.classList.remove('target-active');
+                      li.classList.remove('ancestor-active');
+                    });
+                    
+                    // Find and activate corresponding nav link
                     const correspondingLink = document.querySelector(`.nav-container a[href="#${subSection.id}"]`);
                     if (correspondingLink) {
-                      setActiveClasses(correspondingLink.parentElement);
+                      // Add active class to the link and its parent items
+                      if (correspondingLink.parentElement) {
+                        correspondingLink.parentElement.classList.add('active');
+                        correspondingLink.parentElement.classList.add('target-active');
+                      }
+                      
+                      let currentElement = correspondingLink.parentElement ? correspondingLink.parentElement.parentElement : null;
+                      while (currentElement && !currentElement.classList.contains('nav-container')) {
+                        if (currentElement.tagName === 'LI') {
+                          currentElement.classList.add('active');
+                          currentElement.classList.add('ancestor-active');
+                        }
+                        currentElement = currentElement.parentElement;
+                      }
                     }
                   }
                 });
               });
-              
+        
               // Handle navigation menu links
               navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
+                link.addEventListener('click', function (e) {
                   e.preventDefault();
-                  clearActiveClasses();
-                  setActiveClasses(this.parentElement);
+                  
+                  // Remove active class from all links' parent li elements
+                  document.querySelectorAll('.nav-container li').forEach(li => {
+                    li.classList.remove('active');
+                    li.classList.remove('target-active');
+                    li.classList.remove('ancestor-active');
+                  });
+                  
+                  // Add active class to clicked link's parent li
+                  if (this.parentElement) {
+                    this.parentElement.classList.add('active');
+                    this.parentElement.classList.add('target-active');
+                  }
+                  
+                  // Add active class to all parent li elements
+                  let currentElement = this.parentElement ? this.parentElement.parentElement : null;
+                  while (currentElement && !currentElement.classList.contains('nav-container')) {
+                    if (currentElement.tagName === 'LI') {
+                      currentElement.classList.add('active');
+                      currentElement.classList.add('ancestor-active');
+                    }
+                    currentElement = currentElement.parentElement;
+                  }
+                  
                   const target = this.getAttribute('href').substring(1);
                   handleNavigation(target);
                 });
               });
-              
-              // Handle other internal links
+        
+              // Handle all other internal links
               allLinks.forEach(link => {
-                if (!link.closest('.nav-container')) {
-                  link.addEventListener('click', function(e) {
+                if (!link.closest('.nav-container')) {  // Only for non-nav links
+                  link.addEventListener('click', function (e) {
                     e.preventDefault();
                     const target = this.getAttribute('href').substring(1);
                     handleNavigation(target);
                   });
                 }
               });
+        
+              // Function to show section and scroll to target
+              function handleNavigation(target) {
+                // Hide all sections first
+                sections.forEach(section => {
+                  section.classList.remove('active');
+                });
+        
+                // Find and show the target section
+                const targetElement = document.getElementById(target);
+                if (targetElement) {
+                  const parentSection = targetElement.closest('.section');
+                  if (parentSection) {
+                    parentSection.classList.add('active');
+                  }
+                  
+                  // Update navigation state
+                  document.querySelectorAll('.nav-container li').forEach(li => {
+                    li.classList.remove('active');
+                    li.classList.remove('target-active');
+                    li.classList.remove('ancestor-active');
+                  });
+                  
+                  const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+                  if (matchingNavLink) {
+                    // Add active class to the link's parent
+                    if (matchingNavLink.parentElement) {
+                      matchingNavLink.parentElement.classList.add('active');
+                      matchingNavLink.parentElement.classList.add('target-active');
+                    }
+                    
+                    // Add active class to all parent li elements
+                    let currentElement = matchingNavLink.parentElement ? matchingNavLink.parentElement.parentElement : null;
+                    while (currentElement && !currentElement.classList.contains('nav-container')) {
+                      if (currentElement.tagName === 'LI') {
+                        currentElement.classList.add('active');
+                        currentElement.classList.add('ancestor-active');
+                      }
+                      currentElement = currentElement.parentElement;
+                    }
+                  }
+                  
+                  // Different scroll behavior for mobile and desktop
+                  if (window.innerWidth <= 768) { // Mobile
+                    setTimeout(() => {
+                      // First scroll the element into view
+                      targetElement.scrollIntoView({ behavior: 'smooth' });
+                      
+                      // Then adjust for header offset with a shorter delay and smoother transition
+                      setTimeout(() => {
+                        window.scrollBy({
+                          top: -85,
+                          behavior: 'instant' // Use instant to hide the adjustment
+                        });
+                      }, 400); // Reduced from 500ms
+                    }, 300);
+                  } else { // Desktop
+                    const headerOffset = 85;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
+                }
+              }
+        
+              // Add mobile menu toggle functionality
+              const menuToggle = document.querySelector('.menu-toggle');
+              const navContainer = document.querySelector('.nav-container');
               
-              // Mobile menu functionality
-              menuToggle.addEventListener('click', () => navContainer.classList.toggle('active'));
-              
+              menuToggle.addEventListener('click', function() {
+                navContainer.classList.toggle('active');
+              });
+        
+              // Close menu when clicking outside
               document.addEventListener('click', function(event) {
                 if (!navContainer.contains(event.target) && !menuToggle.contains(event.target)) {
                   navContainer.classList.remove('active');
                 }
               });
-              
-              // Close menu on mobile when clicking certain links
+        
+              // Close menu when clicking a link (mobile only)
               if (window.innerWidth <= 768) {
                 navLinks.forEach(link => {
                   link.addEventListener('click', function() {
+                    // Check if the parent li has no child ul elements
                     const parentLi = this.closest('li');
-                    if (parentLi && !parentLi.querySelector('ul')) {
+                    const hasChildren = parentLi.querySelector('ul');
+                    
+                    // Only close the sidebar if there are no child elements
+                    if (!hasChildren) {
                       navContainer.classList.remove('active');
                     }
                   });
                 });
               }
-              
-              // Handle initial hash
+        
+              // Handle initial hash after a small delay to ensure page is ready
               setTimeout(() => {
                 if (window.location.hash) {
                   const target = window.location.hash.substring(1);
@@ -2107,11 +2156,11 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .then(translations => {
         if (!translations) return;
         
-        // Store active navigation paths
+        // Store active navigation items before translation
         const activeNavPaths = [];
         document.querySelectorAll('.nav-container li.active').forEach(el => {
           const link = el.querySelector('a');
-          if (link && link.getAttribute('href')) {
+          if (link?.getAttribute('href')) {
             activeNavPaths.push(link.getAttribute('href'));
           }
         });
@@ -2139,36 +2188,29 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           }
         });
         
-        // Update metadata
-        document.querySelector('meta[name="language"]').setAttribute('content', language);
+        document.querySelector('meta[name="language"]')?.setAttribute('content', language);
         
         // Restore navigation state
-        window.setTimeout(function() {
-          // Reattach event listeners
-          attachNavigationHandlers();
+        window.setTimeout(() => {
+          reattachNavigationEventListeners();
           
-          // Clear active states
+          // Clear all active states
           document.querySelectorAll('.nav-container li').forEach(li => {
-            li.classList.remove('active');
-            li.classList.remove('target-active');
-            li.classList.remove('ancestor-active');
+            li.classList.remove('active', 'target-active', 'ancestor-active');
           });
           
-          // Restore active state for selected item
+          // Restore active item
           const lastActiveHref = activeNavPaths[activeNavPaths.length - 1];
           if (lastActiveHref) {
             const matchingLink = document.querySelector(`.nav-container a[href="${lastActiveHref}"]`);
-            if (matchingLink && matchingLink.parentElement) {
-              // Set active on the item
-              matchingLink.parentElement.classList.add('active');
-              matchingLink.parentElement.classList.add('target-active');
+            if (matchingLink?.parentElement) {
+              matchingLink.parentElement.classList.add('active', 'target-active');
               
-              // Set active on parents
+              // Activate parent elements
               let currentElement = matchingLink.parentElement.parentElement;
               while (currentElement && !currentElement.classList.contains('nav-container')) {
                 if (currentElement.tagName === 'LI') {
-                  currentElement.classList.add('active');
-                  currentElement.classList.add('ancestor-active');
+                  currentElement.classList.add('active', 'ancestor-active');
                 }
                 currentElement = currentElement.parentElement;
               }
@@ -2179,13 +2221,63 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .catch(() => {});
   }
   
-  // Attach event handlers after translation
-  function attachNavigationHandlers() {
-    const navLinks = document.querySelectorAll('.nav-container a');
-    const allLinks = document.querySelectorAll('a[href^="#"]');
+  function globalHandleNavigation(target) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+      section.classList.remove('active');
+    });
+
+    const targetElement = document.getElementById(target);
+    if (!targetElement) return;
     
-    // Handle navigation links
-    navLinks.forEach(link => {
+    // Show target section
+    const parentSection = targetElement.closest('.section');
+    if (parentSection) {
+      parentSection.classList.add('active');
+    }
+    
+    // Update navigation
+    const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+    if (matchingNavLink) {
+      // Clear all active states
+      document.querySelectorAll('.nav-container li').forEach(li => {
+        li.classList.remove('active', 'target-active', 'ancestor-active');
+      });
+      
+      // Set active states
+      if (matchingNavLink.parentElement) {
+        matchingNavLink.parentElement.classList.add('active', 'target-active');
+        
+        // Activate parent elements
+        let currentElement = matchingNavLink.parentElement.parentElement;
+        while (currentElement && !currentElement.classList.contains('nav-container')) {
+          if (currentElement.tagName === 'LI') {
+            currentElement.classList.add('active', 'ancestor-active');
+          }
+          currentElement = currentElement.parentElement;
+        }
+      }
+    }
+    
+    // Scroll to target
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          window.scrollBy({ top: -85, behavior: 'instant' });
+        }, 400);
+      }, 300);
+    } else {
+      const headerOffset = 85;
+      const elementPosition = targetElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  }
+
+  function reattachNavigationEventListeners() {
+    // Handle navigation menu links
+    document.querySelectorAll('.nav-container a').forEach(link => {
       const newLink = link.cloneNode(true);
       if (link.parentNode) {
         link.parentNode.replaceChild(newLink, link);
@@ -2193,40 +2285,35 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function(e) {
           e.preventDefault();
           
-          // Clear active classes
+          // Clear all active states
           document.querySelectorAll('.nav-container li').forEach(li => {
-            li.classList.remove('active');
-            li.classList.remove('target-active');
-            li.classList.remove('ancestor-active');
+            li.classList.remove('active', 'target-active', 'ancestor-active');
           });
           
-          // Set active classes
+          // Set active states
           if (this.parentElement) {
-            this.parentElement.classList.add('active');
-            this.parentElement.classList.add('target-active');
-          }
-          
-          // Set active classes on parents
-          let currentElement = this.parentElement ? this.parentElement.parentElement : null;
-          while (currentElement && !currentElement.classList.contains('nav-container')) {
-            if (currentElement.tagName === 'LI') {
-              currentElement.classList.add('active');
-              currentElement.classList.add('ancestor-active');
+            this.parentElement.classList.add('active', 'target-active');
+            
+            // Activate parent elements
+            let currentElement = this.parentElement.parentElement;
+            while (currentElement && !currentElement.classList.contains('nav-container')) {
+              if (currentElement.tagName === 'LI') {
+                currentElement.classList.add('active', 'ancestor-active');
+              }
+              currentElement = currentElement.parentElement;
             }
-            currentElement = currentElement.parentElement;
           }
           
-          // Navigate to target
           const target = this.getAttribute('href')?.substring(1);
           if (target) {
-            navigateToSection(target);
+            globalHandleNavigation(target);
           }
         });
       }
     });
-    
+
     // Handle other internal links
-    allLinks.forEach(link => {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
       if (!link.closest('.nav-container')) {
         const newLink = link.cloneNode(true);
         if (link.parentNode) {
@@ -2236,7 +2323,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             e.preventDefault();
             const target = this.getAttribute('href')?.substring(1);
             if (target) {
-              navigateToSection(target);
+              globalHandleNavigation(target);
             }
           });
         }
@@ -2244,69 +2331,10 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     });
   }
   
-  // Navigate to a section
-  function navigateToSection(target) {
-    const sections = document.querySelectorAll('.section');
-    
-    // Hide all sections
-    sections.forEach(section => section.classList.remove('active'));
-    
-    // Show target section
-    const targetElement = document.getElementById(target);
-    if (targetElement) {
-      const parentSection = targetElement.closest('.section');
-      if (parentSection) {
-        parentSection.classList.add('active');
-      }
-      
-      // Update navigation
-      document.querySelectorAll('.nav-container li').forEach(li => {
-        li.classList.remove('active');
-        li.classList.remove('target-active');
-        li.classList.remove('ancestor-active');
-      });
-      
-      const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
-      if (matchingNavLink) {
-        // Set active on the item
-        if (matchingNavLink.parentElement) {
-          matchingNavLink.parentElement.classList.add('active');
-          matchingNavLink.parentElement.classList.add('target-active');
-        }
-        
-        // Set active on parents
-        let currentElement = matchingNavLink.parentElement ? matchingNavLink.parentElement.parentElement : null;
-        while (currentElement && !currentElement.classList.contains('nav-container')) {
-          if (currentElement.tagName === 'LI') {
-            currentElement.classList.add('active');
-            currentElement.classList.add('ancestor-active');
-          }
-          currentElement = currentElement.parentElement;
-        }
-      }
-      
-      // Scroll to target
-      if (window.innerWidth <= 768) {
-        setTimeout(() => {
-          targetElement.scrollIntoView({ behavior: 'smooth' });
-          setTimeout(() => {
-            window.scrollBy({ top: -85, behavior: 'instant' });
-          }, 400);
-        }, 300);
-      } else {
-        const headerOffset = 85;
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
-      }
-    }
-  }
-  
   // Initialize language
-  const preferredLanguage = getPreferredLanguage();
-  applyLanguage(preferredLanguage);
+  applyLanguage(getPreferredLanguage());
   
-  // Language switcher
+  // Language switcher handling
   document.addEventListener('DOMContentLoaded', function() {
     const languageButton = document.getElementById('languageButton');
     const languageDropdown = document.getElementById('languageDropdown');
@@ -2317,7 +2345,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         languageDropdown.classList.toggle('show');
       });
     }
-    
+  
     document.querySelectorAll('.language-option').forEach(option => {
       option.addEventListener('click', function(e) {
         e.preventDefault();
@@ -2326,16 +2354,14 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         languageDropdown.classList.remove('show');
       });
     });
-    
+  
     document.addEventListener('click', function(event) {
-      if (!event.target.closest('.language-switcher-container')) {
-        if (languageDropdown) {
-          languageDropdown.classList.remove('show');
-        }
+      if (!event.target.closest('.language-switcher-container') && languageDropdown) {
+        languageDropdown.classList.remove('show');
       }
     });
   });
-  </script>
+</script>
 
         </body>
         </html>
