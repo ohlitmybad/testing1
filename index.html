@@ -2157,7 +2157,9 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
   function globalHandleNavigation(target) {
     const sections = document.querySelectorAll('.section');
     const navLinks = document.querySelectorAll('.nav-container a');
-    
+    document.querySelectorAll('.nav-container li.active').forEach(item => {
+       item.classList.remove('active');
+     });
     // Hide all sections first
     sections.forEach(section => {
       section.classList.remove('active');
@@ -2171,12 +2173,8 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         parentSection.classList.add('active');
       }
       
-      // Update navigation state - first remove all active classes
-      document.querySelectorAll('.nav-container li').forEach(li => {
-        li.classList.remove('active');
-      });
-      
-      // Then only add active class to the matching link's parent hierarchy
+      // Update navigation state
+      navLinks.forEach(link => link.parentElement.classList.remove('active'));
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       if (matchingNavLink) {
         let currentElement = matchingNavLink.parentElement;
@@ -2219,27 +2217,9 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
   function reattachNavigationEventListeners() {
     const navLinks = document.querySelectorAll('.nav-container a');
     const allLinks = document.querySelectorAll('a[href^="#"]');
-    
-    // First, clear all active states to start with a clean slate
-    document.querySelectorAll('.nav-container li').forEach(li => {
-      li.classList.remove('active');
-    });
-    
-    // Then set active state based on current location hash if available
-    const currentHash = window.location.hash.substring(1);
-    if (currentHash) {
-      const activeLink = document.querySelector(`.nav-container a[href="#${currentHash}"]`);
-      if (activeLink) {
-        let currentElement = activeLink.parentElement;
-        while (currentElement && !currentElement.classList.contains('nav-container')) {
-          if (currentElement.tagName === 'LI') {
-            currentElement.classList.add('active');
-          }
-          currentElement = currentElement.parentElement;
-        }
-      }
-    }
-    
+    document.querySelectorAll('.nav-container li.active').forEach(item => {
+       item.classList.remove('active');
+     });
     // Handle navigation menu links
     navLinks.forEach(link => {
       // Remove old listeners by cloning and replacing
@@ -2250,10 +2230,8 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // Remove active class from all navigation list items
-          document.querySelectorAll('.nav-container li').forEach(li => {
-            li.classList.remove('active');
-          });
+          // Remove active class from all links' parent li elements
+          navLinks.forEach(l => l.parentElement?.classList.remove('active'));
           
           // Add active class to clicked link's parent li and all its parent li elements
           let currentElement = this.parentElement;
