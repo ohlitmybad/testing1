@@ -1889,188 +1889,175 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
           </div> </section></div>
 
 	<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const navLinks = document.querySelectorAll('.nav-container a');
-    const allLinks = document.querySelectorAll('a[href^="#"]');
-    const sections = document.querySelectorAll('.section');
-
-    // Function to attach all event listeners
-    function attachEventListeners() {
-      // Handle navigation menu links
-      navLinks.forEach(link => {
-        link.removeEventListener('click', handleNavLinkClick); // Remove existing listeners
-        link.addEventListener('click', handleNavLinkClick); // Reattach listeners
-      });
-
-      // Handle all other internal links
-      allLinks.forEach(link => {
-        if (!link.closest('.nav-container')) {
-          link.removeEventListener('click', handleInternalLinkClick);
-          link.addEventListener('click', handleInternalLinkClick);
-        }
-      });
-
-      // Add mobile menu toggle functionality
-      const menuToggle = document.querySelector('.menu-toggle');
-      const navContainer = document.querySelector('.nav-container');
-      menuToggle.removeEventListener('click', handleMenuToggleClick);
-      menuToggle.addEventListener('click', handleMenuToggleClick);
-
-      // Close menu when clicking outside
-      document.removeEventListener('click', handleOutsideClick);
-      document.addEventListener('click', handleOutsideClick);
-
-      // Close menu when clicking a link (mobile only)
-      if (window.innerWidth <= 768) {
-        navLinks.forEach(link => {
-          link.removeEventListener('click', handleMobileLinkClick);
-          link.addEventListener('click', handleMobileLinkClick);
-        });
-      }
-    }
-
-    // Define the event handler functions
-    function handleNavLinkClick(e) {
-      e.preventDefault();
-      const target = this.getAttribute('href').substring(1);
-      handleNavigation(target);
-    }
-
-    function handleInternalLinkClick(e) {
-      e.preventDefault();
-      const target = this.getAttribute('href').substring(1);
-      handleNavigation(target);
-    }
-
-    function handleMenuToggleClick() {
-      const navContainer = document.querySelector('.nav-container');
-      navContainer.classList.toggle('active');
-    }
-
-    function handleOutsideClick(event) {
-      const navContainer = document.querySelector('.nav-container');
-      const menuToggle = document.querySelector('.menu-toggle');
-      if (!navContainer.contains(event.target) && !menuToggle.contains(event.target)) {
-        navContainer.classList.remove('active');
-      }
-    }
-
-    function handleMobileLinkClick() {
-      const navContainer = document.querySelector('.nav-container');
-      const parentLi = this.closest('li');
-      const hasChildren = parentLi.querySelector('ul');
-      if (!hasChildren) {
-        navContainer.classList.remove('active');
-      }
-    }
-
-    // Function to show section and scroll to target
-    function handleNavigation(target) {
-      // Hide all sections first
-      sections.forEach(section => {
-        section.classList.remove('active');
-      });
-
-      // Find and show the target section
-      const targetElement = document.getElementById(target);
-      if (targetElement) {
-        const parentSection = targetElement.closest('.section');
-        if (parentSection) {
-          parentSection.classList.add('active');
-        }
-
-        // Update navigation state
-        navLinks.forEach(link => link.parentElement.classList.remove('active'));
-        const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
-        if (matchingNavLink) {
-          let currentElement = matchingNavLink.parentElement;
-          while (currentElement && !currentElement.classList.contains('nav-container')) {
-            if (currentElement.tagName === 'LI') {
-              currentElement.classList.add('active');
-            }
-            currentElement = currentElement.parentElement;
-          }
-        }
-
-        // Different scroll behavior for mobile and desktop
-        if (window.innerWidth <= 768) { // Mobile
-          setTimeout(() => {
-            // First scroll the element into view
-            targetElement.scrollIntoView({ behavior: 'smooth' });
-
-            // Then adjust for header offset with a shorter delay and smoother transition
-            setTimeout(() => {
-              window.scrollBy({
-                top: -85,
-                behavior: 'instant' // Use instant to hide the adjustment
+            document.addEventListener('DOMContentLoaded', function () {
+              const navLinks = document.querySelectorAll('.nav-container a');
+              const allLinks = document.querySelectorAll('a[href^="#"]');
+              const sections = document.querySelectorAll('.section');
+        
+              // Add scroll event listener to track section visibility
+              window.addEventListener('scroll', function() {
+                const scrollPosition = window.scrollY;
+        
+                // Find all section headings (h3) within the active section
+                const activeSection = document.querySelector('.section.active');
+                if (!activeSection) return;
+        
+                const subSections = activeSection.querySelectorAll('div[id]');
+                
+                // Check which subsection is currently in view
+                subSections.forEach(subSection => {
+                  const rect = subSection.getBoundingClientRect();
+                  const offset = 100; // Adjust this value to change when the active state updates
+        
+                  if (rect.top <= offset && rect.bottom >= offset) {
+                    // Remove active class from all nav items
+                    navLinks.forEach(link => link.parentElement.classList.remove('active'));
+                    
+                    // Find and activate corresponding nav link
+                    const correspondingLink = document.querySelector(`.nav-container a[href="#${subSection.id}"]`);
+                    if (correspondingLink) {
+                      // Add active class to the link and its parent items
+                      let currentElement = correspondingLink.parentElement;
+                      while (currentElement && !currentElement.classList.contains('nav-container')) {
+                        if (currentElement.tagName === 'LI') {
+                          currentElement.classList.add('active');
+                        }
+                        currentElement = currentElement.parentElement;
+                      }
+                    }
+                  }
+                });
               });
-            }, 400); // Reduced from 500ms
-          }, 300);
-        } else { // Desktop
-          const headerOffset = 85;
-          const elementPosition = targetElement.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      }
-    }
-
-    // Add scroll event listener to track section visibility
-    window.addEventListener('scroll', function () {
-      const scrollPosition = window.scrollY;
-
-      // Find all section headings (h3) within the active section
-      const activeSection = document.querySelector('.section.active');
-      if (!activeSection) return;
-
-      const subSections = activeSection.querySelectorAll('div[id]');
-
-      // Check which subsection is currently in view
-      subSections.forEach(subSection => {
-        const rect = subSection.getBoundingClientRect();
-        const offset = 100; // Adjust this value to change when the active state updates
-
-        if (rect.top <= offset && rect.bottom >= offset) {
-          // Remove active class from all nav items
-          navLinks.forEach(link => link.parentElement.classList.remove('active'));
-
-          // Find and activate corresponding nav link
-          const correspondingLink = document.querySelector(`.nav-container a[href="#${subSection.id}"]`);
-          if (correspondingLink) {
-            // Add active class to the link and its parent items
-            let currentElement = correspondingLink.parentElement;
-            while (currentElement && !currentElement.classList.contains('nav-container')) {
-              if (currentElement.tagName === 'LI') {
-                currentElement.classList.add('active');
+        
+              // Handle navigation menu links
+              navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                  e.preventDefault();
+                  
+                  // Remove active class from all links' parent li elements
+                  navLinks.forEach(l => l.parentElement.classList.remove('active'));
+                  
+                  // Add active class to clicked link's parent li and all its parent li elements
+                  let currentElement = this.parentElement;
+                  while (currentElement && currentElement.classList.contains('nav-container') === false) {
+                    if (currentElement.tagName === 'LI') {
+                      currentElement.classList.add('active');
+                    }
+                    currentElement = currentElement.parentElement;
+                  }
+                  
+                  const target = this.getAttribute('href').substring(1);
+                  handleNavigation(target);
+                });
+              });
+        
+              // Handle all other internal links
+              allLinks.forEach(link => {
+                if (!link.closest('.nav-container')) {  // Only for non-nav links
+                  link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('href').substring(1);
+                    handleNavigation(target);
+                  });
+                }
+              });
+        
+              // Function to show section and scroll to target
+              function handleNavigation(target) {
+                // Hide all sections first
+                sections.forEach(section => {
+                  section.classList.remove('active');
+                });
+        
+                // Find and show the target section
+                const targetElement = document.getElementById(target);
+                if (targetElement) {
+                  const parentSection = targetElement.closest('.section');
+                  if (parentSection) {
+                    parentSection.classList.add('active');
+                  }
+                  
+                  // Update navigation state
+                  navLinks.forEach(link => link.parentElement.classList.remove('active'));
+                  const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+                  if (matchingNavLink) {
+                    let currentElement = matchingNavLink.parentElement;
+                    while (currentElement && !currentElement.classList.contains('nav-container')) {
+                      if (currentElement.tagName === 'LI') {
+                        currentElement.classList.add('active');
+                      }
+                      currentElement = currentElement.parentElement;
+                    }
+                  }
+                  
+                  // Different scroll behavior for mobile and desktop
+                  if (window.innerWidth <= 768) { // Mobile
+                    setTimeout(() => {
+                      // First scroll the element into view
+                      targetElement.scrollIntoView({ behavior: 'smooth' });
+                      
+                      // Then adjust for header offset with a shorter delay and smoother transition
+                      setTimeout(() => {
+                        window.scrollBy({
+                          top: -85,
+                          behavior: 'instant' // Use instant to hide the adjustment
+                        });
+                      }, 400); // Reduced from 500ms
+                    }, 300);
+                  } else { // Desktop
+                    const headerOffset = 85;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
+                    });
+                  }
+                }
               }
-              currentElement = currentElement.parentElement;
-            }
-          }
-        }
-      });
-    });
+        
+              // Add mobile menu toggle functionality
+              const menuToggle = document.querySelector('.menu-toggle');
+              const navContainer = document.querySelector('.nav-container');
+              
+              menuToggle.addEventListener('click', function() {
+                navContainer.classList.toggle('active');
+              });
+        
+              // Close menu when clicking outside
+              document.addEventListener('click', function(event) {
+                if (!navContainer.contains(event.target) && !menuToggle.contains(event.target)) {
+                  navContainer.classList.remove('active');
+                }
+              });
+        
+              // Close menu when clicking a link (mobile only)
+              if (window.innerWidth <= 768) {
+                navLinks.forEach(link => {
+                  link.addEventListener('click', function() {
+                    // Check if the parent li has no child ul elements
+                    const parentLi = this.closest('li');
+                    const hasChildren = parentLi.querySelector('ul');
+                    
+                    // Only close the sidebar if there are no child elements
+                    if (!hasChildren) {
+                      navContainer.classList.remove('active');
+                    }
+                  });
+                });
+              }
+        
+              // Handle initial hash after a small delay to ensure page is ready
+              setTimeout(() => {
+                if (window.location.hash) {
+                  const target = window.location.hash.substring(1);
+                  handleNavigation(target);
+                }
+              }, 100);
+            });
 
-    // Handle initial hash after a small delay to ensure page is ready
-    setTimeout(() => {
-      if (window.location.hash) {
-        const target = window.location.hash.substring(1);
-        handleNavigation(target);
-      }
-    }, 100);
-
-    // Attach event listeners initially
-    attachEventListeners();
-
-    // Apply translations and reattach event listeners
-    const preferredLanguage = getPreferredLanguage();
-    applyLanguage(preferredLanguage);
-  });
-
-  function setLanguage(language) {
+ function setLanguage(language) {
     localStorage.setItem('preferredLanguage', language);
     const url = new URL(window.location.href);
     if (language === 'en') {
@@ -2082,7 +2069,7 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
     }
     window.history.pushState({}, '', url);
   }
-
+  
   function getPreferredLanguage() {
     // PRIORITY 1: Check URL parameter first
     const urlParams = new URLSearchParams(window.location.search);
@@ -2102,14 +2089,14 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
   function getBrowserLanguage() {
     return navigator.language.slice(0, 2);
   }
-function applyLanguage(language) {
-  console.log(language);
 
+
+
+function applyLanguage(language) {
   if (language === 'en') {
-    attachEventListeners(); // Attach listeners even if no translation is applied
     return;
   }
-
+  
   fetch(`locales/${language}.json`)
     .then(response => response.ok ? response.json() : null)
     .then(translations => {
@@ -2121,47 +2108,142 @@ function applyLanguage(language) {
             if (value === undefined || value === null) break;
             value = value[key];
           }
+          
           if (value) {
             if (element.tagName === 'META') {
               element.setAttribute('content', value);
             } else if (element.tagName === 'INPUT') {
               element.setAttribute('placeholder', value);
             } else if (value.includes('<')) {
+              // Instead of using innerHTML, use a more careful approach for HTML content
+              // Store original children with their event listeners
+              const originalChildren = Array.from(element.querySelectorAll('*'));
+              const originalChildrenWithListeners = originalChildren.map(child => {
+                return {
+                  element: child,
+                  id: child.id,
+                  classes: child.className
+                };
+              });
+              
+              // Now set the inner HTML
               element.innerHTML = value;
+              
+              // Try to restore event listeners by matching elements
+              originalChildrenWithListeners.forEach(originalData => {
+                if (originalData.id) {
+                  // If the element had an ID, we can easily find its replacement
+                  const newElement = element.querySelector(`#${originalData.id}`);
+                  if (newElement) {
+                    // Clone the old element's event listeners (simplified approach - only works for click)
+                    const oldElement = originalData.element;
+                    const oldClone = oldElement.cloneNode(true);
+                    // Re-add click event listeners using the href attribute for navigation links
+                    if (newElement.tagName === 'A' && newElement.getAttribute('href')?.startsWith('#')) {
+                      newElement.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = this.getAttribute('href').substring(1);
+                        handleNavigation(target);
+                      });
+                    }
+                  }
+                } else if (originalData.classes) {
+                  // If no ID, try to match by classes
+                  const newElements = element.querySelectorAll(`.${originalData.classes.replace(/ /g, '.')}`);
+                  // Similar approach to above for each matching element
+                }
+              });
             } else {
+              // Simple text content change is safe
               element.textContent = value;
             }
           }
         });
-        document.querySelector('meta[name="language"]').setAttribute('content', language);
+        
+        // After translation is complete, re-attach critical event listeners
+        reattachEventListeners();
       }
-      attachEventListeners(); // Reattach listeners after translations are applied
     })
-    .catch(() => {});
+    .catch(error => {
+      console.log("Translation error (silently ignored):", error);
+    });
 }
 
+// Function to reattach critical event listeners after translation
+function reattachEventListeners() {
+  // Reattach all navigation listeners
+  const navLinks = document.querySelectorAll('.nav-container a');
+  const allLinks = document.querySelectorAll('a[href^="#"]');
+  
+  // Handle navigation menu links
+  navLinks.forEach(link => {
+    // Remove existing listeners to prevent duplicates
+    const oldLink = link.cloneNode(true);
+    link.parentNode.replaceChild(oldLink, link);
+    
+    oldLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Remove active class from all links' parent li elements
+      navLinks.forEach(l => l.parentElement.classList.remove('active'));
+      
+      // Add active class to clicked link's parent li and all its parent li elements
+      let currentElement = this.parentElement;
+      while (currentElement && currentElement.classList.contains('nav-container') === false) {
+        if (currentElement.tagName === 'LI') {
+          currentElement.classList.add('active');
+        }
+        currentElement = currentElement.parentElement;
+      }
+      
+      const target = this.getAttribute('href').substring(1);
+      handleNavigation(target);
+    });
+  });
+
+  // Handle all other internal links
+  allLinks.forEach(link => {
+    if (!link.closest('.nav-container')) {  // Only for non-nav links
+      // Remove existing listeners to prevent duplicates
+      const oldLink = link.cloneNode(true);
+      link.parentNode.replaceChild(oldLink, link);
+      
+      oldLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = this.getAttribute('href').substring(1);
+        handleNavigation(target);
+      });
+    }
+  });
+}
+		
+  
+  const preferredLanguage = getPreferredLanguage();
+  applyLanguage(preferredLanguage);
+  
   // BUTTON LANGUAGE SWITCHER REMOVE FOR PAGES WITH NO LANGUAGE SWITCHER
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
     const languageButton = document.getElementById('languageButton');
     const languageDropdown = document.getElementById('languageDropdown');
+    
 
     if (languageButton) {
-      languageButton.addEventListener('click', function (e) {
+      languageButton.addEventListener('click', function(e) {
         e.stopPropagation();
         languageDropdown.classList.toggle('show');
       });
     }
-
+  
     document.querySelectorAll('.language-option').forEach(option => {
-      option.addEventListener('click', function (e) {
+      option.addEventListener('click', function(e) {
         e.preventDefault();
         const lang = this.getAttribute('href').split('=')[1];
         setLanguage(lang);
         languageDropdown.classList.remove('show');
       });
     });
-
-    document.addEventListener('click', function (event) {
+  
+    document.addEventListener('click', function(event) {
       if (!event.target.closest('.language-switcher-container')) {
         if (languageDropdown) {
           languageDropdown.classList.remove('show');
@@ -2169,7 +2251,7 @@ function applyLanguage(language) {
       }
     });
   });
-</script>
+  </script>
 
 <script>
   const xhr = new XMLHttpRequest();
