@@ -2133,18 +2133,137 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           } else if (element.tagName === 'INPUT') {
         element.setAttribute('placeholder', value);
     } else if (value.includes('<')) {
+              // Apply translation (but save original event listeners might be lost)
               element.innerHTML = value;
-          } else {
+            } else {
               element.textContent = value;
-          }          }
+            }          }
           });
           // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
+          
+          // Reattach event listeners after translation
+          window.setTimeout(function() {
+            reattachNavigationEventListeners();
+          }, 0);
         }
       })
       .catch(() => {
         // Completely empty catch block to silently ignore any errors
       });
+  }
+  
+  // Global navigation handler function
+  function globalHandleNavigation(target) {
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-container a');
+    
+    // Hide all sections first
+    sections.forEach(section => {
+      section.classList.remove('active');
+    });
+
+    // Find and show the target section
+    const targetElement = document.getElementById(target);
+    if (targetElement) {
+      const parentSection = targetElement.closest('.section');
+      if (parentSection) {
+        parentSection.classList.add('active');
+      }
+      
+      // Update navigation state
+      navLinks.forEach(link => link.parentElement.classList.remove('active'));
+      const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+      if (matchingNavLink) {
+        let currentElement = matchingNavLink.parentElement;
+        while (currentElement && !currentElement.classList.contains('nav-container')) {
+          if (currentElement.tagName === 'LI') {
+            currentElement.classList.add('active');
+          }
+          currentElement = currentElement.parentElement;
+        }
+      }
+      
+      // Different scroll behavior for mobile and desktop
+      if (window.innerWidth <= 768) { // Mobile
+        setTimeout(() => {
+          // First scroll the element into view
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+          
+          // Then adjust for header offset with a shorter delay and smoother transition
+          setTimeout(() => {
+            window.scrollBy({
+              top: -85,
+              behavior: 'instant' // Use instant to hide the adjustment
+            });
+          }, 400);
+        }, 300);
+      } else { // Desktop
+        const headerOffset = 85;
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }
+
+  // Function to reattach navigation event listeners after translation
+  function reattachNavigationEventListeners() {
+    const navLinks = document.querySelectorAll('.nav-container a');
+    const allLinks = document.querySelectorAll('a[href^="#"]');
+    
+    // Handle navigation menu links
+    navLinks.forEach(link => {
+      // Remove old listeners by cloning and replacing
+      const newLink = link.cloneNode(true);
+      if (link.parentNode) {
+        link.parentNode.replaceChild(newLink, link);
+        
+        newLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          
+          // Remove active class from all links' parent li elements
+          navLinks.forEach(l => l.parentElement?.classList.remove('active'));
+          
+          // Add active class to clicked link's parent li and all its parent li elements
+          let currentElement = this.parentElement;
+          while (currentElement && !currentElement.classList.contains('nav-container')) {
+            if (currentElement.tagName === 'LI') {
+              currentElement.classList.add('active');
+            }
+            currentElement = currentElement.parentElement;
+          }
+          
+          const target = this.getAttribute('href')?.substring(1);
+          if (target) {
+            globalHandleNavigation(target);
+          }
+        });
+      }
+    });
+
+    // Handle all other internal links
+    allLinks.forEach(link => {
+      if (!link.closest('.nav-container')) {  // Only for non-nav links
+        // Remove old listeners by cloning and replacing
+        const newLink = link.cloneNode(true);
+        if (link.parentNode) {
+          link.parentNode.replaceChild(newLink, link);
+          
+          newLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = this.getAttribute('href')?.substring(1);
+            if (target) {
+              globalHandleNavigation(target);
+            }
+          });
+        }
+      }
+    });
   }
   
   const preferredLanguage = getPreferredLanguage();
