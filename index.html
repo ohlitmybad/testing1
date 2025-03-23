@@ -2120,10 +2120,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
-          // Save current hash location
-          const currentHash = window.location.hash.substring(1) || '';
-          
-          // Apply translations
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
@@ -2133,30 +2129,23 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             }
             if (value) {
               if (element.tagName === 'META') {
-                element.setAttribute('content', value);
-              } else if (element.tagName === 'INPUT') {
-                element.setAttribute('placeholder', value);
-              } else if (value.includes('<')) {
-                // Apply translation (but save original event listeners might be lost)
-                element.innerHTML = value;
-              } else {
-                element.textContent = value;
-              }          
-            }
+              element.setAttribute('content', value);
+          } else if (element.tagName === 'INPUT') {
+        element.setAttribute('placeholder', value);
+    } else if (value.includes('<')) {
+              // Apply translation (but save original event listeners might be lost)
+              element.innerHTML = value;
+            } else {
+              element.textContent = value;
+            }          }
           });
-          
           // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
           
-          // Wait for DOM to update, then reattach event listeners and restore navigation
-          setTimeout(function() {
+          // Reattach event listeners after translation
+          window.setTimeout(function() {
             reattachNavigationEventListeners();
-            
-            // If there was a hash, navigate to that section
-            if (currentHash) {
-              navigateToSection(currentHash);
-            }
-          }, 200);
+          }, 0);
         }
       })
       .catch(() => {
@@ -2164,123 +2153,48 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       });
   }
   
-  // Function to reattach navigation event listeners after translation
-  function reattachNavigationEventListeners() {
-    // Step 1: Remove ALL event listeners by cloning the entire navigation
-    const navContainer = document.querySelector('.nav-container');
-    if (navContainer) {
-      const newNavContainer = navContainer.cloneNode(true);
-      navContainer.parentNode.replaceChild(newNavContainer, navContainer);
-    }
+  // Global navigation handler function
+  function globalHandleNavigation(target) {
+    const sections = document.querySelectorAll('.section');
+    const navLinks = document.querySelectorAll('.nav-container a');
     
-    // Step 2: Attach event listeners to ALL navigation items
-    document.querySelectorAll('.nav-container a').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = this.getAttribute('href').substring(1);
-        resetAllNavStates(); // Reset ALL states first
-        activatePathTo(this); // Then only activate path to this link
-        navigateToSection(target);
-      });
-    });
-    
-    // Step 3: Attach event listeners to all other internal links
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      if (!link.closest('.nav-container')) {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = this.getAttribute('href').substring(1);
-          resetAllNavStates();
-          const navLink = document.querySelector(`.nav-container a[href="#${target}"]`);
-          if (navLink) {
-            activatePathTo(navLink);
-          }
-          navigateToSection(target);
-        });
-      }
-    });
-    
-    // If there's a hash in the URL, activate the corresponding navigation
-    if (window.location.hash) {
-      const targetId = window.location.hash.substring(1);
-      const navLink = document.querySelector(`.nav-container a[href="#${targetId}"]`);
-      if (navLink) {
-        resetAllNavStates();
-        activatePathTo(navLink);
-      }
-    }
-  }
-  
-  // Helper function to reset all navigation states
-  function resetAllNavStates() {
-    document.querySelectorAll('.nav-container li').forEach(item => {
-      item.classList.remove('active');
-    });
-  }
-  
-  // Helper function to activate the path to a navigation link
-  function activatePathTo(linkElement) {
-    // First identify the exact path we need to activate
-    let path = [];
-    let current = linkElement.parentElement;
-    
-    // Work up the tree, collecting elements to activate
-    while (current && !current.classList.contains('nav-container')) {
-      if (current.tagName === 'LI') {
-        path.push(current);
-      }
-      current = current.parentElement;
-    }
-    
-    // Only activate these exact elements
-    path.forEach(element => {
-      element.classList.add('active');
-    });
-    
-    // Special handling for nested lists - only show the exact submenu
-    document.querySelectorAll('.nav-container ul').forEach(ul => {
-      // Default to hiding all submenus
-      ul.style.maxHeight = '0';
-      ul.style.visibility = 'hidden';
-      
-      // Only show submenus that are parents of our selected item
-      let isInPath = false;
-      path.forEach(item => {
-        if (ul.parentNode === item || item.contains(ul)) {
-          isInPath = true;
-        }
-      });
-      
-      if (isInPath) {
-        ul.style.maxHeight = '1000px';
-        ul.style.visibility = 'visible';
-      }
-    });
-  }
-  
-  // Helper function to navigate to a section
-  function navigateToSection(targetId) {
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(section => {
+    // Hide all sections first
+    sections.forEach(section => {
       section.classList.remove('active');
     });
-    
-    // Show target section
-    const targetElement = document.getElementById(targetId);
+
+    // Find and show the target section
+    const targetElement = document.getElementById(target);
     if (targetElement) {
       const parentSection = targetElement.closest('.section');
       if (parentSection) {
         parentSection.classList.add('active');
       }
       
-      // Scroll handling
+      // Update navigation state
+      navLinks.forEach(link => link.parentElement.classList.remove('active'));
+      const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+      if (matchingNavLink) {
+        let currentElement = matchingNavLink.parentElement;
+        while (currentElement && !currentElement.classList.contains('nav-container')) {
+          if (currentElement.tagName === 'LI') {
+            currentElement.classList.add('active');
+          }
+          currentElement = currentElement.parentElement;
+        }
+      }
+      
+      // Different scroll behavior for mobile and desktop
       if (window.innerWidth <= 768) { // Mobile
         setTimeout(() => {
+          // First scroll the element into view
           targetElement.scrollIntoView({ behavior: 'smooth' });
+          
+          // Then adjust for header offset with a shorter delay and smoother transition
           setTimeout(() => {
             window.scrollBy({
               top: -85,
-              behavior: 'instant'
+              behavior: 'instant' // Use instant to hide the adjustment
             });
           }, 400);
         }, 300);
@@ -2288,6 +2202,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         const headerOffset = 85;
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
@@ -2295,19 +2210,133 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       }
     }
   }
+
+  // Function to reattach navigation event listeners after translation
+  function reattachNavigationEventListeners() {
+    const navLinks = document.querySelectorAll('.nav-container a');
+    const allLinks = document.querySelectorAll('a[href^="#"]');
+    
+    // Handle navigation menu links
+    navLinks.forEach(link => {
+      // Remove old listeners by cloning and replacing
+      const newLink = link.cloneNode(true);
+      if (link.parentNode) {
+        link.parentNode.replaceChild(newLink, link);
+        
+        newLink.addEventListener('click', function (e) {
+          e.preventDefault();
+          
+          // First, close all submenus by removing active class from all li elements
+          const allNavItems = document.querySelectorAll('.nav-container ul li');
+          allNavItems.forEach(item => item.classList.remove('active'));
+          
+          // Add active class to clicked link's parent li and all its parent li elements
+          let currentElement = this.parentElement;
+          while (currentElement && !currentElement.classList.contains('nav-container')) {
+            if (currentElement.tagName === 'LI') {
+              currentElement.classList.add('active');
+            }
+            currentElement = currentElement.parentElement;
+          }
+          
+          const target = this.getAttribute('href')?.substring(1);
+          if (target) {
+            globalHandleNavigation(target);
+          }
+        });
+      }
+    });
+
+    // Update the global navigation handler to match our submenu handling
+    window.globalHandleNavigation = function(target) {
+      const sections = document.querySelectorAll('.section');
+      const navLinks = document.querySelectorAll('.nav-container a');
+      
+      // Hide all sections first
+      sections.forEach(section => {
+        section.classList.remove('active');
+      });
+
+      // Find and show the target section
+      const targetElement = document.getElementById(target);
+      if (targetElement) {
+        const parentSection = targetElement.closest('.section');
+        if (parentSection) {
+          parentSection.classList.add('active');
+        }
+        
+        // First, close all submenus by removing active class from all li elements
+        const allNavItems = document.querySelectorAll('.nav-container ul li');
+        allNavItems.forEach(item => item.classList.remove('active'));
+        
+        // Update navigation state - find the matching link and activate its hierarchy
+        const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+        if (matchingNavLink) {
+          let currentElement = matchingNavLink.parentElement;
+          while (currentElement && !currentElement.classList.contains('nav-container')) {
+            if (currentElement.tagName === 'LI') {
+              currentElement.classList.add('active');
+            }
+            currentElement = currentElement.parentElement;
+          }
+        }
+        
+        // Different scroll behavior for mobile and desktop
+        if (window.innerWidth <= 768) { // Mobile
+          setTimeout(() => {
+            // First scroll the element into view
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            
+            // Then adjust for header offset with a shorter delay and smoother transition
+            setTimeout(() => {
+              window.scrollBy({
+                top: -85,
+                behavior: 'instant' // Use instant to hide the adjustment
+              });
+            }, 400);
+          }, 300);
+        } else { // Desktop
+          const headerOffset = 85;
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
+      }
+    };
+
+    // Handle all other internal links
+    allLinks.forEach(link => {
+      if (!link.closest('.nav-container')) {  // Only for non-nav links
+        // Remove old listeners by cloning and replacing
+        const newLink = link.cloneNode(true);
+        if (link.parentNode) {
+          link.parentNode.replaceChild(newLink, link);
+          
+          newLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = this.getAttribute('href')?.substring(1);
+            if (target) {
+              globalHandleNavigation(target);
+            }
+          });
+        }
+      }
+    });
+  }
   
   const preferredLanguage = getPreferredLanguage();
   applyLanguage(preferredLanguage);
   
   // BUTTON LANGUAGE SWITCHER REMOVE FOR PAGES WITH NO LANGUAGE SWITCHER
   document.addEventListener('DOMContentLoaded', function() {
-    // Run our navigation setup on page load to ensure it works from the start
-    reattachNavigationEventListeners();
-    
-    // Setup language switcher
     const languageButton = document.getElementById('languageButton');
     const languageDropdown = document.getElementById('languageDropdown');
     
+
     if (languageButton) {
       languageButton.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -2331,12 +2360,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         }
       }
     });
-    
-    // If there's a hash in the URL, navigate to it now 
-    if (window.location.hash) {
-      const targetId = window.location.hash.substring(1);
-      navigateToSection(targetId);
-    }
   });
   </script>
 
