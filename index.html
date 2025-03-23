@@ -2121,9 +2121,13 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         // Only proceed if translations exist
         if (translations) {
           // Store current active states before translation
-          const activeElements = [];
+          const activeNavPaths = [];
           document.querySelectorAll('.nav-container li.active').forEach(el => {
-            activeElements.push(el);
+            // Store the href of the link inside this li
+            const link = el.querySelector('a');
+            if (link && link.getAttribute('href')) {
+              activeNavPaths.push(link.getAttribute('href'));
+            }
           });
           
           document.querySelectorAll('[data-i18n]').forEach(element => {
@@ -2152,15 +2156,33 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           window.setTimeout(function() {
             reattachNavigationEventListeners();
             
-            // Restore active states
-            activeElements.forEach(el => {
-              // Find the corresponding element after translation
-              const selector = getElementSelector(el);
-              const newEl = document.querySelector(selector);
-              if (newEl) {
-                newEl.classList.add('active');
-              }
+            // First, clear all active states to avoid conflicts
+            document.querySelectorAll('.nav-container li').forEach(li => {
+              li.classList.remove('active');
             });
+            
+            // Get the last active item's href (the one that was actually selected)
+            const lastActiveHref = activeNavPaths[activeNavPaths.length - 1];
+            
+            if (lastActiveHref) {
+              // Find and activate just this one element and its parents
+              const matchingLink = document.querySelector(`.nav-container a[href="${lastActiveHref}"]`);
+              if (matchingLink) {
+                // Add active class to the matching link's parent
+                if (matchingLink.parentElement) {
+                  matchingLink.parentElement.classList.add('active');
+                }
+                
+                // Add active class to all parent li elements
+                let currentElement = matchingLink.parentElement ? matchingLink.parentElement.parentElement : null;
+                while (currentElement && !currentElement.classList.contains('nav-container')) {
+                  if (currentElement.tagName === 'LI') {
+                    currentElement.classList.add('active');
+                  }
+                  currentElement = currentElement.parentElement;
+                }
+              }
+            }
           }, 0);
         }
       })
@@ -2169,26 +2191,8 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       });
   }
   
-  // Helper function to get a CSS selector for an element
-  function getElementSelector(element) {
-    if (element.id) {
-      return `#${element.id}`;
-    }
-    
-    // Get the position among siblings of the same type
-    const siblings = Array.from(element.parentNode.children);
-    const tagIndex = siblings.filter(sibling => 
-      sibling.tagName === element.tagName
-    ).indexOf(element);
-    
-    // For li elements in the nav, use href as identifier
-    if (element.tagName === 'LI' && element.querySelector('a[href]')) {
-      const href = element.querySelector('a[href]').getAttribute('href');
-      return `li:has(a[href="${href}"])`;
-    }
-    
-    return `${element.tagName.toLowerCase()}:nth-of-type(${tagIndex + 1})`;
-  }
+  // Helper function is no longer needed
+  // function getElementSelector(element) { ... }
   
   // Global navigation handler function
   function globalHandleNavigation(target) {
