@@ -1991,28 +1991,26 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   
                   // Different scroll behavior for mobile and desktop
                   if (window.innerWidth <= 768) { // Mobile
-                    // Use requestAnimationFrame for smoother animation
-                    requestAnimationFrame(() => {
+                    setTimeout(() => {
+                      // First scroll the element into view
                       targetElement.scrollIntoView({ behavior: 'smooth' });
                       
+                      // Then adjust for header offset with a shorter delay and smoother transition
                       setTimeout(() => {
                         window.scrollBy({
                           top: -85,
-                          behavior: 'smooth' // Use smooth for more elegant transition
+                          behavior: 'instant' // Use instant to hide the adjustment
                         });
-                      }, 350); // Slightly faster timing
-                    });
+                      }, 400); // Reduced from 500ms
+                    }, 300);
                   } else { // Desktop
                     const headerOffset = 85;
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                     
-                    // Use requestAnimationFrame for smoother animation
-                    requestAnimationFrame(() => {
-                      window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                      });
+                    window.scrollTo({
+                      top: offsetPosition,
+                      behavior: 'smooth'
                     });
                   }
                 }
@@ -2113,14 +2111,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       return;
     }
 
-    // Store active navigation items before translation
-    const activeNavPaths = [];
-    document.querySelectorAll('.nav-container li.active').forEach(el => {
-      const link = el.querySelector('a');
-      if (link && link.getAttribute('href')) {
-        activeNavPaths.push(link.getAttribute('href'));
-      }
-    });
     
     fetch(`locales/${language}.json`)
       .then(response => {
@@ -2130,6 +2120,15 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
+          // Store active navigation items before translation
+          const activeNavPaths = [];
+          document.querySelectorAll('.nav-container li.active').forEach(el => {
+            const link = el.querySelector('a');
+            if (link?.getAttribute('href')) {
+              activeNavPaths.push(link.getAttribute('href'));
+            }
+          });
+
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
@@ -2151,20 +2150,42 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
           
-          // Restore active navigation state
-          if (activeNavPaths.length > 0) {
+          // Restore navigation functionality
+          window.setTimeout(() => {
+            // Re-attach event listeners to navigation links
+            document.querySelectorAll('.nav-container a').forEach(link => {
+              const newLink = link.cloneNode(true);
+              if (link.parentNode) {
+                link.parentNode.replaceChild(newLink, link);
+                
+                newLink.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  const target = this.getAttribute('href')?.substring(1);
+                  if (target) {
+                    handleNavigation(target);
+                  }
+                });
+              }
+            });
+            
+            // Restore active item
             const lastActiveHref = activeNavPaths[activeNavPaths.length - 1];
-            const matchingNavLink = document.querySelector(`.nav-container a[href="${lastActiveHref}"]`);
-            if (matchingNavLink) {
-              let currentElement = matchingNavLink.parentElement;
-              while (currentElement && !currentElement.classList.contains('nav-container')) {
-                if (currentElement.tagName === 'LI') {
-                  currentElement.classList.add('active');
+            if (lastActiveHref) {
+              const matchingLink = document.querySelector(`.nav-container a[href="${lastActiveHref}"]`);
+              if (matchingLink?.parentElement) {
+                matchingLink.parentElement.classList.add('active');
+                
+                // Activate parent elements
+                let currentElement = matchingLink.parentElement.parentElement;
+                while (currentElement && !currentElement.classList.contains('nav-container')) {
+                  if (currentElement.tagName === 'LI') {
+                    currentElement.classList.add('active');
+                  }
+                  currentElement = currentElement.parentElement;
                 }
-                currentElement = currentElement.parentElement;
               }
             }
-          }
+          }, 0);
         }
       })
       .catch(() => {
@@ -2180,18 +2201,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     const languageButton = document.getElementById('languageButton');
     const languageDropdown = document.getElementById('languageDropdown');
     
-    // Set default navigation active state on page load
-    const hash = window.location.hash.substring(1) || 'overview'; // Default to 'overview' if no hash
-    const defaultNavLink = document.querySelector(`.nav-container a[href="#${hash}"]`);
-    if (defaultNavLink) {
-      let currentElement = defaultNavLink.parentElement;
-      while (currentElement && !currentElement.classList.contains('nav-container')) {
-        if (currentElement.tagName === 'LI') {
-          currentElement.classList.add('active');
-        }
-        currentElement = currentElement.parentElement;
-      }
-    }
 
     if (languageButton) {
       languageButton.addEventListener('click', function(e) {
