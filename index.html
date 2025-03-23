@@ -123,9 +123,8 @@
      transition: max-height 0.5s ease, visibility 0.5s ease;
      padding-left: 15px;
 }
-
 /* Show nested items when parent is hovered or has active class */
-.nav-container ul li:hover > ul, .nav-container ul li.active > ul {
+ .nav-container ul li:hover > ul, .nav-container ul li.active > ul {
      max-height: 1000px;
      visibility: visible;
      transition: max-height 0.3s ease, visibility 0s;
@@ -140,7 +139,6 @@
      transition-delay: 0.27s;
     /* Increased from 0s to 0.5s */
 }
-
 /* Add longer delay for hiding after hover */
  .nav-container ul li > ul {
      transition-delay: 0.8s;
@@ -1912,26 +1910,16 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
         
                   if (rect.top <= offset && rect.bottom >= offset) {
                     // Remove active class from all nav items
-                    document.querySelectorAll('.nav-container li').forEach(li => {
-                      li.classList.remove('active');
-                      li.classList.remove('target-active');
-                      li.classList.remove('ancestor-active');
-                    });
+                    navLinks.forEach(link => link.parentElement.classList.remove('active'));
                     
                     // Find and activate corresponding nav link
                     const correspondingLink = document.querySelector(`.nav-container a[href="#${subSection.id}"]`);
                     if (correspondingLink) {
                       // Add active class to the link and its parent items
-                      if (correspondingLink.parentElement) {
-                        correspondingLink.parentElement.classList.add('active');
-                        correspondingLink.parentElement.classList.add('target-active');
-                      }
-                      
-                      let currentElement = correspondingLink.parentElement ? correspondingLink.parentElement.parentElement : null;
+                      let currentElement = correspondingLink.parentElement;
                       while (currentElement && !currentElement.classList.contains('nav-container')) {
                         if (currentElement.tagName === 'LI') {
                           currentElement.classList.add('active');
-                          currentElement.classList.add('ancestor-active');
                         }
                         currentElement = currentElement.parentElement;
                       }
@@ -1946,24 +1934,13 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   e.preventDefault();
                   
                   // Remove active class from all links' parent li elements
-                  document.querySelectorAll('.nav-container li').forEach(li => {
-                    li.classList.remove('active');
-                    li.classList.remove('target-active');
-                    li.classList.remove('ancestor-active');
-                  });
+                  navLinks.forEach(l => l.parentElement.classList.remove('active'));
                   
-                  // Add active class to clicked link's parent li
-                  if (this.parentElement) {
-                    this.parentElement.classList.add('active');
-                    this.parentElement.classList.add('target-active');
-                  }
-                  
-                  // Add active class to all parent li elements
-                  let currentElement = this.parentElement ? this.parentElement.parentElement : null;
-                  while (currentElement && !currentElement.classList.contains('nav-container')) {
+                  // Add active class to clicked link's parent li and all its parent li elements
+                  let currentElement = this.parentElement;
+                  while (currentElement && currentElement.classList.contains('nav-container') === false) {
                     if (currentElement.tagName === 'LI') {
                       currentElement.classList.add('active');
-                      currentElement.classList.add('ancestor-active');
                     }
                     currentElement = currentElement.parentElement;
                   }
@@ -2000,26 +1977,13 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   }
                   
                   // Update navigation state
-                  document.querySelectorAll('.nav-container li').forEach(li => {
-                    li.classList.remove('active');
-                    li.classList.remove('target-active');
-                    li.classList.remove('ancestor-active');
-                  });
-                  
+                  navLinks.forEach(link => link.parentElement.classList.remove('active'));
                   const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
                   if (matchingNavLink) {
-                    // Add active class to the link's parent
-                    if (matchingNavLink.parentElement) {
-                      matchingNavLink.parentElement.classList.add('active');
-                      matchingNavLink.parentElement.classList.add('target-active');
-                    }
-                    
-                    // Add active class to all parent li elements
-                    let currentElement = matchingNavLink.parentElement ? matchingNavLink.parentElement.parentElement : null;
+                    let currentElement = matchingNavLink.parentElement;
                     while (currentElement && !currentElement.classList.contains('nav-container')) {
                       if (currentElement.tagName === 'LI') {
                         currentElement.classList.add('active');
-                        currentElement.classList.add('ancestor-active');
                       }
                       currentElement = currentElement.parentElement;
                     }
@@ -2083,13 +2047,28 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                 });
               }
         
-              // Handle initial hash after a small delay to ensure page is ready
+              // Navigate to the hash in URL or default to introduction
               setTimeout(() => {
-                if (window.location.hash) {
-                  const target = window.location.hash.substring(1);
-                  handleNavigation(target);
+                const hash = window.location.hash.substring(1);
+                const target = hash || 'introduction'; // Default section if no hash
+                handleNavigation(target);
+                
+                // Also ensure the corresponding navigation item is activated
+                const navLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+                if (navLink) {
+                  let currentElement = navLink.parentElement;
+                  if (currentElement) {
+                    currentElement.classList.add('active');
+                    // Activate parent elements
+                    while (currentElement && !currentElement.classList.contains('nav-container')) {
+                      if (currentElement.tagName === 'LI') {
+                        currentElement.classList.add('active');
+                      }
+                      currentElement = currentElement.parentElement;
+                    }
+                  }
                 }
-              }, 100);
+              }, 100); // Give a bit more time for everything to initialize
             });
           </script>
 
@@ -2147,153 +2126,108 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       return;
     }
 
-    
     fetch(`locales/${language}.json`)
       .then(response => {
         // Don't throw an error, just return null if response is not OK
         return response.ok ? response.json() : null;
       })
       .then(translations => {
-        if (!translations) return;
-        
-        // Store active navigation items before translation
-        const activeNavPaths = [];
-        document.querySelectorAll('.nav-container li.active').forEach(el => {
-          const link = el.querySelector('a');
-          if (link?.getAttribute('href')) {
-            activeNavPaths.push(link.getAttribute('href'));
-          }
-        });
-        
-        // Apply translations
-        document.querySelectorAll('[data-i18n]').forEach(element => {
-          const keys = element.getAttribute('data-i18n').split('.');
-          let value = translations;
-          for (const key of keys) {
-            if (value === undefined || value === null) break;
-            value = value[key];
-          }
-          
-          if (value) {
-            if (element.tagName === 'META') {
-              element.setAttribute('content', value);
-          } else if (element.tagName === 'INPUT') {
-        element.setAttribute('placeholder', value);
-    } else if (value.includes('<')) {
-              // Apply translation (but save original event listeners might be lost)
-              element.innerHTML = value;
-            } else {
-              element.textContent = value;
+        // Only proceed if translations exist
+        if (translations) {
+          // Store active navigation elements before applying translations
+          const activeNavPaths = [];
+          document.querySelectorAll('.nav-container li.active').forEach(el => {
+            const link = el.querySelector('a');
+            if (link && link.getAttribute('href')) {
+              activeNavPaths.push(link.getAttribute('href'));
             }
-          }
-        });
-        
-        document.querySelector('meta[name="language"]')?.setAttribute('content', language);
-        
-        // Restore navigation state
-        window.setTimeout(() => {
-          reattachNavigationEventListeners();
-          
-          // Clear all active states
-          document.querySelectorAll('.nav-container li').forEach(li => {
-            li.classList.remove('active', 'target-active', 'ancestor-active');
           });
           
-          // Restore active item
-          const lastActiveHref = activeNavPaths[activeNavPaths.length - 1];
-          if (lastActiveHref) {
-            const matchingLink = document.querySelector(`.nav-container a[href="${lastActiveHref}"]`);
-            if (matchingLink?.parentElement) {
-              matchingLink.parentElement.classList.add('active', 'target-active');
-              
-              // Activate parent elements
-              let currentElement = matchingLink.parentElement.parentElement;
-              while (currentElement && !currentElement.classList.contains('nav-container')) {
-                if (currentElement.tagName === 'LI') {
-                  currentElement.classList.add('active', 'ancestor-active');
-                }
-                currentElement = currentElement.parentElement;
+          document.querySelectorAll('[data-i18n]').forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let value = translations;
+            for (const key of keys) {
+              if (value === undefined || value === null) break;
+              value = value[key];
+            }
+            
+            if (value) {
+              if (element.tagName === 'META') {
+                element.setAttribute('content', value);
+              } else if (element.tagName === 'INPUT') {
+                element.setAttribute('placeholder', value);
+              } else if (value.includes('<')) {
+                element.innerHTML = value;
+              } else {
+                element.textContent = value;
               }
             }
-          }
-        }, 0);
+          });
+          
+          document.querySelector('meta[name="language"]').setAttribute('content', language);
+          
+          // Restore navigation event listeners without disrupting animations
+          setTimeout(() => {
+            reattachNavigationEventListeners();
+            
+            // Restore active states for navigation items
+            activeNavPaths.forEach(path => {
+              const navLink = document.querySelector(`.nav-container a[href="${path}"]`);
+              if (navLink) {
+                let currentElement = navLink.parentElement;
+                if (currentElement) {
+                  currentElement.classList.add('active');
+                  while (currentElement && !currentElement.classList.contains('nav-container')) {
+                    if (currentElement.tagName === 'LI') {
+                      currentElement.classList.add('active');
+                    }
+                    currentElement = currentElement.parentElement;
+                  }
+                }
+              }
+            });
+          }, 0);
+        }
       })
       .catch(() => {});
   }
   
-  function globalHandleNavigation(target) {
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(section => {
-      section.classList.remove('active');
-    });
-
-    const targetElement = document.getElementById(target);
-    if (!targetElement) return;
-    
-    // Show target section
-    const parentSection = targetElement.closest('.section');
-    if (parentSection) {
-      parentSection.classList.add('active');
-    }
-    
-    // Update navigation
-    const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
-    if (matchingNavLink) {
-      // Clear all active states
-      document.querySelectorAll('.nav-container li').forEach(li => {
-        li.classList.remove('active', 'target-active', 'ancestor-active');
-      });
-      
-      // Set active states
-      if (matchingNavLink.parentElement) {
-        matchingNavLink.parentElement.classList.add('active', 'target-active');
-        
-        // Activate parent elements
-        let currentElement = matchingNavLink.parentElement.parentElement;
-        while (currentElement && !currentElement.classList.contains('nav-container')) {
-          if (currentElement.tagName === 'LI') {
-            currentElement.classList.add('active', 'ancestor-active');
-          }
-          currentElement = currentElement.parentElement;
-        }
-      }
-    }
-    
-
-  }
-
+  // Function to reattach navigation event listeners after translation
   function reattachNavigationEventListeners() {
     // Handle navigation menu links
     document.querySelectorAll('.nav-container a').forEach(link => {
+      // Create a new element to replace the original, preserving attributes
       const newLink = link.cloneNode(true);
       if (link.parentNode) {
         link.parentNode.replaceChild(newLink, link);
         
-        newLink.addEventListener('click', function(e) {
+        // Re-attach the click event listener
+        newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
           // Clear all active states
           document.querySelectorAll('.nav-container li').forEach(li => {
-            li.classList.remove('active', 'target-active', 'ancestor-active');
+            li.classList.remove('active');
           });
           
           // Set active states
           if (this.parentElement) {
-            this.parentElement.classList.add('active', 'target-active');
+            this.parentElement.classList.add('active');
             
             // Activate parent elements
             let currentElement = this.parentElement.parentElement;
             while (currentElement && !currentElement.classList.contains('nav-container')) {
               if (currentElement.tagName === 'LI') {
-                currentElement.classList.add('active', 'ancestor-active');
+                currentElement.classList.add('active');
               }
               currentElement = currentElement.parentElement;
             }
           }
           
+          // Handle navigation
           const target = this.getAttribute('href')?.substring(1);
           if (target) {
-            globalHandleNavigation(target);
+            handleNavigation(target);
           }
         });
       }
@@ -2310,7 +2244,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             e.preventDefault();
             const target = this.getAttribute('href')?.substring(1);
             if (target) {
-              globalHandleNavigation(target);
+              handleNavigation(target);
             }
           });
         }
@@ -2318,14 +2252,15 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     });
   }
   
-  // Initialize language
-  applyLanguage(getPreferredLanguage());
+  const preferredLanguage = getPreferredLanguage();
+  applyLanguage(preferredLanguage);
   
-  // Language switcher handling
+  // BUTTON LANGUAGE SWITCHER REMOVE FOR PAGES WITH NO LANGUAGE SWITCHER
   document.addEventListener('DOMContentLoaded', function() {
     const languageButton = document.getElementById('languageButton');
     const languageDropdown = document.getElementById('languageDropdown');
     
+
     if (languageButton) {
       languageButton.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -2343,12 +2278,14 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     });
   
     document.addEventListener('click', function(event) {
-      if (!event.target.closest('.language-switcher-container') && languageDropdown) {
-        languageDropdown.classList.remove('show');
+      if (!event.target.closest('.language-switcher-container')) {
+        if (languageDropdown) {
+          languageDropdown.classList.remove('show');
+        }
       }
     });
   });
-</script>
+  </script>
 
         </body>
         </html>
