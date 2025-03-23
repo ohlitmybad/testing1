@@ -125,19 +125,31 @@
 }
 /* Show nested items when parent is hovered or has active class */
  .nav-container ul li:hover > ul, .nav-container ul li.active > ul {
+     max-height: 0;
+     visibility: hidden;
+     overflow: hidden;
+}
+/* Only show submenus for specifically targeted active elements */
+.nav-container ul li.target-active > ul,
+.nav-container ul li.ancestor-active > ul {
      max-height: 1000px;
      visibility: visible;
+     overflow: visible;
      transition: max-height 0.3s ease, visibility 0s;
-     transition-delay: 0.27s;
-    /* Increased from 0s to 0.5s */
 }
 /* Show second level when parent is hovered or has active class */
  .nav-container ul ul li:hover > ul, .nav-container ul ul li.active > ul {
+     max-height: 0;
+     visibility: hidden;
+     overflow: hidden;
+}
+/* Only show nested submenus for specifically targeted elements */
+.nav-container ul ul li.target-active > ul,
+.nav-container ul ul li.ancestor-active > ul {
      max-height: 1000px;
      visibility: visible;
+     overflow: visible;
      transition: max-height 0.3s ease, visibility 0s;
-     transition-delay: 0.27s;
-    /* Increased from 0s to 0.5s */
 }
 /* Add longer delay for hiding after hover */
  .nav-container ul li > ul {
@@ -1910,16 +1922,26 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
         
                   if (rect.top <= offset && rect.bottom >= offset) {
                     // Remove active class from all nav items
-                    navLinks.forEach(link => link.parentElement.classList.remove('active'));
+                    document.querySelectorAll('.nav-container li').forEach(li => {
+                      li.classList.remove('active');
+                      li.classList.remove('target-active');
+                      li.classList.remove('ancestor-active');
+                    });
                     
                     // Find and activate corresponding nav link
                     const correspondingLink = document.querySelector(`.nav-container a[href="#${subSection.id}"]`);
                     if (correspondingLink) {
                       // Add active class to the link and its parent items
-                      let currentElement = correspondingLink.parentElement;
+                      if (correspondingLink.parentElement) {
+                        correspondingLink.parentElement.classList.add('active');
+                        correspondingLink.parentElement.classList.add('target-active');
+                      }
+                      
+                      let currentElement = correspondingLink.parentElement ? correspondingLink.parentElement.parentElement : null;
                       while (currentElement && !currentElement.classList.contains('nav-container')) {
                         if (currentElement.tagName === 'LI') {
                           currentElement.classList.add('active');
+                          currentElement.classList.add('ancestor-active');
                         }
                         currentElement = currentElement.parentElement;
                       }
@@ -1934,13 +1956,24 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   e.preventDefault();
                   
                   // Remove active class from all links' parent li elements
-                  navLinks.forEach(l => l.parentElement.classList.remove('active'));
+                  document.querySelectorAll('.nav-container li').forEach(li => {
+                    li.classList.remove('active');
+                    li.classList.remove('target-active');
+                    li.classList.remove('ancestor-active');
+                  });
                   
-                  // Add active class to clicked link's parent li and all its parent li elements
-                  let currentElement = this.parentElement;
-                  while (currentElement && currentElement.classList.contains('nav-container') === false) {
+                  // Add active class to clicked link's parent li
+                  if (this.parentElement) {
+                    this.parentElement.classList.add('active');
+                    this.parentElement.classList.add('target-active');
+                  }
+                  
+                  // Add active class to all parent li elements
+                  let currentElement = this.parentElement ? this.parentElement.parentElement : null;
+                  while (currentElement && !currentElement.classList.contains('nav-container')) {
                     if (currentElement.tagName === 'LI') {
                       currentElement.classList.add('active');
+                      currentElement.classList.add('ancestor-active');
                     }
                     currentElement = currentElement.parentElement;
                   }
@@ -1977,13 +2010,26 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   }
                   
                   // Update navigation state
-                  navLinks.forEach(link => link.parentElement.classList.remove('active'));
+                  document.querySelectorAll('.nav-container li').forEach(li => {
+                    li.classList.remove('active');
+                    li.classList.remove('target-active');
+                    li.classList.remove('ancestor-active');
+                  });
+                  
                   const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
                   if (matchingNavLink) {
-                    let currentElement = matchingNavLink.parentElement;
+                    // Add active class to the link's parent
+                    if (matchingNavLink.parentElement) {
+                      matchingNavLink.parentElement.classList.add('active');
+                      matchingNavLink.parentElement.classList.add('target-active');
+                    }
+                    
+                    // Add active class to all parent li elements
+                    let currentElement = matchingNavLink.parentElement ? matchingNavLink.parentElement.parentElement : null;
                     while (currentElement && !currentElement.classList.contains('nav-container')) {
                       if (currentElement.tagName === 'LI') {
                         currentElement.classList.add('active');
+                        currentElement.classList.add('ancestor-active');
                       }
                       currentElement = currentElement.parentElement;
                     }
@@ -2152,31 +2198,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
           
-          // Add CSS override to fix the menu behavior
-          let cssOverride = document.getElementById('translation-css-fix');
-          if (!cssOverride) {
-            cssOverride = document.createElement('style');
-            cssOverride.id = 'translation-css-fix';
-            document.head.appendChild(cssOverride);
-          }
-          
-          cssOverride.textContent = `
-            /* Override submenu visibility behavior */
-            .nav-container ul li.active > ul {
-              max-height: 0;
-              visibility: hidden;
-              overflow: hidden;
-            }
-            
-            /* Only direct target and its ancestors should show submenus */
-            .nav-container ul li.active.target-active > ul,
-            .nav-container ul li.active.ancestor-active > ul {
-              max-height: 1000px;
-              visibility: visible;
-              overflow: visible;
-            }
-          `;
-          
           // Reattach event listeners after translation
           window.setTimeout(function() {
             reattachNavigationEventListeners();
@@ -2245,12 +2266,17 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       
       if (matchingNavLink) {
-        // Remove active class from all links' parent li elements
-        navLinks.forEach(link => link.parentElement?.classList.remove('active'));
+        // Remove all special active classes 
+        document.querySelectorAll('.nav-container li').forEach(li => {
+          li.classList.remove('active');
+          li.classList.remove('target-active'); 
+          li.classList.remove('ancestor-active');
+        });
         
         // Add active class to the matching link's parent
         if (matchingNavLink.parentElement) {
           matchingNavLink.parentElement.classList.add('active');
+          matchingNavLink.parentElement.classList.add('target-active');
         }
         
         // Add active class to all parent li elements
@@ -2258,6 +2284,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         while (currentElement && !currentElement.classList.contains('nav-container')) {
           if (currentElement.tagName === 'LI') {
             currentElement.classList.add('active');
+            currentElement.classList.add('ancestor-active');
           }
           currentElement = currentElement.parentElement;
         }
