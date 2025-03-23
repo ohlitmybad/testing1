@@ -2102,45 +2102,43 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
   function getBrowserLanguage() {
     return navigator.language.slice(0, 2);
   }
+function applyLanguage(language) {
+  console.log(language);
 
-  // Function to apply translations
-  function applyLanguage(language) {
-    console.log(language);
-
-    if (language === 'en') {
-      return;
-    }
-
-    fetch(`locales/${language}.json`)
-      .then(response => response.ok ? response.json() : null)
-      .then(translations => {
-        if (translations) {
-          document.querySelectorAll('[data-i18n]').forEach(element => {
-            const keys = element.getAttribute('data-i18n').split('.');
-            let value = translations;
-            for (const key of keys) {
-              if (value === undefined || value === null) break;
-              value = value[key];
-            }
-            if (value) {
-              if (element.tagName === 'META') {
-                element.setAttribute('content', value);
-              } else if (element.tagName === 'INPUT') {
-                element.setAttribute('placeholder', value);
-              } else if (value.includes('<')) {
-                element.innerHTML = value;
-              } else {
-                element.textContent = value;
-              }
-            }
-          });
-          document.querySelector('meta[name="language"]').setAttribute('content', language);
-        }
-        // Reattach event listeners after translations are applied
-        attachEventListeners();
-      })
-      .catch(() => {});
+  if (language === 'en') {
+    attachEventListeners(); // Attach listeners even if no translation is applied
+    return;
   }
+
+  fetch(`locales/${language}.json`)
+    .then(response => response.ok ? response.json() : null)
+    .then(translations => {
+      if (translations) {
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+          const keys = element.getAttribute('data-i18n').split('.');
+          let value = translations;
+          for (const key of keys) {
+            if (value === undefined || value === null) break;
+            value = value[key];
+          }
+          if (value) {
+            if (element.tagName === 'META') {
+              element.setAttribute('content', value);
+            } else if (element.tagName === 'INPUT') {
+              element.setAttribute('placeholder', value);
+            } else if (value.includes('<')) {
+              element.innerHTML = value;
+            } else {
+              element.textContent = value;
+            }
+          }
+        });
+        document.querySelector('meta[name="language"]').setAttribute('content', language);
+      }
+      attachEventListeners(); // Reattach listeners after translations are applied
+    })
+    .catch(() => {});
+}
 
   // BUTTON LANGUAGE SWITCHER REMOVE FOR PAGES WITH NO LANGUAGE SWITCHER
   document.addEventListener('DOMContentLoaded', function () {
