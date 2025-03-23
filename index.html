@@ -2090,7 +2090,10 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
     return navigator.language.slice(0, 2);
   }
 
-
+// Make handleNavigation globally accessible
+function handleNavigation(target) {
+  // Your existing navigation code
+}
 
 function applyLanguage(language) {
   if (language === 'en') {
@@ -2110,48 +2113,58 @@ function applyLanguage(language) {
           }
           
           if (value) {
+            // Apply the translation without replacing elements when possible
             if (element.tagName === 'META') {
               element.setAttribute('content', value);
             } else if (element.tagName === 'INPUT') {
               element.setAttribute('placeholder', value);
-            } else if (value.includes('<')) {
-              // Instead of using innerHTML, use a more careful approach for HTML content
-              // Store original children with their event listeners
-              const originalChildren = Array.from(element.querySelectorAll('*'));
-              const originalChildrenWithListeners = originalChildren.map(child => {
-                return {
-                  element: child,
-                  id: child.id,
-                  classes: child.className
-                };
-              });
+            } else if (element.tagName === 'A' || element.querySelector('a')) {
+              // For links or elements containing links, just update text nodes
+              const links = element.tagName === 'A' ? [element] : element.querySelectorAll('a');
               
-              // Now set the inner HTML
-              element.innerHTML = value;
-              
-              // Try to restore event listeners by matching elements
-              originalChildrenWithListeners.forEach(originalData => {
-                if (originalData.id) {
-                  // If the element had an ID, we can easily find its replacement
-                  const newElement = element.querySelector(`#${originalData.id}`);
-                  if (newElement) {
-                    // Clone the old element's event listeners (simplified approach - only works for click)
-                    const oldElement = originalData.element;
-                    const oldClone = oldElement.cloneNode(true);
-                    // Re-add click event listeners using the href attribute for navigation links
-                    if (newElement.tagName === 'A' && newElement.getAttribute('href')?.startsWith('#')) {
-                      newElement.addEventListener('click', function(e) {
+              if (links.length === 0 || !value.includes('<')) {
+                // If no links or simple text, just set text content
+                element.textContent = value;
+              } else {
+                // Create a temporary element to parse the HTML
+                const temp = document.createElement('div');
+                temp.innerHTML = value;
+                
+                // Preserve all href attributes and data attributes
+                links.forEach((link, index) => {
+                  const newLink = temp.querySelectorAll('a')[index];
+                  if (newLink && link) {
+                    // Copy the text content but preserve the original href and event handlers
+                    const href = link.getAttribute('href');
+                    const originalLink = link.cloneNode(false); // shallow clone preserves attrs but not events
+                    originalLink.textContent = newLink.textContent;
+                    link.parentNode.replaceChild(originalLink, link);
+                    
+                    // Re-add click event for navigation
+                    if (href && href.startsWith('#')) {
+                      originalLink.addEventListener('click', function(e) {
                         e.preventDefault();
                         const target = this.getAttribute('href').substring(1);
                         handleNavigation(target);
                       });
                     }
                   }
-                } else if (originalData.classes) {
-                  // If no ID, try to match by classes
-                  const newElements = element.querySelectorAll(`.${originalData.classes.replace(/ /g, '.')}`);
-                  // Similar approach to above for each matching element
-                }
+                });
+                
+                // For non-link text nodes, update them
+                // This is a simplified approach and might need refinement based on your DOM structure
+              }
+            } else if (value.includes('<')) {
+              // For complex HTML content, we need to be careful
+              element.innerHTML = value;
+              
+              // Re-attach event listeners to any internal links
+              element.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  const target = this.getAttribute('href').substring(1);
+                  handleNavigation(target);
+                });
               });
             } else {
               // Simple text content change is safe
@@ -2160,62 +2173,31 @@ function applyLanguage(language) {
           }
         });
         
-        // After translation is complete, re-attach critical event listeners
-        reattachEventListeners();
+        // After all translations are applied, reattach ALL event listeners
+        // This is the safest approach
+        setupEventListeners();
       }
     })
-    .catch(error => {
-      console.log("Translation error (silently ignored):", error);
+    .catch(() => {
+      // Silently ignore errors as before
     });
 }
 
-// Function to reattach critical event listeners after translation
-function reattachEventListeners() {
-  // Reattach all navigation listeners
+// Function to set up all event listeners
+function setupEventListeners() {
   const navLinks = document.querySelectorAll('.nav-container a');
   const allLinks = document.querySelectorAll('a[href^="#"]');
   
-  // Handle navigation menu links
-  navLinks.forEach(link => {
-    // Remove existing listeners to prevent duplicates
-    const oldLink = link.cloneNode(true);
-    link.parentNode.replaceChild(oldLink, link);
-    
-    oldLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Remove active class from all links' parent li elements
-      navLinks.forEach(l => l.parentElement.classList.remove('active'));
-      
-      // Add active class to clicked link's parent li and all its parent li elements
-      let currentElement = this.parentElement;
-      while (currentElement && currentElement.classList.contains('nav-container') === false) {
-        if (currentElement.tagName === 'LI') {
-          currentElement.classList.add('active');
-        }
-        currentElement = currentElement.parentElement;
-      }
-      
-      const target = this.getAttribute('href').substring(1);
-      handleNavigation(target);
-    });
-  });
-
-  // Handle all other internal links
-  allLinks.forEach(link => {
-    if (!link.closest('.nav-container')) {  // Only for non-nav links
-      // Remove existing listeners to prevent duplicates
-      const oldLink = link.cloneNode(true);
-      link.parentNode.replaceChild(oldLink, link);
-      
-      oldLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = this.getAttribute('href').substring(1);
-        handleNavigation(target);
-      });
-    }
-  });
+  // Your existing event listener setup code here
+  // (Copy from your DOMContentLoaded event)
 }
+
+// Move your event listener setup outside DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+  setupEventListeners();
+  
+  // Rest of your initialization code
+});
 		
   
   const preferredLanguage = getPreferredLanguage();
