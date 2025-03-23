@@ -89,31 +89,6 @@
      z-index: 100;
     /* Reduced from 1000 */
 }
-
-/* Adding state-reset class to fix hover/active states after translation */
-.nav-container.state-reset ul li > ul {
-    transition: none !important;
-    max-height: 0 !important;
-    visibility: hidden !important;
-}
-
-.nav-container.state-reset ul li a {
-    background-color: transparent !important;
-    color: #4b5563 !important;
-    font-weight: normal !important;
-}
-
-/* Fix to ensure hover states clear properly */
-.nav-container ul li:not(:hover):not(.active) > ul {
-    max-height: 0 !important;
-    visibility: hidden !important;
-    transition: max-height 0.2s ease, visibility 0.2s ease;
-}
-
-/* Ensure hover effects clear immediately when mouse leaves */
-.nav-container ul li a {
-    transition: all 0.2s ease;
-}
  .nav-container h2 {
      margin-top: 11px;
      font-size: 1.5rem;
@@ -2167,13 +2142,10 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
           
-          // Reset all navigation states before reattaching listeners
-          resetAllNavigationStates();
-          
-          // Reattach event listeners after translation with a slight delay
+          // Reattach event listeners after translation
           window.setTimeout(function() {
             reattachNavigationEventListeners();
-          }, 50);
+          }, 0);
         }
       })
       .catch(() => {
@@ -2181,30 +2153,10 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       });
   }
   
-  // Function to completely reset all navigation states
-  function resetAllNavigationStates() {
-    // Remove all active classes from navigation
-    document.querySelectorAll('.nav-container li').forEach(li => {
-      li.classList.remove('active');
-    });
-    
-    // Force reset all hover states by applying and removing a temporary class to the parent
-    const navContainer = document.querySelector('.nav-container');
-    if (navContainer) {
-      navContainer.classList.add('state-reset');
-      // Force browser to recognize the change
-      void navContainer.offsetWidth;
-      navContainer.classList.remove('state-reset');
-    }
-  }
-  
   // Global navigation handler function
   function globalHandleNavigation(target) {
     const sections = document.querySelectorAll('.section');
     const navLinks = document.querySelectorAll('.nav-container a');
-    
-    // Reset all navigation states first
-    resetAllNavigationStates();
     
     // Hide all sections first
     sections.forEach(section => {
@@ -2220,6 +2172,13 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       }
       
       // Update navigation state
+      // Get a fresh list of all nav link parents
+      document.querySelectorAll('.nav-container a').forEach(link => {
+        if (link.parentElement) {
+          link.parentElement.classList.remove('active');
+        }
+      });
+      
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       if (matchingNavLink) {
         let currentElement = matchingNavLink.parentElement;
@@ -2263,9 +2222,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     const navLinks = document.querySelectorAll('.nav-container a');
     const allLinks = document.querySelectorAll('a[href^="#"]');
     
-    // Reset all navigation states first
-    resetAllNavigationStates();
-    
     // Handle navigation menu links
     navLinks.forEach(link => {
       // Remove old listeners by cloning and replacing
@@ -2276,8 +2232,13 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // Complete reset of all navigation states
-          resetAllNavigationStates();
+          // Remove active class from all links' parent li elements
+          // Get a fresh NodeList of all nav links each time
+          document.querySelectorAll('.nav-container a').forEach(l => {
+            if (l.parentElement) {
+              l.parentElement.classList.remove('active');
+            }
+          });
           
           // Add active class to clicked link's parent li and all its parent li elements
           let currentElement = this.parentElement;
@@ -2311,28 +2272,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
               globalHandleNavigation(target);
             }
           });
-        }
-      }
-    });
-    
-    // Add a global click handler to reset states when clicking outside nav
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.nav-container')) {
-        resetAllNavigationStates();
-        
-        // Restore active state only for the current section
-        if (window.location.hash) {
-          const currentTarget = window.location.hash.substring(1);
-          const matchingNavLink = document.querySelector(`.nav-container a[href="#${currentTarget}"]`);
-          if (matchingNavLink) {
-            let currentElement = matchingNavLink.parentElement;
-            while (currentElement && !currentElement.classList.contains('nav-container')) {
-              if (currentElement.tagName === 'LI') {
-                currentElement.classList.add('active');
-              }
-              currentElement = currentElement.parentElement;
-            }
-          }
         }
       }
     });
