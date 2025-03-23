@@ -2128,7 +2128,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
               activeNavPaths.push(link.getAttribute('href'));
             }
           });
-
+          
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
@@ -2148,24 +2148,15 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           }          }
           });
           // REMOVE FOR PAGES WITH NO METADATA
-          document.querySelector('meta[name="language"]').setAttribute('content', language);
+          document.querySelector('meta[name="language"]')?.setAttribute('content', language);
           
-          // Restore navigation functionality
+          // Restore navigation state
           window.setTimeout(() => {
-            // Re-attach event listeners to navigation links
-            document.querySelectorAll('.nav-container a').forEach(link => {
-              const newLink = link.cloneNode(true);
-              if (link.parentNode) {
-                link.parentNode.replaceChild(newLink, link);
-                
-                newLink.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  const target = this.getAttribute('href')?.substring(1);
-                  if (target) {
-                    handleNavigation(target);
-                  }
-                });
-              }
+            reattachNavigationEventListeners();
+            
+            // Clear all active states
+            document.querySelectorAll('.nav-container li').forEach(li => {
+              li.classList.remove('active', 'target-active', 'ancestor-active');
             });
             
             // Restore active item
@@ -2173,13 +2164,13 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             if (lastActiveHref) {
               const matchingLink = document.querySelector(`.nav-container a[href="${lastActiveHref}"]`);
               if (matchingLink?.parentElement) {
-                matchingLink.parentElement.classList.add('active');
+                matchingLink.parentElement.classList.add('active', 'target-active');
                 
                 // Activate parent elements
                 let currentElement = matchingLink.parentElement.parentElement;
                 while (currentElement && !currentElement.classList.contains('nav-container')) {
                   if (currentElement.tagName === 'LI') {
-                    currentElement.classList.add('active');
+                    currentElement.classList.add('active', 'ancestor-active');
                   }
                   currentElement = currentElement.parentElement;
                 }
@@ -2191,6 +2182,116 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .catch(() => {
         // Completely empty catch block to silently ignore any errors
       });
+  }
+  
+  function reattachNavigationEventListeners() {
+    // Handle navigation menu links
+    document.querySelectorAll('.nav-container a').forEach(link => {
+      const newLink = link.cloneNode(true);
+      if (link.parentNode) {
+        link.parentNode.replaceChild(newLink, link);
+        
+        newLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Clear all active states
+          document.querySelectorAll('.nav-container li').forEach(li => {
+            li.classList.remove('active', 'target-active', 'ancestor-active');
+          });
+          
+          // Set active states
+          if (this.parentElement) {
+            this.parentElement.classList.add('active', 'target-active');
+            
+            // Activate parent elements
+            let currentElement = this.parentElement.parentElement;
+            while (currentElement && !currentElement.classList.contains('nav-container')) {
+              if (currentElement.tagName === 'LI') {
+                currentElement.classList.add('active', 'ancestor-active');
+              }
+              currentElement = currentElement.parentElement;
+            }
+          }
+          
+          const target = this.getAttribute('href')?.substring(1);
+          if (target) {
+            globalHandleNavigation(target);
+          }
+        });
+      }
+    });
+
+    // Handle other internal links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      if (!link.closest('.nav-container')) {
+        const newLink = link.cloneNode(true);
+        if (link.parentNode) {
+          link.parentNode.replaceChild(newLink, link);
+          
+          newLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('href')?.substring(1);
+            if (target) {
+              globalHandleNavigation(target);
+            }
+          });
+        }
+      }
+    });
+  }
+  
+  function globalHandleNavigation(target) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+      section.classList.remove('active');
+    });
+
+    const targetElement = document.getElementById(target);
+    if (!targetElement) return;
+    
+    // Show target section
+    const parentSection = targetElement.closest('.section');
+    if (parentSection) {
+      parentSection.classList.add('active');
+    }
+    
+    // Update navigation
+    const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+    if (matchingNavLink) {
+      // Clear all active states
+      document.querySelectorAll('.nav-container li').forEach(li => {
+        li.classList.remove('active', 'target-active', 'ancestor-active');
+      });
+      
+      // Set active states
+      if (matchingNavLink.parentElement) {
+        matchingNavLink.parentElement.classList.add('active', 'target-active');
+        
+        // Activate parent elements
+        let currentElement = matchingNavLink.parentElement.parentElement;
+        while (currentElement && !currentElement.classList.contains('nav-container')) {
+          if (currentElement.tagName === 'LI') {
+            currentElement.classList.add('active', 'ancestor-active');
+          }
+          currentElement = currentElement.parentElement;
+        }
+      }
+    }
+    
+    // Scroll to target
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          window.scrollBy({ top: -85, behavior: 'instant' });
+        }, 400);
+      }, 300);
+    } else {
+      const headerOffset = 85;
+      const elementPosition = targetElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
   }
   
   const preferredLanguage = getPreferredLanguage();
@@ -2219,12 +2320,13 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     });
   
     document.addEventListener('click', function(event) {
-      if (!event.target.closest('.language-switcher-container')) {
-        if (languageDropdown) {
-          languageDropdown.classList.remove('show');
-        }
+      if (!event.target.closest('.language-switcher-container') && languageDropdown) {
+        languageDropdown.classList.remove('show');
       }
     });
+    
+    // Initialize navigation event listeners
+    reattachNavigationEventListeners();
   });
   </script>
 
