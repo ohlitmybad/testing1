@@ -2120,23 +2120,9 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
-          // First, save current active state
-          const activeItems = [];
-          document.querySelectorAll('.nav-container li.active').forEach(item => {
-            const path = [];
-            let current = item;
-            while (current && !current.classList.contains('nav-container')) {
-              if (current.tagName === 'LI') {
-                const linkEl = current.querySelector('a');
-                if (linkEl && linkEl.getAttribute('href')) {
-                  path.push(linkEl.getAttribute('href'));
-                }
-              }
-              current = current.parentElement;
-            }
-            activeItems.push(path);
-          });
-
+          // First, save current active state and the current hash location
+          const currentHash = window.location.hash.substring(1) || '';
+          
           // Apply translations
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
@@ -2164,24 +2150,40 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           
           // Ensure reattachment happens after DOM is fully updated
           setTimeout(function() {
+            // First reattach all navigation listeners properly
             reattachNavigationEventListeners();
             
-            // Restore active states
-            activeItems.forEach(path => {
-              if (path.length > 0) {
-                const href = path[0];
-                const targetLink = document.querySelector(`.nav-container a[href="${href}"]`);
-                if (targetLink) {
-                  let currentElement = targetLink.parentElement;
-                  while (currentElement && !currentElement.classList.contains('nav-container')) {
-                    if (currentElement.tagName === 'LI') {
-                      currentElement.classList.add('active');
-                    }
-                    currentElement = currentElement.parentElement;
+            // Then reactivate the correct navigation item
+            if (currentHash) {
+              // Clear all active states
+              document.querySelectorAll('.nav-container li').forEach(li => {
+                li.classList.remove('active');
+              });
+              
+              // Find the matching link and activate its path
+              const matchingLink = document.querySelector(`.nav-container a[href="#${currentHash}"]`);
+              if (matchingLink) {
+                // Track what elements we've activated
+                const activatedElements = new Set();
+                
+                // Activate the path
+                let currentElement = matchingLink.parentElement;
+                while (currentElement && !currentElement.classList.contains('nav-container')) {
+                  if (currentElement.tagName === 'LI') {
+                    currentElement.classList.add('active');
+                    activatedElements.add(currentElement);
                   }
+                  currentElement = currentElement.parentElement;
                 }
+                
+                // Make sure no other elements have active state
+                document.querySelectorAll('.nav-container li.active').forEach(li => {
+                  if (!activatedElements.has(li)) {
+                    li.classList.remove('active');
+                  }
+                });
               }
-            });
+            }
           }, 100);
         }
       })
@@ -2212,13 +2214,24 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       if (matchingNavLink) {
+        // Track activated elements to ensure no extras get active class
+        const activatedElements = new Set();
+        
         let currentElement = matchingNavLink.parentElement;
         while (currentElement && !currentElement.classList.contains('nav-container')) {
           if (currentElement.tagName === 'LI') {
             currentElement.classList.add('active');
+            activatedElements.add(currentElement);
           }
           currentElement = currentElement.parentElement;
         }
+        
+        // Double check no extras have active class
+        document.querySelectorAll('.nav-container li.active').forEach(item => {
+          if (!activatedElements.has(item)) {
+            item.classList.remove('active');
+          }
+        });
       }
       
       // Different scroll behavior for mobile and desktop
@@ -2250,8 +2263,11 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
 
   // Function to reattach navigation event listeners after translation
   function reattachNavigationEventListeners() {
+    // Track which elements have event listeners to avoid duplicates
+    const processedElements = new Set();
+    
     // Clear all active states first
-    document.querySelectorAll('.nav-container li.active').forEach(item => {
+    document.querySelectorAll('.nav-container li').forEach(item => {
       item.classList.remove('active');
     });
 
@@ -2268,19 +2284,29 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // First clear all active states from entire navigation
+          // First remove active state from ALL li elements in navigation
           document.querySelectorAll('.nav-container li').forEach(item => {
             item.classList.remove('active');
           });
           
-          // Add active class to clicked link's parent li and all its parent li elements
+          // Then only add active class to direct ancestors
           let currentElement = this.parentElement;
+          const activatedElements = new Set();
+          
           while (currentElement && !currentElement.classList.contains('nav-container')) {
             if (currentElement.tagName === 'LI') {
               currentElement.classList.add('active');
+              activatedElements.add(currentElement);
             }
             currentElement = currentElement.parentElement;
           }
+          
+          // Make sure no other elements have active class
+          document.querySelectorAll('.nav-container li.active').forEach(item => {
+            if (!activatedElements.has(item)) {
+              item.classList.remove('active');
+            }
+          });
           
           const target = this.getAttribute('href')?.substring(1);
           if (target) {
@@ -2333,6 +2359,23 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             e.preventDefault();
             const target = this.getAttribute('href')?.substring(1);
             if (target) {
+              // Clear all active states from ALL li elements
+              document.querySelectorAll('.nav-container li').forEach(item => {
+                item.classList.remove('active');
+              });
+              
+              // Add active state only to the matching path
+              const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+              if (matchingNavLink) {
+                let currentElement = matchingNavLink.parentElement;
+                while (currentElement && !currentElement.classList.contains('nav-container')) {
+                  if (currentElement.tagName === 'LI') {
+                    currentElement.classList.add('active');
+                  }
+                  currentElement = currentElement.parentElement;
+                }
+              }
+              
               globalHandleNavigation(target);
             }
           });
@@ -2343,6 +2386,12 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     // Set active state based on current URL
     if (window.location.hash) {
       const target = window.location.hash.substring(1);
+      
+      // Clear all active states first
+      document.querySelectorAll('.nav-container li').forEach(item => {
+        item.classList.remove('active');
+      });
+      
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       if (matchingNavLink) {
         let currentElement = matchingNavLink.parentElement;
