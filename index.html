@@ -2220,13 +2220,42 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
   
   // Helper function to activate the path to a navigation link
   function activatePathTo(linkElement) {
+    // First identify the exact path we need to activate
+    let path = [];
     let current = linkElement.parentElement;
+    
+    // Work up the tree, collecting elements to activate
     while (current && !current.classList.contains('nav-container')) {
       if (current.tagName === 'LI') {
-        current.classList.add('active');
+        path.push(current);
       }
       current = current.parentElement;
     }
+    
+    // Only activate these exact elements
+    path.forEach(element => {
+      element.classList.add('active');
+    });
+    
+    // Special handling for nested lists - only show the exact submenu
+    document.querySelectorAll('.nav-container ul').forEach(ul => {
+      // Default to hiding all submenus
+      ul.style.maxHeight = '0';
+      ul.style.visibility = 'hidden';
+      
+      // Only show submenus that are parents of our selected item
+      let isInPath = false;
+      path.forEach(item => {
+        if (ul.parentNode === item || item.contains(ul)) {
+          isInPath = true;
+        }
+      });
+      
+      if (isInPath) {
+        ul.style.maxHeight = '1000px';
+        ul.style.visibility = 'visible';
+      }
+    });
   }
   
   // Helper function to navigate to a section
@@ -2272,10 +2301,13 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
   
   // BUTTON LANGUAGE SWITCHER REMOVE FOR PAGES WITH NO LANGUAGE SWITCHER
   document.addEventListener('DOMContentLoaded', function() {
+    // Run our navigation setup on page load to ensure it works from the start
+    reattachNavigationEventListeners();
+    
+    // Setup language switcher
     const languageButton = document.getElementById('languageButton');
     const languageDropdown = document.getElementById('languageDropdown');
     
-
     if (languageButton) {
       languageButton.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -2299,6 +2331,12 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         }
       }
     });
+    
+    // If there's a hash in the URL, navigate to it now 
+    if (window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      navigateToSection(targetId);
+    }
   });
   </script>
 
