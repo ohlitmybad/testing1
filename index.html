@@ -1991,26 +1991,28 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                   
                   // Different scroll behavior for mobile and desktop
                   if (window.innerWidth <= 768) { // Mobile
-                    setTimeout(() => {
-                      // First scroll the element into view
+                    // Use requestAnimationFrame for smoother animation
+                    requestAnimationFrame(() => {
                       targetElement.scrollIntoView({ behavior: 'smooth' });
                       
-                      // Then adjust for header offset with a shorter delay and smoother transition
                       setTimeout(() => {
                         window.scrollBy({
                           top: -85,
-                          behavior: 'instant' // Use instant to hide the adjustment
+                          behavior: 'smooth' // Use smooth for more elegant transition
                         });
-                      }, 400); // Reduced from 500ms
-                    }, 300);
+                      }, 350); // Slightly faster timing
+                    });
                   } else { // Desktop
                     const headerOffset = 85;
                     const elementPosition = targetElement.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
                     
-                    window.scrollTo({
-                      top: offsetPosition,
-                      behavior: 'smooth'
+                    // Use requestAnimationFrame for smoother animation
+                    requestAnimationFrame(() => {
+                      window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                      });
                     });
                   }
                 }
@@ -2047,28 +2049,13 @@ Non-penalty goals per 90 x9, Goals per 90 x8, xG per 90 x5, Goal conversion % x4
                 });
               }
         
-              // Navigate to the hash in URL or default to introduction
+              // Handle initial hash after a small delay to ensure page is ready
               setTimeout(() => {
-                const hash = window.location.hash.substring(1);
-                const target = hash || 'introduction'; // Default section if no hash
-                handleNavigation(target);
-                
-                // Also ensure the corresponding navigation item is activated
-                const navLink = document.querySelector(`.nav-container a[href="#${target}"]`);
-                if (navLink) {
-                  let currentElement = navLink.parentElement;
-                  if (currentElement) {
-                    currentElement.classList.add('active');
-                    // Activate parent elements
-                    while (currentElement && !currentElement.classList.contains('nav-container')) {
-                      if (currentElement.tagName === 'LI') {
-                        currentElement.classList.add('active');
-                      }
-                      currentElement = currentElement.parentElement;
-                    }
-                  }
+                if (window.location.hash) {
+                  const target = window.location.hash.substring(1);
+                  handleNavigation(target);
                 }
-              }, 100); // Give a bit more time for everything to initialize
+              }, 100);
             });
           </script>
 
@@ -2126,6 +2113,15 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       return;
     }
 
+    // Store active navigation items before translation
+    const activeNavPaths = [];
+    document.querySelectorAll('.nav-container li.active').forEach(el => {
+      const link = el.querySelector('a');
+      if (link && link.getAttribute('href')) {
+        activeNavPaths.push(link.getAttribute('href'));
+      }
+    });
+    
     fetch(`locales/${language}.json`)
       .then(response => {
         // Don't throw an error, just return null if response is not OK
@@ -2134,15 +2130,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
-          // Store active navigation elements before applying translations
-          const activeNavPaths = [];
-          document.querySelectorAll('.nav-container li.active').forEach(el => {
-            const link = el.querySelector('a');
-            if (link && link.getAttribute('href')) {
-              activeNavPaths.push(link.getAttribute('href'));
-            }
-          });
-          
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
@@ -2150,106 +2137,39 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
               if (value === undefined || value === null) break;
               value = value[key];
             }
-            
             if (value) {
               if (element.tagName === 'META') {
-                element.setAttribute('content', value);
-              } else if (element.tagName === 'INPUT') {
-                element.setAttribute('placeholder', value);
-              } else if (value.includes('<')) {
-                element.innerHTML = value;
-              } else {
-                element.textContent = value;
-              }
-            }
+              element.setAttribute('content', value);
+          } else if (element.tagName === 'INPUT') {
+        element.setAttribute('placeholder', value);
+    } else if (value.includes('<')) {
+              element.innerHTML = value;
+          } else {
+              element.textContent = value;
+          }          }
           });
-          
+          // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
           
-          // Restore navigation event listeners without disrupting animations
-          setTimeout(() => {
-            reattachNavigationEventListeners();
-            
-            // Restore active states for navigation items
-            activeNavPaths.forEach(path => {
-              const navLink = document.querySelector(`.nav-container a[href="${path}"]`);
-              if (navLink) {
-                let currentElement = navLink.parentElement;
-                if (currentElement) {
+          // Restore active navigation state
+          if (activeNavPaths.length > 0) {
+            const lastActiveHref = activeNavPaths[activeNavPaths.length - 1];
+            const matchingNavLink = document.querySelector(`.nav-container a[href="${lastActiveHref}"]`);
+            if (matchingNavLink) {
+              let currentElement = matchingNavLink.parentElement;
+              while (currentElement && !currentElement.classList.contains('nav-container')) {
+                if (currentElement.tagName === 'LI') {
                   currentElement.classList.add('active');
-                  while (currentElement && !currentElement.classList.contains('nav-container')) {
-                    if (currentElement.tagName === 'LI') {
-                      currentElement.classList.add('active');
-                    }
-                    currentElement = currentElement.parentElement;
-                  }
                 }
+                currentElement = currentElement.parentElement;
               }
-            });
-          }, 0);
+            }
+          }
         }
       })
-      .catch(() => {});
-  }
-  
-  // Function to reattach navigation event listeners after translation
-  function reattachNavigationEventListeners() {
-    // Handle navigation menu links
-    document.querySelectorAll('.nav-container a').forEach(link => {
-      // Create a new element to replace the original, preserving attributes
-      const newLink = link.cloneNode(true);
-      if (link.parentNode) {
-        link.parentNode.replaceChild(newLink, link);
-        
-        // Re-attach the click event listener
-        newLink.addEventListener('click', function (e) {
-          e.preventDefault();
-          
-          // Clear all active states
-          document.querySelectorAll('.nav-container li').forEach(li => {
-            li.classList.remove('active');
-          });
-          
-          // Set active states
-          if (this.parentElement) {
-            this.parentElement.classList.add('active');
-            
-            // Activate parent elements
-            let currentElement = this.parentElement.parentElement;
-            while (currentElement && !currentElement.classList.contains('nav-container')) {
-              if (currentElement.tagName === 'LI') {
-                currentElement.classList.add('active');
-              }
-              currentElement = currentElement.parentElement;
-            }
-          }
-          
-          // Handle navigation
-          const target = this.getAttribute('href')?.substring(1);
-          if (target) {
-            handleNavigation(target);
-          }
-        });
-      }
-    });
-
-    // Handle other internal links
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      if (!link.closest('.nav-container')) {
-        const newLink = link.cloneNode(true);
-        if (link.parentNode) {
-          link.parentNode.replaceChild(newLink, link);
-          
-          newLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = this.getAttribute('href')?.substring(1);
-            if (target) {
-              handleNavigation(target);
-            }
-          });
-        }
-      }
-    });
+      .catch(() => {
+        // Completely empty catch block to silently ignore any errors
+      });
   }
   
   const preferredLanguage = getPreferredLanguage();
@@ -2260,6 +2180,18 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     const languageButton = document.getElementById('languageButton');
     const languageDropdown = document.getElementById('languageDropdown');
     
+    // Set default navigation active state on page load
+    const hash = window.location.hash.substring(1) || 'overview'; // Default to 'overview' if no hash
+    const defaultNavLink = document.querySelector(`.nav-container a[href="#${hash}"]`);
+    if (defaultNavLink) {
+      let currentElement = defaultNavLink.parentElement;
+      while (currentElement && !currentElement.classList.contains('nav-container')) {
+        if (currentElement.tagName === 'LI') {
+          currentElement.classList.add('active');
+        }
+        currentElement = currentElement.parentElement;
+      }
+    }
 
     if (languageButton) {
       languageButton.addEventListener('click', function(e) {
