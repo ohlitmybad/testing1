@@ -2171,8 +2171,12 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         parentSection.classList.add('active');
       }
       
-      // Update navigation state
-      navLinks.forEach(link => link.parentElement.classList.remove('active'));
+      // Update navigation state - first remove all active classes
+      document.querySelectorAll('.nav-container li').forEach(li => {
+        li.classList.remove('active');
+      });
+      
+      // Then only add active class to the matching link's parent hierarchy
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       if (matchingNavLink) {
         let currentElement = matchingNavLink.parentElement;
@@ -2216,27 +2220,22 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     const navLinks = document.querySelectorAll('.nav-container a');
     const allLinks = document.querySelectorAll('a[href^="#"]');
     
-    // First, clear existing active states to avoid multiple active items
-    document.querySelectorAll('.nav-container li.active').forEach(li => {
+    // First, clear all active states to start with a clean slate
+    document.querySelectorAll('.nav-container li').forEach(li => {
       li.classList.remove('active');
     });
     
-    // Find current section and highlight the appropriate nav item
-    const activeSection = document.querySelector('.section.active');
-    if (activeSection) {
-      // Try to find the active element within this section
-      const visibleElement = findVisibleElement(activeSection);
-      if (visibleElement && visibleElement.id) {
-        const matchingLink = document.querySelector(`.nav-container a[href="#${visibleElement.id}"]`);
-        if (matchingLink) {
-          // Add active class to matching link and its parents
-          let current = matchingLink.parentElement;
-          while (current && !current.classList.contains('nav-container')) {
-            if (current.tagName === 'LI') {
-              current.classList.add('active');
-            }
-            current = current.parentElement;
+    // Then set active state based on current location hash if available
+    const currentHash = window.location.hash.substring(1);
+    if (currentHash) {
+      const activeLink = document.querySelector(`.nav-container a[href="#${currentHash}"]`);
+      if (activeLink) {
+        let currentElement = activeLink.parentElement;
+        while (currentElement && !currentElement.classList.contains('nav-container')) {
+          if (currentElement.tagName === 'LI') {
+            currentElement.classList.add('active');
           }
+          currentElement = currentElement.parentElement;
         }
       }
     }
@@ -2251,8 +2250,8 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // Remove active class from all links' parent li elements
-          document.querySelectorAll('.nav-container li.active').forEach(li => {
+          // Remove active class from all navigation list items
+          document.querySelectorAll('.nav-container li').forEach(li => {
             li.classList.remove('active');
           });
           
@@ -2291,27 +2290,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         }
       }
     });
-  }
-  
-  // Helper function to find the most visible element in the viewport
-  function findVisibleElement(container) {
-    const elements = container.querySelectorAll('[id]');
-    let bestElement = null;
-    let bestVisibility = 0;
-    
-    elements.forEach(el => {
-      const rect = el.getBoundingClientRect();
-      // Calculate how much of the element is visible in the viewport
-      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-      const visibility = visibleHeight > 0 ? visibleHeight / rect.height : 0;
-      
-      if (visibility > bestVisibility) {
-        bestVisibility = visibility;
-        bestElement = el;
-      }
-    });
-    
-    return bestElement;
   }
   
   const preferredLanguage = getPreferredLanguage();
