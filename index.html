@@ -2215,7 +2215,11 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
   function reattachNavigationEventListeners() {
     const navLinks = document.querySelectorAll('.nav-container a');
     const allLinks = document.querySelectorAll('a[href^="#"]');
-    const headerButtons = document.querySelectorAll('.header .button');
+    
+    // First, completely reset ALL active states in the navigation
+    document.querySelectorAll('.nav-container li.active').forEach(li => {
+      li.classList.remove('active');
+    });
     
     // Handle navigation menu links
     navLinks.forEach(link => {
@@ -2227,8 +2231,10 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // Remove active class from all links' parent li elements
-          navLinks.forEach(l => l.parentElement?.classList.remove('active'));
+          // Remove active class from ALL li elements in nav (complete reset)
+          document.querySelectorAll('.nav-container li').forEach(li => {
+            li.classList.remove('active');
+          });
           
           // Add active class to clicked link's parent li and all its parent li elements
           let currentElement = this.parentElement;
@@ -2246,49 +2252,10 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         });
       }
     });
-
-    // Handle header navigation buttons
-    headerButtons.forEach(button => {
-      const newButton = button.cloneNode(true);
-      if (button.parentNode) {
-        button.parentNode.replaceChild(newButton, button);
-        
-        // Manually recreate hover effect with mouseover/mouseout if :hover not working properly
-        newButton.addEventListener('mouseover', function() {
-          this.style.backgroundColor = '#f0f0f0';
-          this.style.color = '#2563eb';
-        });
-        
-        newButton.addEventListener('mouseout', function() {
-          this.style.backgroundColor = '';
-          this.style.color = '';
-        });
-        
-        // Handle click state manually
-        newButton.addEventListener('mousedown', function() {
-          this.style.backgroundColor = '#e5e7eb';
-        });
-        
-        newButton.addEventListener('mouseup', function() {
-          this.style.backgroundColor = '#f0f0f0';
-        });
-        
-        // Preserve the original click behavior
-        newButton.addEventListener('click', function (e) {
-          if (this.getAttribute('href')?.startsWith('#')) {
-            e.preventDefault();
-            const target = this.getAttribute('href')?.substring(1);
-            if (target) {
-              globalHandleNavigation(target);
-            }
-          }
-        });
-      }
-    });
-
+    
     // Handle all other internal links
     allLinks.forEach(link => {
-      if (!link.closest('.nav-container') && !link.classList.contains('button')) {  // Only for non-nav links and non-button links
+      if (!link.closest('.nav-container')) {  // Only for non-nav links
         // Remove old listeners by cloning and replacing
         const newLink = link.cloneNode(true);
         if (link.parentNode) {
