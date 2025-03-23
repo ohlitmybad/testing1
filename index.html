@@ -2111,7 +2111,50 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       return;
     }
 
+    // Store all event handlers on key page elements before translation
+    const pageContentLinks = document.querySelectorAll('[data-i18n="page-content"] a');
+    const originalEventData = new Map();
     
+    // Save all event listeners on key navigation elements
+    pageContentLinks.forEach((link, index) => {
+      // Mark this element with a unique ID for retrieval
+      const uniqueId = `nav-clone-${index}`;
+      link.setAttribute('data-clone-id', uniqueId);
+      originalEventData.set(uniqueId, link.cloneNode(true));
+    });
+
+    // Set up mutation observer to detect when translations have been applied to the DOM
+    const observer = new MutationObserver((mutations) => {
+      let needsEventReattachment = false;
+      
+      mutations.forEach(mutation => {
+        if (mutation.type === 'childList' || mutation.type === 'attributes') {
+          // If a navigation element was modified, we need to reattach events
+          if (mutation.target.closest('[data-i18n="page-content"]') || 
+              (mutation.target.getAttribute && mutation.target.getAttribute('data-i18n') === 'page-content')) {
+            needsEventReattachment = true;
+          }
+        }
+      });
+      
+      if (needsEventReattachment) {
+        // Wait a moment for DOM to settle then reattach
+        window.setTimeout(() => {
+          reattachAllEventListeners(originalEventData);
+          // After events are reattached, disconnect observer
+          observer.disconnect();
+        }, 50);
+      }
+    });
+    
+    // Start observing the document for DOM changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['data-i18n', 'href', 'class']
+    });
+
     fetch(`locales/${language}.json`)
       .then(response => {
         // Don't throw an error, just return null if response is not OK
@@ -2129,30 +2172,77 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             }
             if (value) {
               if (element.tagName === 'META') {
-              element.setAttribute('content', value);
-          } else if (element.tagName === 'INPUT') {
-        element.setAttribute('placeholder', value);
-    } else if (value.includes('<')) {
-              // Apply translation (but save original event listeners might be lost)
-              element.innerHTML = value;
-            } else {
-              element.textContent = value;
-            }          }
+                element.setAttribute('content', value);
+              } else if (element.tagName === 'INPUT') {
+                element.setAttribute('placeholder', value);
+              } else if (value.includes('<')) {
+                // Store the original element ID to restore navigation if needed
+                const isPageContent = element.getAttribute('data-i18n') === 'page-content';
+                
+                // Apply translation (but save original event listeners might be lost)
+                element.innerHTML = value;
+                
+                // If this is the main page content, we'll need special handling
+                if (isPageContent) {
+                  // Mark for restoration after translation
+                  element.setAttribute('data-needs-restoration', 'true');
+                }
+              } else {
+                element.textContent = value;
+              }
+            }
           });
+          
           // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
           
-          // Reattach event listeners after translation
+          // Use a slight delay to ensure DOM has been updated
           window.setTimeout(function() {
-            reattachNavigationEventListeners();
-          }, 0);
+            // Re-run the original DOM content loaded event handler to rebuild navigation
+            document.dispatchEvent(new Event('DOMContentLoadedTranslation'));
+            
+            // Restore event listeners to navigation elements
+            reattachAllEventListeners(originalEventData);
+            
+            // After reattaching event listeners, disconnect the observer
+            observer.disconnect();
+          }, 100);
         }
       })
       .catch(() => {
         // Completely empty catch block to silently ignore any errors
+        // Disconnect observer on error
+        observer.disconnect();
       });
   }
   
+  // Function to reattach all event listeners after translation
+  function reattachAllEventListeners(originalEventData) {
+    // First handle all standard navigation links by setting up navigation system
+    setupNavigationSystem();
+    
+    // Then handle any specially saved elements
+    if (originalEventData && originalEventData.size > 0) {
+      // Find any elements that need restoration
+      document.querySelectorAll('[data-i18n="page-content"] a').forEach(newLink => {
+        // Try to find an href match with the original saved elements
+        originalEventData.forEach((originalElement, id) => {
+          if (newLink.getAttribute('href') === originalElement.getAttribute('href')) {
+            // This is a match - clone the event handlers by replacing with original and setting innerHTML
+            const newInnerHTML = newLink.innerHTML;
+            const parentNode = newLink.parentNode;
+            if (parentNode) {
+              // Clone original with event handlers but use new inner HTML
+              const clone = originalElement.cloneNode(true);
+              clone.innerHTML = newInnerHTML;
+              parentNode.replaceChild(clone, newLink);
+            }
+          }
+        });
+      });
+    }
+  }
+
   // Global navigation handler function
   function globalHandleNavigation(target) {
     const sections = document.querySelectorAll('.section');
@@ -2211,14 +2301,15 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     }
   }
 
-  // Function to reattach navigation event listeners after translation
-  function reattachNavigationEventListeners() {
+  // Function to setup the navigation system fresh
+  function setupNavigationSystem() {
     const navLinks = document.querySelectorAll('.nav-container a');
     const allLinks = document.querySelectorAll('a[href^="#"]');
+    const sections = document.querySelectorAll('.section');
     
     // Handle navigation menu links
     navLinks.forEach(link => {
-      // Remove old listeners by cloning and replacing
+      // Clone and replace to ensure clean event listeners
       const newLink = link.cloneNode(true);
       if (link.parentNode) {
         link.parentNode.replaceChild(newLink, link);
@@ -2243,13 +2334,16 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             globalHandleNavigation(target);
           }
         });
+        
+        // Mark this link as having event listeners attached
+        newLink.setAttribute('data-event-attached', 'true');
       }
     });
 
     // Handle all other internal links
     allLinks.forEach(link => {
       if (!link.closest('.nav-container')) {  // Only for non-nav links
-        // Remove old listeners by cloning and replacing
+        // Clone and replace to ensure clean event listeners
         const newLink = link.cloneNode(true);
         if (link.parentNode) {
           link.parentNode.replaceChild(newLink, link);
@@ -2261,11 +2355,31 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
               globalHandleNavigation(target);
             }
           });
+          
+          // Mark this link as having event listeners attached
+          newLink.setAttribute('data-event-attached', 'true');
         }
       }
     });
   }
-  
+
+  // Function to reattach navigation event listeners after translation
+  function reattachNavigationEventListeners() {
+    // This is now a wrapper around setupNavigationSystem
+    // for backward compatibility with the implementation
+    setupNavigationSystem();
+  }
+
+  // Add a special event handler just for translation-triggered DOM updates
+  document.addEventListener('DOMContentLoadedTranslation', function() {
+    // Navigation is already set up in reattachAllEventListeners
+    // This is a safety measure for direct DOM updates
+    // If no navigation components work at all, we force a re-setup
+    if (!document.querySelector('.nav-container a[data-event-attached="true"]')) {
+      setupNavigationSystem();
+    }
+  });
+
   const preferredLanguage = getPreferredLanguage();
   applyLanguage(preferredLanguage);
   
