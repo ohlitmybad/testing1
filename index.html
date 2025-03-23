@@ -2120,6 +2120,12 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
+          // Store current active states before translation
+          const activeElements = [];
+          document.querySelectorAll('.nav-container li.active').forEach(el => {
+            activeElements.push(el);
+          });
+          
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
@@ -2145,12 +2151,43 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           // Reattach event listeners after translation
           window.setTimeout(function() {
             reattachNavigationEventListeners();
+            
+            // Restore active states
+            activeElements.forEach(el => {
+              // Find the corresponding element after translation
+              const selector = getElementSelector(el);
+              const newEl = document.querySelector(selector);
+              if (newEl) {
+                newEl.classList.add('active');
+              }
+            });
           }, 0);
         }
       })
       .catch(() => {
         // Completely empty catch block to silently ignore any errors
       });
+  }
+  
+  // Helper function to get a CSS selector for an element
+  function getElementSelector(element) {
+    if (element.id) {
+      return `#${element.id}`;
+    }
+    
+    // Get the position among siblings of the same type
+    const siblings = Array.from(element.parentNode.children);
+    const tagIndex = siblings.filter(sibling => 
+      sibling.tagName === element.tagName
+    ).indexOf(element);
+    
+    // For li elements in the nav, use href as identifier
+    if (element.tagName === 'LI' && element.querySelector('a[href]')) {
+      const href = element.querySelector('a[href]').getAttribute('href');
+      return `li:has(a[href="${href}"])`;
+    }
+    
+    return `${element.tagName.toLowerCase()}:nth-of-type(${tagIndex + 1})`;
   }
   
   // Global navigation handler function
@@ -2175,25 +2212,8 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       
       if (matchingNavLink) {
-        // Clear all active states at the same menu level
-        const parentUl = matchingNavLink.closest('ul');
-        if (parentUl) {
-          // Get all li elements at this level
-          const siblingItems = parentUl.querySelectorAll('li');
-          siblingItems.forEach(item => {
-            // Remove active class from the item
-            item.classList.remove('active');
-            
-            // Also remove active from any children of siblings
-            const childUls = item.querySelectorAll('ul');
-            childUls.forEach(childUl => {
-              const childItems = childUl.querySelectorAll('li');
-              childItems.forEach(childItem => {
-                childItem.classList.remove('active');
-              });
-            });
-          });
-        }
+        // Remove active class from all links' parent li elements
+        navLinks.forEach(link => link.parentElement?.classList.remove('active'));
         
         // Add active class to the matching link's parent
         if (matchingNavLink.parentElement) {
@@ -2237,27 +2257,10 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     }
   }
 
-  // Function to find parent submenu container
-  function findParentSubMenu(element) {
-    let current = element;
-    // Go up to the li parent
-    if (current.parentElement && current.parentElement.tagName === 'LI') {
-      current = current.parentElement;
-      // Find the parent ul
-      if (current.parentElement && current.parentElement.tagName === 'UL') {
-        return current.parentElement;
-      }
-    }
-    return null;
-  }
-
   // Function to reattach navigation event listeners after translation
   function reattachNavigationEventListeners() {
     const navLinks = document.querySelectorAll('.nav-container a');
     const allLinks = document.querySelectorAll('a[href^="#"]');
-    
-    // First, create a NodeList copy of all nav links to avoid live collection issues
-    const navLinksArray = Array.from(navLinks);
     
     // Handle navigation menu links
     navLinks.forEach(link => {
@@ -2269,33 +2272,11 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // Clear all active states at the same menu level
-          const parentUl = this.closest('ul');
-          if (parentUl) {
-            // Get all li elements at this level
-            const siblingItems = parentUl.querySelectorAll('li');
-            siblingItems.forEach(item => {
-              // Remove active class from the item
-              item.classList.remove('active');
-              
-              // Also remove active from any children of siblings
-              const childUls = item.querySelectorAll('ul');
-              childUls.forEach(childUl => {
-                const childItems = childUl.querySelectorAll('li');
-                childItems.forEach(childItem => {
-                  childItem.classList.remove('active');
-                });
-              });
-            });
-          }
+          // Remove active class from all links' parent li elements
+          navLinks.forEach(l => l.parentElement?.classList.remove('active'));
           
-          // Add active class to clicked link's parent li
-          if (this.parentElement) {
-            this.parentElement.classList.add('active');
-          }
-          
-          // Add active class to all parent li elements up to nav-container
-          let currentElement = this.parentElement ? this.parentElement.parentElement : null;
+          // Add active class to clicked link's parent li and all its parent li elements
+          let currentElement = this.parentElement;
           while (currentElement && !currentElement.classList.contains('nav-container')) {
             if (currentElement.tagName === 'LI') {
               currentElement.classList.add('active');
