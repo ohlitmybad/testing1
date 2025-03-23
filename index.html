@@ -2152,6 +2152,31 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           // REMOVE FOR PAGES WITH NO METADATA
           document.querySelector('meta[name="language"]').setAttribute('content', language);
           
+          // Add CSS override to fix the menu behavior
+          let cssOverride = document.getElementById('translation-css-fix');
+          if (!cssOverride) {
+            cssOverride = document.createElement('style');
+            cssOverride.id = 'translation-css-fix';
+            document.head.appendChild(cssOverride);
+          }
+          
+          cssOverride.textContent = `
+            /* Override submenu visibility behavior */
+            .nav-container ul li.active > ul {
+              max-height: 0;
+              visibility: hidden;
+              overflow: hidden;
+            }
+            
+            /* Only direct target and its ancestors should show submenus */
+            .nav-container ul li.active.target-active > ul,
+            .nav-container ul li.active.ancestor-active > ul {
+              max-height: 1000px;
+              visibility: visible;
+              overflow: visible;
+            }
+          `;
+          
           // Reattach event listeners after translation
           window.setTimeout(function() {
             reattachNavigationEventListeners();
@@ -2159,6 +2184,8 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
             // First, clear all active states to avoid conflicts
             document.querySelectorAll('.nav-container li').forEach(li => {
               li.classList.remove('active');
+              li.classList.remove('target-active');
+              li.classList.remove('ancestor-active');
             });
             
             // Get the last active item's href (the one that was actually selected)
@@ -2171,6 +2198,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                 // Add active class to the matching link's parent
                 if (matchingLink.parentElement) {
                   matchingLink.parentElement.classList.add('active');
+                  matchingLink.parentElement.classList.add('target-active');
                 }
                 
                 // Add active class to all parent li elements
@@ -2178,6 +2206,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
                 while (currentElement && !currentElement.classList.contains('nav-container')) {
                   if (currentElement.tagName === 'LI') {
                     currentElement.classList.add('active');
+                    currentElement.classList.add('ancestor-active');
                   }
                   currentElement = currentElement.parentElement;
                 }
@@ -2276,14 +2305,25 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // Remove active class from all links' parent li elements
-          navLinks.forEach(l => l.parentElement?.classList.remove('active'));
+          // Remove all special active classes 
+          document.querySelectorAll('.nav-container li').forEach(li => {
+            li.classList.remove('active');
+            li.classList.remove('target-active');
+            li.classList.remove('ancestor-active');
+          });
           
-          // Add active class to clicked link's parent li and all its parent li elements
-          let currentElement = this.parentElement;
+          // Add active class to clicked link's parent li
+          if (this.parentElement) {
+            this.parentElement.classList.add('active');
+            this.parentElement.classList.add('target-active');
+          }
+          
+          // Add active class to all parent li elements
+          let currentElement = this.parentElement ? this.parentElement.parentElement : null;
           while (currentElement && !currentElement.classList.contains('nav-container')) {
             if (currentElement.tagName === 'LI') {
               currentElement.classList.add('active');
+              currentElement.classList.add('ancestor-active');
             }
             currentElement = currentElement.parentElement;
           }
