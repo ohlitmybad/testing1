@@ -2175,24 +2175,23 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
       
       if (matchingNavLink) {
-        // Find the container of the submenu this link belongs to
-        const parentContainer = findParentSubMenu(matchingNavLink);
-        
-        // Only remove active class from elements in the same submenu container
-        if (parentContainer) {
-          const containerLinks = parentContainer.querySelectorAll('a');
-          containerLinks.forEach(l => {
-            if (l !== matchingNavLink && l.parentElement) {
-              l.parentElement.classList.remove('active');
-            }
-          });
-        } else {
-          // If no specific container found, remove active from direct siblings
-          const navLinksArray = Array.from(navLinks);
-          navLinksArray.forEach(l => {
-            if (l.parentElement && l.parentElement.parentElement === matchingNavLink.parentElement.parentElement) {
-              l.parentElement.classList.remove('active');
-            }
+        // Clear all active states at the same menu level
+        const parentUl = matchingNavLink.closest('ul');
+        if (parentUl) {
+          // Get all li elements at this level
+          const siblingItems = parentUl.querySelectorAll('li');
+          siblingItems.forEach(item => {
+            // Remove active class from the item
+            item.classList.remove('active');
+            
+            // Also remove active from any children of siblings
+            const childUls = item.querySelectorAll('ul');
+            childUls.forEach(childUl => {
+              const childItems = childUl.querySelectorAll('li');
+              childItems.forEach(childItem => {
+                childItem.classList.remove('active');
+              });
+            });
           });
         }
         
@@ -2270,23 +2269,23 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         newLink.addEventListener('click', function (e) {
           e.preventDefault();
           
-          // Find the container of the submenu this link belongs to
-          const parentContainer = findParentSubMenu(this);
-          
-          // Only remove active class from elements in the same submenu container
-          if (parentContainer) {
-            const containerLinks = parentContainer.querySelectorAll('a');
-            containerLinks.forEach(l => {
-              if (l !== this && l.parentElement) {
-                l.parentElement.classList.remove('active');
-              }
-            });
-          } else {
-            // If no specific container found, remove active from all at the same level
-            navLinksArray.forEach(l => {
-              if (l.parentElement && l.parentElement.parentElement === this.parentElement.parentElement) {
-                l.parentElement.classList.remove('active');
-              }
+          // Clear all active states at the same menu level
+          const parentUl = this.closest('ul');
+          if (parentUl) {
+            // Get all li elements at this level
+            const siblingItems = parentUl.querySelectorAll('li');
+            siblingItems.forEach(item => {
+              // Remove active class from the item
+              item.classList.remove('active');
+              
+              // Also remove active from any children of siblings
+              const childUls = item.querySelectorAll('ul');
+              childUls.forEach(childUl => {
+                const childItems = childUl.querySelectorAll('li');
+                childItems.forEach(childItem => {
+                  childItem.classList.remove('active');
+                });
+              });
             });
           }
           
