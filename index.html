@@ -2221,7 +2221,114 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       .catch(() => {});
   }
   
-  const preferredLanguage = getPreferredLanguage();
+  function globalHandleNavigation(target) {
+  
+
+    const targetElement = document.getElementById(target);
+    if (!targetElement) return;
+    
+    // Show target section
+    const parentSection = targetElement.closest('.section');
+    if (parentSection) {
+      parentSection.classList.add('active');
+    }
+    
+    // Update navigation
+    const matchingNavLink = document.querySelector(`.nav-container a[href="#${target}"]`);
+    if (matchingNavLink) {
+      // Clear all active states
+      document.querySelectorAll('.nav-container li').forEach(li => {
+        li.classList.remove('active', 'target-active', 'ancestor-active');
+      });
+      
+      // Set active states
+      if (matchingNavLink.parentElement) {
+        matchingNavLink.parentElement.classList.add('active', 'target-active');
+        
+        // Activate parent elements
+        let currentElement = matchingNavLink.parentElement.parentElement;
+        while (currentElement && !currentElement.classList.contains('nav-container')) {
+          if (currentElement.tagName === 'LI') {
+            currentElement.classList.add('active', 'ancestor-active');
+          }
+          currentElement = currentElement.parentElement;
+        }
+      }
+    }
+    
+    // Scroll to target
+    if (window.innerWidth <= 768) {
+      setTimeout(() => {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          window.scrollBy({ top: -85, behavior: 'instant' });
+        }, 400);
+      }, 300);
+    } else {
+      const headerOffset = 85;
+      const elementPosition = targetElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+  }
+
+  function reattachNavigationEventListeners() {
+    // Handle navigation menu links
+    document.querySelectorAll('.nav-container a').forEach(link => {
+      const newLink = link.cloneNode(true);
+      if (link.parentNode) {
+        link.parentNode.replaceChild(newLink, link);
+        
+        newLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          // Clear all active states
+          document.querySelectorAll('.nav-container li').forEach(li => {
+            li.classList.remove('active', 'target-active', 'ancestor-active');
+          });
+          
+          // Set active states
+          if (this.parentElement) {
+            this.parentElement.classList.add('active', 'target-active');
+            
+            // Activate parent elements
+            let currentElement = this.parentElement.parentElement;
+            while (currentElement && !currentElement.classList.contains('nav-container')) {
+              if (currentElement.tagName === 'LI') {
+                currentElement.classList.add('active', 'ancestor-active');
+              }
+              currentElement = currentElement.parentElement;
+            }
+          }
+          
+          const target = this.getAttribute('href')?.substring(1);
+          if (target) {
+            globalHandleNavigation(target);
+          }
+        });
+      }
+    });
+
+    // Handle other internal links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      if (!link.closest('.nav-container')) {
+        const newLink = link.cloneNode(true);
+        if (link.parentNode) {
+          link.parentNode.replaceChild(newLink, link);
+          
+          newLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('href')?.substring(1);
+            if (target) {
+              globalHandleNavigation(target);
+            }
+          });
+        }
+      }
+    });
+  }
+  
+  // Initialize language
   applyLanguage(getPreferredLanguage());
   
   // Language switcher handling
