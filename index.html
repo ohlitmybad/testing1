@@ -2176,7 +2176,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
       
       if (matchingNavLink) {
         // Find the container of the submenu this link belongs to
-        const parentContainer = findClosestContainer(matchingNavLink);
+        const parentContainer = findParentSubMenu(matchingNavLink);
         
         // Only remove active class from elements in the same submenu container
         if (parentContainer) {
@@ -2211,20 +2211,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         }
       }
       
-      // Helper function to find the closest container (ul) that this link belongs to
-      function findClosestContainer(element) {
-        let current = element;
-        // Go up to the li parent
-        if (current.parentElement && current.parentElement.tagName === 'LI') {
-          current = current.parentElement;
-          // Find the parent ul
-          if (current.parentElement && current.parentElement.tagName === 'UL') {
-            return current.parentElement;
-          }
-        }
-        return null;
-      }
-      
       // Different scroll behavior for mobile and desktop
       if (window.innerWidth <= 768) { // Mobile
         setTimeout(() => {
@@ -2252,6 +2238,20 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
     }
   }
 
+  // Function to find parent submenu container
+  function findParentSubMenu(element) {
+    let current = element;
+    // Go up to the li parent
+    if (current.parentElement && current.parentElement.tagName === 'LI') {
+      current = current.parentElement;
+      // Find the parent ul
+      if (current.parentElement && current.parentElement.tagName === 'UL') {
+        return current.parentElement;
+      }
+    }
+    return null;
+  }
+
   // Function to reattach navigation event listeners after translation
   function reattachNavigationEventListeners() {
     const navLinks = document.querySelectorAll('.nav-container a');
@@ -2271,7 +2271,7 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
           e.preventDefault();
           
           // Find the container of the submenu this link belongs to
-          const parentContainer = findClosestContainer(this);
+          const parentContainer = findParentSubMenu(this);
           
           // Only remove active class from elements in the same submenu container
           if (parentContainer) {
@@ -2311,20 +2311,6 @@ function _0x5707(_0xd20fa7,_0x4d36b5){const _0x4dcd69=_0x4dcd();return _0x5707=f
         });
       }
     });
-
-    // Helper function to find the closest container (ul) that this link belongs to
-    function findClosestContainer(element) {
-      let current = element;
-      // Go up to the li parent
-      if (current.parentElement && current.parentElement.tagName === 'LI') {
-        current = current.parentElement;
-        // Find the parent ul
-        if (current.parentElement && current.parentElement.tagName === 'UL') {
-          return current.parentElement;
-        }
-      }
-      return null;
-    }
 
     // Handle all other internal links
     allLinks.forEach(link => {
