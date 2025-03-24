@@ -2199,11 +2199,20 @@ function toggleDarkMode() {
                   (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
   const isSafariDesktop = isSafariVendor && !isMobile;
   
-  
+  // Reset browser zoom using multiple methods for cross-browser compatibility
   const body = document.querySelector('body');
-  // Replace zoom with standard transform
-  body.style.transform = 'scale(1)';
-  body.style.transformOrigin = 'top left';
+  document.body.style.zoom = "100%";  // For Webkit/Blink
+  document.body.style.transform = "scale(1)";  // Standard approach
+  document.body.style.transformOrigin = "top left";
+  
+  // Reset viewport scale to ensure proper rendering
+  const viewportMeta = document.querySelector('meta[name="viewport"]');
+  if (viewportMeta) {
+    const content = viewportMeta.getAttribute('content');
+    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1, user-scalable=no');
+    // Restore original viewport content after a brief delay
+    setTimeout(() => viewportMeta.setAttribute('content', content), 300);
+  }
   
   const options = {
     scale: 2, 
