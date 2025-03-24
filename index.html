@@ -2181,35 +2181,83 @@ function toggleDarkMode() {
                   (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
   const isSafariDesktop = isSafariVendor && !isMobile;
   
-  // Store original body styles for Safari
-  let originalStyles = {};
-  
-  // Special handling for Safari Desktop
   if (isSafariDesktop) {
-    console.log("Applying Safari zoom fix");
-    
-    // Store original styles to restore later
-    originalStyles = {
-      zoom: document.body.style.zoom,
-      webkitTransform: document.body.style.webkitTransform,
-      transform: document.body.style.transform
-    };
-    
-    // Force reset ALL zoom properties on the body
-    document.body.style.zoom = 1;
-    document.body.style.webkitTransform = 'scale(1)';
-    document.body.style.transform = 'scale(1)';
-    
-    // Give the browser a moment to redraw at the new zoom level
-    setTimeout(captureScreenshot, 100);
+    takeSafariScreenshot();
   } else {
-    // For non-Safari browsers, capture immediately
-    captureScreenshot();
+    takeStandardScreenshot();
   }
   
-  function captureScreenshot() {
+  // Special method for Safari that captures SVG directly
+  function takeSafariScreenshot() {
+    console.log("Using Safari-specific screenshot method");
+    
+    try {
+      // Get the SVG element
+      const radar = document.querySelector('.radar');
+      if (!radar) {
+        throw new Error("Radar SVG not found");
+      }
+      
+      // Create a canvas at a fixed high resolution
+      const canvas = document.createElement('canvas');
+      const width = 1000;
+      const height = 1000;
+      canvas.width = width;
+      canvas.height = height;
+      
+      // Create a new SVG with a foreignObject to properly scale content
+      const svgData = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+          <rect width="100%" height="100%" fill="${isDarkMode ? '#1a1a1a' : '#ffffff'}"/>
+          <foreignObject width="100%" height="100%">
+            ${radar.outerHTML}
+          </foreignObject>
+        </svg>
+      `;
+      
+      // Create a Blob from the SVG data
+      const blob = new Blob([svgData], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      
+      // Load the SVG into an image
+      const img = new Image();
+      img.onload = function() {
+        // Draw the image to the canvas
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Convert the canvas to an image
+        const imageUrl = canvas.toDataURL('image/png');
+        
+        // Download the image
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imageUrl;
+        downloadLink.download = 'DataMB Screenshot.png';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Clean up
+        URL.revokeObjectURL(url);
+        chartWrapper.classList.remove('screenshot-capture');
+      };
+      
+      img.onerror = function(e) {
+        console.error("Error loading SVG:", e);
+        takeStandardScreenshot();
+      };
+      
+      img.src = url;
+    } catch (error) {
+      console.error("Error in Safari screenshot method:", error);
+      takeStandardScreenshot();
+    }
+  }
+  
+  // Standard screenshot method using html2canvas
+  function takeStandardScreenshot() {
     const options = {
-      scale: isSafariDesktop ? 4 : 2, // Higher resolution for Safari
+      scale: 2,
       backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
       allowTaint: true,
       useCORS: true,
@@ -2228,19 +2276,6 @@ function toggleDarkMode() {
         if (clonedRadar) {
           clonedRadar.style.display = 'block';
           clonedRadar.style.margin = '0 auto';
-          
-          // Force SVG to render at full size with precise dimensions
-          if (isSafariDesktop) {
-            clonedDocument.body.style.zoom = 1;
-            clonedDocument.body.style.webkitTransform = 'scale(1)';
-            clonedDocument.body.style.transform = 'scale(1)';
-            
-            // Force SVG to be crisp
-            clonedRadar.setAttribute('width', '800');
-            clonedRadar.setAttribute('height', '800');
-            clonedRadar.style.width = 'auto';
-            clonedRadar.style.height = 'auto';
-          }
         }
       }
     };
@@ -2254,23 +2289,9 @@ function toggleDarkMode() {
       downloadLink.click();
       document.body.removeChild(downloadLink);
       chartWrapper.classList.remove('screenshot-capture');
-      
-      // Restore original body styles for Safari
-      if (isSafariDesktop) {
-        document.body.style.zoom = originalStyles.zoom || '';
-        document.body.style.webkitTransform = originalStyles.webkitTransform || '';
-        document.body.style.transform = originalStyles.transform || '';
-      }
     }).catch(error => {
       console.error("Screenshot error:", error);
       chartWrapper.classList.remove('screenshot-capture');
-      
-      // Restore original body styles for Safari even if error
-      if (isSafariDesktop) {
-        document.body.style.zoom = originalStyles.zoom || '';
-        document.body.style.webkitTransform = originalStyles.webkitTransform || '';
-        document.body.style.transform = originalStyles.transform || '';
-      }
     });
   }
 }
