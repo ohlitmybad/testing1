@@ -2240,6 +2240,21 @@ function toggleDarkMode() {
   const isDarkMode = document.body.classList.contains('dark-mode');
   chartWrapper.classList.add('screenshot-capture');
   
+  // Safari desktop detection - confirmed by testing
+  const isSafariVendor = navigator.vendor === "Apple Computer, Inc.";
+  const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+                  (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
+  const isSafariDesktop = isSafariVendor && !isMobile;
+  
+  // Store original page scale
+  let originalScale = null;
+  
+  // Apply fix for Safari desktop
+  if (isSafariDesktop) {    
+    const computedStyle = window.getComputedStyle(document.documentElement);
+    originalScale = computedStyle.zoom || 1;
+        document.documentElement.style.zoom = 1;
+  }
     
   const options = {
     scale: 2, 
@@ -2263,7 +2278,10 @@ function toggleDarkMode() {
         radar.style.margin = '0 auto';
       }
       
-
+      // Additional zooming fix for Safari desktop
+      if (isSafariDesktop) {
+        clonedDocument.documentElement.style.zoom = 1;
+      }
     }
   };
   
@@ -2276,6 +2294,11 @@ function toggleDarkMode() {
     downloadLink.click();
     document.body.removeChild(downloadLink);
     chartWrapper.classList.remove('screenshot-capture');
+    
+    // Restore original zoom on Safari desktop
+    if (isSafariDesktop && originalScale) {
+      document.documentElement.style.zoom = originalScale;
+    }
   }).catch(error => {
   });
 }
