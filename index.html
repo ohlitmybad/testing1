@@ -2181,104 +2181,35 @@ function toggleDarkMode() {
                   (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
   const isSafariDesktop = isSafariVendor && !isMobile;
   
-  // Special handling for Safari Desktop with zoom issues
+  // Store original body styles for Safari
+  let originalStyles = {};
+  
+  // Special handling for Safari Desktop
   if (isSafariDesktop) {
-    console.log("Using special Safari desktop screenshot method");
+    console.log("Applying Safari zoom fix");
     
-    try {
-      // Create a temporary container for the entire chart wrapper
-      const tempContainer = document.createElement('div');
-      tempContainer.style.position = 'absolute';
-      tempContainer.style.left = '-9999px';
-      tempContainer.style.width = chartWrapper.offsetWidth + 'px';
-      tempContainer.style.height = chartWrapper.offsetHeight + 'px';
-      tempContainer.style.overflow = 'hidden';
-      
-      // Clone the chart wrapper
-      const clonedWrapper = chartWrapper.cloneNode(true);
-      
-      // Hide elements we don't want in the screenshot
-      const similarContainer = clonedWrapper.querySelector('#similarPlayersContainer');
-      if (similarContainer) similarContainer.style.display = 'none';
-      
-      const horizontalLine = clonedWrapper.querySelector('hr');
-      if (horizontalLine) horizontalLine.style.display = 'none';
-      
-      const toggleControls = clonedWrapper.querySelector('.toggle-controls');
-      if (toggleControls) toggleControls.style.display = 'none';
-      
-      // Ensure radar is visible and styled correctly
-      const radar = clonedWrapper.querySelector('.radar');
-      if (radar) {
-        radar.style.display = 'block';
-        radar.style.margin = '0 auto';
-        
-        // Force width and height for SVG
-        radar.style.width = '100%';
-        radar.style.height = 'auto';
-        radar.setAttribute('width', '800');
-        radar.setAttribute('height', '800');
-        radar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-        
-        // Ensure all SVG paths are rendered with high quality
-        const allPaths = radar.querySelectorAll('path, polygon, circle, line');
-        allPaths.forEach(path => {
-          path.setAttribute('vector-effect', 'non-scaling-stroke');
-          path.setAttribute('shape-rendering', 'geometricPrecision');
-        });
-      }
-      
-      // Add the cloned wrapper to the temporary container
-      tempContainer.appendChild(clonedWrapper);
-      document.body.appendChild(tempContainer);
-      
-      // Use html2canvas with forced high resolution
-      const options = {
-        scale: 4, // Increased scale for sharper image
-        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
-        allowTaint: true,
-        useCORS: true,
-        logging: false,
-        width: chartWrapper.offsetWidth,
-        height: chartWrapper.offsetHeight
-      };
-      
-      html2canvas(clonedWrapper, options).then(canvas => {
-        const imageUrl = canvas.toDataURL('image/png');
-        const downloadLink = document.createElement('a');
-        downloadLink.href = imageUrl;
-        downloadLink.download = 'DataMB Screenshot.png';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        // Clean up
-        document.body.removeChild(tempContainer);
-        chartWrapper.classList.remove('screenshot-capture');
-      }).catch(error => {
-        console.error("Safari screenshot error:", error);
-        chartWrapper.classList.remove('screenshot-capture');
-        document.body.removeChild(tempContainer);
-        
-        // Fall back to standard method
-        useStandardScreenshotMethod();
-      });
-    } catch (error) {
-      console.error("Error in Safari screenshot method:", error);
-      chartWrapper.classList.remove('screenshot-capture');
-      
-      // Fall back to standard method
-      useStandardScreenshotMethod();
-    }
+    // Store original styles to restore later
+    originalStyles = {
+      zoom: document.body.style.zoom,
+      webkitTransform: document.body.style.webkitTransform,
+      transform: document.body.style.transform
+    };
+    
+    // Force reset ALL zoom properties on the body
+    document.body.style.zoom = 1;
+    document.body.style.webkitTransform = 'scale(1)';
+    document.body.style.transform = 'scale(1)';
+    
+    // Give the browser a moment to redraw at the new zoom level
+    setTimeout(captureScreenshot, 100);
   } else {
-    // Use standard method for non-Safari browsers
-    useStandardScreenshotMethod();
+    // For non-Safari browsers, capture immediately
+    captureScreenshot();
   }
   
-  // Standard screenshot method using html2canvas
-  function useStandardScreenshotMethod() {
+  function captureScreenshot() {
     const options = {
-      scale: 2, 
+      scale: isSafariDesktop ? 4 : 2, // Higher resolution for Safari
       backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
       allowTaint: true,
       useCORS: true,
@@ -2297,6 +2228,19 @@ function toggleDarkMode() {
         if (clonedRadar) {
           clonedRadar.style.display = 'block';
           clonedRadar.style.margin = '0 auto';
+          
+          // Force SVG to render at full size with precise dimensions
+          if (isSafariDesktop) {
+            clonedDocument.body.style.zoom = 1;
+            clonedDocument.body.style.webkitTransform = 'scale(1)';
+            clonedDocument.body.style.transform = 'scale(1)';
+            
+            // Force SVG to be crisp
+            clonedRadar.setAttribute('width', '800');
+            clonedRadar.setAttribute('height', '800');
+            clonedRadar.style.width = 'auto';
+            clonedRadar.style.height = 'auto';
+          }
         }
       }
     };
@@ -2310,9 +2254,23 @@ function toggleDarkMode() {
       downloadLink.click();
       document.body.removeChild(downloadLink);
       chartWrapper.classList.remove('screenshot-capture');
+      
+      // Restore original body styles for Safari
+      if (isSafariDesktop) {
+        document.body.style.zoom = originalStyles.zoom || '';
+        document.body.style.webkitTransform = originalStyles.webkitTransform || '';
+        document.body.style.transform = originalStyles.transform || '';
+      }
     }).catch(error => {
       console.error("Screenshot error:", error);
       chartWrapper.classList.remove('screenshot-capture');
+      
+      // Restore original body styles for Safari even if error
+      if (isSafariDesktop) {
+        document.body.style.zoom = originalStyles.zoom || '';
+        document.body.style.webkitTransform = originalStyles.webkitTransform || '';
+        document.body.style.transform = originalStyles.transform || '';
+      }
     });
   }
 }
