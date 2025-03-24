@@ -2175,70 +2175,56 @@ function toggleDarkMode() {
   const isDarkMode = document.body.classList.contains('dark-mode');
   chartWrapper.classList.add('screenshot-capture');
   
-  // Safari desktop detection - confirmed by testing
-  const isSafariVendor = navigator.vendor === "Apple Computer, Inc.";
-  const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
-                  (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
-  const isSafariDesktop = isSafariVendor && !isMobile;
+  // Safari desktop detection - simple approach
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   
-  // FINAL SOLUTION: Direct HTML rendering
-  if (isSafariDesktop) {
-    console.log("Using Safari desktop direct rendering solution");
-    
-    // Capture the SVG element
-    const radar = document.querySelector('.radar');
-    if (!radar) {
-      console.error("Radar element not found");
-      return takeStandardScreenshot();
-    }
+  if (isSafari) {
+    console.log("Using Safari-specific screenshot method");
     
     try {
-      // Get SVG dimensions and content
-      const svgRect = radar.getBoundingClientRect();
-      const svgHTML = radar.outerHTML;
+      // Get the SVG element
+      const radar = document.querySelector('.radar');
+      if (!radar) {
+        console.error("Radar element not found");
+        return standardScreenshot();
+      }
       
-      // Create a clean SVG in a new document
-      const svgDoc = document.implementation.createHTMLDocument("");
-      const container = svgDoc.createElement('div');
-      container.style.width = "800px";
-      container.style.height = "800px";
-      container.style.backgroundColor = isDarkMode ? '#1a1a1a' : '#ffffff';
-      container.innerHTML = svgHTML;
-      svgDoc.body.appendChild(container);
+      // Clone the SVG to avoid modifying the original
+      const svgClone = radar.cloneNode(true);
       
-      // Get the SVG in the new document and set fixed dimensions
-      const newSvg = container.querySelector('svg');
-      newSvg.setAttribute('width', '800');
-      newSvg.setAttribute('height', '800');
-      newSvg.style.width = '800px';
-      newSvg.style.height = '800px';
+      // Set explicit dimensions on the SVG
+      svgClone.setAttribute('width', '800');
+      svgClone.setAttribute('height', '800');
+      svgClone.style.width = '800px';
+      svgClone.style.height = '800px';
       
-      // Convert to a data URL directly (workaround for Safari)
+      // Convert to a data URL
       const serializer = new XMLSerializer();
-      const svgString = serializer.serializeToString(newSvg);
-      const svgURL = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+      const svgString = serializer.serializeToString(svgClone);
+      const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
       
-      // Download the exact SVG
+      // Create download link for SVG
+      const svgUrl = URL.createObjectURL(svgBlob);
       const downloadLink = document.createElement('a');
-      downloadLink.href = svgURL;
-      downloadLink.download = 'DataMB_DirectSVG.svg';
+      downloadLink.href = svgUrl;
+      downloadLink.download = 'DataMB_Chart.svg';
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(svgUrl);
       
-      // Fall back to standard screenshot as well
-      takeStandardScreenshot("Safari_Standard");
+      chartWrapper.classList.remove('screenshot-capture');
+      console.log("SVG export complete");
     } catch (error) {
-      console.error("Error in direct rendering:", error);
-      takeStandardScreenshot();
+      console.error("Error exporting SVG:", error);
+      standardScreenshot();
     }
   } else {
     // For non-Safari browsers
-    takeStandardScreenshot();
+    standardScreenshot();
   }
   
-  // Standard screenshot method
-  function takeStandardScreenshot(suffix = "") {
+  function standardScreenshot() {
     const options = {
       scale: 2,
       backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
@@ -2264,11 +2250,10 @@ function toggleDarkMode() {
     };
     
     html2canvas(chartWrapper, options).then(canvas => {
-      const filename = suffix ? `DataMB_${suffix}.png` : 'DataMB Screenshot.png';
       const imageUrl = canvas.toDataURL('image/png');
       const downloadLink = document.createElement('a');
       downloadLink.href = imageUrl;
-      downloadLink.download = filename;
+      downloadLink.download = 'DataMB Screenshot.png';
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
