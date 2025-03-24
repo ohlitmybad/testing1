@@ -2182,79 +2182,454 @@ function toggleDarkMode() {
   const isSafariDesktop = isSafariVendor && !isMobile;
   
   if (isSafariDesktop) {
-    takeSafariScreenshot();
+    console.log("Using Safari desktop screenshot methods");
+    safariScreenshotMethods();
   } else {
+    // For non-Safari browsers
     takeStandardScreenshot();
   }
   
-  // Special method for Safari that captures SVG directly
-  function takeSafariScreenshot() {
-    console.log("Using Safari-specific screenshot method");
+  // Try multiple Safari screenshot methods and download all results
+  function safariScreenshotMethods() {
+    // Store original styles to restore later
+    const originalStyles = {
+      wrapperWidth: chartWrapper.style.width,
+      wrapperHeight: chartWrapper.style.height,
+      wrapperPosition: chartWrapper.style.position,
+      wrapperOverflow: chartWrapper.style.overflow,
+      bodyZoom: document.body.style.zoom,
+      bodyOverflow: document.body.style.overflow,
+      html: document.documentElement.style.cssText,
+    };
     
+    // Array of different methods to try
+    const methods = [
+      {
+        name: "Method1-StandardNoChanges",
+        fn: standardMethod
+      },
+      {
+        name: "Method2-PageZoom100",
+        fn: pageZoomMethod
+      },
+      {
+        name: "Method3-FixedSVGDimensions",
+        fn: fixedSVGDimensionsMethod
+      },
+      {
+        name: "Method4-SVGTransform",
+        fn: svgTransformMethod
+      },
+      {
+        name: "Method5-Rasterization",
+        fn: rasterizationMethod
+      },
+      {
+        name: "Method6-CloneOffscreen",
+        fn: cloneOffscreenMethod
+      },
+      {
+        name: "Method7-HighResolution",
+        fn: highResolutionMethod
+      },
+      {
+        name: "Method8-BlobToCanvas",
+        fn: blobToCanvasMethod
+      }
+    ];
+    
+    // Try each method sequentially
+    let methodIndex = 0;
+    
+    function tryNextMethod() {
+      if (methodIndex < methods.length) {
+        const method = methods[methodIndex];
+        console.log(`Trying Safari screenshot method ${methodIndex + 1}/${methods.length}: ${method.name}`);
+        
+        // Restore original styles before trying next method
+        restoreOriginalStyles();
+        
+        // Execute the method
+        method.fn(method.name, function() {
+          methodIndex++;
+          // Wait a moment before trying the next method
+          setTimeout(tryNextMethod, 500);
+        });
+      } else {
+        // All methods tried, restore styles
+        restoreOriginalStyles();
+        console.log("All Safari screenshot methods completed");
+      }
+    }
+    
+    // Start trying methods
+    tryNextMethod();
+  }
+  
+  // Method 1: Standard method with no changes
+  function standardMethod(methodName, callback) {
+    const options = {
+      scale: 2,
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) clonedSimilarContainer.style.display = 'none';
+        
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        
+        const clonedRadar = clonedWrapper.querySelector('.radar');
+        if (clonedRadar) {
+          clonedRadar.style.display = 'block';
+          clonedRadar.style.margin = '0 auto';
+        }
+      }
+    };
+    
+    html2canvas(chartWrapper, options)
+      .then(canvas => {
+        downloadScreenshot(canvas, methodName);
+        callback();
+      })
+      .catch(error => {
+        console.error(`Error in ${methodName}:`, error);
+        callback();
+      });
+  }
+  
+  // Method 2: Force page zoom to 100%
+  function pageZoomMethod(methodName, callback) {
+    document.body.style.zoom = "100%";
+    document.documentElement.style.zoom = "100%";
+    
+    const options = {
+      scale: 2,
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        clonedDocument.body.style.zoom = "100%";
+        clonedDocument.documentElement.style.zoom = "100%";
+        
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) clonedSimilarContainer.style.display = 'none';
+        
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        
+        const clonedRadar = clonedWrapper.querySelector('.radar');
+        if (clonedRadar) {
+          clonedRadar.style.display = 'block';
+          clonedRadar.style.margin = '0 auto';
+        }
+      }
+    };
+    
+    html2canvas(chartWrapper, options)
+      .then(canvas => {
+        downloadScreenshot(canvas, methodName);
+        callback();
+      })
+      .catch(error => {
+        console.error(`Error in ${methodName}:`, error);
+        callback();
+      });
+  }
+  
+  // Method 3: Set fixed dimensions on SVG
+  function fixedSVGDimensionsMethod(methodName, callback) {
+    const radar = chartWrapper.querySelector('.radar');
+    if (radar) {
+      radar.setAttribute('width', '800');
+      radar.setAttribute('height', '800');
+      radar.style.width = '800px';
+      radar.style.height = '800px';
+    }
+    
+    const options = {
+      scale: 2,
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) clonedSimilarContainer.style.display = 'none';
+        
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        
+        const clonedRadar = clonedWrapper.querySelector('.radar');
+        if (clonedRadar) {
+          clonedRadar.style.display = 'block';
+          clonedRadar.style.margin = '0 auto';
+          clonedRadar.setAttribute('width', '800');
+          clonedRadar.setAttribute('height', '800');
+          clonedRadar.style.width = '800px';
+          clonedRadar.style.height = '800px';
+        }
+      }
+    };
+    
+    html2canvas(chartWrapper, options)
+      .then(canvas => {
+        downloadScreenshot(canvas, methodName);
+        callback();
+      })
+      .catch(error => {
+        console.error(`Error in ${methodName}:`, error);
+        callback();
+      });
+  }
+  
+  // Method 4: Apply SVG transforms
+  function svgTransformMethod(methodName, callback) {
+    const radar = chartWrapper.querySelector('.radar');
+    if (radar) {
+      radar.style.transformOrigin = 'center';
+      radar.style.transform = 'scale(1)';
+      radar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      
+      const paths = radar.querySelectorAll('path, polygon, circle');
+      paths.forEach(path => {
+        path.setAttribute('vector-effect', 'non-scaling-stroke');
+      });
+    }
+    
+    const options = {
+      scale: 2,
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) clonedSimilarContainer.style.display = 'none';
+        
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        
+        const clonedRadar = clonedWrapper.querySelector('.radar');
+        if (clonedRadar) {
+          clonedRadar.style.display = 'block';
+          clonedRadar.style.margin = '0 auto';
+          clonedRadar.style.transformOrigin = 'center';
+          clonedRadar.style.transform = 'scale(1)';
+          clonedRadar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          
+          const paths = clonedRadar.querySelectorAll('path, polygon, circle');
+          paths.forEach(path => {
+            path.setAttribute('vector-effect', 'non-scaling-stroke');
+          });
+        }
+      }
+    };
+    
+    html2canvas(chartWrapper, options)
+      .then(canvas => {
+        downloadScreenshot(canvas, methodName);
+        callback();
+      })
+      .catch(error => {
+        console.error(`Error in ${methodName}:`, error);
+        callback();
+      });
+  }
+  
+  // Method 5: Force SVG rasterization
+  function rasterizationMethod(methodName, callback) {
+    const svgs = chartWrapper.querySelectorAll('svg');
+    svgs.forEach(svg => {
+      svg.style.transform = 'translateZ(0)';
+      svg.style.backfaceVisibility = 'hidden';
+      svg.style.webkitFontSmoothing = 'antialiased';
+    });
+    
+    const options = {
+      scale: 3,
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) clonedSimilarContainer.style.display = 'none';
+        
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        
+        const clonedSvgs = clonedWrapper.querySelectorAll('svg');
+        clonedSvgs.forEach(svg => {
+          svg.style.transform = 'translateZ(0)';
+          svg.style.backfaceVisibility = 'hidden';
+          svg.style.webkitFontSmoothing = 'antialiased';
+        });
+      }
+    };
+    
+    html2canvas(chartWrapper, options)
+      .then(canvas => {
+        downloadScreenshot(canvas, methodName);
+        callback();
+      })
+      .catch(error => {
+        console.error(`Error in ${methodName}:`, error);
+        callback();
+      });
+  }
+  
+  // Method 6: Clone chart wrapper offscreen
+  function cloneOffscreenMethod(methodName, callback) {
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.left = '-9999px';
+    tempContainer.style.width = chartWrapper.offsetWidth + 'px';
+    tempContainer.style.height = chartWrapper.offsetHeight + 'px';
+    
+    const clonedWrapper = chartWrapper.cloneNode(true);
+    const similarContainer = clonedWrapper.querySelector('#similarPlayersContainer');
+    if (similarContainer) similarContainer.style.display = 'none';
+    
+    const horizontalLine = clonedWrapper.querySelector('hr');
+    if (horizontalLine) horizontalLine.style.display = 'none';
+    
+    const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+    if (toggleControls) toggleControls.style.display = 'none';
+    
+    const radar = clonedWrapper.querySelector('.radar');
+    if (radar) {
+      radar.style.display = 'block';
+      radar.style.margin = '0 auto';
+    }
+    
+    tempContainer.appendChild(clonedWrapper);
+    document.body.appendChild(tempContainer);
+    
+    const options = {
+      scale: 2,
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false
+    };
+    
+    html2canvas(clonedWrapper, options)
+      .then(canvas => {
+        downloadScreenshot(canvas, methodName);
+        document.body.removeChild(tempContainer);
+        callback();
+      })
+      .catch(error => {
+        console.error(`Error in ${methodName}:`, error);
+        document.body.removeChild(tempContainer);
+        callback();
+      });
+  }
+  
+  // Method 7: High resolution (4x scale)
+  function highResolutionMethod(methodName, callback) {
+    const options = {
+      scale: 4,
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) clonedSimilarContainer.style.display = 'none';
+        
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        
+        const clonedRadar = clonedWrapper.querySelector('.radar');
+        if (clonedRadar) {
+          clonedRadar.style.display = 'block';
+          clonedRadar.style.margin = '0 auto';
+        }
+      }
+    };
+    
+    html2canvas(chartWrapper, options)
+      .then(canvas => {
+        downloadScreenshot(canvas, methodName);
+        callback();
+      })
+      .catch(error => {
+        console.error(`Error in ${methodName}:`, error);
+        callback();
+      });
+  }
+  
+  // Method 8: Convert SVG to blob and draw on canvas
+  function blobToCanvasMethod(methodName, callback) {
     try {
-      // Get the SVG element
       const radar = document.querySelector('.radar');
       if (!radar) {
         throw new Error("Radar SVG not found");
       }
       
-      // Create a canvas at a fixed high resolution
-      const canvas = document.createElement('canvas');
-      const width = 1000;
-      const height = 1000;
-      canvas.width = width;
-      canvas.height = height;
+      const svgData = radar.outerHTML;
+      const svgBlob = new Blob([svgData], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(svgBlob);
       
-      // Create a new SVG with a foreignObject to properly scale content
-      const svgData = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-          <rect width="100%" height="100%" fill="${isDarkMode ? '#1a1a1a' : '#ffffff'}"/>
-          <foreignObject width="100%" height="100%">
-            ${radar.outerHTML}
-          </foreignObject>
-        </svg>
-      `;
-      
-      // Create a Blob from the SVG data
-      const blob = new Blob([svgData], { type: 'image/svg+xml' });
-      const url = URL.createObjectURL(blob);
-      
-      // Load the SVG into an image
       const img = new Image();
       img.onload = function() {
-        // Draw the image to the canvas
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width * 2;
+        canvas.height = img.height * 2;
+        
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
+        ctx.scale(2, 2);
+        ctx.fillStyle = isDarkMode ? '#1a1a1a' : '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
         
-        // Convert the canvas to an image
-        const imageUrl = canvas.toDataURL('image/png');
-        
-        // Download the image
-        const downloadLink = document.createElement('a');
-        downloadLink.href = imageUrl;
-        downloadLink.download = 'DataMB Screenshot.png';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        // Clean up
+        downloadScreenshot(canvas, methodName);
         URL.revokeObjectURL(url);
-        chartWrapper.classList.remove('screenshot-capture');
+        callback();
       };
       
       img.onerror = function(e) {
-        console.error("Error loading SVG:", e);
-        takeStandardScreenshot();
+        console.error(`Error in ${methodName}:`, e);
+        callback();
       };
       
       img.src = url;
     } catch (error) {
-      console.error("Error in Safari screenshot method:", error);
-      takeStandardScreenshot();
+      console.error(`Error in ${methodName}:`, error);
+      callback();
     }
   }
   
-  // Standard screenshot method using html2canvas
+  // Standard screenshot method for non-Safari browsers
   function takeStandardScreenshot() {
     const options = {
       scale: 2,
@@ -2281,18 +2656,57 @@ function toggleDarkMode() {
     };
     
     html2canvas(chartWrapper, options).then(canvas => {
-      const imageUrl = canvas.toDataURL('image/png');
-      const downloadLink = document.createElement('a');
-      downloadLink.href = imageUrl;
-      downloadLink.download = 'DataMB Screenshot.png';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
+      downloadScreenshot(canvas, "Standard");
       chartWrapper.classList.remove('screenshot-capture');
     }).catch(error => {
       console.error("Screenshot error:", error);
       chartWrapper.classList.remove('screenshot-capture');
     });
+  }
+  
+  // Helper function to download a screenshot with method name
+  function downloadScreenshot(canvas, methodName) {
+    const imageUrl = canvas.toDataURL('image/png');
+    const downloadLink = document.createElement('a');
+    downloadLink.href = imageUrl;
+    downloadLink.download = `DataMB_${methodName}.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }
+  
+  // Helper function to restore original styles
+  function restoreOriginalStyles() {
+    chartWrapper.style.width = originalStyles.wrapperWidth || '';
+    chartWrapper.style.height = originalStyles.wrapperHeight || '';
+    chartWrapper.style.position = originalStyles.wrapperPosition || '';
+    chartWrapper.style.overflow = originalStyles.wrapperOverflow || '';
+    
+    document.body.style.zoom = originalStyles.bodyZoom || '';
+    document.body.style.overflow = originalStyles.bodyOverflow || '';
+    document.documentElement.style.cssText = originalStyles.html || '';
+    
+    const svgs = document.querySelectorAll('svg');
+    svgs.forEach(svg => {
+      svg.style.transform = '';
+      svg.style.backfaceVisibility = '';
+      svg.style.webkitFontSmoothing = '';
+      svg.style.transformOrigin = '';
+    });
+    
+    const radar = chartWrapper.querySelector('.radar');
+    if (radar) {
+      radar.style.width = '';
+      radar.style.height = '';
+      radar.style.transform = '';
+      radar.style.transformOrigin = '';
+      radar.removeAttribute('preserveAspectRatio');
+      
+      const paths = radar.querySelectorAll('path, polygon, circle');
+      paths.forEach(path => {
+        path.removeAttribute('vector-effect');
+      });
+    }
   }
 }
 </script>
