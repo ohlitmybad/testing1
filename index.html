@@ -2200,12 +2200,8 @@ function toggleDarkMode() {
   const isSafariDesktop = isSafariVendor && !isMobile;
   
   
-  if (isSafariDesktop) {    
     const body = document.querySelector('body');
       body.style.zoom = '1';
-
-  }
-    
   const options = {
     scale: 2, 
     backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
