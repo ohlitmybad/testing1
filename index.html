@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 <head>
   <meta name="language" content="en">
@@ -2200,8 +2200,11 @@ function toggleDarkMode() {
   const isSafariDesktop = isSafariVendor && !isMobile;
   
   
-    const body = document.querySelector('body');
-      body.style.zoom = '1';
+  const body = document.querySelector('body');
+  // Replace zoom with standard transform
+  body.style.transform = 'scale(1)';
+  body.style.transformOrigin = 'top left';
+  
   const options = {
     scale: 2, 
     backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
