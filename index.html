@@ -2199,13 +2199,11 @@ function toggleDarkMode() {
                   (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
   const isSafariDesktop = isSafariVendor && !isMobile;
   
-  // Store original page scale
-  let originalScale = null;
   
   if (isSafariDesktop) {    
     let originalZoom = null;
-      originalZoom = body.style.zoom;
-      body.style.zoom = '1';
+      originalZoom = document.body.style.zoom;
+      document.body.style.zoom = '1';
   }
     
   const options = {
@@ -2244,8 +2242,8 @@ function toggleDarkMode() {
     chartWrapper.classList.remove('screenshot-capture');
     
     // Restore original zoom on Safari desktop
-    if (isSafariDesktop && originalScale) {
-      document.documentElement.style.zoom = originalScale;
+    if (isSafariDesktop && originalZoom) {
+      document.body.style.zoom = originalZoom;
     }
   }).catch(error => {
   });
