@@ -2170,65 +2170,46 @@ function toggleDarkMode() {
     });
   }
   
+  // Add a button to trigger the Safari detection test
+  document.addEventListener('DOMContentLoaded', function() {
+    const detectButton = document.createElement('button');
+    detectButton.textContent = 'Test Safari Detection';
+    detectButton.style.position = 'fixed';
+    detectButton.style.bottom = '70px';
+    detectButton.style.right = '20px';
+    detectButton.style.padding = '8px 12px';
+    detectButton.style.backgroundColor = '#3498db';
+    detectButton.style.color = 'white';
+    detectButton.style.border = 'none';
+    detectButton.style.borderRadius = '4px';
+    detectButton.style.cursor = 'pointer';
+    detectButton.style.zIndex = '9999';
+    
+    detectButton.addEventListener('click', detectSafari);
+    document.body.appendChild(detectButton);
+  });
+
   function takeScreenshot() {
   const chartWrapper = document.querySelector('.chart-wrapper');
   const isDarkMode = document.body.classList.contains('dark-mode');
-  
-  // Safari detection
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  
-  if (isSafari) {
-    // Create temporary overlay with instructions
-    const overlay = document.createElement('div');
-    overlay.style.position = 'fixed';
-    overlay.style.top = '0';
-    overlay.style.left = '0';
-    overlay.style.width = '100%';
-    overlay.style.height = '100%';
-    overlay.style.backgroundColor = 'rgba(0,0,0,0.8)';
-    overlay.style.color = 'white';
-    overlay.style.zIndex = '10000';
-    overlay.style.display = 'flex';
-    overlay.style.flexDirection = 'column';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
-    overlay.style.padding = '20px';
-    overlay.style.boxSizing = 'border-box';
-    overlay.style.textAlign = 'center';
-    overlay.style.fontFamily = 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
-    
-    overlay.innerHTML = `
-      <h2 style="margin-bottom: 20px; font-size: 24px;">Safari Screenshot Instructions</h2>
-      <p style="margin-bottom: 15px; font-size: 16px; max-width: 600px;">
-        Due to Safari rendering limitations, please use the built-in screenshot tool:
-      </p>
-      <ol style="text-align: left; margin-bottom: 30px; font-size: 16px; max-width: 600px;">
-        <li style="margin-bottom: 10px;">Press <strong>Command (⌘) + Shift + 4</strong> then <strong>Space</strong></li>
-        <li style="margin-bottom: 10px;">Click on this browser window to capture it</li>
-        <li style="margin-bottom: 10px;">The screenshot will be saved to your desktop</li>
-      </ol>
-      <p style="margin-bottom: 15px; font-size: 16px;">
-        <strong>Before taking the screenshot:</strong> Ensure the chart is visible and 
-        properly sized in your window.
-      </p>
-      <button id="closeInstructions" style="padding: 10px 20px; background: #0077cc; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Close Instructions</button>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-    // Add event listener to close button
-    document.getElementById('closeInstructions').addEventListener('click', function() {
-      document.body.removeChild(overlay);
-    });
-    
-    return;
-  }
-  
-  // For non-Safari browsers, use the existing screenshot method
   chartWrapper.classList.add('screenshot-capture');
   
+  const isSafariVendor = navigator.vendor === "Apple Computer, Inc.";
+  const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+                  (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
+  const isSafariDesktop = isSafariVendor && !isMobile;
+  
+  // Store original page scale
+  let originalScale = null;
+  
+  if (isSafariDesktop) {    
+    const computedStyle = window.getComputedStyle(document.documentElement);
+    originalScale = computedStyle.zoom || 1;
+        document.documentElement.style.zoom = 1;
+  }
+    
   const options = {
-    scale: 2,
+    scale: 2, 
     backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
     allowTaint: true,
     useCORS: true,
@@ -2243,11 +2224,12 @@ function toggleDarkMode() {
       if (horizontalLine) horizontalLine.style.display = 'none';
       const toggleControls = clonedWrapper.querySelector('.toggle-controls');
       if (toggleControls) toggleControls.style.display = 'none';
-      const clonedRadar = clonedWrapper.querySelector('.radar');
-      if (clonedRadar) {
-        clonedRadar.style.display = 'block';
-        clonedRadar.style.margin = '0 auto';
+      const radar = clonedWrapper.querySelector('.radar');
+      if (radar) {
+        radar.style.display = 'block';
+        radar.style.margin = '0 auto';
       }
+
     }
   };
   
@@ -2260,9 +2242,12 @@ function toggleDarkMode() {
     downloadLink.click();
     document.body.removeChild(downloadLink);
     chartWrapper.classList.remove('screenshot-capture');
+    
+    // Restore original zoom on Safari desktop
+    if (isSafariDesktop && originalScale) {
+      document.documentElement.style.zoom = originalScale;
+    }
   }).catch(error => {
-    console.error("Screenshot error:", error);
-    chartWrapper.classList.remove('screenshot-capture');
   });
 }
 </script>
