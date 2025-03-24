@@ -2175,17 +2175,48 @@ function toggleDarkMode() {
   const isDarkMode = document.body.classList.contains('dark-mode');
   chartWrapper.classList.add('screenshot-capture');
   
-  // Simple Safari desktop detection: Safari browser that is NOT a touch device
+  // Try multiple Safari detection methods
   const ua = navigator.userAgent.toLowerCase();
-  const isSafariDesktop = ua.indexOf('safari') !== -1 && 
-                          ua.indexOf('chrome') === -1 && 
-                          navigator.maxTouchPoints <= 1;
   
-  // Store original zoom level for Safari desktop
-  let originalZoom = 1;
+  // Method 1: User Agent + vendor check
+  const isSafariUA = ua.indexOf('safari') !== -1 && 
+                     ua.indexOf('chrome') === -1 && 
+                     ua.indexOf('crios') === -1;
+  
+  // Method 2: Vendor check (more reliable for Safari)
+  const isSafariVendor = navigator.vendor === "Apple Computer, Inc.";
+  
+  // Method 3: Browser features check (window.safari exists only in Safari)
+  const isSafariFeature = typeof window.safari !== 'undefined';
+  
+  // Combine methods and add debugging
+  const isSafariDesktop = isSafariVendor && !(/iPhone|iPad|iPod/i.test(navigator.userAgent));
+  
+  // Show debug info
+  const debugInfo = `
+    User Agent: ${navigator.userAgent}
+    Safari by UA: ${isSafariUA}
+    Safari by vendor: ${isSafariVendor}
+    Safari by feature: ${isSafariFeature}
+    Touch points: ${navigator.maxTouchPoints}
+    Detected as Safari Desktop: ${isSafariDesktop}
+  `;
+  console.log(debugInfo);
+  
+  // Store original zoom level
+  let originalZoom = document.body.style.zoom || 1;
+  
+  // Try a different approach - use CSS transform on the SVG
   if (isSafariDesktop) {
-    originalZoom = document.documentElement.style.zoom || 1;
-    document.documentElement.style.zoom = 1; // Reset to 100% zoom
+    // Force 100% zoom using body zoom
+    document.body.style.zoom = 1;
+    
+    // Also try to fix SVG directly
+    const radar = document.querySelector('.radar');
+    if (radar) {
+      radar.style.transformOrigin = 'center';
+      radar.style.transform = 'scale(1)';
+    }
   }
     
   const options = {
@@ -2208,6 +2239,7 @@ function toggleDarkMode() {
       if (radar) {
         radar.style.display = 'block';
         radar.style.margin = '0 auto';
+        radar.style.transform = 'scale(1)';
       }
     }
   };
@@ -2222,16 +2254,27 @@ function toggleDarkMode() {
     document.body.removeChild(downloadLink);
     chartWrapper.classList.remove('screenshot-capture');
     
-    // Restore original zoom level for Safari desktop
+    // Restore original zoom level and SVG transform
     if (isSafariDesktop) {
-      document.documentElement.style.zoom = originalZoom;
+      document.body.style.zoom = originalZoom;
+      const radar = document.querySelector('.radar');
+      if (radar) {
+        radar.style.transformOrigin = '';
+        radar.style.transform = '';
+      }
     }
   }).catch(error => {
+    console.error('Screenshot error:', error);
     chartWrapper.classList.remove('screenshot-capture');
     
-    // Restore original zoom level even on error
+    // Restore original zoom level on error
     if (isSafariDesktop) {
-      document.documentElement.style.zoom = originalZoom;
+      document.body.style.zoom = originalZoom;
+      const radar = document.querySelector('.radar');
+      if (radar) {
+        radar.style.transformOrigin = '';
+        radar.style.transform = '';
+      }
     }
   });
 }
