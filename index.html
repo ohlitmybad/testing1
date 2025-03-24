@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World Zoom Reset</title>
+    <title>Hello World Screenshot Helper</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,24 +26,76 @@
             color: white;
             border: none;
             border-radius: 4px;
+            margin-bottom: 1rem;
         }
         button:hover {
             background-color: #3367d6;
+        }
+        #instructions {
+            max-width: 600px;
+            text-align: center;
+            margin-top: 2rem;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <h1>Hello World</h1>
-    <button id="resetZoom">Reset Zoom to 100%</button>
+    <button id="takeScreenshot">Take Screenshot at 100% Zoom</button>
+    <div id="countdown" style="font-size: 2rem; margin: 1rem; display: none;"></div>
+    <div id="instructions">
+        <p>This button will temporarily set the viewport to 100% zoom, wait 3 seconds for you to take a screenshot, then restore your original zoom level.</p>
+    </div>
 
     <script>
-        document.getElementById('resetZoom').addEventListener('click', function() {
-            // This uses the document.body.style.zoom property which works in Safari
-            document.body.style.zoom = "100%";
+        document.getElementById('takeScreenshot').addEventListener('click', function() {
+            // Store the current scroll position and zoom level
+            const originalZoom = document.documentElement.style.zoom || window.innerWidth / document.documentElement.clientWidth;
+            const originalScrollX = window.scrollX;
+            const originalScrollY = window.scrollY;
             
-            // For completeness, adding webkit specific zoom reset
-            document.body.style.webkitTransform = "scale(1)";
-            document.body.style.transform = "scale(1)";
+            // Show countdown element
+            const countdownEl = document.getElementById('countdown');
+            countdownEl.style.display = 'block';
+            
+            // Reset zoom to 100%
+            document.documentElement.style.zoom = "100%";
+            
+            // Ensure the viewport is set correctly
+            const viewport = document.querySelector("meta[name=viewport]");
+            const originalViewport = viewport.getAttribute('content');
+            viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            
+            // Center the content in the viewport
+            window.scrollTo(0, 0);
+            
+            // Start the countdown
+            let count = 3;
+            countdownEl.textContent = `Ready to screenshot in: ${count}`;
+            
+            const interval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownEl.textContent = `Ready to screenshot in: ${count}`;
+                } else {
+                    countdownEl.textContent = "Take screenshot now!";
+                    
+                    // After a short delay, restore original settings
+                    setTimeout(() => {
+                        // Restore original zoom and viewport
+                        document.documentElement.style.zoom = originalZoom;
+                        viewport.setAttribute('content', originalViewport);
+                        
+                        // Restore original scroll position
+                        window.scrollTo(originalScrollX, originalScrollY);
+                        
+                        // Hide countdown
+                        countdownEl.style.display = 'none';
+                        
+                        clearInterval(interval);
+                    }, 1500); // Wait 1.5 seconds for the user to take the screenshot
+                }
+            }, 1000);
         });
     </script>
 </body>
