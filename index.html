@@ -2175,48 +2175,105 @@ function toggleDarkMode() {
   const isDarkMode = document.body.classList.contains('dark-mode');
   chartWrapper.classList.add('screenshot-capture');
   
-  // Safari desktop detection - simple approach
+  // Safari detection
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   
   if (isSafari) {
-    console.log("Using Safari-specific screenshot method");
+    console.log("Using Safari-specific capture method");
     
     try {
-      // Get the SVG element
-      const radar = document.querySelector('.radar');
+      // Get all elements we need to hide temporarily
+      const similarContainer = document.getElementById('similarPlayersContainer');
+      const toggleControls = chartWrapper.querySelector('.toggle-controls');
+      const horizontalLine = chartWrapper.querySelector('hr');
+      
+      // Store their original display state
+      const originalStyles = {
+        similarContainer: similarContainer ? similarContainer.style.display : null,
+        toggleControls: toggleControls ? toggleControls.style.display : null,
+        horizontalLine: horizontalLine ? horizontalLine.style.display : null
+      };
+      
+      // Hide elements not needed in the screenshot
+      if (similarContainer) similarContainer.style.display = 'none';
+      if (toggleControls) toggleControls.style.display = 'none';
+      if (horizontalLine) horizontalLine.style.display = 'none';
+      
+      // Get parent container dimensions
+      const containerWidth = chartWrapper.clientWidth;
+      const containerHeight = 800; // Force a consistent height
+      
+      // Create a canvas with appropriate dimensions
+      const canvas = document.createElement('canvas');
+      canvas.width = containerWidth * 2; // Multiply by 2 for high DPI
+      canvas.height = containerHeight * 2;
+      
+      // Get the radar chart
+      const radar = chartWrapper.querySelector('.radar');
       if (!radar) {
-        console.error("Radar element not found");
-        return standardScreenshot();
+        throw new Error("Radar element not found");
       }
       
-      // Clone the SVG to avoid modifying the original
-      const svgClone = radar.cloneNode(true);
+      // Create a combined screenshot with title and chart
+      const ctx = canvas.getContext('2d');
+      ctx.scale(2, 2); // Scale for high DPI
       
-      // Set explicit dimensions on the SVG
-      svgClone.setAttribute('width', '800');
-      svgClone.setAttribute('height', '800');
-      svgClone.style.width = '800px';
-      svgClone.style.height = '800px';
+      // Fill background
+      ctx.fillStyle = isDarkMode ? '#1a1a1a' : '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Convert to a data URL
-      const serializer = new XMLSerializer();
-      const svgString = serializer.serializeToString(svgClone);
-      const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
-      
-      // Create download link for SVG
-      const svgUrl = URL.createObjectURL(svgBlob);
-      const downloadLink = document.createElement('a');
-      downloadLink.href = svgUrl;
-      downloadLink.download = 'DataMB_Chart.svg';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-      URL.revokeObjectURL(svgUrl);
-      
-      chartWrapper.classList.remove('screenshot-capture');
-      console.log("SVG export complete");
+      // Make a copy of the chart with HTML2Canvas
+      html2canvas(chartWrapper, {
+        scale: 2,
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+        allowTaint: true,
+        useCORS: true,
+        logging: false,
+        // Crucial setting for Safari - force bitmap renderer
+        imageRendering: 'pixelated',
+        // Only capture what we need
+        ignoreElements: element => {
+          return (element === similarContainer) || 
+                 (element === toggleControls) || 
+                 (element === horizontalLine);
+        }
+      }).then(capturedCanvas => {
+        // Draw the captured content onto our main canvas
+        ctx.drawImage(capturedCanvas, 0, 0, containerWidth, containerHeight);
+        
+        // Create the download link
+        const imageUrl = canvas.toDataURL('image/png');
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imageUrl;
+        downloadLink.download = 'DataMB_Screenshot.png';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Restore original styles
+        if (similarContainer && originalStyles.similarContainer !== null) 
+          similarContainer.style.display = originalStyles.similarContainer;
+        if (toggleControls && originalStyles.toggleControls !== null) 
+          toggleControls.style.display = originalStyles.toggleControls;
+        if (horizontalLine && originalStyles.horizontalLine !== null) 
+          horizontalLine.style.display = originalStyles.horizontalLine;
+        
+        chartWrapper.classList.remove('screenshot-capture');
+      }).catch(error => {
+        console.error("Safari screenshot error:", error);
+        // Restore original styles
+        if (similarContainer && originalStyles.similarContainer !== null) 
+          similarContainer.style.display = originalStyles.similarContainer;
+        if (toggleControls && originalStyles.toggleControls !== null) 
+          toggleControls.style.display = originalStyles.toggleControls;
+        if (horizontalLine && originalStyles.horizontalLine !== null) 
+          horizontalLine.style.display = originalStyles.horizontalLine;
+        
+        chartWrapper.classList.remove('screenshot-capture');
+        standardScreenshot(); // Fall back to standard method
+      });
     } catch (error) {
-      console.error("Error exporting SVG:", error);
+      console.error("Error in Safari method:", error);
       standardScreenshot();
     }
   } else {
