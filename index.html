@@ -2180,6 +2180,13 @@ function toggleDarkMode() {
   const isSafariDesktop = ua.indexOf('safari') !== -1 && 
                           ua.indexOf('chrome') === -1 && 
                           navigator.maxTouchPoints <= 1;
+  
+  // Store original zoom level for Safari desktop
+  let originalZoom = 1;
+  if (isSafariDesktop) {
+    originalZoom = document.documentElement.style.zoom || 1;
+    document.documentElement.style.zoom = 1; // Reset to 100% zoom
+  }
     
   const options = {
     scale: 2, 
@@ -2202,11 +2209,6 @@ function toggleDarkMode() {
         radar.style.display = 'block';
         radar.style.margin = '0 auto';
       }
-      
-      // For Safari desktop, ensure the clone is at 100% zoom
-      if (isSafariDesktop) {
-        clonedDocument.documentElement.style.zoom = 1;
-      }
     }
   };
   
@@ -2219,7 +2221,18 @@ function toggleDarkMode() {
     downloadLink.click();
     document.body.removeChild(downloadLink);
     chartWrapper.classList.remove('screenshot-capture');
+    
+    // Restore original zoom level for Safari desktop
+    if (isSafariDesktop) {
+      document.documentElement.style.zoom = originalZoom;
+    }
   }).catch(error => {
+    chartWrapper.classList.remove('screenshot-capture');
+    
+    // Restore original zoom level even on error
+    if (isSafariDesktop) {
+      document.documentElement.style.zoom = originalZoom;
+    }
   });
 }
 </script>
