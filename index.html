@@ -2199,58 +2199,93 @@ function toggleDarkMode() {
                   (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
   const isSafariDesktop = isSafariVendor && !isMobile;
   
-  // Reset browser zoom using multiple methods for cross-browser compatibility
-  const body = document.querySelector('body');
-  document.body.style.zoom = "100%";  // For Webkit/Blink
-  document.body.style.transform = "scale(1)";  // Standard approach
-  document.body.style.transformOrigin = "top left";
-  
-  // Reset viewport scale to ensure proper rendering
-  const viewportMeta = document.querySelector('meta[name="viewport"]');
-  if (viewportMeta) {
-    const content = viewportMeta.getAttribute('content');
-    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1, user-scalable=no');
-    // Restore original viewport content after a brief delay
-    setTimeout(() => viewportMeta.setAttribute('content', content), 300);
+  // FORCE browser zoom reset - multiple aggressive approaches
+  try {
+    // Method 1: Force zoom reset with !important style
+    const zoomResetStyle = document.createElement('style');
+    zoomResetStyle.textContent = `
+      body, html {
+        zoom: 1 !important;
+        -moz-transform: scale(1) !important;
+        -webkit-transform: scale(1) !important;
+        transform: scale(1) !important;
+        transform-origin: top left !important;
+      }
+    `;
+    document.head.appendChild(zoomResetStyle);
+    
+    // Method 2: Direct DOM manipulation
+    document.body.style.cssText += 'zoom: 1 !important; -moz-transform: scale(1) !important; -webkit-transform: scale(1) !important; transform: scale(1) !important;';
+    
+    // Method 3: Try using CSS variables
+    document.documentElement.style.setProperty('--zoom-level', '1');
+    
+    // Method 4: Force viewport reset
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (viewportMeta) {
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
+    }
+    
+    // Method 5: Direct JavaScript zoom control for browsers that support it
+    if (window.innerWidth) {
+      const originalWidth = window.innerWidth;
+      if (originalWidth !== window.outerWidth) {
+        window.resizeTo(originalWidth, window.outerHeight * (originalWidth / window.outerWidth));
+      }
+    }
+  } catch (e) {
+    console.error("Error trying to reset zoom:", e);
   }
   
-  const options = {
-    scale: 2, 
-    backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
-    allowTaint: true,
-    useCORS: true,
-    logging: false,
-    onclone: function(clonedDocument) {
-      const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
-      const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
-      if (clonedSimilarContainer) {
-        clonedSimilarContainer.style.display = 'none';
+  // Delay screenshot to give zoom reset time to take effect
+  setTimeout(() => {
+    const options = {
+      scale: 2, 
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        // Also apply zoom reset to cloned document
+        clonedDocument.body.style.zoom = "1";
+        clonedDocument.body.style.transform = "scale(1)";
+        
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) {
+          clonedSimilarContainer.style.display = 'none';
+        }
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        const radar = clonedWrapper.querySelector('.radar');
+        if (radar) {
+          radar.style.display = 'block';
+          radar.style.margin = '0 auto';
+        }
       }
-      const horizontalLine = clonedWrapper.querySelector('hr');
-      if (horizontalLine) horizontalLine.style.display = 'none';
-      const toggleControls = clonedWrapper.querySelector('.toggle-controls');
-      if (toggleControls) toggleControls.style.display = 'none';
-      const radar = clonedWrapper.querySelector('.radar');
-      if (radar) {
-        radar.style.display = 'block';
-        radar.style.margin = '0 auto';
+    };
+    
+    html2canvas(chartWrapper, options).then(canvas => {
+      const imageUrl = canvas.toDataURL('image/png');
+      const downloadLink = document.createElement('a');
+      downloadLink.href = imageUrl;
+      downloadLink.download = 'DataMB Screenshot.png';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      chartWrapper.classList.remove('screenshot-capture');
+      
+      // Clean up the forced zoom style
+      if (zoomResetStyle && zoomResetStyle.parentNode) {
+        zoomResetStyle.parentNode.removeChild(zoomResetStyle);
       }
-
-    }
-  };
-  
-  html2canvas(chartWrapper, options).then(canvas => {
-    const imageUrl = canvas.toDataURL('image/png');
-    const downloadLink = document.createElement('a');
-    downloadLink.href = imageUrl;
-    downloadLink.download = 'DataMB Screenshot.png';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    chartWrapper.classList.remove('screenshot-capture');
-
-  }).catch(error => {
-  });
+    }).catch(error => {
+      console.error("Error taking screenshot:", error);
+      chartWrapper.classList.remove('screenshot-capture');
+    });
+  }, 500); // 500ms delay to ensure zoom reset takes effect
 }
 </script>
    <center>
