@@ -2200,19 +2200,9 @@ function toggleDarkMode() {
   const isSafariDesktop = isSafariVendor && !isMobile;
   
   
-  if (isSafariDesktop) {    
-    // Use transform scale instead of zoom (better browser support)
-    // First, save current transform if any
-    const computedStyle = window.getComputedStyle(document.body);
-    const originalTransform = computedStyle.transform;
-    
-    // Apply scale transform to ensure 1:1 ratio for screenshot
-    document.body.style.transformOrigin = 'top left';
-    document.body.style.transform = 'scale(1)';
-    
-    // Store for later restoration
-    document.body._originalTransform = originalTransform;
-  }
+    let originalZoom = null;
+      originalZoom = document.body.style.zoom;
+      document.body.style.zoom = '1';
     
   const options = {
     scale: 2, 
@@ -2248,12 +2238,6 @@ function toggleDarkMode() {
     downloadLink.click();
     document.body.removeChild(downloadLink);
     chartWrapper.classList.remove('screenshot-capture');
-    
-    // Restore original transform if in Safari
-    if (isSafariDesktop && document.body._originalTransform) {
-      document.body.style.transform = document.body._originalTransform;
-      delete document.body._originalTransform;
-    }
 
   }).catch(error => {
   });
