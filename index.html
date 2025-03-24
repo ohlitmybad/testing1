@@ -2246,122 +2246,122 @@ function toggleDarkMode() {
                   (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
   const isSafariDesktop = isSafariVendor && !isMobile;
   
-  console.log("Safari detection:", isSafariDesktop);
-  
-  // Reference to the SVG element we need to fix
-  const radar = document.querySelector('.radar');
-  
-  // Store original state of SVG elements
-  let originalStyles = {};
-  
-  // Apply fix for Safari desktop by modifying the SVG elements directly
-  if (isSafariDesktop && radar) {
-    console.log("Applying Safari fix to SVG radar");
+  // Special handling for Safari Desktop with zoom issues
+  if (isSafariDesktop) {
+    console.log("Using special Safari desktop screenshot method");
     
-    // Store original state to restore later
-    originalStyles = {
-      transformOrigin: radar.style.transformOrigin,
-      transform: radar.style.transform,
-      width: radar.style.width,
-      height: radar.style.height,
-      viewBox: radar.getAttribute('viewBox')
-    };
-    
-    // Apply transformations to SVG
-    radar.style.transformOrigin = 'center';
-    radar.style.transform = 'scale(1)';
-    
-    // Make sure the viewBox is correctly set if it exists
-    if (radar.getAttribute('viewBox')) {
-      radar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    }
-  }
-    
-  const options = {
-    scale: 2, 
-    backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
-    allowTaint: true,
-    useCORS: true,
-    logging: false,
-    onclone: function(clonedDocument) {
-      const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
-      const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
-      if (clonedSimilarContainer) {
-        clonedSimilarContainer.style.display = 'none';
+    try {
+      // Get the SVG element
+      const radar = document.querySelector('.radar');
+      if (!radar) {
+        throw new Error("Radar SVG not found");
       }
-      const horizontalLine = clonedWrapper.querySelector('hr');
-      if (horizontalLine) horizontalLine.style.display = 'none';
-      const toggleControls = clonedWrapper.querySelector('.toggle-controls');
-      if (toggleControls) toggleControls.style.display = 'none';
-      const clonedRadar = clonedWrapper.querySelector('.radar');
-      if (clonedRadar) {
-        clonedRadar.style.display = 'block';
-        clonedRadar.style.margin = '0 auto';
+      
+      // Get current SVG content as string
+      const svgContent = radar.outerHTML;
+      
+      // Create an image element and set its source to the SVG
+      const img = new Image();
+      const svgBlob = new Blob([svgContent], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(svgBlob);
+      
+      // When image loads, draw it to canvas and download
+      img.onload = function() {
+        // Create canvas sized to the image dimensions
+        const canvas = document.createElement('canvas');
         
-        // For Safari desktop, apply additional SVG fixes to the clone
-        if (isSafariDesktop) {
-          clonedRadar.style.transformOrigin = 'center';
-          clonedRadar.style.transform = 'scale(1)';
-          
-          // Force dimensions to exact pixels if needed
-          if (window.getComputedStyle(radar).width) {
-            const width = parseInt(window.getComputedStyle(radar).width);
-            const height = parseInt(window.getComputedStyle(radar).height);
-            clonedRadar.style.width = width + 'px';
-            clonedRadar.style.height = height + 'px';
-          }
-          
-          // Set proper aspect ratio preservation
-          clonedRadar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-          
-          // Force all paths and polygons to have crisp edges in Safari
-          const paths = clonedRadar.querySelectorAll('path, polygon');
-          paths.forEach(path => {
-            path.setAttribute('shape-rendering', 'geometricPrecision');
-            path.style.transformOrigin = 'center';
-          });
+        // Set canvas dimensions to 2x for high res
+        canvas.width = img.width * 2;
+        canvas.height = img.height * 2;
+        
+        // Get rendering context and draw the image
+        const ctx = canvas.getContext('2d');
+        ctx.scale(2, 2); // Scale for high res
+        
+        // Fill background
+        ctx.fillStyle = isDarkMode ? '#1a1a1a' : '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw the image centered
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        
+        // Convert canvas to data URL and download
+        const imageUrl = canvas.toDataURL('image/png');
+        const downloadLink = document.createElement('a');
+        downloadLink.href = imageUrl;
+        downloadLink.download = 'DataMB Screenshot.png';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Clean up
+        URL.revokeObjectURL(url);
+        chartWrapper.classList.remove('screenshot-capture');
+      };
+      
+      // Set image source to start loading
+      img.src = url;
+      
+      // Handle image loading error
+      img.onerror = function() {
+        console.error("Error loading SVG as image");
+        chartWrapper.classList.remove('screenshot-capture');
+        
+        // Fall back to standard method
+        useStandardScreenshotMethod();
+      };
+    } catch (error) {
+      console.error("Error in Safari screenshot method:", error);
+      chartWrapper.classList.remove('screenshot-capture');
+      
+      // Fall back to standard method
+      useStandardScreenshotMethod();
+    }
+  } else {
+    // Use standard method for non-Safari browsers
+    useStandardScreenshotMethod();
+  }
+  
+  // Standard screenshot method using html2canvas
+  function useStandardScreenshotMethod() {
+    const options = {
+      scale: 2, 
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      allowTaint: true,
+      useCORS: true,
+      logging: false,
+      onclone: function(clonedDocument) {
+        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+        if (clonedSimilarContainer) {
+          clonedSimilarContainer.style.display = 'none';
+        }
+        const horizontalLine = clonedWrapper.querySelector('hr');
+        if (horizontalLine) horizontalLine.style.display = 'none';
+        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+        if (toggleControls) toggleControls.style.display = 'none';
+        const clonedRadar = clonedWrapper.querySelector('.radar');
+        if (clonedRadar) {
+          clonedRadar.style.display = 'block';
+          clonedRadar.style.margin = '0 auto';
         }
       }
-    }
-  };
-  
-  html2canvas(chartWrapper, options).then(canvas => {
-    const imageUrl = canvas.toDataURL('image/png');
-    const downloadLink = document.createElement('a');
-    downloadLink.href = imageUrl;
-    downloadLink.download = 'DataMB Screenshot.png';
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    chartWrapper.classList.remove('screenshot-capture');
+    };
     
-    // Restore original SVG properties
-    if (isSafariDesktop && radar) {
-      radar.style.transformOrigin = originalStyles.transformOrigin || '';
-      radar.style.transform = originalStyles.transform || '';
-      radar.style.width = originalStyles.width || '';
-      radar.style.height = originalStyles.height || '';
-      if (originalStyles.viewBox) {
-        radar.setAttribute('viewBox', originalStyles.viewBox);
-      }
-      radar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    }
-  }).catch(error => {
-    console.error("Screenshot error:", error);
-    chartWrapper.classList.remove('screenshot-capture');
-    
-    // Restore original SVG properties even on error
-    if (isSafariDesktop && radar) {
-      radar.style.transformOrigin = originalStyles.transformOrigin || '';
-      radar.style.transform = originalStyles.transform || '';
-      radar.style.width = originalStyles.width || '';
-      radar.style.height = originalStyles.height || '';
-      if (originalStyles.viewBox) {
-        radar.setAttribute('viewBox', originalStyles.viewBox);
-      }
-      radar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    }
-  });
+    html2canvas(chartWrapper, options).then(canvas => {
+      const imageUrl = canvas.toDataURL('image/png');
+      const downloadLink = document.createElement('a');
+      downloadLink.href = imageUrl;
+      downloadLink.download = 'DataMB Screenshot.png';
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      chartWrapper.classList.remove('screenshot-capture');
+    }).catch(error => {
+      console.error("Screenshot error:", error);
+      chartWrapper.classList.remove('screenshot-capture');
+    });
+  }
 }
 </script>
    <center>
