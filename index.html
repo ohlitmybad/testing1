@@ -2181,6 +2181,17 @@ function toggleDarkMode() {
                   (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
   const isSafariDesktop = isSafariVendor && !isMobile;
   
+  // Store original styles - moved to function scope to be accessible by all functions
+  const originalStyles = {
+    wrapperWidth: chartWrapper.style.width,
+    wrapperHeight: chartWrapper.style.height,
+    wrapperPosition: chartWrapper.style.position,
+    wrapperOverflow: chartWrapper.style.overflow,
+    bodyZoom: document.body.style.zoom,
+    bodyOverflow: document.body.style.overflow,
+    html: document.documentElement.style.cssText,
+  };
+  
   if (isSafariDesktop) {
     console.log("Using Safari desktop screenshot methods");
     safariScreenshotMethods();
@@ -2191,17 +2202,6 @@ function toggleDarkMode() {
   
   // Try multiple Safari screenshot methods and download all results
   function safariScreenshotMethods() {
-    // Store original styles to restore later
-    const originalStyles = {
-      wrapperWidth: chartWrapper.style.width,
-      wrapperHeight: chartWrapper.style.height,
-      wrapperPosition: chartWrapper.style.position,
-      wrapperOverflow: chartWrapper.style.overflow,
-      bodyZoom: document.body.style.zoom,
-      bodyOverflow: document.body.style.overflow,
-      html: document.documentElement.style.cssText,
-    };
-    
     // Array of different methods to try
     const methods = [
       {
