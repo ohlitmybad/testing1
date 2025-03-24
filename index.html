@@ -2186,41 +2186,64 @@ function toggleDarkMode() {
     console.log("Using special Safari desktop screenshot method");
     
     try {
-      // Get the SVG element
-      const radar = document.querySelector('.radar');
-      if (!radar) {
-        throw new Error("Radar SVG not found");
+      // Create a temporary container for the entire chart wrapper
+      const tempContainer = document.createElement('div');
+      tempContainer.style.position = 'absolute';
+      tempContainer.style.left = '-9999px';
+      tempContainer.style.width = chartWrapper.offsetWidth + 'px';
+      tempContainer.style.height = chartWrapper.offsetHeight + 'px';
+      tempContainer.style.overflow = 'hidden';
+      
+      // Clone the chart wrapper
+      const clonedWrapper = chartWrapper.cloneNode(true);
+      
+      // Hide elements we don't want in the screenshot
+      const similarContainer = clonedWrapper.querySelector('#similarPlayersContainer');
+      if (similarContainer) similarContainer.style.display = 'none';
+      
+      const horizontalLine = clonedWrapper.querySelector('hr');
+      if (horizontalLine) horizontalLine.style.display = 'none';
+      
+      const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+      if (toggleControls) toggleControls.style.display = 'none';
+      
+      // Ensure radar is visible and styled correctly
+      const radar = clonedWrapper.querySelector('.radar');
+      if (radar) {
+        radar.style.display = 'block';
+        radar.style.margin = '0 auto';
+        
+        // Force width and height for SVG
+        radar.style.width = '100%';
+        radar.style.height = 'auto';
+        radar.setAttribute('width', '800');
+        radar.setAttribute('height', '800');
+        radar.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        
+        // Ensure all SVG paths are rendered with high quality
+        const allPaths = radar.querySelectorAll('path, polygon, circle, line');
+        allPaths.forEach(path => {
+          path.setAttribute('vector-effect', 'non-scaling-stroke');
+          path.setAttribute('shape-rendering', 'geometricPrecision');
+        });
       }
       
-      // Get current SVG content as string
-      const svgContent = radar.outerHTML;
+      // Add the cloned wrapper to the temporary container
+      tempContainer.appendChild(clonedWrapper);
+      document.body.appendChild(tempContainer);
       
-      // Create an image element and set its source to the SVG
-      const img = new Image();
-      const svgBlob = new Blob([svgContent], {type: 'image/svg+xml'});
-      const url = URL.createObjectURL(svgBlob);
+      // Use html2canvas with forced high resolution
+      const options = {
+        scale: 4, // Increased scale for sharper image
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+        allowTaint: true,
+        useCORS: true,
+        logging: false,
+        width: chartWrapper.offsetWidth,
+        height: chartWrapper.offsetHeight
+      };
       
-      // When image loads, draw it to canvas and download
-      img.onload = function() {
-        // Create canvas sized to the image dimensions
-        const canvas = document.createElement('canvas');
-        
-        // Set canvas dimensions to 2x for high res
-        canvas.width = img.width * 2;
-        canvas.height = img.height * 2;
-        
-        // Get rendering context and draw the image
-        const ctx = canvas.getContext('2d');
-        ctx.scale(2, 2); // Scale for high res
-        
-        // Fill background
-        ctx.fillStyle = isDarkMode ? '#1a1a1a' : '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw the image centered
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        
-        // Convert canvas to data URL and download
+      html2canvas(clonedWrapper, options).then(canvas => {
         const imageUrl = canvas.toDataURL('image/png');
         const downloadLink = document.createElement('a');
         downloadLink.href = imageUrl;
@@ -2230,21 +2253,16 @@ function toggleDarkMode() {
         document.body.removeChild(downloadLink);
         
         // Clean up
-        URL.revokeObjectURL(url);
+        document.body.removeChild(tempContainer);
         chartWrapper.classList.remove('screenshot-capture');
-      };
-      
-      // Set image source to start loading
-      img.src = url;
-      
-      // Handle image loading error
-      img.onerror = function() {
-        console.error("Error loading SVG as image");
+      }).catch(error => {
+        console.error("Safari screenshot error:", error);
         chartWrapper.classList.remove('screenshot-capture');
+        document.body.removeChild(tempContainer);
         
         // Fall back to standard method
         useStandardScreenshotMethod();
-      };
+      });
     } catch (error) {
       console.error("Error in Safari screenshot method:", error);
       chartWrapper.classList.remove('screenshot-capture');
