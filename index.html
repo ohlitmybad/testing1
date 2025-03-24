@@ -1,123 +1,182 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Zoom Reset Test</title>
+    <title>Content Scale Adjustment</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             text-align: center;
-            margin-top: 100px;
+            margin: 0;
+            padding: 40px;
+            line-height: 1.5;
+            transition: transform 0.3s ease-out;
         }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 16px;
-            background-color: #4285f4;
+            background-color: #0066cc;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.2s;
         }
-        .zoom-level {
+        
+        button:hover {
+            background-color: #004c99;
+        }
+        
+        .zoom-info {
             margin-top: 20px;
-            font-size: 18px;
+            font-size: 16px;
+            padding: 10px;
+            background-color: #e6f2ff;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .red-square, .blue-square, .green-square {
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            margin: 10px;
+        }
+        
+        .red-square {
+            background-color: #ff6666;
+        }
+        
+        .blue-square {
+            background-color: #6699ff;
+        }
+        
+        .green-square {
+            background-color: #66cc99;
+        }
+        
+        .squares-container {
+            margin: 20px 0;
+        }
+        
+        .permanent-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            z-index: 9999;
         }
     </style>
 </head>
 <body>
-    <h1>Hello World</h1>
-    <p>Zoom your browser using Ctrl/Cmd + or Ctrl/Cmd -, then try the reset button</p>
-    <button id="resetZoomButton">Reset Zoom to 100%</button>
-    <div class="zoom-level">Current zoom level: <span id="currentZoom">100%</span></div>
+    <div class="container">
+        <h1>Content Scale Adjustment</h1>
+        
+        <p>Zoom your browser with Cmd+ or Cmd-, then click the button to adjust content scale.</p>
+        
+        <button id="resetScale">Reset Content Scale to 100%</button>
+        
+        <div class="squares-container">
+            <div class="red-square"></div>
+            <div class="blue-square"></div>
+            <div class="green-square"></div>
+        </div>
+        
+        <div class="zoom-info">
+            Current browser zoom: <span id="zoomLevel">100%</span>
+        </div>
+    </div>
+    
+    <div class="permanent-message" id="scaleStatus">
+        Content scale: Normal
+    </div>
 
     <script>
-        // Function to update displayed zoom level
-        function updateZoomDisplay() {
-            // This approximation works in some browsers
-            const zoomLevel = Math.round(window.outerWidth / window.innerWidth * 100);
-            document.getElementById('currentZoom').textContent = zoomLevel + '%';
+        // Detect zoom level - works well in Safari
+        function detectZoom() {
+            return Math.round(window.devicePixelRatio * 100);
         }
-
-        // Update zoom display on load and resize
+        
+        // Update the zoom display
+        function updateZoomDisplay() {
+            const zoomPercent = detectZoom();
+            document.getElementById('zoomLevel').textContent = zoomPercent + '%';
+        }
+        
+        // Initialize and set event listeners
         window.addEventListener('load', updateZoomDisplay);
         window.addEventListener('resize', updateZoomDisplay);
-
-        // Reset zoom button click handler
-        document.getElementById('resetZoomButton').addEventListener('click', function() {
-            // Method 1: Using CSS zoom property (WebKit/Blink browsers)
-            document.body.style.zoom = "100%";
+        
+        // Reset scale button
+        document.getElementById('resetScale').addEventListener('click', function() {
+            const zoomPercent = detectZoom();
+            const scale = 100 / zoomPercent;
             
-            // Method 2: Using transform (more standard approach)
-            document.body.style.transform = "scale(1)";
-            document.body.style.transformOrigin = "top left";
+            // Apply the inverse scale to counteract browser zoom
+            document.body.style.transform = `scale(${scale})`;
+            document.body.style.transformOrigin = 'center top';
+            document.body.style.width = `${zoomPercent}%`;
+            document.body.style.height = `${zoomPercent}%`;
             
-            // Method 3: Force with !important style
-            const zoomResetStyle = document.createElement('style');
-            zoomResetStyle.textContent = `
-                body, html {
-                    zoom: 1 !important;
-                    -webkit-text-size-adjust: 100% !important;
-                    -moz-text-size-adjust: 100% !important;
-                    text-size-adjust: 100% !important;
+            // Update status message
+            const statusEl = document.getElementById('scaleStatus');
+            statusEl.textContent = `Content scale: Adjusted (${scale.toFixed(2)}x)`;
+            statusEl.style.backgroundColor = 'rgba(0, 102, 0, 0.7)';
+            
+            // Real-time zoom monitoring
+            const zoomMonitor = setInterval(() => {
+                const currentZoom = detectZoom();
+                if (currentZoom !== zoomPercent) {
+                    // Zoom changed, update scale
+                    const newScale = 100 / currentZoom;
+                    document.body.style.transform = `scale(${newScale})`;
+                    document.body.style.width = `${currentZoom}%`;
+                    document.body.style.height = `${currentZoom}%`;
+                    
+                    statusEl.textContent = `Content scale: Adjusted (${newScale.toFixed(2)}x)`;
+                    updateZoomDisplay();
                 }
-            `;
-            document.head.appendChild(zoomResetStyle);
+            }, 500);
             
-            // Method 4: Using viewport meta tag
-            const viewportMeta = document.querySelector('meta[name="viewport"]');
-            if (viewportMeta) {
-                viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
-                
-                // Reset it back after a moment
-                setTimeout(() => {
-                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1, user-scalable=yes');
-                }, 500);
-            }
+            // Add a reset button
+            const resetBtn = document.createElement('button');
+            resetBtn.textContent = 'Remove Scale Adjustment';
+            resetBtn.style.marginLeft = '10px';
+            resetBtn.style.backgroundColor = '#cc3333';
             
-            // Method 5: For Chrome and some others, try keyboard event simulation (Ctrl+0)
-            try {
-                // Create and dispatch keyboard event
-                const keyEvent = new KeyboardEvent('keydown', {
-                    key: '0',
-                    code: 'Digit0',
-                    ctrlKey: true,
-                    bubbles: true,
-                    cancelable: true
-                });
-                document.dispatchEvent(keyEvent);
-            } catch (e) {
-                console.error("Error simulating keyboard shortcut", e);
-            }
+            resetBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                clearInterval(zoomMonitor);
+                document.body.style.transform = '';
+                document.body.style.width = '';
+                document.body.style.height = '';
+                statusEl.textContent = 'Content scale: Normal';
+                statusEl.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                this.remove();
+            });
             
-            // Method 6: Safari-specific approach with window.innerWidth
-            if (navigator.userAgent.indexOf('Safari') !== -1) {
-                try {
-                    window.resizeTo(window.screen.availWidth, window.screen.availHeight);
-                } catch (e) {
-                    console.log("Cannot resize window:", e);
-                }
-            }
-            
-            // Method 7: Try to use the browser's reset zoom command
-            try {
-                if (document.execCommand) {
-                    document.execCommand('ReFresh', false, null);
-                }
-            } catch (e) {
-                console.log("execCommand not supported:", e);
-            }
-            
-            // Update zoom display after a moment
-            setTimeout(updateZoomDisplay, 100);
-            
-            alert("Attempted to reset zoom using multiple methods. Did it work?");
-            
-            // Clean up
-            setTimeout(() => {
-                if (zoomResetStyle && zoomResetStyle.parentNode) {
-                    zoomResetStyle.parentNode.removeChild(zoomResetStyle);
-                }
-            }, 1000);
+            // Add the reset button next to the original button
+            document.getElementById('resetScale').parentNode.appendChild(resetBtn);
         });
     </script>
 </body>
