@@ -2203,9 +2203,9 @@ function toggleDarkMode() {
   let originalScale = null;
   
   if (isSafariDesktop) {    
-    const computedStyle = window.getComputedStyle(document.documentElement);
-    originalScale = computedStyle.zoom || 1;
-        document.documentElement.style.zoom = 1;
+    let originalZoom = null;
+      originalZoom = body.style.zoom;
+      body.style.zoom = '1';
   }
     
   const options = {
