@@ -2173,153 +2173,97 @@ function toggleDarkMode() {
   function takeScreenshot() {
   const chartWrapper = document.querySelector('.chart-wrapper');
   const isDarkMode = document.body.classList.contains('dark-mode');
-  chartWrapper.classList.add('screenshot-capture');
   
   // Safari detection
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   
   if (isSafari) {
-    console.log("Using Safari-specific capture method");
+    // Create temporary overlay with instructions
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.8)';
+    overlay.style.color = 'white';
+    overlay.style.zIndex = '10000';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.padding = '20px';
+    overlay.style.boxSizing = 'border-box';
+    overlay.style.textAlign = 'center';
+    overlay.style.fontFamily = 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
     
-    try {
-      // Get all elements we need to hide temporarily
-      const similarContainer = document.getElementById('similarPlayersContainer');
-      const toggleControls = chartWrapper.querySelector('.toggle-controls');
-      const horizontalLine = chartWrapper.querySelector('hr');
-      
-      // Store their original display state
-      const originalStyles = {
-        similarContainer: similarContainer ? similarContainer.style.display : null,
-        toggleControls: toggleControls ? toggleControls.style.display : null,
-        horizontalLine: horizontalLine ? horizontalLine.style.display : null
-      };
-      
-      // Hide elements not needed in the screenshot
-      if (similarContainer) similarContainer.style.display = 'none';
-      if (toggleControls) toggleControls.style.display = 'none';
-      if (horizontalLine) horizontalLine.style.display = 'none';
-      
-      // Get parent container dimensions
-      const containerWidth = chartWrapper.clientWidth;
-      const containerHeight = 800; // Force a consistent height
-      
-      // Create a canvas with appropriate dimensions
-      const canvas = document.createElement('canvas');
-      canvas.width = containerWidth * 2; // Multiply by 2 for high DPI
-      canvas.height = containerHeight * 2;
-      
-      // Get the radar chart
-      const radar = chartWrapper.querySelector('.radar');
-      if (!radar) {
-        throw new Error("Radar element not found");
-      }
-      
-      // Create a combined screenshot with title and chart
-      const ctx = canvas.getContext('2d');
-      ctx.scale(2, 2); // Scale for high DPI
-      
-      // Fill background
-      ctx.fillStyle = isDarkMode ? '#1a1a1a' : '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Make a copy of the chart with HTML2Canvas
-      html2canvas(chartWrapper, {
-        scale: 2,
-        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
-        allowTaint: true,
-        useCORS: true,
-        logging: false,
-        // Crucial setting for Safari - force bitmap renderer
-        imageRendering: 'pixelated',
-        // Only capture what we need
-        ignoreElements: element => {
-          return (element === similarContainer) || 
-                 (element === toggleControls) || 
-                 (element === horizontalLine);
-        }
-      }).then(capturedCanvas => {
-        // Draw the captured content onto our main canvas
-        ctx.drawImage(capturedCanvas, 0, 0, containerWidth, containerHeight);
-        
-        // Create the download link
-        const imageUrl = canvas.toDataURL('image/png');
-        const downloadLink = document.createElement('a');
-        downloadLink.href = imageUrl;
-        downloadLink.download = 'DataMB_Screenshot.png';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        
-        // Restore original styles
-        if (similarContainer && originalStyles.similarContainer !== null) 
-          similarContainer.style.display = originalStyles.similarContainer;
-        if (toggleControls && originalStyles.toggleControls !== null) 
-          toggleControls.style.display = originalStyles.toggleControls;
-        if (horizontalLine && originalStyles.horizontalLine !== null) 
-          horizontalLine.style.display = originalStyles.horizontalLine;
-        
-        chartWrapper.classList.remove('screenshot-capture');
-      }).catch(error => {
-        console.error("Safari screenshot error:", error);
-        // Restore original styles
-        if (similarContainer && originalStyles.similarContainer !== null) 
-          similarContainer.style.display = originalStyles.similarContainer;
-        if (toggleControls && originalStyles.toggleControls !== null) 
-          toggleControls.style.display = originalStyles.toggleControls;
-        if (horizontalLine && originalStyles.horizontalLine !== null) 
-          horizontalLine.style.display = originalStyles.horizontalLine;
-        
-        chartWrapper.classList.remove('screenshot-capture');
-        standardScreenshot(); // Fall back to standard method
-      });
-    } catch (error) {
-      console.error("Error in Safari method:", error);
-      standardScreenshot();
-    }
-  } else {
-    // For non-Safari browsers
-    standardScreenshot();
+    overlay.innerHTML = `
+      <h2 style="margin-bottom: 20px; font-size: 24px;">Safari Screenshot Instructions</h2>
+      <p style="margin-bottom: 15px; font-size: 16px; max-width: 600px;">
+        Due to Safari rendering limitations, please use the built-in screenshot tool:
+      </p>
+      <ol style="text-align: left; margin-bottom: 30px; font-size: 16px; max-width: 600px;">
+        <li style="margin-bottom: 10px;">Press <strong>Command (⌘) + Shift + 4</strong> then <strong>Space</strong></li>
+        <li style="margin-bottom: 10px;">Click on this browser window to capture it</li>
+        <li style="margin-bottom: 10px;">The screenshot will be saved to your desktop</li>
+      </ol>
+      <p style="margin-bottom: 15px; font-size: 16px;">
+        <strong>Before taking the screenshot:</strong> Ensure the chart is visible and 
+        properly sized in your window.
+      </p>
+      <button id="closeInstructions" style="padding: 10px 20px; background: #0077cc; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">Close Instructions</button>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Add event listener to close button
+    document.getElementById('closeInstructions').addEventListener('click', function() {
+      document.body.removeChild(overlay);
+    });
+    
+    return;
   }
   
-  function standardScreenshot() {
-    const options = {
-      scale: 2,
-      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
-      allowTaint: true,
-      useCORS: true,
-      logging: false,
-      onclone: function(clonedDocument) {
-        const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
-        const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
-        if (clonedSimilarContainer) {
-          clonedSimilarContainer.style.display = 'none';
-        }
-        const horizontalLine = clonedWrapper.querySelector('hr');
-        if (horizontalLine) horizontalLine.style.display = 'none';
-        const toggleControls = clonedWrapper.querySelector('.toggle-controls');
-        if (toggleControls) toggleControls.style.display = 'none';
-        const clonedRadar = clonedWrapper.querySelector('.radar');
-        if (clonedRadar) {
-          clonedRadar.style.display = 'block';
-          clonedRadar.style.margin = '0 auto';
-        }
+  // For non-Safari browsers, use the existing screenshot method
+  chartWrapper.classList.add('screenshot-capture');
+  
+  const options = {
+    scale: 2,
+    backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+    allowTaint: true,
+    useCORS: true,
+    logging: false,
+    onclone: function(clonedDocument) {
+      const clonedWrapper = clonedDocument.querySelector('.chart-wrapper');
+      const clonedSimilarContainer = clonedDocument.getElementById('similarPlayersContainer');
+      if (clonedSimilarContainer) {
+        clonedSimilarContainer.style.display = 'none';
       }
-    };
-    
-    html2canvas(chartWrapper, options).then(canvas => {
-      const imageUrl = canvas.toDataURL('image/png');
-      const downloadLink = document.createElement('a');
-      downloadLink.href = imageUrl;
-      downloadLink.download = 'DataMB Screenshot.png';
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-      chartWrapper.classList.remove('screenshot-capture');
-    }).catch(error => {
-      console.error("Screenshot error:", error);
-      chartWrapper.classList.remove('screenshot-capture');
-    });
-  }
+      const horizontalLine = clonedWrapper.querySelector('hr');
+      if (horizontalLine) horizontalLine.style.display = 'none';
+      const toggleControls = clonedWrapper.querySelector('.toggle-controls');
+      if (toggleControls) toggleControls.style.display = 'none';
+      const clonedRadar = clonedWrapper.querySelector('.radar');
+      if (clonedRadar) {
+        clonedRadar.style.display = 'block';
+        clonedRadar.style.margin = '0 auto';
+      }
+    }
+  };
+  
+  html2canvas(chartWrapper, options).then(canvas => {
+    const imageUrl = canvas.toDataURL('image/png');
+    const downloadLink = document.createElement('a');
+    downloadLink.href = imageUrl;
+    downloadLink.download = 'DataMB Screenshot.png';
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    chartWrapper.classList.remove('screenshot-capture');
+  }).catch(error => {
+    console.error("Screenshot error:", error);
+    chartWrapper.classList.remove('screenshot-capture');
+  });
 }
 </script>
    <center>
