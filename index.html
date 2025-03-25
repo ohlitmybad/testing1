@@ -3890,10 +3890,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         .style("opacity", 0);
     
     var labelWidth = tempLabel.node().getComputedTextLength();
-    tempLabel
-        .style("pointer-events", "none")
-        .attr("transform", "translate(-9999,-9999)")
-        .remove();
+   
     
     // Define 4 possible positions (right, left, top, bottom) - closer to the dot
     var positions = [
@@ -3980,14 +3977,6 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // If too crowded, skip this label
             if (neighborCount > 3) {
-                // Create a hidden dummy label that will be immediately removed properly
-                // This prevents Safari from showing phantom labels
-                svg.append("text")
-                    .attr("class", "team-label " + teamClass)
-                    .style("opacity", 0)
-                    .style("pointer-events", "none")
-                    .attr("transform", "translate(-9999,-9999)")
-                    .remove();
                 return;
             }
         }
