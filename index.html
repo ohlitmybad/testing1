@@ -2822,6 +2822,13 @@ return isNaN(parsedValue) ? 0 : parsedValue;
         
         // Function to update the chart - assign to the global variable
         updateChart = function() {
+            // Store currently clicked circles for Safari desktop
+            var tempClickedCircles = [];
+            if (isDesktopSafari()) {
+                tempClickedCircles = [...clickedCircles];
+                clickedCircles = [];
+            }
+
             // Update chart dimensions based on current window size
             updateChartDimensions();
             
@@ -3387,6 +3394,32 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
+
+            // After all chart updates are done, reapply clicked circles for Safari desktop
+            if (isDesktopSafari() && tempClickedCircles.length > 0) {
+                // Small delay to ensure DOM is ready
+                setTimeout(() => {
+                    tempClickedCircles.forEach(uniqueId => {
+                        var teamData = filteredData.find(d => getPlayerUniqueId(d) === uniqueId);
+                        if (teamData) {
+                            // Find and click the circle
+                            svg.selectAll("circle")
+                                .filter(d => getPlayerUniqueId(d) === uniqueId)
+                                .each(function(d) {
+                                    clickedCircles.push(uniqueId);
+                                    d3.select(this)
+                                        .style("fill", getLeagueColor(d[2]))
+                                        .style("stroke", "#000")
+                                        .style("stroke-width", 2);
+                                    addTeamLabel(d, false);
+                                });
+                        }
+                    });
+                    // Update button text and legend after re-clicking
+                    updateSelectAllButtonText();
+                    updateLeagueLegend(document.getElementById("select-league").value);
+                }, 50);
+            }
         }
         
         // Function to update the "Click All" button icon
