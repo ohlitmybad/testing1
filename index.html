@@ -3873,54 +3873,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             if (isDesktopSafari()) {
                 // Remove all instances of this label first
                 svg.selectAll("." + teamClass).remove();
-                
-                // Force a complete SVG refresh for Safari
-                var svgNode = svg.node();
-                var parentNode = svgNode.parentNode;
-                var nextSibling = svgNode.nextSibling;
-                parentNode.removeChild(svgNode);
-                parentNode.insertBefore(svgNode, nextSibling);
-                
-                // Create a container group for the label
-                var labelGroup = svg.append("g")
-                    .attr("class", "team-label-group " + teamClass);
-                
-                // Get the coordinates
-                var x = xScale(d[header.indexOf(xMetric)]);
-                var y = yScale(d[header.indexOf(yMetric)]);
-                
-                // Create the label using transform instead of x/y positioning
-                var label = labelGroup.append("text")
-                    .attr("class", "team-label")
-                    .text(playerName)
-                    .style("font-family", "Inter, sans-serif")
-                    .style("font-size", "12px")
-                    .style("font-weight", "500")
-                    .style("fill", "#333");
-                
-                // Measure the label width
-                var labelWidth = label.node().getComputedTextLength();
-                
-                // Determine position (right or left of point)
-                var dx = 8;
-                var textAnchor = "start";
-                
-                if (x + dx + labelWidth > width) {
-                    dx = -8;
-                    textAnchor = "end";
-                }
-                
-                // Apply positioning through transform
-                labelGroup.attr("transform", `translate(${x + dx},${y})`);
-                label.attr("text-anchor", textAnchor)
-                    .attr("dominant-baseline", "middle");
-                
-                if (isSearchMatch) {
-                    label.classed("search-match", true);
-                }
-                
-                return;
-            }
+                            }
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
