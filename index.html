@@ -3392,59 +3392,6 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
 		    
-            // Final Safari-specific cleanup to ensure no ghost text labels remain
-            if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-                // After all chart updates are done, run one final cleanup
-                setTimeout(function() {
-                    // Get a list of all legitimate label texts
-                    var validLabelTexts = [];
-                    
-                    // From regular labels
-                    svg.selectAll(".team-label").each(function() {
-                        if (d3.select(this).node().tagName === "text") {
-                            validLabelTexts.push(d3.select(this).text());
-                        }
-                    });
-                    
-                    // From foreignObject labels
-                    svg.selectAll("foreignObject.team-label div").each(function() {
-                        validLabelTexts.push(d3.select(this).text());
-                    });
-                    
-                    // Remove any text element that contains player names but isn't in a legitimate label
-                    svg.selectAll("text").each(function() {
-                        var el = d3.select(this);
-                        var text = el.text();
-                        
-                        // Skip axis labels and legitimate team labels
-                        if (!el.classed("x-label") && !el.classed("y-label") && !el.classed("team-label")) {
-                            // Check if this text matches any player name
-                            var matchesValidLabel = validLabelTexts.some(function(validText) {
-                                return text === validText;
-                            });
-                            
-                            // If it matches a player name but isn't a legitimate label, it's a ghost - remove it
-                            if (matchesValidLabel) {
-                                el.remove();
-                            }
-                            
-                            // Also remove any empty or whitespace-only text elements
-                            if (!text || text.trim() === "") {
-                                el.remove();
-                            }
-                        }
-                    });
-                    
-                    // Force browser to do a complete reflow
-                    var chartContainer = document.querySelector('.chart-container');
-                    if (chartContainer) {
-                        var originalDisplay = chartContainer.style.display;
-                        chartContainer.style.display = 'none';
-                        void chartContainer.offsetHeight; // Trigger reflow
-                        chartContainer.style.display = originalDisplay;
-                    }
-                }, 100); // Wait a bit longer to ensure all rendering is complete
-            }
         }
         
         // Function to update the "Click All" button icon
