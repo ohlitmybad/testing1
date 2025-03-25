@@ -2822,13 +2822,6 @@ return isNaN(parsedValue) ? 0 : parsedValue;
         
         // Function to update the chart - assign to the global variable
         updateChart = function() {
-            // Store currently clicked circles for Safari desktop
-            var tempClickedCircles = [];
-            if (isDesktopSafari()) {
-                tempClickedCircles = [...clickedCircles];
-                clickedCircles = [];
-            }
-
             // Update chart dimensions based on current window size
             updateChartDimensions();
             
@@ -3394,32 +3387,6 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
-
-            // After all chart updates are done, reapply clicked circles for Safari desktop
-            if (isDesktopSafari() && tempClickedCircles.length > 0) {
-                // Small delay to ensure DOM is ready
-                setTimeout(() => {
-                    tempClickedCircles.forEach(uniqueId => {
-                        var teamData = filteredData.find(d => getPlayerUniqueId(d) === uniqueId);
-                        if (teamData) {
-                            // Find and click the circle
-                            svg.selectAll("circle")
-                                .filter(d => getPlayerUniqueId(d) === uniqueId)
-                                .each(function(d) {
-                                    clickedCircles.push(uniqueId);
-                                    d3.select(this)
-                                        .style("fill", getLeagueColor(d[2]))
-                                        .style("stroke", "#000")
-                                        .style("stroke-width", 2);
-                                    addTeamLabel(d, false);
-                                });
-                        }
-                    });
-                    // Update button text and legend after re-clicking
-                    updateSelectAllButtonText();
-                    updateLeagueLegend(document.getElementById("select-league").value);
-                }, 50);
-            }
         }
         
         // Function to update the "Click All" button icon
@@ -3893,28 +3860,16 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         }
         
 
+        function isDesktopSafari() {
+    const ua = navigator.userAgent;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
+    return isSafari && !isMobile;
+}
 
  
-        // Function to detect Safari browser on desktop
-        function isDesktopSafari() {
-            const ua = navigator.userAgent;
-            const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
-            return isSafari && !isMobile;
-        }
-
         function addTeamLabel(d, isSearchMatch) {
-            // Get the unique ID and class name first
-            var uniqueId = getPlayerUniqueId(d);
-            var playerName = d[1];
-            var playerId = d[0];
-            
-            var teamClass = "team-label-" + playerId + "-" + playerName.toLowerCase()
-                .replace(/[^a-z0-9]/g, '-')
-                .replace(/-+/g, '-')
-                .replace(/^-|-$/g, '');
-            
-            // For Safari: Use a more aggressive cleanup approach
+
             if (isDesktopSafari()) {
                 // Remove all instances of this label first
                 svg.selectAll("." + teamClass).remove();
@@ -3966,156 +3921,181 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 
                 return;
             }
+    var x = xScale(d[header.indexOf(xMetric)]);
+    var y = yScale(d[header.indexOf(yMetric)]);
+    
+    // Create a unique class name for this team's label that includes the player ID
+    var uniqueId = getPlayerUniqueId(d);
+    var playerName = d[1];
+    var playerId = d[0];
+    
+    var teamClass = "team-label-" + playerId + "-" + playerName.toLowerCase()
+        .replace(/[^a-z0-9]/g, '-') // Replace any non-alphanumeric character with a hyphen
+        .replace(/-+/g, '-')        // Replace multiple consecutive hyphens with a single one
+        .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
+    
+    // Check if this label already exists (avoid duplicates)
+    if (svg.select("." + teamClass).size() > 0) {
+        return;
+    }
+    
+    // Create the label temporarily to measure its width
+    var tempLabel = svg.append("text")
+        .attr("class", "temp-label")
+        .text(playerName)
+        .style("font-family", "Inter, sans-serif")
+        .style("font-size", "12px")
+        .style("opacity", 0);
+    
+    var labelWidth = tempLabel.node().getComputedTextLength();
+    tempLabel.remove();
+    
+    // Define 4 possible positions (right, left, top, bottom) - closer to the dot
+    var positions = [
+        { dx: 8, dy: 0, anchor: "start" },      // Right (closest)
+        { dx: -8, dy: 0, anchor: "end" },       // Left (closest)
+        { dx: 0, dy: -8, anchor: "middle" },    // Top (closest)
+        { dx: 0, dy: 8, anchor: "middle" }      // Bottom (closest)
+    ];
+    
+    // Get all existing labels' bounding boxes for quick collision detection
+    var existingLabelBoxes = [];
+    svg.selectAll("text.team-label").each(function() {
+        var bbox = this.getBBox();
+        existingLabelBoxes.push({
+            x1: bbox.x - 2,
+            y1: bbox.y - 2,
+            x2: bbox.x + bbox.width + 2,
+            y2: bbox.y + bbox.height + 2
+        });
+    });
+    
+    // Find the first non-colliding position
+    var chosenPosition = null;
+    var labelHeight = 12; // Approximate height based on font size
+    
+    // Get chart boundaries
+    var chartWidth = width;
+    var chartHeight = height;
+    
+    // If it's a search match, we'll always show the label regardless of collisions
+    if (!isSearchMatch) {
+        for (var i = 0; i < positions.length; i++) {
+            var pos = positions[i];
+            var labelX = x + pos.dx;
+            var labelY = y + pos.dy;
             
-            // For non-Safari browsers, continue with the existing logic
-            // ... existing code ...
-
-            // Get the coordinates
-            var x = xScale(d[header.indexOf(xMetric)]);
-            var y = yScale(d[header.indexOf(yMetric)]);
-
-            // Create the label temporarily to measure its width
-            var tempLabel = svg.append("text")
-                .attr("class", "temp-label")
-                .text(playerName)
-                .style("font-family", "Inter, sans-serif")
-                .style("font-size", "12px")
-                .style("opacity", 0);
+            // Calculate label bounds based on anchor
+            var labelBox = {
+                x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
+                y1: pos.dy < 0 ? labelY - labelHeight : labelY,
+                x2: pos.anchor === "start" ? labelX + labelWidth : (pos.anchor === "middle" ? labelX + labelWidth/2 : labelX),
+                y2: pos.dy < 0 ? labelY : labelY + labelHeight
+            };
             
-            var labelWidth = tempLabel.node().getComputedTextLength();
-            tempLabel.remove();
-
-            // Simplified positioning for Safari
-            if (isDesktopSafari()) {
-                var chosenPosition = { dx: 8, dy: 0, anchor: "start" };  // Default right
-                
-                // Simple boundary check
-                var rightEdge = x + 8 + labelWidth;
-                if (rightEdge > width) {
-                    chosenPosition = { dx: -8, dy: 0, anchor: "end" };  // Switch to left
-                }
-
-                // Create the actual label
-                var label = svg.append("text")
-                    .attr("class", "team-label " + teamClass)
-                    .attr("x", x + chosenPosition.dx)
-                    .attr("y", y)
-                    .attr("text-anchor", chosenPosition.anchor)
-                    .attr("dominant-baseline", "middle")
-                    .text(playerName)
-                    .style("font-family", "Inter, sans-serif")
-                    .style("font-size", "12px")
-                    .style("font-weight", "500")
-                    .style("fill", "#333");
-
-                if (isSearchMatch) {
-                    label.classed("search-match", true);
-                }
-
-                return;
+            // Check if label is within chart boundaries
+            if (labelBox.x1 < 0 || labelBox.x2 > chartWidth || 
+                labelBox.y1 < 0 || labelBox.y2 > chartHeight) {
+                continue; // Skip this position if label would be outside chart
             }
-
-            // Regular positioning logic for other browsers continues below...
-            // ... rest of the original non-Safari code ...
-
-            // Define positions - simplified for Safari
-            var positions = isDesktopSafari() ? [
-                { dx: 8, dy: 0, anchor: "start" },      // Right
-                { dx: -8, dy: 0, anchor: "end" }        // Left
-            ] : [
-                { dx: 8, dy: 0, anchor: "start" },      // Right
-                { dx: -8, dy: 0, anchor: "end" },       // Left
-                { dx: 0, dy: -8, anchor: "middle" },    // Top
-                { dx: 0, dy: 8, anchor: "middle" }      // Bottom
-            ];
-
-            // Get chart boundaries
-            var chartWidth = width;
-            var chartHeight = height;
             
-            // Initialize variables
-            var chosenPosition = null;
-            var labelHeight = 12;
-
-            // If it's a search match or Safari, use simpler placement
-            if (isSearchMatch || isDesktopSafari()) {
-                chosenPosition = positions[0]; // Default to right position
-                
-                // Simple boundary check
-                var rightEdge = x + 8 + labelWidth;
-                if (rightEdge > chartWidth) {
-                    chosenPosition = positions[1]; // Use left position if right edge would overflow
-                }
-            } else {
-                // Full collision detection for non-Safari browsers
-                var existingLabelBoxes = [];
-                svg.selectAll("text.team-label").each(function() {
-                    var bbox = this.getBBox();
-                    existingLabelBoxes.push({
-                        x1: bbox.x - 2,
-                        y1: bbox.y - 2,
-                        x2: bbox.x + bbox.width + 2,
-                        y2: bbox.y + bbox.height + 2
-                    });
-                });
-
-                // Try each position
-                for (var i = 0; i < positions.length; i++) {
-                    var pos = positions[i];
-                    var labelX = x + pos.dx;
-                    var labelY = y + pos.dy;
-                    
-                    var labelBox = {
-                        x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
-                        y1: pos.dy < 0 ? labelY - labelHeight : labelY,
-                        x2: pos.anchor === "start" ? labelX + labelWidth : (pos.anchor === "middle" ? labelX + labelWidth/2 : labelX),
-                        y2: pos.dy < 0 ? labelY : labelY + labelHeight
-                    };
-                    
-                    if (labelBox.x1 < 0 || labelBox.x2 > chartWidth || 
-                        labelBox.y1 < 0 || labelBox.y2 > chartHeight) {
-                        continue;
-                    }
-                    
-                    var hasCollision = false;
-                    for (var j = 0; j < existingLabelBoxes.length; j++) {
-                        var existing = existingLabelBoxes[j];
-                        if (!(labelBox.x2 < existing.x1 || labelBox.x1 > existing.x2 || 
-                              labelBox.y2 < existing.y1 || labelBox.y1 > existing.y2)) {
-                            hasCollision = true;
-                            break;
-                        }
-                    }
-                    
-                    if (!hasCollision) {
-                        chosenPosition = pos;
-                        break;
-                    }
-                }
-
-                // If no position works, use default right position
-                if (!chosenPosition) {
-                    chosenPosition = positions[0];
+            // Check for collisions
+            var hasCollision = false;
+            for (var j = 0; j < existingLabelBoxes.length; j++) {
+                var existing = existingLabelBoxes[j];
+                if (!(labelBox.x2 < existing.x1 || labelBox.x1 > existing.x2 || 
+                      labelBox.y2 < existing.y1 || labelBox.y1 > existing.y2)) {
+                    hasCollision = true;
+                    break;
                 }
             }
             
-            // Create the actual label
-            var label = svg.append("text")
-                .attr("class", "team-label " + teamClass)
-                .attr("x", x + chosenPosition.dx)
-                .attr("y", y + chosenPosition.dy)
-                .attr("text-anchor", chosenPosition.anchor)
-                .attr("dominant-baseline", chosenPosition.dy < 0 ? "auto" : "middle")
-                .text(playerName)
-                .style("font-family", "Inter, sans-serif")
-                .style("font-size", "12px")
-                .style("font-weight", "500")
-                .style("fill", "#333");
-            
-            if (isSearchMatch) {
-                label.classed("search-match", true);
+            if (!hasCollision) {
+                chosenPosition = pos;
+                break;
             }
         }
+        
+        // If all positions have collisions, check if there are too many neighbors
+        // If so, skip this label entirely
+        if (!chosenPosition) {
+            // Count nearby labels (within a certain radius)
+            var radius = 50; // Adjust based on chart density
+            var neighborCount = 0;
+            
+            existingLabelBoxes.forEach(function(box) {
+                var centerX = (box.x1 + box.x2) / 2;
+                var centerY = (box.y1 + box.y2) / 2;
+                var distance = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
+                
+                if (distance < radius) {
+                    neighborCount++;
+                }
+            });
+            
+            // If too crowded, skip this label
+            if (neighborCount > 3) {
+                return;
+            }
+        }
+    }
+    
+    // Use the default right position if no non-colliding position was found or if it's a search match
+    if (!chosenPosition) {
+        chosenPosition = positions[0];
+        
+        // For edge cases, adjust the position to keep label within bounds
+        var labelX = x + chosenPosition.dx;
+        var labelY = y + chosenPosition.dy;
+        
+        var labelBox = {
+            x1: chosenPosition.anchor === "end" ? labelX - labelWidth : (chosenPosition.anchor === "middle" ? labelX - labelWidth/2 : labelX),
+            y1: chosenPosition.dy < 0 ? labelY - labelHeight : labelY,
+            x2: chosenPosition.anchor === "start" ? labelX + labelWidth : (chosenPosition.anchor === "middle" ? labelX + labelWidth/2 : labelX),
+            y2: chosenPosition.dy < 0 ? labelY : labelY + labelHeight
+        };
+        
+        // Adjust position if needed to keep within bounds
+        if (labelBox.x1 < 0) {
+            chosenPosition = positions[0]; // Use right position
+        } else if (labelBox.x2 > chartWidth) {
+            chosenPosition = positions[1]; // Use left position
+        }
+        
+        if (labelBox.y1 < 0) {
+            chosenPosition = positions[3]; // Use bottom position
+        } else if (labelBox.y2 > chartHeight) {
+            chosenPosition = positions[2]; // Use top position
+        }
+    }
+    
+    // Create the actual label with the chosen position
+    var label = svg.append("text")
+        .attr("class", "team-label " + teamClass)
+        .attr("x", x + chosenPosition.dx)
+        .attr("y", y + chosenPosition.dy)
+        .attr("text-anchor", chosenPosition.anchor)
+        .attr("dominant-baseline", chosenPosition.dy < 0 ? "auto" : "hanging")
+        .text(playerName)
+        .style("font-family", "Inter, sans-serif")
+        .style("font-size", "12px")
+        .style("font-weight", "500")
+        .style("fill", "#333");
+    
+    // If it's a search match, add the search-match class
+    if (isSearchMatch) {
+        label.classed("search-match", true);
+    }
+        
+    // Add this label's bounding box to the collection for future labels
+    var bbox = label.node().getBBox();
+    existingLabelBoxes.push({
+        x1: bbox.x - 2,
+        y1: bbox.y - 2,
+        x2: bbox.x + bbox.width + 2,
+        y2: bbox.y + bbox.height + 2
+    });
+}
 
       
 
