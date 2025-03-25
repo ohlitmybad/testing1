@@ -3908,7 +3908,22 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
     
     var existingLabelBoxes = [];
     svg.selectAll(isSafari ? "foreignObject.team-label" : "text.team-label").each(function() {
-        var bbox = this.getBBox();
+        var bbox;
+        if (isSafari && this.tagName === "foreignObject") {
+            // For Safari with foreignObject, we need to calculate the bounds manually
+            var x = parseFloat(this.getAttribute("x"));
+            var y = parseFloat(this.getAttribute("y"));
+            var width = parseFloat(this.getAttribute("width"));
+            var height = parseFloat(this.getAttribute("height"));
+            bbox = {
+                x: x,
+                y: y,
+                width: width,
+                height: height
+            };
+        } else {
+            bbox = this.getBBox();
+        }
         existingLabelBoxes.push({
             x1: bbox.x - 2,
             y1: bbox.y - 2,
@@ -4041,7 +4056,23 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         }
     }
         
-    var bbox = (isSafari ? label.node().parentNode : label.node()).getBBox();
+    var bbox;
+    if (isSafari) {
+        // For Safari, get the foreignObject element and use its attributes
+        var foreignObj = label.node().parentNode;
+        var x = parseFloat(foreignObj.getAttribute("x"));
+        var y = parseFloat(foreignObj.getAttribute("y"));
+        var width = parseFloat(foreignObj.getAttribute("width"));
+        var height = parseFloat(foreignObj.getAttribute("height"));
+        bbox = {
+            x: x,
+            y: y,
+            width: width,
+            height: height
+        };
+    } else {
+        bbox = label.node().getBBox();
+    }
     existingLabelBoxes.push({
         x1: bbox.x - 2,
         y1: bbox.y - 2,
