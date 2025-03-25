@@ -37,8 +37,45 @@
             --header-bg: #0e0f0f;
             --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
-
-	    
+        
+        /* Safari-specific fixes */
+        @media not all and (min-resolution:.001dpcm) { 
+            @supports (-webkit-appearance:none) {
+                /* Safari-specific text optimizations */
+                text.team-label {
+                    transform: translateZ(0);
+                    -webkit-font-smoothing: antialiased;
+                    will-change: transform;
+                    paint-order: stroke;
+                    stroke: rgba(255,255,255,0.01);
+                    stroke-width: 1px;
+                }
+                
+                svg text {
+                    text-rendering: geometricPrecision;
+                    shape-rendering: crispEdges;
+                }
+                
+                /* Hide any text that doesn't have specific classes to eliminate ghost labels */
+                svg text:not(.team-label):not(.x-label):not(.y-label):not(.performance-label):not(.xy-line-label) {
+                    opacity: 0 !important;
+                    visibility: hidden !important;
+                    display: none !important;
+                }
+                
+                /* Force hardware acceleration for the entire chart area */
+                .chart-container {
+                    transform: translateZ(0);
+                    backface-visibility: hidden;
+                    perspective: 1000px;
+                }
+                
+                /* Use specific font features to avoid ghost text */
+                svg text {
+                    font-feature-settings: "kern" 1, "liga" 0;
+                }
+            }
+        }
 
         * {
             margin: 0;
@@ -3039,9 +3076,57 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
             // Remove existing circles and labels
             svg.selectAll("circle").remove();
+            
+            // EXTREMELY aggressive Safari text cleanup
+            if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                // First collect IDs of all team labels we want to keep
+                var teamLabelsToKeep = [];
+                clickedCircles.forEach(function(uniqueId) {
+                    var teamData = filteredData.find(function(d) {
+                        return getPlayerUniqueId(d) === uniqueId;
+                    });
+                    if (teamData) {
+                        var playerId = teamData[0];
+                        var playerName = teamData[1];
+                        teamLabelsToKeep.push({
+                            id: playerId,
+                            name: playerName
+                        });
+                    }
+                });
+                
+                // Remove ALL existing text elements in the SVG except axis labels
+                svg.selectAll("text").each(function() {
+                    var el = d3.select(this);
+                    // Keep only the x and y axis labels
+                    if (!el.classed("x-label") && !el.classed("y-label")) {
+                        el.remove();
+                    }
+                });
+                
+                // Force a complete redraw of the SVG - extreme but effective
+                var svgNode = svg.node().parentNode;
+                var svgHTML = svgNode.outerHTML;
+                var parent = svgNode.parentNode;
+                svgNode.remove();
+                parent.innerHTML += svgHTML;
+                
+                // Redefine svg after recreation
+                svg = d3.select("#scatter-plot")
+                    .select("g");
+                    
+                // Ensure all selections are still valid
+                gXAxis = svg.select(".x-axis");
+                gYAxis = svg.select(".y-axis");
+                xLabel = svg.select(".x-label");
+                yLabel = svg.select(".y-label");
+            } else {
+                // For non-Safari browsers, just remove team labels normally
                 svg.selectAll(".team-label").remove();
-        
-		svg.selectAll(".xy-line").remove(); // Remove any existing diagonal reference line
+            }
+            
+            // Remove all chart elements
+            svg.selectAll(".xy-line").remove(); // Remove any existing diagonal reference line
             svg.selectAll(".xy-line-bg").remove(); // Remove line background
             svg.selectAll(".xy-line-label").remove(); // Remove line label
             svg.selectAll(".xy-line-label-bg").remove(); // Remove label background
@@ -3213,22 +3298,27 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // Add circles
             circles = svg.selectAll("circle")
-                .data(filteredData)
+                .data(filteredData, function(d) {
+                    return getPlayerUniqueId(d);
+                })
                 .enter()
                 .append("circle")
-                .attr("cx", function(d) { return xScale(d[header.indexOf(xMetric)]); })
-                .attr("cy", function(d) { return yScale(d[header.indexOf(yMetric)]); })
-                .attr("r", function(d) { 
-             
-                    const value = d[header.indexOf(sizeMetric)];
-                    return value !== undefined ? sizeScale(value) : 8;
+                .attr("cx", function(d) {
+                    return xScale(d[header.indexOf(xMetric)]);
+                })
+                .attr("cy", function(d) {
+                    return yScale(d[header.indexOf(yMetric)]);
+                })
+                .attr("r", function(d) {
+                    if (sizeMetric === "None") {
+                        return 6;
+                    } else {
+                        return sizeScale(d[header.indexOf(sizeMetric)]);
+                    }
                 })
                 .style("fill", function(d) {
-                    // Check if this circle is in the clicked circles array
-                    if (clickedCircles.includes(getPlayerUniqueId(d))) {
-                        return getLeagueColor(d[2]);
-                    }
-                    return "rgba(70, 130, 180, 0.7)";
+                    // Check if this team is in the clickedCircles array
+                    return clickedCircles.includes(getPlayerUniqueId(d)) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
                 })
                 .style("stroke", function(d) {
                     return clickedCircles.includes(getPlayerUniqueId(d)) ? "#000" : "none";
@@ -3238,21 +3328,25 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 })
                 .style("cursor", "pointer")
                 .on("mouseover", function(d) {
-                    // Store the original radius for smoother transition
-                    const originalRadius = sizeMetric === "None" || d[header.indexOf(sizeMetric)] === undefined ? 8 : sizeScale(d[header.indexOf(sizeMetric)]);
                     d3.select(this)
                         .transition()
                         .duration(200)
-                        .attr("r", originalRadius * 1.25)
-                        .style("fill", getLeagueColor(d[2])); // Show league color on hover
-
+                        .attr("r", function() {
+                            if (sizeMetric === "None") {
+                                return 8;
+                            } else {
+                                return sizeScale(d[header.indexOf(sizeMetric)]) + 2;
+                            }
+                        });
+                        
                     // For Safari: Clean up any ghost/errant text elements when hovering
                     if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
                         // Remove any text that doesn't have proper classes
                         svg.selectAll("text:not(.x-label):not(.y-label):not(.team-label):not(.performance-label):not(.xy-line-label)")
                            .remove();
                     }
-			
+                        
+                    // Show tooltip
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", 0.9);
@@ -3401,6 +3495,60 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
+            
+            // Final Safari-specific cleanup to ensure no ghost text labels remain
+            if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                // After all chart updates are done, run one final cleanup
+                setTimeout(function() {
+                    // Get a list of all legitimate label texts
+                    var validLabelTexts = [];
+                    
+                    // From regular labels
+                    svg.selectAll(".team-label").each(function() {
+                        if (d3.select(this).node().tagName === "text") {
+                            validLabelTexts.push(d3.select(this).text());
+                        }
+                    });
+                    
+                    // From foreignObject labels
+                    svg.selectAll("foreignObject.team-label div").each(function() {
+                        validLabelTexts.push(d3.select(this).text());
+                    });
+                    
+                    // Remove any text element that contains player names but isn't in a legitimate label
+                    svg.selectAll("text").each(function() {
+                        var el = d3.select(this);
+                        var text = el.text();
+                        
+                        // Skip axis labels and legitimate team labels
+                        if (!el.classed("x-label") && !el.classed("y-label") && !el.classed("team-label")) {
+                            // Check if this text matches any player name
+                            var matchesValidLabel = validLabelTexts.some(function(validText) {
+                                return text === validText;
+                            });
+                            
+                            // If it matches a player name but isn't a legitimate label, it's a ghost - remove it
+                            if (matchesValidLabel) {
+                                el.remove();
+                            }
+                            
+                            // Also remove any empty or whitespace-only text elements
+                            if (!text || text.trim() === "") {
+                                el.remove();
+                            }
+                        }
+                    });
+                    
+                    // Force browser to do a complete reflow
+                    var chartContainer = document.querySelector('.chart-container');
+                    if (chartContainer) {
+                        var originalDisplay = chartContainer.style.display;
+                        chartContainer.style.display = 'none';
+                        void chartContainer.offsetHeight; // Trigger reflow
+                        chartContainer.style.display = originalDisplay;
+                    }
+                }, 100); // Wait a bit longer to ensure all rendering is complete
+            }
         }
         
         // Function to update the "Click All" button icon
@@ -3877,6 +4025,26 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
  
         function addTeamLabel(d, isSearchMatch) {
+    // Safari specific optimization
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+    // For Safari, check if there are any ghost labels with similar text and remove them
+    if (isSafari) {
+        var playerName = d[1];
+        // Find and remove any text elements containing this player name that aren't properly classed
+        svg.selectAll("text").each(function() {
+            var el = d3.select(this);
+            if (!el.classed("team-label") && !el.classed("x-label") && !el.classed("y-label") && 
+                !el.classed("temp-label") && !el.classed("performance-label") && !el.classed("xy-line-label")) {
+                // If this text content matches or contains our player name, remove it
+                var content = el.text();
+                if (content && content.includes(playerName)) {
+                    el.remove();
+                }
+            }
+        });
+    }
+    
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
@@ -3890,9 +4058,18 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         .replace(/-+/g, '-')        // Replace multiple consecutive hyphens with a single one
         .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
     
-    // Check if this label already exists (avoid duplicates)
-    if (svg.select("." + teamClass).size() > 0) {
-        return;
+    // Aggressively remove any existing label with this class first
+    svg.selectAll("." + teamClass).remove();
+    
+    // For Safari, also remove any potential ghost labels with similar content
+    if (isSafari) {
+        svg.selectAll("text").each(function() {
+            var content = d3.select(this).text().trim();
+            // If this text element contains our player name but is not properly classified
+            if (content === playerName && !d3.select(this).classed("team-label")) {
+                d3.select(this).remove();
+            }
+        });
     }
     
     // Create the label temporarily to measure its width
@@ -4026,25 +4203,72 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
     }
     
     // Create the actual label with the chosen position
-    var label = svg.append("text")
-        .attr("class", "team-label " + teamClass)
-        .attr("x", x + chosenPosition.dx)
-        .attr("y", y + chosenPosition.dy)
-        .attr("text-anchor", chosenPosition.anchor)
-        .attr("dominant-baseline", chosenPosition.dy < 0 ? "auto" : "hanging")
-        .text(playerName)
-        .style("font-family", "Inter, sans-serif")
-        .style("font-size", "12px")
-        .style("font-weight", "500")
-        .style("fill", "#333");
+    var label;
     
-    // If it's a search match, add the search-match class
-    if (isSearchMatch) {
-        label.classed("search-match", true);
-    }
+    // For Safari, use a completely different approach to label creation
+    if (isSafari) {
+        // First create a unique ID for the label
+        var labelId = "team-label-" + Date.now() + "-" + Math.random().toString(36).substring(2, 8);
         
+        // Create a foreignObject instead of text for Safari
+        label = svg.append("foreignObject")
+            .attr("class", "team-label " + teamClass)
+            .attr("id", labelId)
+            .attr("x", x + chosenPosition.dx - (chosenPosition.anchor === "end" ? labelWidth : (chosenPosition.anchor === "middle" ? labelWidth/2 : 0)))
+            .attr("y", y + chosenPosition.dy - (chosenPosition.dy < 0 ? labelHeight : 0))
+            .attr("width", labelWidth + 4)
+            .attr("height", labelHeight + 4);
+            
+        // Add HTML div inside for better text rendering
+        var div = label.append("xhtml:div")
+            .style("font-family", "Inter, sans-serif")
+            .style("font-size", "12px")
+            .style("font-weight", "500")
+            .style("color", "#333")
+            .style("white-space", "nowrap")
+            .text(playerName);
+            
+        if (isSearchMatch) {
+            div.style("color", "#ff3333");
+        }
+    } else {
+        // For other browsers, use the standard SVG text element
+        label = svg.append("text")
+            .attr("class", "team-label " + teamClass)
+            .attr("data-player-id", playerId)
+            .attr("data-player-name", playerName)
+            .attr("x", x + chosenPosition.dx)
+            .attr("y", y + chosenPosition.dy)
+            .attr("text-anchor", chosenPosition.anchor)
+            .attr("dominant-baseline", chosenPosition.dy < 0 ? "auto" : "hanging")
+            .text(playerName)
+            .style("font-family", "Inter, sans-serif")
+            .style("font-size", "12px")
+            .style("font-weight", "500")
+            .style("fill", "#333");
+        
+        // If it's a search match, add the search-match class
+        if (isSearchMatch) {
+            label.classed("search-match", true);
+        }
+    }
+    
     // Add this label's bounding box to the collection for future labels
-    var bbox = label.node().getBBox();
+    var bbox;
+    if (isSafari) {
+        // For foreignObject, manually create bbox based on dimensions
+        var labelX = x + chosenPosition.dx;
+        var labelY = y + chosenPosition.dy;
+        bbox = {
+            x: chosenPosition.anchor === "end" ? labelX - labelWidth : (chosenPosition.anchor === "middle" ? labelX - labelWidth/2 : labelX),
+            y: chosenPosition.dy < 0 ? labelY - labelHeight : labelY,
+            width: labelWidth,
+            height: labelHeight
+        };
+    } else {
+        bbox = label.node().getBBox();
+    }
+    
     existingLabelBoxes.push({
         x1: bbox.x - 2,
         y1: bbox.y - 2,
@@ -4060,6 +4284,97 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         document.addEventListener('DOMContentLoaded', function() {
             const medianTooltip = document.getElementById('median-lines-tooltip');
             medianTooltip.textContent = medianLinesVisible ? "Hide median lines" : "Show median lines";
+            
+            // Safari-specific ghost text elimination using MutationObserver
+            if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                console.log("Setting up Safari ghost label prevention");
+                
+                // Keep track of valid labels
+                var validLabelIds = new Set();
+                
+                // Create a MutationObserver to watch for any text being added to the SVG
+                var observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                            // Check each added node
+                            mutation.addedNodes.forEach(function(node) {
+                                // Handle direct text elements
+                                if (node.nodeName === 'text') {
+                                    // Check if this is a valid labeled text element
+                                    var isValid = node.classList.contains('team-label') || 
+                                                node.classList.contains('x-label') || 
+                                                node.classList.contains('y-label') ||
+                                                node.classList.contains('performance-label') ||
+                                                node.classList.contains('xy-line-label');
+                                    
+                                    // If not valid and not part of our tracked valid labels, remove it
+                                    if (!isValid && !validLabelIds.has(node.id)) {
+                                        if (node.textContent && node.textContent.trim() !== '') {
+                                            console.log("Auto-removing ghost label: ", node.textContent);
+                                            node.remove();
+                                        }
+                                    }
+                                }
+                                
+                                // Handle subtree by finding all text elements
+                                if (node.querySelectorAll) {
+                                    var textNodes = node.querySelectorAll('text');
+                                    textNodes.forEach(function(textNode) {
+                                        // Same validation as above
+                                        var isValid = textNode.classList.contains('team-label') || 
+                                                    textNode.classList.contains('x-label') || 
+                                                    textNode.classList.contains('y-label') ||
+                                                    textNode.classList.contains('performance-label') ||
+                                                    textNode.classList.contains('xy-line-label');
+                                                    
+                                        if (!isValid && !validLabelIds.has(textNode.id)) {
+                                            if (textNode.textContent && textNode.textContent.trim() !== '') {
+                                                console.log("Auto-removing ghost label (subtree): ", textNode.textContent);
+                                                textNode.remove();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+                
+                // Watch for changes in the SVG
+                var svgNode = document.getElementById('scatter-plot');
+                if (svgNode) {
+                    observer.observe(svgNode, { 
+                        childList: true, 
+                        subtree: true 
+                    });
+                    console.log("Safari ghost label observer active");
+                }
+                
+                // Also attach a listener to chart updates to force a full refresh
+                var updateChartOriginal = updateChart;
+                updateChart = function() {
+                    // Call the original updateChart function
+                    updateChartOriginal.apply(this, arguments);
+                    
+                    // Additional Safari ghost label cleanup
+                    setTimeout(function() {
+                        // Get all visible text elements and check if they're valid
+                        var allTextNodes = document.querySelectorAll('#scatter-plot text');
+                        allTextNodes.forEach(function(node) {
+                            var isValid = node.classList.contains('team-label') || 
+                                        node.classList.contains('x-label') || 
+                                        node.classList.contains('y-label') ||
+                                        node.classList.contains('performance-label') ||
+                                        node.classList.contains('xy-line-label');
+                                        
+                            if (!isValid) {
+                                // This is likely a ghost label, remove it
+                                node.remove();
+                            }
+                        });
+                    }, 200);
+                };
+            }
         });
 
 
