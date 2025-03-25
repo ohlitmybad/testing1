@@ -4027,17 +4027,17 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
     
     // For Safari, use a completely different approach to label creation
     if (isSafari) {
-        // First create a unique ID for the label
-        var labelId = "team-label-" + Date.now() + "-" + Math.random().toString(36).substring(2, 8);
-        
         // Create a foreignObject instead of text for Safari
         label = svg.append("foreignObject")
             .attr("class", "team-label " + teamClass)
-            .attr("id", labelId)
-            .attr("x", x + chosenPosition.dx - (chosenPosition.anchor === "end" ? labelWidth : (chosenPosition.anchor === "middle" ? labelWidth/2 : 0)))
-            .attr("y", y + chosenPosition.dy - (chosenPosition.dy < 0 ? labelHeight : 0))
+            .attr("data-player-id", playerId)
+            .attr("data-player-name", playerName)
+            .attr("x", x + chosenPosition.dx)
+            .attr("y", y + chosenPosition.dy)
             .attr("width", labelWidth + 4)
-            .attr("height", labelHeight + 4);
+            .attr("height", labelHeight + 4)
+            .style("text-anchor", chosenPosition.anchor)
+            .style("dominant-baseline", chosenPosition.dy < 0 ? "auto" : "hanging");
             
         // Add HTML div inside for better text rendering
         var div = label.append("xhtml:div")
@@ -4050,6 +4050,18 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
         if (isSearchMatch) {
             div.style("color", "#ff3333");
+        }
+        
+        // Adjust position based on text-anchor equivalent
+        if (chosenPosition.anchor === "end") {
+            label.attr("x", x + chosenPosition.dx - labelWidth);
+        } else if (chosenPosition.anchor === "middle") {
+            label.attr("x", x + chosenPosition.dx - labelWidth/2);
+        }
+        
+        // Adjust position based on dominant-baseline equivalent
+        if (chosenPosition.dy < 0) {
+            label.attr("y", y + chosenPosition.dy - labelHeight);
         }
     } else {
         // For other browsers, use the standard SVG text element
@@ -4076,12 +4088,13 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
     // Add this label's bounding box to the collection for future labels
     var bbox;
     if (isSafari) {
-        // For foreignObject, manually create bbox based on dimensions
-        var labelX = x + chosenPosition.dx;
-        var labelY = y + chosenPosition.dy;
+        // Get the actual positioned coordinates after adjustments
+        var labelX = parseFloat(label.attr("x"));
+        var labelY = parseFloat(label.attr("y"));
+        
         bbox = {
-            x: chosenPosition.anchor === "end" ? labelX - labelWidth : (chosenPosition.anchor === "middle" ? labelX - labelWidth/2 : labelX),
-            y: chosenPosition.dy < 0 ? labelY - labelHeight : labelY,
+            x: labelX,
+            y: labelY,
             width: labelWidth,
             height: labelHeight
         };
