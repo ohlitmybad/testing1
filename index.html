@@ -3390,25 +3390,29 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
             // After all chart updates are done, add temporary overlay for Safari desktop
             if (isDesktopSafari()) {
-                // Create a temporary colored overlay that covers the entire viewport
+                // Create a temporary tooltip that matches our regular tooltip style
                 const tempTooltip = d3.select("body")
                     .append("div")
                     .attr("class", "tooltip")
-                    .style("opacity", "1")  // Fully visible
+                    .style("opacity", "1")
                     .style("pointer-events", "none")
                     .style("position", "fixed")
                     .style("left", "0")
                     .style("top", "0")
-                    .style("width", "100%")
-                    .style("height", "100%")
+                    .style("width", "100vw")
+                    .style("height", "100vh")
                     .style("z-index", "9999")
-                    .style("background-color", "var(--container-bg)") // Use theme background color
-                    .style("border", "1px solid var(--border-color)"); // Add border like regular tooltip
+                    .style("background-color", "var(--container-bg)")
+                    .style("border", "1px solid var(--border-color)")
+                    .style("box-shadow", "var(--shadow)");
 
-                // Remove the temporary tooltip after a very short delay
+                // Force a repaint by accessing offsetHeight
+                tempTooltip.node().offsetHeight;
+
+                // Remove the temporary tooltip after a short delay
                 setTimeout(() => {
                     tempTooltip.remove();
-                }, 500);
+                }, 50);
             }
         }
         
