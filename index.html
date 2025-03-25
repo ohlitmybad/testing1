@@ -37,6 +37,23 @@
             --header-bg: #0e0f0f;
             --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
+        
+        /* Safari-specific fixes */
+        @media not all and (min-resolution:.001dpcm) { 
+            @supports (-webkit-appearance:none) {
+                /* Safari-specific text optimizations */
+                text.team-label {
+                    transform: translateZ(0);
+                    -webkit-font-smoothing: antialiased;
+                    will-change: transform;
+                }
+                
+                svg text {
+                    text-rendering: geometricPrecision;
+                    shape-rendering: crispEdges;
+                }
+            }
+        }
 
         * {
             margin: 0;
@@ -1098,43 +1115,48 @@ color: #ffffff
   top: -15px;
 }
 
+
+   
+
     </style>
     
     </head>
 <body>
     <script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
-    <div class="container">
-    
-    <div class="position-switcher-container">
+    <div class="container">  
+        
+        <div class="position-switcher-container">
 
-        <a href="https://datamb.football/proplotgk24/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>GK</span>
-        </a>
-
-        <span class="position-link active" style="user-select: none;">CB</span>
-
-        <a href="https://datamb.football/proplotfb24/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>FB</span>
-        </a>
-        <a href="https://datamb.football/proplotcm24/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>CM</span>
-        </a>
-        <a href="https://datamb.football/proplotfw24/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>FW</span>
-        </a>
-        <a href="https://datamb.football/proplotst24/" target="_self" rel="noopener noreferrer" class="position-link">
-            <span>ST</span>
-        </a>
-        <div class="season-selector">
-            <a class="active" style="user-select: none;">
-                <span data-i18n="current">Current</span>
+            <a href="https://datamb.football/proplotgk24/" target="_self" rel="noopener noreferrer" class="position-link">
+                <span>GK</span>
             </a>
-            <div class="season-divider"></div>
-            <a href="https://datamb.football/proplotcb/" target="_self" rel="noopener noreferrer">
-                <span data-i18n="previous">Previous</span>
+
+            <a href="https://datamb.football/proplotcb24/" target="_self" rel="noopener noreferrer" class="position-link">
+                <span>CB</span>
             </a>
-        </div>
-    </div>    
+            <a href="https://datamb.football/proplotfb24/" target="_self" rel="noopener noreferrer" class="position-link">
+                <span>FB</span>
+            </a>
+         
+            <span class="position-link active" style="user-select: none;">CM</span>
+
+
+            <a href="https://datamb.football/proplotfw24/" target="_self" rel="noopener noreferrer" class="position-link">
+                <span>FW</span>
+            </a>
+            <a href="https://datamb.football/proplotst24/" target="_self" rel="noopener noreferrer" class="position-link">
+                <span>ST</span>
+            </a>
+            <div class="season-selector">
+                <a class="active" style="user-select: none;">
+                    <span data-i18n="current">Current</span>
+                </a>
+                <div class="season-divider"></div>
+                <a href="https://datamb.football/proplotcm/" target="_self" rel="noopener noreferrer">
+                    <span data-i18n="previous">Previous</span>
+                </a>
+            </div>
+        </div>      
         <div class="chart-wrapper">
             <div class="controls">
                 <select id="select-x" style="display: none;"></select>
@@ -1507,27 +1529,7 @@ color: #ffffff
                 { text: "Minutes played", dataI18n: "minutes_played" },
               
 
-  
-    {text: "CATEGORY: Defending", dataI18n: "defending"},
-    {text: "Defensive duels per 90", dataI18n: "metrics.defensive-duels-per-90"},
-    {text: "Defensive duels won %", dataI18n: "metrics.defensive-duels-won-pct"},
-    {text: "Defensive duels won per 90", dataI18n: "metrics.defensive-duels-won-per-90"},
-    {text: "Sliding tackles per 90", dataI18n: "metrics.sliding-tackles-per-90"},
-    {text: "Sliding tackles (PAdj)", dataI18n: "metrics.sliding-tackles-(padj)"},
-    {text: "Interceptions per 90", dataI18n: "metrics.interceptions-per-90"},
-    {text: "Interceptions (PAdj)", dataI18n: "metrics.interceptions-(padj)"},
-    {text: "Possessions won per 90", dataI18n: "metrics.possessions-won-per-90"},
-    {text: "Aerial duels per 90", dataI18n: "metrics.aerial-duels-per-90"},
-    {text: "Aerial duels won %", dataI18n: "metrics.aerial-duels-won-pct"},
-    {text: "Aerial duels won per 90", dataI18n: "metrics.aerial-duels-won-per-90"},
-    {text: "Shots blocked per 90", dataI18n: "metrics.shots-blocked-per-90"},
-   
-   
-    {text: "CATEGORY: Discipline", dataI18n: "disciplinary"},
-    {text: "Fouls per 90", dataI18n: "metrics.fouls-per-90"},
-    {text: "Yellow cards per 90", dataI18n: "metrics.yellow-cards-per-90"},
-    {text: "Red cards per 90", dataI18n: "metrics.red-cards-per-90"},
-  
+
     {text: "CATEGORY: Passing", dataI18n: "passing"},
     {text: "Passes per 90", dataI18n: "metrics.passes-per-90"},
     {text: "Pass completion %", dataI18n: "metrics.pass-completion-pct"},
@@ -1573,6 +1575,21 @@ color: #ffffff
     {text: "Progressive actions per 90", dataI18n: "metrics.progressive-actions-per-90"},
     {text: "Progressive action rate", dataI18n: "metrics.progressive-action-rate"},
   
+  
+    {text: "CATEGORY: Defending", dataI18n: "defending"},
+    {text: "Defensive duels per 90", dataI18n: "metrics.defensive-duels-per-90"},
+    {text: "Defensive duels won %", dataI18n: "metrics.defensive-duels-won-pct"},
+    {text: "Defensive duels won per 90", dataI18n: "metrics.defensive-duels-won-per-90"},
+    {text: "Sliding tackles per 90", dataI18n: "metrics.sliding-tackles-per-90"},
+    {text: "Sliding tackles (PAdj)", dataI18n: "metrics.sliding-tackles-(padj)"},
+    {text: "Interceptions per 90", dataI18n: "metrics.interceptions-per-90"},
+    {text: "Interceptions (PAdj)", dataI18n: "metrics.interceptions-(padj)"},
+    {text: "Possessions won per 90", dataI18n: "metrics.possessions-won-per-90"},
+    {text: "Aerial duels per 90", dataI18n: "metrics.aerial-duels-per-90"},
+    {text: "Aerial duels won %", dataI18n: "metrics.aerial-duels-won-pct"},
+    {text: "Aerial duels won per 90", dataI18n: "metrics.aerial-duels-won-per-90"},
+    {text: "Shots blocked per 90", dataI18n: "metrics.shots-blocked-per-90"},
+   
 
     {text: "CATEGORY: Ball Carrying", dataI18n: "dribbling"},
     {text: "Dribbles attempted per 90", dataI18n: "metrics.dribbles-attempted-per-90"},
@@ -1588,7 +1605,7 @@ color: #ffffff
     {text: "Accelerations per 90", dataI18n: "metrics.accelerations-per-90"},
     {text: "Fouls suffered per 90", dataI18n: "metrics.fouls-suffered-per-90"},
  
-
+ 
               
     {text: "CATEGORY: Goal Scoring", dataI18n: "goal-scoring"},
     {text: "Goals per 90", dataI18n: "metrics.goals-per-90"},
@@ -1628,7 +1645,12 @@ color: #ffffff
     {text: "Deep completions per 90", dataI18n: "metrics.deep-completions-per-90"},
 
 
-
+   
+    {text: "CATEGORY: Discipline", dataI18n: "disciplinary"},
+    {text: "Fouls per 90", dataI18n: "metrics.fouls-per-90"},
+    {text: "Yellow cards per 90", dataI18n: "metrics.yellow-cards-per-90"},
+    {text: "Red cards per 90", dataI18n: "metrics.red-cards-per-90"},
+  
   
     {text: "CATEGORY: Set Pieces", dataI18n: "set-pieces"},
     {text: "Free kicks per 90", dataI18n: "metrics.free-kicks-per-90"},
@@ -2066,9 +2088,9 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
 let isFirstFileProcessed = false;
 
 const urls = [
-'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx',
-   'https://datamb.football/database/CURRENT/PRO2425/CB/CB.xlsx',
-'https://datamb.football/database/CURRENT/PRO2025/CB/CB.xlsx',
+'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx',
+   'https://datamb.football/database/CURRENT/PRO2425/CM/CM.xlsx',
+'https://datamb.football/database/CURRENT/PRO2025/CM/CM.xlsx',
 ];
 
 const fetchPromises = urls.map(url => fetch(url).then(response => response.arrayBuffer()));
@@ -2096,7 +2118,7 @@ Promise.all(fetchPromises)
             });
 
             // 3. Insert new columns and fill with appropriate values
-            if (url === 'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx' && !isFirstFileProcessed) {
+            if (url === 'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx' && !isFirstFileProcessed) {
                 // Include header only for the first file ('gk4.xlsx')
                 jsonData.forEach(row => row.unshift(null)); // Insert empty column at the beginning
                 jsonData[0][0] = "ID"; // Set header for the new column
@@ -2121,13 +2143,12 @@ Promise.all(fetchPromises)
             });
 
             // 5. Collect the transformed data (excluding header for non-first 'gk4.xlsx')
-            allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx' ? jsonData : jsonData.slice(1)));
+            allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx' ? jsonData : jsonData.slice(1)));
         });
 
 const leagues = {
  
   
-   
    "MLS": [
     "Columbus Crew",
     "Chicago Fire",
@@ -2433,7 +2454,7 @@ const leagues = {
 ],
 
 "Denmark Superliga": [
-"Brøndby", "Viborg", "Nordsjælland", "København", "Midtjylland", "SønderjyskE", "AaB", "Silkeborg", "Randers", "Lyngby", "Vejle", "AGF", "Sønderjyske"
+"Brøndby", "Viborg", "Nordsjælland", "København", "Midtjylland", "SønderjyskE", "Sønderjyske", "AaB", "Silkeborg", "Randers", "Lyngby", "Vejle", "AGF",
 ],
 
 "Czech Fortuna Liga": [
@@ -2536,9 +2557,9 @@ var header = rows[0].split(',');
 var data = rows.slice(1).map(function(row) {
   return row.split(',').map(function(d, i) {
     if (i >= 3) { // Assuming columns 2 and onwards contain numeric values
-      const parsedValue = parseFloat(d);
-return isNaN(parsedValue) ? 0 : parsedValue;
-    } else {
+        const parsedValue = parseFloat(d);
+        return isNaN(parsedValue) ? 0 : parsedValue;
+        } else {
       return d;
     }
   });
@@ -3034,6 +3055,20 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             // Remove existing circles and labels
             svg.selectAll("circle").remove();
             svg.selectAll(".team-label").remove();
+            
+            // Additional cleanup for Safari to prevent ghost text labels
+            svg.selectAll("text:not(.x-label):not(.y-label)").remove();
+            
+            // Safari-specific fix: Force redraw of the SVG
+            var svgNode = svg.node();
+            if (svgNode && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                // Force browser reflow in Safari
+                svgNode.style.display = 'none';
+                // Trigger browser reflow
+                void svgNode.offsetHeight;
+                svgNode.style.display = '';
+            }
+            
             svg.selectAll(".xy-line").remove(); // Remove any existing diagonal reference line
             svg.selectAll(".xy-line-bg").remove(); // Remove line background
             svg.selectAll(".xy-line-label").remove(); // Remove line label
@@ -3206,22 +3241,27 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // Add circles
             circles = svg.selectAll("circle")
-                .data(filteredData)
+                .data(filteredData, function(d) {
+                    return getPlayerUniqueId(d);
+                })
                 .enter()
                 .append("circle")
-                .attr("cx", function(d) { return xScale(d[header.indexOf(xMetric)]); })
-                .attr("cy", function(d) { return yScale(d[header.indexOf(yMetric)]); })
-                .attr("r", function(d) { 
-             
-                    const value = d[header.indexOf(sizeMetric)];
-                    return value !== undefined ? sizeScale(value) : 8;
+                .attr("cx", function(d) {
+                    return xScale(d[header.indexOf(xMetric)]);
+                })
+                .attr("cy", function(d) {
+                    return yScale(d[header.indexOf(yMetric)]);
+                })
+                .attr("r", function(d) {
+                    if (sizeMetric === "None") {
+                        return 6;
+                    } else {
+                        return sizeScale(d[header.indexOf(sizeMetric)]);
+                    }
                 })
                 .style("fill", function(d) {
-                    // Check if this circle is in the clicked circles array
-                    if (clickedCircles.includes(getPlayerUniqueId(d))) {
-                        return getLeagueColor(d[2]);
-                    }
-                    return "rgba(70, 130, 180, 0.7)";
+                    // Check if this team is in the clickedCircles array
+                    return clickedCircles.includes(getPlayerUniqueId(d)) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
                 })
                 .style("stroke", function(d) {
                     return clickedCircles.includes(getPlayerUniqueId(d)) ? "#000" : "none";
@@ -3231,14 +3271,25 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 })
                 .style("cursor", "pointer")
                 .on("mouseover", function(d) {
-                    // Store the original radius for smoother transition
-                    const originalRadius = sizeMetric === "None" || d[header.indexOf(sizeMetric)] === undefined ? 8 : sizeScale(d[header.indexOf(sizeMetric)]);
                     d3.select(this)
                         .transition()
                         .duration(200)
-                        .attr("r", originalRadius * 1.25)
-                        .style("fill", getLeagueColor(d[2])); // Show league color on hover
-                    
+                        .attr("r", function() {
+                            if (sizeMetric === "None") {
+                                return 8;
+                            } else {
+                                return sizeScale(d[header.indexOf(sizeMetric)]) + 2;
+                            }
+                        });
+                        
+                    // For Safari: Clean up any ghost/errant text elements when hovering
+                    if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                        // Remove any text that doesn't have proper classes
+                        svg.selectAll("text:not(.x-label):not(.y-label):not(.team-label):not(.performance-label):not(.xy-line-label)")
+                           .remove();
+                    }
+                        
+                    // Show tooltip
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", 0.9);
@@ -3387,70 +3438,211 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
-
-            // After all chart updates are done, add temporary overlay for Safari desktop
-            if (isDesktopSafari()) {
-                // Clear SVG artifacts using multiple approaches
-                var allText = svg.selectAll("text");
-                allText.style("visibility", "hidden");
-                allText.attr("transform", null);
-                allText.attr("x", null).attr("y", null);
-                allText.attr("text-anchor", null);
-                allText.style("opacity", null);
-                
-                svg.selectAll(".team-label").remove();
-                svg.selectAll("clipPath").remove();
-                svg.style("display", "none").style("display", "block");
-                d3.select(".chart-container").style("transform", "translateZ(0)");
-                
-                // Create temporary tooltip
-                var tempTooltip = d3.select("body").append("div")
-                    .attr("class", "tooltip")
-                    .style("opacity", "0.9")
-                    .style("pointer-events", "none")
-                    .style("position", "fixed")
-                    .style("left", "50%")
-                    .style("top", "50%")
-                    .style("transform", "translate(-50%, -50%)")
-                    .style("padding", "10px")
-                    .style("font-size", "12px")
-                    .style("background-color", "var(--container-bg)")
-                    .style("border", "1px solid var(--border-color)")
-                    .style("border-radius", "6px")
-                    .style("box-shadow", "var(--shadow)")
-                    .style("z-index", "1000")
-                    .html("<strong>Updating chart...</strong>");
-
-                // Force repaint
-                void tempTooltip.node().offsetHeight;
-
-                // Cleanup after delay
+            
+            // Final Safari-specific cleanup to ensure no ghost text labels remain
+            if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                // Delay slightly to ensure all expected labels are rendered
                 setTimeout(function() {
-                    allText.style("visibility", null);
-                    tempTooltip.transition().duration(500).style("opacity", "0").remove();
+                    // Remove any unclassified text that might be ghost labels
+                    svg.selectAll("text:not(.x-label):not(.y-label):not(.team-label):not(.performance-label):not(.xy-line-label):not(.temp-label)")
+                       .remove();
                     
-                    // Re-add labels after transition
-                    setTimeout(function() {
-                        clickedCircles.forEach(function(uniqueId) {
-                            var teamData = filteredData.find(function(d) {
-                                return getPlayerUniqueId(d) === uniqueId;
-                            });
-                            if (teamData) {
-                                addTeamLabel(teamData, false);
-                            }
-                        });
-                    }, 550);
-                }, 500);
+                    // Force redraw of all valid text elements
+                    svg.selectAll("text.team-label")
+                       .each(function() {
+                           var label = d3.select(this);
+                           label.style("opacity", "0.99")
+                                .transition()
+                                .duration(10)
+                                .style("opacity", "1");
+                       });
+                }, 50);
             }
-        }  // Close updateChart function
+        }
         
-        // Initialize the chart
-        updateChart();
+        // Function to update the "Click All" button icon
+        function updateSelectAllButtonText() {
+            var selectIcon = document.getElementById('select-icon');
+            var selectTooltip = document.getElementById('select-all-tooltip');
+            var allSelected = filteredData.every(function(d) {
+                return clickedCircles.includes(getPlayerUniqueId(d));
+            });
+            
+            if (allSelected) {
+                selectIcon.className = "ion-ios-circle-outline"; // Icon for "Unclick All"
+                if (selectTooltip) {
+                    // Use translations for unselect all teams
+                    if (window.currentTranslations && window.currentTranslations.tooltip) {
+                        selectTooltip.textContent = window.currentTranslations.tooltip.unselectAll || "Unselect all players";
+                    } else {
+                        selectTooltip.textContent = "Unselect all players";
+                    }
+                }
+            } else {
+                selectIcon.className = "ion-ios-circle-filled"; // Icon for "Click All"
+                if (selectTooltip) {
+                    // Use translations for select all teams
+                    if (window.currentTranslations && window.currentTranslations.tooltip) {
+                        selectTooltip.textContent = window.currentTranslations.tooltip.selectAll || "Select all players";
+                    } else {
+                        selectTooltip.textContent = "Select all players";
+                    }
+                }
+            }
+        }
         
-        // Initialize the custom selectors now that data is loaded
-        initializeCustomSelectors(header);
-
-        // Function to reset search
+        // Add event listeners to the selectors
+        selectX.on("change", updateChart);
+        selectY.on("change", updateChart);
+        selectSize.on("change", updateChart);
+        
+        // Function to remove special characters and diacritics for better search matching
+        function removeSpecialCharsAndDiacritics(str) {
+            if (!str) return '';
+            return str.normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+                .replace(/Ø/g, 'O')
+                .replace(/ø/g, 'o');
+        }
+        
+        // Add search functionality
+        var searchBar = document.getElementById("search-bar");
+        
+        searchBar.addEventListener("input", function() {
+            var searchTerm = searchBar.value.toLowerCase();
+            
+            if (searchTerm === '') {
+                resetSearch();
+                return;
+            }
+            
+            // Normalize search term to handle special characters and diacritics
+            var normalizedSearchTerm = removeSpecialCharsAndDiacritics(searchTerm);
+            
+            // Reset previous search styling
+            svg.selectAll("circle").classed("search-match", false)
+                .style("fill", function(d) {
+                    // Restore original fill color
+                    return clickedCircles.includes(getPlayerUniqueId(d)) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
+                })
+                .style("stroke", function(d) {
+                    return clickedCircles.includes(getPlayerUniqueId(d)) ? "#000" : "none";
+                })
+                .style("stroke-width", function(d) {
+                    return clickedCircles.includes(getPlayerUniqueId(d)) ? 2 : 0;
+                })
+                .style("filter", "none")
+                .each(function() {
+                    // Reset any inline styles that might interfere with our animation
+                    d3.select(this).style("r", null);
+                });
+            
+            svg.selectAll(".team-label")
+                .classed("search-match", false)
+                .classed("search-dimmed", false);
+            
+            // Find matching teams
+            var matchingTeams = [];
+            
+            // Apply new search styling
+            svg.selectAll("circle").filter(function(d) {
+                var teamName = d[1].toLowerCase();
+                var normalizedTeamName = removeSpecialCharsAndDiacritics(teamName);
+                
+                // Check if the search term is in the team name
+                var isMatch = normalizedTeamName.includes(normalizedSearchTerm);
+                
+                if (isMatch) {
+                    matchingTeams.push(getPlayerUniqueId(d));
+                }
+                
+                
+                return isMatch;
+            })
+            .classed("search-match", true)
+            .each(function() {
+                // Bring matching circles to front
+                this.parentNode.appendChild(this);
+            });
+            
+            // If we have matches, dim non-matching labels
+            if (matchingTeams.length > 0) {
+                // First dim all labels
+                svg.selectAll(".team-label").classed("search-dimmed", true);
+                
+                // Then highlight matching labels
+                svg.selectAll(".team-label").filter(function() {
+                    var labelText = d3.select(this).text();
+                    // Check if this label corresponds to any of the matching teams
+                    for (var i = 0; i < matchingTeams.length; i++) {
+                        var playerName = getPlayerNameFromId(matchingTeams[i]);
+                        if (labelText === playerName) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .classed("search-match", true)
+                .classed("search-dimmed", false)
+                .each(function() {
+                    // Bring matching labels to front
+                    this.parentNode.appendChild(this);
+                });
+                
+                // Add labels for matching teams that don't have labels yet
+                matchingTeams.forEach(function(uniqueId) {
+                    // Check if this team already has a label
+                    var playerName = getPlayerNameFromId(uniqueId);
+                    var playerId = getPlayerIdFromUniqueId(uniqueId);
+                    var labelClass = "team-label-" + playerId + "-" + playerName.toLowerCase()
+                        .replace(/[^a-z0-9]/g, '-') // Replace any non-alphanumeric character with a hyphen
+                        .replace(/-+/g, '-')        // Replace multiple consecutive hyphens with a single one
+                        .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
+                    
+                    if (svg.select("." + labelClass).size() === 0) {
+                        // Find the team data
+                        var teamData = filteredData.find(function(d) {
+                            return getPlayerUniqueId(d) === uniqueId;
+                        });
+                        
+                        if (teamData) {
+                            // Add the label with isSearchMatch=true to bypass collision detection
+                            addTeamLabel(teamData, true);
+                            // Apply search match styling (now done inside addTeamLabel)
+                        }
+                    }
+                });
+            } else {
+                // No matches found - reset to default state
+                // Remove all team labels
+                svg.selectAll(".team-label").remove();
+                
+                // Re-add labels only for clicked teams, respecting collision detection
+                clickedCircles.forEach(function(uniqueId) {
+                    var teamData = filteredData.find(function(d) {
+                        return getPlayerUniqueId(d) === uniqueId;
+                    });
+                    
+                    if (teamData) {
+                        // Add the label with isSearchMatch=false to respect collision detection
+                        addTeamLabel(teamData, false);
+                    }
+                });
+                
+                // Make sure clicked circles remain highlighted
+                svg.selectAll("circle")
+                    .style("fill", function(d) {
+                        return clickedCircles.includes(getPlayerUniqueId(d)) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
+                    })
+                    .style("stroke", function(d) {
+                        return clickedCircles.includes(getPlayerUniqueId(d)) ? "#000" : "none";
+                    })
+                    .style("stroke-width", function(d) {
+                        return clickedCircles.includes(getPlayerUniqueId(d)) ? 2 : 0;
+                    });
+            }
+        });
+        
         function resetSearch() {
             // Clear the search input field
             searchBar.value = '';
@@ -3516,8 +3708,8 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 medianTooltip.textContent = medianLinesVisible ? "Hide median lines" : "Show median lines";
             }
         });
-
-        function selectAllCircles() {
+        
+                function selectAllCircles() {
             // Check if all circles are already selected
             var allSelected = filteredData.every(function(d) {
                 return clickedCircles.includes(getPlayerUniqueId(d));
@@ -3739,17 +3931,9 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         }
         
 
-        function isDesktopSafari() {
-    const ua = navigator.userAgent;
-    const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
-    return isSafari && !isMobile;
-}
 
  
         function addTeamLabel(d, isSearchMatch) {
-
-            
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
@@ -3764,8 +3948,10 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
     
     // Check if this label already exists (avoid duplicates)
-    if (svg.select("." + teamClass).size() > 0) {
-        return;
+    // For Safari, explicitly remove any existing label with this class first
+    var existingLabel = svg.select("." + teamClass);
+    if (existingLabel.size() > 0) {
+        existingLabel.remove();
     }
     
     // Create the label temporarily to measure its width
@@ -3901,6 +4087,8 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
     // Create the actual label with the chosen position
     var label = svg.append("text")
         .attr("class", "team-label " + teamClass)
+        .attr("data-player-id", playerId)
+        .attr("data-player-name", playerName)
         .attr("x", x + chosenPosition.dx)
         .attr("y", y + chosenPosition.dy)
         .attr("text-anchor", chosenPosition.anchor)
@@ -3924,6 +4112,15 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         x2: bbox.x + bbox.width + 2,
         y2: bbox.y + bbox.height + 2
     });
+    
+    // Safari specific fix: ensure proper rendering
+    if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+        // Force Safari to properly render the text
+        label.style("opacity", "0.99")
+            .transition()
+            .duration(10)
+            .style("opacity", "1");
+    }
 }
 
       
