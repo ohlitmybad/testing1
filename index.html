@@ -3868,6 +3868,8 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
  
    
         function addTeamLabel(d, isSearchMatch) {
+		    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
