@@ -3868,26 +3868,6 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
  
    
         function addTeamLabel(d, isSearchMatch) {
-    // Safari specific optimization
-    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    
-    // For Safari, check if there are any ghost labels with similar text and remove them
-    if (isSafari) {
-        var playerName = d[1];
-        // Find and remove any text elements containing this player name that aren't properly classed
-        svg.selectAll("text").each(function() {
-            var el = d3.select(this);
-            if (!el.classed("team-label") && !el.classed("x-label") && !el.classed("y-label") && 
-                !el.classed("temp-label") && !el.classed("performance-label") && !el.classed("xy-line-label")) {
-                // If this text content matches or contains our player name, remove it
-                var content = el.text();
-                if (content && content.includes(playerName)) {
-                    el.remove();
-                }
-            }
-        });
-    }
-    
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
@@ -3901,18 +3881,9 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         .replace(/-+/g, '-')        // Replace multiple consecutive hyphens with a single one
         .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
     
-    // Aggressively remove any existing label with this class first
-    svg.selectAll("." + teamClass).remove();
-    
-    // For Safari, also remove any potential ghost labels with similar content
-    if (isSafari) {
-        svg.selectAll("text").each(function() {
-            var content = d3.select(this).text().trim();
-            // If this text element contains our player name but is not properly classified
-            if (content === playerName && !d3.select(this).classed("team-label")) {
-                d3.select(this).remove();
-            }
-        });
+    // Check if this label already exists (avoid duplicates)
+    if (svg.select("." + teamClass).size() > 0) {
+        return;
     }
     
     // Create the label temporarily to measure its width
