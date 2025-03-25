@@ -3867,56 +3867,45 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
  
         function addTeamLabel(d, isSearchMatch) {
+    // Add Safari detection
+    const isSafariVendor = navigator.vendor === "Apple Computer, Inc.";
+    const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
+          (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
+    const isSafari = isSafariVendor && !isMobile;
+
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
-    // Create a unique class name for this team's label that includes the player ID
     var uniqueId = getPlayerUniqueId(d);
     var playerName = d[1];
     var playerId = d[0];
     
     var teamClass = "team-label-" + playerId + "-" + playerName.toLowerCase()
-        .replace(/[^a-z0-9]/g, '-') // Replace any non-alphanumeric character with a hyphen
-        .replace(/-+/g, '-')        // Replace multiple consecutive hyphens with a single one
-        .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
     
-    // Check if this label already exists (avoid duplicates)
     if (svg.select("." + teamClass).size() > 0) {
         return;
     }
     
-    // Create temporary element to measure text width
-    var tempContainer;
-    if (isSafari) {
-        tempContainer = document.createElement('div');
-        tempContainer.style.position = 'absolute';
-        tempContainer.style.visibility = 'hidden';
-        tempContainer.style.fontFamily = 'Inter, sans-serif';
-        tempContainer.style.fontSize = '12px';
-        tempContainer.textContent = playerName;
-        document.body.appendChild(tempContainer);
-        var labelWidth = tempContainer.offsetWidth;
-        document.body.removeChild(tempContainer);
-    } else {
-        var tempLabel = svg.append("text")
-            .attr("class", "temp-label")
-            .text(playerName)
-            .style("font-family", "Inter, sans-serif")
-            .style("font-size", "12px")
-            .style("opacity", 0);
-        var labelWidth = tempLabel.node().getComputedTextLength();
-        tempLabel.remove();
-    }
+    var tempLabel = svg.append("text")
+        .attr("class", "temp-label")
+        .text(playerName)
+        .style("font-family", "Inter, sans-serif")
+        .style("font-size", "12px")
+        .style("opacity", 0);
     
-    // Define 4 possible positions (right, left, top, bottom) - closer to the dot
+    var labelWidth = tempLabel.node().getComputedTextLength();
+    tempLabel.remove();
+    
     var positions = [
-        { dx: 8, dy: 0, anchor: "start" },      // Right (closest)
-        { dx: -8, dy: 0, anchor: "end" },       // Left (closest)
-        { dx: 0, dy: -8, anchor: "middle" },    // Top (closest)
-        { dx: 0, dy: 8, anchor: "middle" }      // Bottom (closest)
+        { dx: 8, dy: 0, anchor: "start" },
+        { dx: -8, dy: 0, anchor: "end" },
+        { dx: 0, dy: -8, anchor: "middle" },
+        { dx: 0, dy: 8, anchor: "middle" }
     ];
     
-    // Get all existing labels' bounding boxes for quick collision detection
     var existingLabelBoxes = [];
     svg.selectAll(isSafari ? "foreignObject.team-label" : "text.team-label").each(function() {
         var bbox = this.getBBox();
@@ -3928,22 +3917,17 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         });
     });
     
-    // Find the first non-colliding position
     var chosenPosition = null;
-    var labelHeight = 12; // Approximate height based on font size
-    
-    // Get chart boundaries
+    var labelHeight = 12;
     var chartWidth = width;
     var chartHeight = height;
     
-    // If it's a search match, we'll always show the label regardless of collisions
     if (!isSearchMatch) {
         for (var i = 0; i < positions.length; i++) {
             var pos = positions[i];
             var labelX = x + pos.dx;
             var labelY = y + pos.dy;
             
-            // Calculate label bounds based on anchor
             var labelBox = {
                 x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
                 y1: pos.dy < 0 ? labelY - labelHeight : labelY,
@@ -3951,13 +3935,11 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 y2: pos.dy < 0 ? labelY : labelY + labelHeight
             };
             
-            // Check if label is within chart boundaries
             if (labelBox.x1 < 0 || labelBox.x2 > chartWidth || 
                 labelBox.y1 < 0 || labelBox.y2 > chartHeight) {
                 continue;
             }
             
-            // Check for collisions
             var hasCollision = false;
             for (var j = 0; j < existingLabelBoxes.length; j++) {
                 var existing = existingLabelBoxes[j];
@@ -4020,36 +4002,25 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         }
     }
     
-    // Create the actual label with the chosen position
+    let label;
     if (isSafari) {
-        var foreignObject = svg.append("foreignObject")
+        // Use foreignObject for Safari
+        label = svg.append("foreignObject")
             .attr("class", "team-label " + teamClass)
             .attr("x", x + chosenPosition.dx - (chosenPosition.anchor === "end" ? labelWidth : (chosenPosition.anchor === "middle" ? labelWidth/2 : 0)))
             .attr("y", y + chosenPosition.dy - (chosenPosition.dy < 0 ? labelHeight : 0))
-            .attr("width", labelWidth + 4) // Add small padding
-            .attr("height", labelHeight + 4);
-            
-        var div = foreignObject.append("xhtml:div")
+            .attr("width", labelWidth + 4)
+            .attr("height", labelHeight + 4)
+            .append("xhtml:div")
             .style("font-family", "Inter, sans-serif")
             .style("font-size", "12px")
             .style("font-weight", "500")
             .style("color", "#333")
             .style("white-space", "nowrap")
             .text(playerName);
-            
-        if (isSearchMatch) {
-            foreignObject.classed("search-match", true);
-        }
-        
-        var bbox = foreignObject.node().getBBox();
-        existingLabelBoxes.push({
-            x1: bbox.x - 2,
-            y1: bbox.y - 2,
-            x2: bbox.x + bbox.width + 2,
-            y2: bbox.y + bbox.height + 2
-        });
     } else {
-        var label = svg.append("text")
+        // Use regular text for other browsers
+        label = svg.append("text")
             .attr("class", "team-label " + teamClass)
             .attr("x", x + chosenPosition.dx)
             .attr("y", y + chosenPosition.dy)
@@ -4060,19 +4031,23 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             .style("font-size", "12px")
             .style("font-weight", "500")
             .style("fill", "#333");
-            
-        if (isSearchMatch) {
+    }
+    
+    if (isSearchMatch) {
+        if (isSafari) {
+            label.style("color", "#ff3366");
+        } else {
             label.classed("search-match", true);
         }
-        
-        var bbox = label.node().getBBox();
-        existingLabelBoxes.push({
-            x1: bbox.x - 2,
-            y1: bbox.y - 2,
-            x2: bbox.x + bbox.width + 2,
-            y2: bbox.y + bbox.height + 2
-        });
     }
+        
+    var bbox = (isSafari ? label.node().parentNode : label.node()).getBBox();
+    existingLabelBoxes.push({
+        x1: bbox.x - 2,
+        y1: bbox.y - 2,
+        x2: bbox.x + bbox.width + 2,
+        y2: bbox.y + bbox.height + 2
+    });
 }
 
       
