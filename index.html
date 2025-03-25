@@ -1057,7 +1057,6 @@
             pointer-events: none;
         }
 
-   
         body.dark-mode #SFctr {
 color: #ffffff
 }
@@ -1099,44 +1098,43 @@ color: #ffffff
   top: -15px;
 }
 
-
     </style>
     
     </head>
 <body>
     <script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
-    <div class="container">   
-        
-        <div class="position-switcher-container">
+    <div class="container">
+    
+    <div class="position-switcher-container">
 
-            <a href="https://datamb.football/proplotgk24/" target="_self" rel="noopener noreferrer" class="position-link">
-                <span>GK</span>
-            </a>
-            <a href="https://datamb.football/proplotcb24/" target="_self" rel="noopener noreferrer" class="position-link">
-                <span>CB</span>
-            </a>
+        <a href="https://datamb.football/proplotgk24/" target="_self" rel="noopener noreferrer" class="position-link">
+            <span>GK</span>
+        </a>
 
-            <span class="position-link active" style="user-select: none;">FB</span>
-            
-            <a href="https://datamb.football/proplotcm24/" target="_self" rel="noopener noreferrer" class="position-link">
-                <span>CM</span>
+        <span class="position-link active" style="user-select: none;">CB</span>
+
+        <a href="https://datamb.football/proplotfb24/" target="_self" rel="noopener noreferrer" class="position-link">
+            <span>FB</span>
+        </a>
+        <a href="https://datamb.football/proplotcm24/" target="_self" rel="noopener noreferrer" class="position-link">
+            <span>CM</span>
+        </a>
+        <a href="https://datamb.football/proplotfw24/" target="_self" rel="noopener noreferrer" class="position-link">
+            <span>FW</span>
+        </a>
+        <a href="https://datamb.football/proplotst24/" target="_self" rel="noopener noreferrer" class="position-link">
+            <span>ST</span>
+        </a>
+        <div class="season-selector">
+            <a class="active" style="user-select: none;">
+                <span data-i18n="current">Current</span>
             </a>
-            <a href="https://datamb.football/proplotfw24/" target="_self" rel="noopener noreferrer" class="position-link">
-                <span>FW</span>
+            <div class="season-divider"></div>
+            <a href="https://datamb.football/proplotcb/" target="_self" rel="noopener noreferrer">
+                <span data-i18n="previous">Previous</span>
             </a>
-            <a href="https://datamb.football/proplotst24/" target="_self" rel="noopener noreferrer" class="position-link">
-                <span>ST</span>
-            </a>
-            <div class="season-selector">
-                <a class="active" style="user-select: none;">
-                    <span data-i18n="current">Current</span>
-                </a>
-                <div class="season-divider"></div>
-                <a href="https://datamb.football/proplotfb/" target="_self" rel="noopener noreferrer">
-                    <span data-i18n="previous">Previous</span>
-                </a>
-            </div>
-        </div>     
+        </div>
+    </div>    
         <div class="chart-wrapper">
             <div class="controls">
                 <select id="select-x" style="display: none;"></select>
@@ -1508,8 +1506,8 @@ color: #ffffff
             const customMetricOrder = [
                 { text: "Minutes played", dataI18n: "minutes_played" },
               
-              
 
+  
     {text: "CATEGORY: Defending", dataI18n: "defending"},
     {text: "Defensive duels per 90", dataI18n: "metrics.defensive-duels-per-90"},
     {text: "Defensive duels won %", dataI18n: "metrics.defensive-duels-won-pct"},
@@ -1530,22 +1528,6 @@ color: #ffffff
     {text: "Yellow cards per 90", dataI18n: "metrics.yellow-cards-per-90"},
     {text: "Red cards per 90", dataI18n: "metrics.red-cards-per-90"},
   
-
-    {text: "CATEGORY: Ball Carrying", dataI18n: "dribbling"},
-    {text: "Dribbles attempted per 90", dataI18n: "metrics.dribbles-attempted-per-90"},
-    {text: "Dribble success rate %", dataI18n: "metrics.dribble-success-rate-pct"},
-    {text: "Successful dribbles per 90", dataI18n: "metrics.successful-dribbles-per-90"},
-    {text: "Dribbles per 100 touches", dataI18n: "metrics.dribbles-per-100-touches"},
-    {text: "Successful attacking actions per 90", dataI18n: "metrics.successful-attacking-actions-per-90"},
-    {text: "Offensive duels per 90", dataI18n: "metrics.offensive-duels-per-90"},
-    {text: "Offensive duels won %", dataI18n: "metrics.offensive-duels-won-pct"},
-    {text: "Offensive duels won per 90", dataI18n: "metrics.offensive-duels-won-per-90"},
-    {text: "Progressive carries per 90", dataI18n: "metrics.progressive-carries-per-90"},
-    {text: "Ball-carrying frequency", dataI18n: "metrics.ball-carrying-frequency"},
-    {text: "Accelerations per 90", dataI18n: "metrics.accelerations-per-90"},
-    {text: "Fouls suffered per 90", dataI18n: "metrics.fouls-suffered-per-90"},
- 
- 
     {text: "CATEGORY: Passing", dataI18n: "passing"},
     {text: "Passes per 90", dataI18n: "metrics.passes-per-90"},
     {text: "Pass completion %", dataI18n: "metrics.pass-completion-pct"},
@@ -1591,7 +1573,23 @@ color: #ffffff
     {text: "Progressive actions per 90", dataI18n: "metrics.progressive-actions-per-90"},
     {text: "Progressive action rate", dataI18n: "metrics.progressive-action-rate"},
   
-  
+
+    {text: "CATEGORY: Ball Carrying", dataI18n: "dribbling"},
+    {text: "Dribbles attempted per 90", dataI18n: "metrics.dribbles-attempted-per-90"},
+    {text: "Dribble success rate %", dataI18n: "metrics.dribble-success-rate-pct"},
+    {text: "Successful dribbles per 90", dataI18n: "metrics.successful-dribbles-per-90"},
+    {text: "Dribbles per 100 touches", dataI18n: "metrics.dribbles-per-100-touches"},
+    {text: "Successful attacking actions per 90", dataI18n: "metrics.successful-attacking-actions-per-90"},
+    {text: "Offensive duels per 90", dataI18n: "metrics.offensive-duels-per-90"},
+    {text: "Offensive duels won %", dataI18n: "metrics.offensive-duels-won-pct"},
+    {text: "Offensive duels won per 90", dataI18n: "metrics.offensive-duels-won-per-90"},
+    {text: "Progressive carries per 90", dataI18n: "metrics.progressive-carries-per-90"},
+    {text: "Ball-carrying frequency", dataI18n: "metrics.ball-carrying-frequency"},
+    {text: "Accelerations per 90", dataI18n: "metrics.accelerations-per-90"},
+    {text: "Fouls suffered per 90", dataI18n: "metrics.fouls-suffered-per-90"},
+ 
+
+              
     {text: "CATEGORY: Goal Scoring", dataI18n: "goal-scoring"},
     {text: "Goals per 90", dataI18n: "metrics.goals-per-90"},
     {text: "Non-penalty goals per 90", dataI18n: "metrics.non-penalty-goals-per-90"},
@@ -1628,6 +1626,7 @@ color: #ffffff
     {text: "Accurate crosses per 90", dataI18n: "metrics.accurate-crosses-per-90"},
     {text: "Crosses to box per 90", dataI18n: "metrics.crosses-to-box-per-90"},
     {text: "Deep completions per 90", dataI18n: "metrics.deep-completions-per-90"},
+
 
 
   
@@ -2067,9 +2066,9 @@ if (e.key.length === 1 && e.key.match(/[a-zA-Z0-9%]/)) {
 let isFirstFileProcessed = false;
 
 const urls = [
-'https://datamb.football/database/CURRENT/TOP72425/FB/FB.xlsx',
-   'https://datamb.football/database/CURRENT/PRO2425/FB/FB.xlsx',
-'https://datamb.football/database/CURRENT/PRO2025/FB/FB.xlsx',
+'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx',
+   'https://datamb.football/database/CURRENT/PRO2425/CB/CB.xlsx',
+'https://datamb.football/database/CURRENT/PRO2025/CB/CB.xlsx',
 ];
 
 const fetchPromises = urls.map(url => fetch(url).then(response => response.arrayBuffer()));
@@ -2097,7 +2096,7 @@ Promise.all(fetchPromises)
             });
 
             // 3. Insert new columns and fill with appropriate values
-            if (url === 'https://datamb.football/database/CURRENT/TOP72425/FB/FB.xlsx' && !isFirstFileProcessed) {
+            if (url === 'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx' && !isFirstFileProcessed) {
                 // Include header only for the first file ('gk4.xlsx')
                 jsonData.forEach(row => row.unshift(null)); // Insert empty column at the beginning
                 jsonData[0][0] = "ID"; // Set header for the new column
@@ -2122,7 +2121,7 @@ Promise.all(fetchPromises)
             });
 
             // 5. Collect the transformed data (excluding header for non-first 'gk4.xlsx')
-            allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72425/FB/FB.xlsx' ? jsonData : jsonData.slice(1)));
+            allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx' ? jsonData : jsonData.slice(1)));
         });
 
 const leagues = {
@@ -2434,7 +2433,7 @@ const leagues = {
 ],
 
 "Denmark Superliga": [
-"Brøndby", "Viborg", "Nordsjælland", "København", "Midtjylland", "SønderjyskE", "Sønderjyske", "AaB", "Silkeborg", "Randers", "Lyngby", "Vejle", "AGF",
+"Brøndby", "Viborg", "Nordsjælland", "København", "Midtjylland", "SønderjyskE", "AaB", "Silkeborg", "Randers", "Lyngby", "Vejle", "AGF", "Sønderjyske"
 ],
 
 "Czech Fortuna Liga": [
@@ -3891,7 +3890,10 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         .style("opacity", 0);
     
     var labelWidth = tempLabel.node().getComputedTextLength();
-    tempLabel.remove();
+    tempLabel
+        .style("pointer-events", "none")
+        .attr("transform", "translate(-9999,-9999)")
+        .remove();
     
     // Define 4 possible positions (right, left, top, bottom) - closer to the dot
     var positions = [
@@ -3978,6 +3980,14 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             // If too crowded, skip this label
             if (neighborCount > 3) {
+                // Create a hidden dummy label that will be immediately removed properly
+                // This prevents Safari from showing phantom labels
+                svg.append("text")
+                    .attr("class", "team-label " + teamClass)
+                    .style("opacity", 0)
+                    .style("pointer-events", "none")
+                    .attr("transform", "translate(-9999,-9999)")
+                    .remove();
                 return;
             }
         }
@@ -4240,7 +4250,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
         // Check if device supports touch events (mobile device)
-        document.addEventListener('DOMContentLoaded', function() {
+ document.addEventListener('DOMContentLoaded', function() {
             const isTouchDevice = window.innerWidth < 768; // Common breakpoint for tablets/mobile
             
             if (isTouchDevice) {
