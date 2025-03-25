@@ -3870,7 +3870,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         function addTeamLabel(d, isSearchMatch) {
             const isSafariVendor = navigator.vendor === "Apple Computer, Inc.";
             const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent) || 
-                        (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
+                  (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 0);
             const isSafari = isSafariVendor && !isMobile;
 
             var x = xScale(d[header.indexOf(xMetric)]);
@@ -3913,15 +3913,32 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             // Get all existing labels' bounding boxes for quick collision detection
             var existingLabelBoxes = [];
             
-            // Collect bounding boxes from both text elements and foreignObjects (for Safari)
+            // Collect bounding boxes from all existing labels, regardless of whether they are 
+            // foreignObject (Safari) or text elements (other browsers)
             svg.selectAll(".team-label").each(function() {
-                var bbox = this.getBBox();
-                existingLabelBoxes.push({
-                    x1: bbox.x - 2,
-                    y1: bbox.y - 2,
-                    x2: bbox.x + bbox.width + 2,
-                    y2: bbox.y + bbox.height + 2
-                });
+                try {
+                    var bbox = this.getBBox();
+                    existingLabelBoxes.push({
+                        x1: bbox.x - 2,
+                        y1: bbox.y - 2,
+                        x2: bbox.x + bbox.width + 2,
+                        y2: bbox.y + bbox.height + 2
+                    });
+                } catch (e) {
+                    // If getBBox fails, try to approximate based on attributes
+                    var elem = d3.select(this);
+                    var x = parseFloat(elem.attr("x") || 0);
+                    var y = parseFloat(elem.attr("y") || 0);
+                    var width = parseFloat(elem.attr("width") || 0);
+                    var height = parseFloat(elem.attr("height") || 0);
+                    
+                    existingLabelBoxes.push({
+                        x1: x - 2,
+                        y1: y - 2,
+                        x2: x + width + 2,
+                        y2: y + height + 2
+                    });
+                }
             });
             
             // Find the first non-colliding position
@@ -3987,7 +4004,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                         }
                     });
                     
-                    // If too crowded, skip this label
+                    // If too crowded, skip this label entirely
                     if (neighborCount > 3) {
                         return;
                     }
@@ -4023,10 +4040,15 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 }
             }
             
+            // Safari-specific fixes for collision detection
+            if (isSafari && !isSearchMatch && chosenPosition === null) {
+                // If we couldn't find a non-colliding position for Safari, skip this label
+                return;
+            }
+            
             // Create the actual label with the chosen position
             var label;
             
-            // For Safari, use a similar approach to maintain consistent behavior with other browsers
             if (isSafari) {
                 // Create a foreignObject with the team-label class
                 label = svg.append("foreignObject")
@@ -4047,6 +4069,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                     
                 // Apply consistent search match styling
                 if (isSearchMatch) {
+                    div.style("color", "#ff3333");
                     label.classed("search-match", true);
                 }
                 
@@ -4083,19 +4106,32 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 // If it's a search match, add the search-match class
                 if (isSearchMatch) {
                     label.classed("search-match", true);
-      
+                    label.style("fill", "#ff3333");
                 }
             }
             
-            // Add this label's bounding box to the collection for future labels
-            var bbox = label.node().getBBox();
-            
-            existingLabelBoxes.push({
-                x1: bbox.x - 2,
-                y1: bbox.y - 2,
-                x2: bbox.x + bbox.width + 2,
-                y2: bbox.y + bbox.height + 2
-            });
+            try {
+                // Add this label's bounding box to the collection for future labels
+                var bbox = label.node().getBBox();
+                
+                existingLabelBoxes.push({
+                    x1: bbox.x - 2,
+                    y1: bbox.y - 2,
+                    x2: bbox.x + bbox.width + 2,
+                    y2: bbox.y + bbox.height + 2
+                });
+            } catch (e) {
+                // If getBBox fails (can happen in Safari), approximate based on label attributes
+                var x = parseFloat(label.attr("x") || 0);
+                var y = parseFloat(label.attr("y") || 0);
+                
+                existingLabelBoxes.push({
+                    x1: x - 2,
+                    y1: y - 2,
+                    x2: x + labelWidth + 2,
+                    y2: y + labelHeight + 2
+                });
+            }
         }
 
       
