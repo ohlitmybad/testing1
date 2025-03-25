@@ -3871,7 +3871,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         }
 
         function addTeamLabel(d, isSearchMatch) {
-            // Get the unique ID and class name first - this is needed for both paths
+            // Get the unique ID and class name first
             var uniqueId = getPlayerUniqueId(d);
             var playerName = d[1];
             var playerId = d[0];
@@ -3881,39 +3881,27 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 .replace(/-+/g, '-')
                 .replace(/^-|-$/g, '');
             
-            // Check for existing label - do this check first for both paths
-            if (svg.select("." + teamClass).size() > 0) {
-                return;
+            // For Safari: Force clear any potential artifacts by removing and re-adding the class
+            if (isDesktopSafari()) {
+                var existingLabel = svg.select("." + teamClass);
+                if (existingLabel.size() > 0) {
+                    existingLabel.remove();
+                }
+                // Force a repaint in Safari
+                svg.style("display", "none");
+                svg.node().offsetHeight; // Force reflow
+                svg.style("display", "block");
+            } else {
+                // For other browsers, just check if label exists
+                if (svg.select("." + teamClass).size() > 0) {
+                    return;
+                }
             }
 
             // Get the coordinates
             var x = xScale(d[header.indexOf(xMetric)]);
             var y = yScale(d[header.indexOf(yMetric)]);
 
-            // If it's desktop Safari, use simplified label placement
-            if (isDesktopSafari()) {
-                // Create the label with fixed right-side placement
-                var label = svg.append("text")
-                    .attr("class", "team-label " + teamClass)
-                    .attr("x", x + 8)
-                    .attr("y", y)
-                    .attr("text-anchor", "start")
-                    .attr("dominant-baseline", "middle")
-                    .text(playerName)
-                    .style("font-family", "Inter, sans-serif")
-                    .style("font-size", "12px")
-                    .style("font-weight", "500")
-                    .style("fill", "#333");
-                    
-                if (isSearchMatch) {
-                    label.classed("search-match", true);
-                }
-                
-                return;
-            }
-            
-            // Non-Safari browsers: Use complex label placement logic
-            
             // Create the label temporarily to measure its width
             var tempLabel = svg.append("text")
                 .attr("class", "temp-label")
@@ -3924,43 +3912,87 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             
             var labelWidth = tempLabel.node().getComputedTextLength();
             tempLabel.remove();
-            
-            // Define 4 possible positions (right, left, top, bottom) - closer to the dot
-            var positions = [
-                { dx: 8, dy: 0, anchor: "start" },      // Right (closest)
-                { dx: -8, dy: 0, anchor: "end" },       // Left (closest)
-                { dx: 0, dy: -8, anchor: "middle" },    // Top (closest)
-                { dx: 0, dy: 8, anchor: "middle" }      // Bottom (closest)
+
+            // Simplified positioning for Safari
+            if (isDesktopSafari()) {
+                var chosenPosition = { dx: 8, dy: 0, anchor: "start" };  // Default right
+                
+                // Simple boundary check
+                var rightEdge = x + 8 + labelWidth;
+                if (rightEdge > width) {
+                    chosenPosition = { dx: -8, dy: 0, anchor: "end" };  // Switch to left
+                }
+
+                // Create the actual label
+                var label = svg.append("text")
+                    .attr("class", "team-label " + teamClass)
+                    .attr("x", x + chosenPosition.dx)
+                    .attr("y", y)
+                    .attr("text-anchor", chosenPosition.anchor)
+                    .attr("dominant-baseline", "middle")
+                    .text(playerName)
+                    .style("font-family", "Inter, sans-serif")
+                    .style("font-size", "12px")
+                    .style("font-weight", "500")
+                    .style("fill", "#333");
+
+                if (isSearchMatch) {
+                    label.classed("search-match", true);
+                }
+
+                return;
+            }
+
+            // Regular positioning logic for other browsers continues below...
+            // ... rest of the original non-Safari code ...
+
+            // Define positions - simplified for Safari
+            var positions = isDesktopSafari() ? [
+                { dx: 8, dy: 0, anchor: "start" },      // Right
+                { dx: -8, dy: 0, anchor: "end" }        // Left
+            ] : [
+                { dx: 8, dy: 0, anchor: "start" },      // Right
+                { dx: -8, dy: 0, anchor: "end" },       // Left
+                { dx: 0, dy: -8, anchor: "middle" },    // Top
+                { dx: 0, dy: 8, anchor: "middle" }      // Bottom
             ];
-            
-            // Get all existing labels' bounding boxes for quick collision detection
-            var existingLabelBoxes = [];
-            svg.selectAll("text.team-label").each(function() {
-                var bbox = this.getBBox();
-                existingLabelBoxes.push({
-                    x1: bbox.x - 2,
-                    y1: bbox.y - 2,
-                    x2: bbox.x + bbox.width + 2,
-                    y2: bbox.y + bbox.height + 2
-                });
-            });
-            
-            // Find the first non-colliding position
-            var chosenPosition = null;
-            var labelHeight = 12; // Approximate height based on font size
-            
+
             // Get chart boundaries
             var chartWidth = width;
             var chartHeight = height;
             
-            // If it's a search match, we'll always show the label regardless of collisions
-            if (!isSearchMatch) {
+            // Initialize variables
+            var chosenPosition = null;
+            var labelHeight = 12;
+
+            // If it's a search match or Safari, use simpler placement
+            if (isSearchMatch || isDesktopSafari()) {
+                chosenPosition = positions[0]; // Default to right position
+                
+                // Simple boundary check
+                var rightEdge = x + 8 + labelWidth;
+                if (rightEdge > chartWidth) {
+                    chosenPosition = positions[1]; // Use left position if right edge would overflow
+                }
+            } else {
+                // Full collision detection for non-Safari browsers
+                var existingLabelBoxes = [];
+                svg.selectAll("text.team-label").each(function() {
+                    var bbox = this.getBBox();
+                    existingLabelBoxes.push({
+                        x1: bbox.x - 2,
+                        y1: bbox.y - 2,
+                        x2: bbox.x + bbox.width + 2,
+                        y2: bbox.y + bbox.height + 2
+                    });
+                });
+
+                // Try each position
                 for (var i = 0; i < positions.length; i++) {
                     var pos = positions[i];
                     var labelX = x + pos.dx;
                     var labelY = y + pos.dy;
                     
-                    // Calculate label bounds based on anchor
                     var labelBox = {
                         x1: pos.anchor === "end" ? labelX - labelWidth : (pos.anchor === "middle" ? labelX - labelWidth/2 : labelX),
                         y1: pos.dy < 0 ? labelY - labelHeight : labelY,
@@ -3968,13 +4000,11 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                         y2: pos.dy < 0 ? labelY : labelY + labelHeight
                     };
                     
-                    // Check if label is within chart boundaries
                     if (labelBox.x1 < 0 || labelBox.x2 > chartWidth || 
                         labelBox.y1 < 0 || labelBox.y2 > chartHeight) {
-                        continue; // Skip this position if label would be outside chart
+                        continue;
                     }
                     
-                    // Check for collisions
                     var hasCollision = false;
                     for (var j = 0; j < existingLabelBoxes.length; j++) {
                         var existing = existingLabelBoxes[j];
@@ -3990,85 +4020,29 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                         break;
                     }
                 }
-                
-                // If all positions have collisions, check if there are too many neighbors
+
+                // If no position works, use default right position
                 if (!chosenPosition) {
-                    // Count nearby labels (within a certain radius)
-                    var radius = 50; // Adjust based on chart density
-                    var neighborCount = 0;
-                    
-                    existingLabelBoxes.forEach(function(box) {
-                        var centerX = (box.x1 + box.x2) / 2;
-                        var centerY = (box.y1 + box.y2) / 2;
-                        var distance = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
-                        
-                        if (distance < radius) {
-                            neighborCount++;
-                        }
-                    });
-                    
-                    // If too crowded, skip this label
-                    if (neighborCount > 3) {
-                        return;
-                    }
+                    chosenPosition = positions[0];
                 }
             }
             
-            // Use the default right position if no non-colliding position was found or if it's a search match
-            if (!chosenPosition) {
-                chosenPosition = positions[0];
-                
-                // For edge cases, adjust the position to keep label within bounds
-                var labelX = x + chosenPosition.dx;
-                var labelY = y + chosenPosition.dy;
-                
-                var labelBox = {
-                    x1: chosenPosition.anchor === "end" ? labelX - labelWidth : (chosenPosition.anchor === "middle" ? labelX - labelWidth/2 : labelX),
-                    y1: chosenPosition.dy < 0 ? labelY - labelHeight : labelY,
-                    x2: chosenPosition.anchor === "start" ? labelX + labelWidth : (chosenPosition.anchor === "middle" ? labelX + labelWidth/2 : labelX),
-                    y2: chosenPosition.dy < 0 ? labelY : labelY + labelHeight
-                };
-                
-                // Adjust position if needed to keep within bounds
-                if (labelBox.x1 < 0) {
-                    chosenPosition = positions[0]; // Use right position
-                } else if (labelBox.x2 > chartWidth) {
-                    chosenPosition = positions[1]; // Use left position
-                }
-                
-                if (labelBox.y1 < 0) {
-                    chosenPosition = positions[3]; // Use bottom position
-                } else if (labelBox.y2 > chartHeight) {
-                    chosenPosition = positions[2]; // Use top position
-                }
-            }
-            
-            // Create the actual label with the chosen position
+            // Create the actual label
             var label = svg.append("text")
                 .attr("class", "team-label " + teamClass)
                 .attr("x", x + chosenPosition.dx)
                 .attr("y", y + chosenPosition.dy)
                 .attr("text-anchor", chosenPosition.anchor)
-                .attr("dominant-baseline", chosenPosition.dy < 0 ? "auto" : "hanging")
+                .attr("dominant-baseline", chosenPosition.dy < 0 ? "auto" : "middle")
                 .text(playerName)
                 .style("font-family", "Inter, sans-serif")
                 .style("font-size", "12px")
                 .style("font-weight", "500")
                 .style("fill", "#333");
             
-            // If it's a search match, add the search-match class
             if (isSearchMatch) {
                 label.classed("search-match", true);
             }
-                
-            // Add this label's bounding box to the collection for future labels
-            var bbox = label.node().getBBox();
-            existingLabelBoxes.push({
-                x1: bbox.x - 2,
-                y1: bbox.y - 2,
-                x2: bbox.x + bbox.width + 2,
-                y2: bbox.y + bbox.height + 2
-            });
         }
 
       
