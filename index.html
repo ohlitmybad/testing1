@@ -3394,7 +3394,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 const tempTooltip = d3.select("body")
                     .append("div")
                     .attr("class", "tooltip")
-                    .style("opacity", "0.1")  // Slightly visible
+                    .style("opacity", "1")  // Fully visible
                     .style("pointer-events", "none")
                     .style("position", "fixed")
                     .style("left", "0")
@@ -3402,12 +3402,13 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                     .style("width", "100%")
                     .style("height", "100%")
                     .style("z-index", "9999")
-                    .style("background-color", "#3498db"); // Blue color
+                    .style("background-color", "var(--container-bg)") // Use theme background color
+                    .style("border", "1px solid var(--border-color)"); // Add border like regular tooltip
 
                 // Remove the temporary tooltip after a very short delay
                 setTimeout(() => {
                     tempTooltip.remove();
-                }, 50);
+                }, 500);
             }
         }
         
