@@ -3390,13 +3390,25 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
             // After all chart updates are done, add temporary overlay for Safari desktop
             if (isDesktopSafari()) {
-                // Create a temporary tooltip on the body (like our regular tooltip)
-                const tempTooltip = d3.select("body")
-                    .append("div")
+                // Clear SVG artifacts using multiple approaches
+                var allText = svg.selectAll("text");
+                allText.style("visibility", "hidden");
+                allText.attr("transform", null);
+                allText.attr("x", null).attr("y", null);
+                allText.attr("text-anchor", null);
+                allText.style("opacity", null);
+                
+                svg.selectAll(".team-label").remove();
+                svg.selectAll("clipPath").remove();
+                svg.style("display", "none").style("display", "block");
+                d3.select(".chart-container").style("transform", "translateZ(0)");
+                
+                // Create temporary tooltip
+                var tempTooltip = d3.select("body").append("div")
                     .attr("class", "tooltip")
                     .style("opacity", "0.9")
                     .style("pointer-events", "none")
-                    .style("position", "fixed") // Use fixed positioning
+                    .style("position", "fixed")
                     .style("left", "50%")
                     .style("top", "50%")
                     .style("transform", "translate(-50%, -50%)")
@@ -3409,199 +3421,26 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                     .style("z-index", "1000")
                     .html("<strong>Updating chart...</strong>");
 
-                // Force a repaint by accessing offsetHeight
-                tempTooltip.node().offsetHeight;
+                // Force repaint
+                void tempTooltip.node().offsetHeight;
 
-                // Remove the temporary tooltip after a short delay
-                setTimeout(() => {
-                    tempTooltip.transition()
-                        .duration(500)
-                        .style("opacity", "0")
-                        .remove();
-                }, 500);
-            }
-        }
-        
-        // Function to update the "Click All" button icon
-        function updateSelectAllButtonText() {
-            var selectIcon = document.getElementById('select-icon');
-            var selectTooltip = document.getElementById('select-all-tooltip');
-            var allSelected = filteredData.every(function(d) {
-                return clickedCircles.includes(getPlayerUniqueId(d));
-            });
-            
-            if (allSelected) {
-                selectIcon.className = "ion-ios-circle-outline"; // Icon for "Unclick All"
-                if (selectTooltip) {
-                    // Use translations for unselect all teams
-                    if (window.currentTranslations && window.currentTranslations.tooltip) {
-                        selectTooltip.textContent = window.currentTranslations.tooltip.unselectAll || "Unselect all players";
-                    } else {
-                        selectTooltip.textContent = "Unselect all players";
-                    }
-                }
-            } else {
-                selectIcon.className = "ion-ios-circle-filled"; // Icon for "Click All"
-                if (selectTooltip) {
-                    // Use translations for select all teams
-                    if (window.currentTranslations && window.currentTranslations.tooltip) {
-                        selectTooltip.textContent = window.currentTranslations.tooltip.selectAll || "Select all players";
-                    } else {
-                        selectTooltip.textContent = "Select all players";
-                    }
-                }
-            }
-        }
-        
-        // Add event listeners to the selectors
-        selectX.on("change", updateChart);
-        selectY.on("change", updateChart);
-        selectSize.on("change", updateChart);
-        
-        // Function to remove special characters and diacritics for better search matching
-        function removeSpecialCharsAndDiacritics(str) {
-            if (!str) return '';
-            return str.normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
-                .replace(/Ø/g, 'O')
-                .replace(/ø/g, 'o');
-        }
-        
-        // Add search functionality
-        var searchBar = document.getElementById("search-bar");
-        
-        searchBar.addEventListener("input", function() {
-            var searchTerm = searchBar.value.toLowerCase();
-            
-            if (searchTerm === '') {
-                resetSearch();
-                return;
-            }
-            
-            // Normalize search term to handle special characters and diacritics
-            var normalizedSearchTerm = removeSpecialCharsAndDiacritics(searchTerm);
-            
-            // Reset previous search styling
-            svg.selectAll("circle").classed("search-match", false)
-                .style("fill", function(d) {
-                    // Restore original fill color
-                    return clickedCircles.includes(getPlayerUniqueId(d)) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
-                })
-                .style("stroke", function(d) {
-                    return clickedCircles.includes(getPlayerUniqueId(d)) ? "#000" : "none";
-                })
-                .style("stroke-width", function(d) {
-                    return clickedCircles.includes(getPlayerUniqueId(d)) ? 2 : 0;
-                })
-                .style("filter", "none")
-                .each(function() {
-                    // Reset any inline styles that might interfere with our animation
-                    d3.select(this).style("r", null);
-                });
-            
-            svg.selectAll(".team-label")
-                .classed("search-match", false)
-                .classed("search-dimmed", false);
-            
-            // Find matching teams
-            var matchingTeams = [];
-            
-            // Apply new search styling
-            svg.selectAll("circle").filter(function(d) {
-                var teamName = d[1].toLowerCase();
-                var normalizedTeamName = removeSpecialCharsAndDiacritics(teamName);
-                
-                // Check if the search term is in the team name
-                var isMatch = normalizedTeamName.includes(normalizedSearchTerm);
-                
-                if (isMatch) {
-                    matchingTeams.push(getPlayerUniqueId(d));
-                }
-                
-                
-                return isMatch;
-            })
-            .classed("search-match", true)
-            .each(function() {
-                // Bring matching circles to front
-                this.parentNode.appendChild(this);
-            });
-            
-            // If we have matches, dim non-matching labels
-            if (matchingTeams.length > 0) {
-                // First dim all labels
-                svg.selectAll(".team-label").classed("search-dimmed", true);
-                
-                // Then highlight matching labels
-                svg.selectAll(".team-label").filter(function() {
-                    var labelText = d3.select(this).text();
-                    // Check if this label corresponds to any of the matching teams
-                    for (var i = 0; i < matchingTeams.length; i++) {
-                        var playerName = getPlayerNameFromId(matchingTeams[i]);
-                        if (labelText === playerName) {
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .classed("search-match", true)
-                .classed("search-dimmed", false)
-                .each(function() {
-                    // Bring matching labels to front
-                    this.parentNode.appendChild(this);
-                });
-                
-                // Add labels for matching teams that don't have labels yet
-                matchingTeams.forEach(function(uniqueId) {
-                    // Check if this team already has a label
-                    var playerName = getPlayerNameFromId(uniqueId);
-                    var playerId = getPlayerIdFromUniqueId(uniqueId);
-                    var labelClass = "team-label-" + playerId + "-" + playerName.toLowerCase()
-                        .replace(/[^a-z0-9]/g, '-') // Replace any non-alphanumeric character with a hyphen
-                        .replace(/-+/g, '-')        // Replace multiple consecutive hyphens with a single one
-                        .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
+                // Cleanup after delay
+                setTimeout(function() {
+                    allText.style("visibility", null);
+                    tempTooltip.transition().duration(500).style("opacity", "0").remove();
                     
-                    if (svg.select("." + labelClass).size() === 0) {
-                        // Find the team data
-                        var teamData = filteredData.find(function(d) {
-                            return getPlayerUniqueId(d) === uniqueId;
+                    // Re-add labels after transition
+                    setTimeout(function() {
+                        clickedCircles.forEach(function(uniqueId) {
+                            var teamData = filteredData.find(function(d) {
+                                return getPlayerUniqueId(d) === uniqueId;
+                            });
+                            if (teamData) {
+                                addTeamLabel(teamData, false);
+                            }
                         });
-                        
-                        if (teamData) {
-                            // Add the label with isSearchMatch=true to bypass collision detection
-                            addTeamLabel(teamData, true);
-                            // Apply search match styling (now done inside addTeamLabel)
-                        }
-                    }
-                });
-            } else {
-                // No matches found - reset to default state
-                // Remove all team labels
-                svg.selectAll(".team-label").remove();
-                
-                // Re-add labels only for clicked teams, respecting collision detection
-                clickedCircles.forEach(function(uniqueId) {
-                    var teamData = filteredData.find(function(d) {
-                        return getPlayerUniqueId(d) === uniqueId;
-                    });
-                    
-                    if (teamData) {
-                        // Add the label with isSearchMatch=false to respect collision detection
-                        addTeamLabel(teamData, false);
-                    }
-                });
-                
-                // Make sure clicked circles remain highlighted
-                svg.selectAll("circle")
-                    .style("fill", function(d) {
-                        return clickedCircles.includes(getPlayerUniqueId(d)) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
-                    })
-                    .style("stroke", function(d) {
-                        return clickedCircles.includes(getPlayerUniqueId(d)) ? "#000" : "none";
-                    })
-                    .style("stroke-width", function(d) {
-                        return clickedCircles.includes(getPlayerUniqueId(d)) ? 2 : 0;
-                    });
+                    }, 550);
+                }, 500);
             }
         });
         
