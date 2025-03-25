@@ -3892,15 +3892,10 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
             // If it's desktop Safari, use simplified label placement
             if (isDesktopSafari()) {
-                // Double-check for existing label again
-                if (svg.select("." + teamClass).size() > 0) {
-                    return;
-                }
-
-                // Simple right-side label placement
+                // Create the label with fixed right-side placement
                 var label = svg.append("text")
                     .attr("class", "team-label " + teamClass)
-                    .attr("x", x + 8)  // Fixed right position
+                    .attr("x", x + 8)
                     .attr("y", y)
                     .attr("text-anchor", "start")
                     .attr("dominant-baseline", "middle")
