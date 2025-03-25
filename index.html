@@ -3388,47 +3388,25 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
 
-            // After all chart updates are done, reapply clicked circles for Safari desktop
+            // After all chart updates are done, add temporary overlay for Safari desktop
             if (isDesktopSafari()) {
-                // Create a temporary invisible tooltip that covers the entire chart area
+                // Create a temporary colored overlay that covers the entire viewport
                 const tempTooltip = d3.select("body")
                     .append("div")
                     .attr("class", "tooltip")
-                    .style("opacity", "0.01")  // Nearly invisible but still triggers repaint
+                    .style("opacity", "0.1")  // Slightly visible
                     .style("pointer-events", "none")
                     .style("position", "fixed")
                     .style("left", "0")
                     .style("top", "0")
                     .style("width", "100%")
                     .style("height", "100%")
-                    .style("z-index", "9999");
+                    .style("z-index", "9999")
+                    .style("background-color", "#3498db"); // Blue color
 
                 // Remove the temporary tooltip after a very short delay
                 setTimeout(() => {
                     tempTooltip.remove();
-                    
-                    // Now reapply the clicked circles
-                    if (tempClickedCircles.length > 0) {
-                        tempClickedCircles.forEach(uniqueId => {
-                            var teamData = filteredData.find(d => getPlayerUniqueId(d) === uniqueId);
-                            if (teamData) {
-                                // Find and click the circle
-                                svg.selectAll("circle")
-                                    .filter(d => getPlayerUniqueId(d) === uniqueId)
-                                    .each(function(d) {
-                                        clickedCircles.push(uniqueId);
-                                        d3.select(this)
-                                            .style("fill", getLeagueColor(d[2]))
-                                            .style("stroke", "#000")
-                                            .style("stroke-width", 2);
-                                        addTeamLabel(d, false);
-                                    });
-                            }
-                        });
-                        // Update button text and legend after re-clicking
-                        updateSelectAllButtonText();
-                        updateLeagueLegend(document.getElementById("select-league").value);
-                    }
                 }, 50);
             }
         }
