@@ -4087,20 +4087,8 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
     
     // Add this label's bounding box to the collection for future labels
     var bbox;
-    if (isSafari) {
-        // Get the actual positioned coordinates after adjustments
-        var labelX = parseFloat(label.attr("x"));
-        var labelY = parseFloat(label.attr("y"));
-        
-        bbox = {
-            x: labelX,
-            y: labelY,
-            width: labelWidth,
-            height: labelHeight
-        };
-    } else {
-        bbox = label.node().getBBox();
-    }
+ bbox = label.node().getBBox();
+
     
     existingLabelBoxes.push({
         x1: bbox.x - 2,
