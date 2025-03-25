@@ -3862,7 +3862,58 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
 
  
+        // Function to detect Safari browser on desktop
+        function isDesktopSafari() {
+            const ua = navigator.userAgent;
+            const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
+            return isSafari && !isMobile;
+        }
+
         function addTeamLabel(d, isSearchMatch) {
+            // If it's desktop Safari, use simplified label placement
+            if (isDesktopSafari()) {
+                var x = xScale(d[header.indexOf(xMetric)]);
+                var y = yScale(d[header.indexOf(yMetric)]);
+                
+                var uniqueId = getPlayerUniqueId(d);
+                var playerName = d[1];
+                var playerId = d[0];
+                
+                var teamClass = "team-label-" + playerId + "-" + playerName.toLowerCase()
+                    .replace(/[^a-z0-9]/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+                
+                // Check for existing label
+                if (svg.select("." + teamClass).size() > 0) {
+                    return;
+                }
+                
+                // Simple right-side label placement
+                var label = svg.append("text")
+                    .attr("class", "team-label " + teamClass)
+                    .attr("x", x + 8)  // Fixed right position
+                    .attr("y", y)
+                    .attr("text-anchor", "start")
+                    .attr("dominant-baseline", "middle")
+                    .text(playerName)
+                    .style("font-family", "Inter, sans-serif")
+                    .style("font-size", "12px")
+                    .style("font-weight", "500")
+                    .style("fill", "#333");
+                    
+                if (isSearchMatch) {
+                    label.classed("search-match", true);
+                }
+                
+                return;
+            }
+            
+            // Original complex label placement logic for non-Safari browsers
+            var x = xScale(d[header.indexOf(xMetric)]);
+            var y = yScale(d[header.indexOf(yMetric)]);
+    
     var x = xScale(d[header.indexOf(xMetric)]);
     var y = yScale(d[header.indexOf(yMetric)]);
     
@@ -3890,7 +3941,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
         .style("opacity", 0);
     
     var labelWidth = tempLabel.node().getComputedTextLength();
-   
+    tempLabel.remove();
     
     // Define 4 possible positions (right, left, top, bottom) - closer to the dot
     var positions = [
