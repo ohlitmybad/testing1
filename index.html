@@ -3443,7 +3443,11 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 }, 500);
             }
         }  // Close updateChart function
+        updateChart();
         
+        // Initialize the custom selectors now that data is loaded
+        initializeCustomSelectors(header);
+
         function resetSearch() {
             // Clear the search input field
             searchBar.value = '';
