@@ -3912,23 +3912,7 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 return;
             }
             
-            // Original complex label placement logic for non-Safari browsers
-            // ... rest of the original function ...
-
-            // Create a unique class name for this team's label that includes the player ID
-            var uniqueId = getPlayerUniqueId(d);
-            var playerName = d[1];
-            var playerId = d[0];
-            
-            var teamClass = "team-label-" + playerId + "-" + playerName.toLowerCase()
-                .replace(/[^a-z0-9]/g, '-') // Replace any non-alphanumeric character with a hyphen
-                .replace(/-+/g, '-')        // Replace multiple consecutive hyphens with a single one
-                .replace(/^-|-$/g, '');     // Remove leading and trailing hyphens
-            
-            // Check if this label already exists (avoid duplicates)
-            if (svg.select("." + teamClass).size() > 0) {
-                return;
-            }
+            // Non-Safari browsers: Use complex label placement logic
             
             // Create the label temporarily to measure its width
             var tempLabel = svg.append("text")
@@ -4008,7 +3992,6 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 }
                 
                 // If all positions have collisions, check if there are too many neighbors
-                // If so, skip this label entirely
                 if (!chosenPosition) {
                     // Count nearby labels (within a certain radius)
                     var radius = 50; // Adjust based on chart density
