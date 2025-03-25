@@ -10,6 +10,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
     <style>
+        /* First, add Safari-specific search match styles */
+.team-label.search-match div {
+    font-weight: 700 !important;
+    color: #ff3366 !important;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 1));
+    opacity: 1 !important;
+    animation: labelPulse 1.5s infinite ease-in-out;
+}
+
+.dark-mode .team-label.search-match div {
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 1));
+}
         :root {
             --primary-color: #3498db;
             --secondary-color: #2ecc71;
@@ -4028,20 +4040,41 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
     
     let label;
     if (isSafari) {
-        // Use foreignObject for Safari
-        label = svg.append("foreignObject")
-            .attr("class", "team-label " + teamClass)
-            .attr("x", x + chosenPosition.dx - (chosenPosition.anchor === "end" ? labelWidth : (chosenPosition.anchor === "middle" ? labelWidth/2 : 0)))
-            .attr("y", y + chosenPosition.dy - (chosenPosition.dy < 0 ? labelHeight : 0))
+        // Calculate adjusted positions for overflow
+        let xPos = x + chosenPosition.dx - (chosenPosition.anchor === "end" ? labelWidth : (chosenPosition.anchor === "middle" ? labelWidth/2 : 0));
+        if (xPos + labelWidth > chartWidth) {
+            xPos = x - labelWidth - 8;
+        } else if (xPos < 0) {
+            xPos = x + 8;
+        }
+        
+        let yPos = y + chosenPosition.dy - (chosenPosition.dy < 0 ? labelHeight : 0);
+        if (yPos + labelHeight > chartHeight) {
+            yPos = y - labelHeight - 8;
+        } else if (yPos < 0) {
+            yPos = y + 8;
+        }
+        
+        // Use foreignObject for Safari with adjusted positions
+        let foreignObject = svg.append("foreignObject")
+            .attr("class", "team-label " + teamClass + (isSearchMatch ? " search-match" : ""))
+            .attr("x", xPos)
+            .attr("y", yPos)
             .attr("width", labelWidth + 4)
-            .attr("height", labelHeight + 4)
-            .append("xhtml:div")
+            .attr("height", labelHeight + 4);
+            
+        label = foreignObject.append("xhtml:div")
             .style("font-family", "Inter, sans-serif")
             .style("font-size", "12px")
             .style("font-weight", "500")
             .style("color", "#333")
             .style("white-space", "nowrap")
             .text(playerName);
+            
+        if (isSearchMatch) {
+            label.style("color", "#ff3366")
+                 .style("font-weight", "700");
+        }
     } else {
         // Use regular text for other browsers
         label = svg.append("text")
@@ -4330,6 +4363,54 @@ function getPlayerIdFromUniqueId(uniqueId) {
     // Extract the ID part before the first dash
     return uniqueId.substring(0, uniqueId.indexOf('-'));
 }
+
+
+
+/* Then modify the addTeamLabel function's Safari branch */
+if (isSafari) {
+    // Use foreignObject for Safari
+    label = svg.append("foreignObject")
+        .attr("class", "team-label " + teamClass)
+        .attr("x", function() {
+            let xPos = x + chosenPosition.dx - (chosenPosition.anchor === "end" ? labelWidth : (chosenPosition.anchor === "middle" ? labelWidth/2 : 0));
+            // Adjust position if it would overflow
+            if (xPos + labelWidth > chartWidth) {
+                xPos = x - labelWidth - 8; // Move to left side with padding
+            } else if (xPos < 0) {
+                xPos = x + 8; // Move to right side with padding
+            }
+            return xPos;
+        })
+        .attr("y", function() {
+            let yPos = y + chosenPosition.dy - (chosenPosition.dy < 0 ? labelHeight : 0);
+            // Adjust position if it would overflow
+            if (yPos + labelHeight > chartHeight) {
+                yPos = y - labelHeight - 8; // Move above with padding
+            } else if (yPos < 0) {
+                yPos = y + 8; // Move below with padding
+            }
+            return yPos;
+        })
+        .attr("width", labelWidth + 4)
+        .attr("height", labelHeight + 4)
+        .append("xhtml:div")
+        .style("font-family", "Inter, sans-serif")
+        .style("font-size", "12px")
+        .style("font-weight", "500")
+        .style("color", "#333")
+        .style("white-space", "nowrap")
+        .text(playerName);
+
+    if (isSearchMatch) {
+        label.style("color", "#ff3366")
+             .style("font-weight", "700");
+        label.node().parentNode.classList.add("search-match");
+    }
+} else {
+    // ... existing non-Safari code ...
+}
+
+// ... existing code ...
 </script>
 
 </body>
