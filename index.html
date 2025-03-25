@@ -343,8 +343,17 @@
             text-shadow: 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white;
         }
 
+        .team-label div {
+            text-shadow: 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white, 0px 0px 2px white;
+        }
+
         .dark-mode .team-label {
             fill: #f5f5f5 !important;
+            text-shadow: 0px 0px 2px #1a1a1a, 0px 0px 2px #1a1a1a, 0px 0px 2px #1a1a1a, 0px 0px 2px #1a1a1a;
+        }
+
+        .dark-mode .team-label div {
+            color: #f5f5f5 !important;
             text-shadow: 0px 0px 2px #1a1a1a, 0px 0px 2px #1a1a1a, 0px 0px 2px #1a1a1a, 0px 0px 2px #1a1a1a;
         }
 
@@ -1099,11 +1108,7 @@ color: #ffffff
 }
 
 
-.dark-mode foreignObject.team-label div {
-    color: #e0e0e0;
-}
-
-
+   
 
     </style>
     
@@ -4325,11 +4330,6 @@ function getPlayerIdFromUniqueId(uniqueId) {
     // Extract the ID part before the first dash
     return uniqueId.substring(0, uniqueId.indexOf('-'));
 }
-
-
-
-
-
 </script>
 
 </body>
