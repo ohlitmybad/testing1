@@ -3443,11 +3443,14 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 }, 500);
             }
         }  // Close updateChart function
+        
+        // Initialize the chart
         updateChart();
         
         // Initialize the custom selectors now that data is loaded
         initializeCustomSelectors(header);
 
+        // Function to reset search
         function resetSearch() {
             // Clear the search input field
             searchBar.value = '';
@@ -3513,8 +3516,8 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
                 medianTooltip.textContent = medianLinesVisible ? "Hide median lines" : "Show median lines";
             }
         });
-        
-                function selectAllCircles() {
+
+        function selectAllCircles() {
             // Check if all circles are already selected
             var allSelected = filteredData.every(function(d) {
                 return clickedCircles.includes(getPlayerUniqueId(d));
