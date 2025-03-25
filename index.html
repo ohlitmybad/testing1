@@ -3388,32 +3388,55 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
             // Update the legend to show only relevant leagues
             updateLeagueLegend(selectedLeague);
 
-            // After all chart updates are done, add temporary overlay for Safari desktop
-            if (isDesktopSafari()) {
-                // Create a temporary tooltip on the chart container
-                const chartContainer = d3.select(".chart-container");
-                const tempTooltip = chartContainer
-                    .append("div")
-                    .attr("class", "tooltip")
-                    .style("opacity", "1")
+            // After all chart updates are done, show the tooltip as a temporary overlay
+            const chartContainer = d3.select(".chart-container");
+            const chartBounds = chartContainer.node().getBoundingClientRect();
+            
+            // Get the first data point to show in the tooltip
+            if (filteredData.length > 0) {
+                const d = filteredData[0];
+                
+                // Create metric keys for translation
+                const xMetricKey = "metrics." + xMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+                const yMetricKey = "metrics." + yMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+                const sizeMetricKey = sizeMetric === "None" || d[header.indexOf(sizeMetric)] === undefined ? "metrics.none" : "metrics." + sizeMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+                
+                // Get translated metric names
+                const xMetricTranslated = getTranslation(xMetricKey, xMetric);
+                const yMetricTranslated = getTranslation(yMetricKey, yMetric);
+                const sizeMetricTranslated = getTranslation(sizeMetricKey, sizeMetric);
+                
+                // Show the tooltip with the first player's data
+                tooltip
+                    .style("left", chartBounds.left + "px")
+                    .style("top", chartBounds.top + "px")
+                    .style("width", chartBounds.width + "px")
+                    .style("height", chartBounds.height + "px")
+                    .style("transform", "none")
                     .style("pointer-events", "none")
-                    .style("position", "absolute")
-                    .style("left", "0")
-                    .style("top", "0")
-                    .style("width", "100%")
-                    .style("height", "100%")
-                    .style("z-index", "9999")
-                    .style("background-color", "var(--container-bg)")
-                    .style("border", "1px solid var(--border-color)")
-                    .style("box-shadow", "var(--shadow)");
-
-                // Force a repaint by accessing offsetHeight
-                tempTooltip.node().offsetHeight;
-
-                // Remove the temporary tooltip after a short delay
+                    .html("<strong>" + d[1] + "</strong><br/>" +
+                        xMetricTranslated + ": " + d[header.indexOf(xMetric)] + "<br/>" +
+                        yMetricTranslated + ": " + d[header.indexOf(yMetric)] + "<br/>" +
+                        (sizeMetric === "None" || d[header.indexOf(sizeMetric)] === undefined ? "" : sizeMetricTranslated + ": " + d[header.indexOf(sizeMetric)]))
+                    .transition()
+                    .duration(200)
+                    .style("opacity", 0.9);
+                
+                // Hide the tooltip after a delay
                 setTimeout(() => {
-                    tempTooltip.remove();
-                }, 50);
+                    tooltip
+                        .transition()
+                        .duration(200)
+                        .style("opacity", 0)
+                        .on("end", function() {
+                            // Reset tooltip styles after fade out
+                            tooltip
+                                .style("width", null)
+                                .style("height", null)
+                                .style("transform", null)
+                                .style("pointer-events", null);
+                        });
+                }, 1000);
             }
         }
         
