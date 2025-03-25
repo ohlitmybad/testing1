@@ -3390,14 +3390,13 @@ return d[2] === "Czech Fortuna Liga" || d[2] === "Serbia SuperLiga" ||
 
             // After all chart updates are done, add temporary overlay for Safari desktop
             if (isDesktopSafari()) {
-                // Create a temporary tooltip on the chart container
-                const chartContainer = d3.select(".chart-container");
-                const tempTooltip = chartContainer
+                // Create a temporary tooltip on the body (like our regular tooltip)
+                const tempTooltip = d3.select("body")
                     .append("div")
                     .attr("class", "tooltip")
                     .style("opacity", "0.9")
                     .style("pointer-events", "none")
-                    .style("position", "absolute")
+                    .style("position", "fixed") // Use fixed positioning
                     .style("left", "50%")
                     .style("top", "50%")
                     .style("transform", "translate(-50%, -50%)")
