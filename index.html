@@ -112,7 +112,7 @@ body.dark-mode {
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
-  contain: content;
+  contain: layout style paint;
   isolation: isolate;
 }
 
@@ -129,6 +129,8 @@ body.dark-mode {
   transform: translateZ(0); /* Force GPU acceleration */
   will-change: transform; /* Hint to browser about animation */
   backface-visibility: hidden; /* Reduce compositing layers */
+  contain: layout style paint;
+  isolation: isolate;
 }
 svg.radar {
   width: 100%;
@@ -166,6 +168,8 @@ svg.radar > g {
   position: relative;
   margin-bottom: 15px;
   min-width: 500px;
+  contain: layout style paint;
+  isolation: isolate;
 }
 #searchInput1 {
   flex: 1;
@@ -274,6 +278,8 @@ body.dark-mode #searchButton1 {
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
+  contain: layout style paint;
+  isolation: isolate;
 }
 /* When matchingNames is empty, maintain spacing */
 #matchingNames:empty {
@@ -325,6 +331,8 @@ body.dark-mode #searchButton1 {
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
+  contain: layout style paint;
+  isolation: isolate;
 }
 .metrics-table th {
   color: var(--text-color);
@@ -543,6 +551,8 @@ input:checked + .toggle-slider {
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
+  contain: layout style paint;
+  isolation: isolate;
 }
 .similar-table th {
   color: var(--text-color);
@@ -1626,10 +1636,40 @@ function calculateEuclideanDifference(data1, data2) {
       }
       
       
+      const MAX_CHARTS = 5; // Maximum number of simultaneous radar charts
+
+      function lazyLoadRadarChart(data) {
+        requestAnimationFrame(() => {
+          // Check if we've reached the maximum number of charts
+          const currentCharts = document.querySelectorAll('.radarPolygon').length;
+          if (currentCharts >= MAX_CHARTS) {
+            // Remove oldest chart
+            const oldestChart = document.querySelector('.radarPolygon');
+            if (oldestChart) {
+              const oldestRow = document.querySelector(`.metrics-table tr:not(:first-child)`);
+              if (oldestRow) {
+                oldestRow.remove();
+              }
+              oldestChart.parentElement.remove();
+            }
+          }
+          createRadarChart(data);
+        });
+      }
+
       function createTable(teamName, teamIndex, color) {
         const resultsTable = document.getElementById('resultsTable');
         const table = document.createElement('table');
         table.classList.add('metrics-table');
+        
+        // Add virtual scrolling container
+        const virtualScrollContainer = document.createElement('div');
+        virtualScrollContainer.style.height = '400px'; // Fixed height for the container
+        virtualScrollContainer.style.overflow = 'auto';
+        virtualScrollContainer.style.position = 'relative';
+        virtualScrollContainer.style.transform = 'translateZ(0)';
+        virtualScrollContainer.style.willChange = 'transform';
+        virtualScrollContainer.style.backfaceVisibility = 'hidden';
         
         // Use DocumentFragment for better performance
         const fragment = document.createDocumentFragment();
@@ -1773,7 +1813,13 @@ function calculateEuclideanDifference(data1, data2) {
         
         fragment.appendChild(dataRow);
         table.appendChild(fragment);
+        
+        // Add virtual scrolling
+        virtualScrollContainer.appendChild(table);
         resultsTable.appendChild(table);
+
+        // Use lazy loading for radar chart
+        lazyLoadRadarChart(teamData);
       }
 
         const teamNames = new Set();
