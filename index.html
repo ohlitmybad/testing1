@@ -93,6 +93,11 @@ body.dark-mode {
   margin: 20px auto;
   padding: 0 20px;
   box-sizing: border-box;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  contain: content;
+  isolation: isolate;
 }
 /* Ensure the chart wrapper doesn't shrink below a minimum width */
 .chart-wrapper {
@@ -104,6 +109,11 @@ body.dark-mode {
   position: relative;
   width: 100%;
   min-width: 730px;
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  contain: content;
+  isolation: isolate;
 }
 
 
@@ -130,6 +140,10 @@ svg.radar {
   transform: translateZ(0); /* Force GPU acceleration */
   will-change: transform; /* Hint to browser about animation */
   backface-visibility: hidden; /* Reduce compositing layers */
+  contain: content;
+  isolation: isolate;
+  shape-rendering: optimizeSpeed;
+  text-rendering: optimizeLegibility;
 }
 /* Add specific styling for the SVG group */
 svg.radar > g {
@@ -1614,257 +1628,152 @@ function calculateEuclideanDifference(data1, data2) {
       
       function createTable(teamName, teamIndex, color) {
         const resultsTable = document.getElementById('resultsTable');
-        const headerNames = [
-      '',
-      '<span data-i18n="table.percentiles">Percentiles</span>',
-      '',
-      '<span data-i18n="table.age">Age</span>',
-      '<span data-i18n="table.passes">Passes</span>',
-      '<span data-i18n="table.fwdPass">Forward pass%</span>',
-      '<span data-i18n="table.progPasses">Prog. passes</span>',
-      '<span data-i18n="table.defActions">Def. actions</span>',
-      '<span data-i18n="table.defDuel">Def. duel%</span>',
-      '<span data-i18n="table.aerial">Aerial%</span>',
-      '<span data-i18n="table.progCarries">Prog. carries</span>',
-      '<span data-i18n="table.minutes">Minutes played</span>',
-    ];
-    
-      
-      
-        // Check if table headers exist
-        const headersExist = resultsTable.querySelector('th') !== null;
-      
-        const table = headersExist ? resultsTable.querySelector('table') : document.createElement('table');
+        const table = document.createElement('table');
         table.classList.add('metrics-table');
-      
-        if (!headersExist) {
-          // Create the table header
-          const headerRow = document.createElement('tr');
-         
-      for (let i = 1; i < headerNames.length; i++) {
-        const th = document.createElement('th');
-        th.innerHTML = headerNames[i];
-        // Set specific widths for columns
-        if (i === 1) {
-          th.style.width = '17%'; // Name column gets more space
-          th.style.textAlign = 'center'; // Center align the header
-        } else if (i === 3) {
-          th.style.width = '7%'; // Numeric columns get less space
-        }
-      else if (i === 2) {
-          th.style.width = '10%'; // Numeric columns get less space
-        }
-        headerRow.appendChild(th);
-      }
-      // Add a separate table header for the "x" column
-      const xHeader = document.createElement('th');
-      xHeader.textContent = '';
-      xHeader.style.width = '4%'; // X column gets minimal space
-      headerRow.appendChild(xHeader);
-          table.appendChild(headerRow);
-        }
-      
-      
-      
-      const teamData = dataArray[teamIndex];
-      const dataRow = document.createElement('tr');
-      for (let i = 1; i < teamData.length; i++) {
-        const td = document.createElement('td');
-        if (i >= 4 && i <= 10) {
-          const value = parseFloat(teamData[i]) * 100;
-          td.textContent = value.toFixed(1);
-          td.style.fontWeight = '500'; // Make percentile values slightly bolder
-        } else {
-          td.textContent = teamData[i];
-        }
-        td.classList.add(color);
         
-        // Apply special styling to the first cell (name column)
-        if (i === 1) {
-          td.style.textAlign = 'center'; /* Center align the text */
-          td.style.whiteSpace = 'normal'; /* Allow text to wrap */
-          td.style.overflow = 'visible';
-          td.style.textOverflow = 'clip';
-          td.style.minHeight = '50px'; /* Increase minimum height */
-          td.style.height = 'auto';
-          td.style.verticalAlign = 'top';
-          
-          // Format the name cell to display name and team more clearly
-          const nameText = teamData[i];
-          
-        }
-        if (i === 2) {
-          td.style.whiteSpace = 'normal'; /* Allow text to wrap */
-
-
-
-        }
-
-        // Apply special styling to the minutes column
-        if (i === 11) {
-          td.style.fontSize = '11px';
-          td.style.color = '#777';
-        }
+        // Use DocumentFragment for better performance
+        const fragment = document.createDocumentFragment();
         
-        dataRow.appendChild(td);
-      }
-      
-      // Add a separate table cell for the "x" column
-      // Add a separate table cell for the "x" column
-      const xCell = document.createElement('td');
-      
-      // Create a wrapper div for the button to contain the larger touch area
-      const buttonWrapper = document.createElement('div');
-      buttonWrapper.style.position = 'relative';
-      buttonWrapper.style.width = '100%';
-      buttonWrapper.style.height = '100%';
-      buttonWrapper.style.display = 'flex';
-      buttonWrapper.style.alignItems = 'center';
-      
-      const xButton = document.createElement('button');
-      xButton.textContent = 'x';
-      xButton.style.backgroundColor = 'transparent';
-      xButton.style.border = 'none';
-      xButton.style.color = '#999';
-      xButton.style.fontSize = '14px';
-      xButton.style.cursor = 'pointer';
-      xButton.style.width = '4px';
-      xButton.style.height = '24px';
-      xButton.style.borderRadius = '50%';
-      xButton.style.display = 'flex';
-      xButton.style.alignItems = 'center';
-      xButton.style.justifyContent = 'center';
-      xButton.style.transition = 'all 0.2s';
-      xButton.style.position = 'relative';
-      xButton.style.zIndex = '1'; // Ensure the visible button is above the invisible touch area
-      
-      // Create an invisible touch target that's much larger but doesn't affect layout
-      const touchTarget = document.createElement('div');
-      touchTarget.style.position = 'absolute';
-      touchTarget.style.top = '-15px';
-      touchTarget.style.left = '-15px';
-      touchTarget.style.width = '44px';
-      touchTarget.style.height = '44px';
-      touchTarget.style.cursor = 'pointer';
-      touchTarget.style.zIndex = '0'; // Place it behind the visible button
-
-      // Event listener for both the visible button and invisible touch target
-      const handleClick = function() {
-        dataRow.remove(); // Remove the corresponding row from the table
-        const radarPolygons = document.querySelectorAll(`.radarPolygon.${color}`);
-        const radarLines = document.querySelectorAll(`.radarLines.${color}`);
-        const radarCircles = document.querySelectorAll(`.radarCircle.${color}`);
-      
-        radarPolygons.forEach((polygon) => polygon.remove()); // Remove radar polygons with the specified color
-        radarLines.forEach((line) => line.remove()); // Remove radar lines with the specified color
-        radarCircles.forEach((circle) => circle.remove()); // Remove radar circles with the specified color
-        const remainingRows = document.querySelectorAll('.metrics-table tr:not(:first-child)');
-
-    
-        if (remainingRows.length > 0) {
-            const lastRow = remainingRows[remainingRows.length - 1];
-            const lastPlayerName = lastRow.firstChild.textContent.split(',')[0];
-            const lastPlayerData = dataArray.find(player => player[1] === lastPlayerName);
-            if (lastPlayerData) {
-                updateSimilarPlayers(lastPlayerData);
-            }
-        } else {
-            const similarPlayersContainer = document.getElementById('similarPlayersContainer');
-            if (similarPlayersContainer) {
-                similarPlayersContainer.innerHTML = '';
-            }
-        }
-      };
-      
-      xButton.addEventListener('click', handleClick);
-      touchTarget.addEventListener('click', handleClick);
-      
-      // Assemble the components
-      buttonWrapper.appendChild(touchTarget);
-      buttonWrapper.appendChild(xButton);
-      xCell.appendChild(buttonWrapper);
-      dataRow.appendChild(xCell);
-      
-      table.appendChild(dataRow);
-      
-        if (!headersExist) {
-          resultsTable.appendChild(table);
-        }
-      
-      
-        const combResults = dataArray[teamIndex].join(', ');
-      
-        const outerRadius = 190;
-        const center = [0, 0];
-        const angles = [
-          0,
-          (2 * Math.PI) / 7,
-          (4 * Math.PI) / 7,
-          (6 * Math.PI) / 7,
-          (8 * Math.PI) / 7,
-          (10 * Math.PI) / 7,
-          (12 * Math.PI) / 7
+        // Create header row
+        const headerRow = document.createElement('tr');
+        const headerNames = [
+          '',
+          '<span data-i18n="table.percentiles">Percentiles</span>',
+          '',
+          '<span data-i18n="table.age">Age</span>',
+          '<span data-i18n="table.passes">Passes</span>',
+          '<span data-i18n="table.fwdPass">Forward pass%</span>',
+          '<span data-i18n="table.progPasses">Prog. passes</span>',
+          '<span data-i18n="table.defActions">Def. actions</span>',
+          '<span data-i18n="table.defDuel">Def. duel%</span>',
+          '<span data-i18n="table.aerial">Aerial%</span>',
+          '<span data-i18n="table.progCarries">Prog. carries</span>',
+          '<span data-i18n="table.minutes">Minutes played</span>',
         ];
-      
-        function axisValueToCartesian(axis, value) {
-          let angle = angles[axis - 1];
-          angle += (2 * Math.PI / 7) * 0.2;
-          const x = 190 * value * Math.cos(angle);
-          const y = 190 * value * Math.sin(angle);
-          return { x, y };
-        }
-      
-        const svg = document.querySelector('.radar');
-        const radarWrapper = svg.appendChild(
-          document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        );
-        radarWrapper.innerHTML = '';
-      
-        const data = [];
-        const rowCols = combResults.split(',');
-        for (let i = 4; i < 11; i++) {
-          data.push({ axis: i - 3, value: parseFloat(rowCols[i]) });
-        }
-      
-        const points = data
-          .map(({ axis, value }) => {
-            const { x, y } = axisValueToCartesian(axis, value);
-            return `${x},${y}`;
-          })
-          .join(' ');
-      
-        const polyline = document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          'polyline'
-        );
-        polyline.setAttribute('class', `radarLines ${color}`);
-        polyline.setAttribute('points', `${points} ${points.split(' ')[0]}`);
-        polyline.setAttribute('stroke-width', '3');
-        polyline.setAttribute('fill', 'none');
-        radarWrapper.appendChild(polyline);
-      
-        const polygon = document.createElementNS(
-          'http://www.w3.org/2000/svg',
-          'polygon'
-        );
-        polygon.setAttribute('class', `radarPolygon ${color}`);
-        polygon.setAttribute('points', points);
-        polygon.style.fillOpacity = '0.2';
-        radarWrapper.appendChild(polygon);
-      
-        data.forEach(({ axis, value }) => {
-          const { x, y } = axisValueToCartesian(axis, value);
-          const circle = document.createElementNS(
-            'http://www.w3.org/2000/svg',
-            'circle'
-          );
-          circle.setAttribute('class', `radarCircle ${color}`);
-          circle.style.fillOpacity = '0.86';
-          circle.setAttribute('r', '6');
-          circle.setAttribute('cx', x);
-          circle.setAttribute('cy', y);
-          radarWrapper.appendChild(circle);
+
+        headerNames.forEach((name, i) => {
+          const th = document.createElement('th');
+          th.innerHTML = name;
+          if (i === 1) th.style.width = '17%';
+          else if (i === 3) th.style.width = '7%';
+          else if (i === 2) th.style.width = '10%';
+          headerRow.appendChild(th);
         });
+
+        const xHeader = document.createElement('th');
+        xHeader.textContent = '';
+        xHeader.style.width = '4%';
+        headerRow.appendChild(xHeader);
+        
+        fragment.appendChild(headerRow);
+
+        // Create data row
+        const teamData = dataArray[teamIndex];
+        const dataRow = document.createElement('tr');
+        
+        for (let i = 1; i < teamData.length; i++) {
+          const td = document.createElement('td');
+          if (i >= 4 && i <= 10) {
+            const value = parseFloat(teamData[i]) * 100;
+            td.textContent = value.toFixed(1);
+            td.style.fontWeight = '500';
+          } else {
+            td.textContent = teamData[i];
+          }
+          td.classList.add(color);
+          
+          if (i === 1) {
+            td.style.textAlign = 'center';
+            td.style.whiteSpace = 'normal';
+            td.style.overflow = 'visible';
+            td.style.textOverflow = 'clip';
+            td.style.minHeight = '50px';
+            td.style.height = 'auto';
+            td.style.verticalAlign = 'top';
+          }
+          
+          if (i === 11) {
+            td.style.fontSize = '11px';
+            td.style.color = '#777';
+          }
+          
+          dataRow.appendChild(td);
+        }
+
+        // Add remove button
+        const xCell = document.createElement('td');
+        const buttonWrapper = document.createElement('div');
+        buttonWrapper.style.position = 'relative';
+        buttonWrapper.style.width = '100%';
+        buttonWrapper.style.height = '100%';
+        buttonWrapper.style.display = 'flex';
+        buttonWrapper.style.alignItems = 'center';
+        
+        const xButton = document.createElement('button');
+        xButton.textContent = 'x';
+        xButton.style.backgroundColor = 'transparent';
+        xButton.style.border = 'none';
+        xButton.style.color = '#999';
+        xButton.style.fontSize = '14px';
+        xButton.style.cursor = 'pointer';
+        xButton.style.width = '4px';
+        xButton.style.height = '24px';
+        xButton.style.borderRadius = '50%';
+        xButton.style.display = 'flex';
+        xButton.style.alignItems = 'center';
+        xButton.style.justifyContent = 'center';
+        xButton.style.transition = 'all 0.2s';
+        xButton.style.position = 'relative';
+        xButton.style.zIndex = '1';
+
+        const touchTarget = document.createElement('div');
+        touchTarget.style.position = 'absolute';
+        touchTarget.style.top = '-15px';
+        touchTarget.style.left = '-15px';
+        touchTarget.style.width = '44px';
+        touchTarget.style.height = '44px';
+        touchTarget.style.cursor = 'pointer';
+        touchTarget.style.zIndex = '0';
+
+        const handleClick = function() {
+          requestAnimationFrame(() => {
+            dataRow.remove();
+            const radarPolygons = document.querySelectorAll(`.radarPolygon.${color}`);
+            const radarLines = document.querySelectorAll(`.radarLines.${color}`);
+            const radarCircles = document.querySelectorAll(`.radarCircle.${color}`);
+            
+            radarPolygons.forEach(polygon => polygon.remove());
+            radarLines.forEach(line => line.remove());
+            radarCircles.forEach(circle => circle.remove());
+            
+            const remainingRows = document.querySelectorAll('.metrics-table tr:not(:first-child)');
+            if (remainingRows.length > 0) {
+              const lastRow = remainingRows[remainingRows.length - 1];
+              const lastPlayerName = lastRow.firstChild.textContent.split(',')[0];
+              const lastPlayerData = dataArray.find(player => player[1] === lastPlayerName);
+              if (lastPlayerData) {
+                updateSimilarPlayers(lastPlayerData);
+              }
+            } else {
+              const similarPlayersContainer = document.getElementById('similarPlayersContainer');
+              if (similarPlayersContainer) {
+                similarPlayersContainer.innerHTML = '';
+              }
+            }
+          });
+        };
+        
+        xButton.addEventListener('click', handleClick);
+        touchTarget.addEventListener('click', handleClick);
+        
+        buttonWrapper.appendChild(touchTarget);
+        buttonWrapper.appendChild(xButton);
+        xCell.appendChild(buttonWrapper);
+        dataRow.appendChild(xCell);
+        
+        fragment.appendChild(dataRow);
+        table.appendChild(fragment);
+        resultsTable.appendChild(table);
       }
 
         const teamNames = new Set();
