@@ -403,10 +403,7 @@ worker.onmessage = function(event) {
         // Hide loading container
         document.getElementById('loadingContainer').style.display = 'none';
         
- setTimeout(function() {
-            // Now show the MembershipWorks script
-            document.getElementById('membershipWorksContainer').style.display = 'block';
-        }, 500); 
+
     }
 
         const leagues = {
