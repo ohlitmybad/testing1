@@ -370,39 +370,72 @@ function updateCurrentMetricValue(parsedData, selectedPlayer, metric) {
     // Return the metric value without modification
     return playerData[columnName];
 }
-
 // Main script
 let allData = [];
-let worker = new Worker('xlsxWorker.js');
+let worker = null;
+let isDataLoaded = false;
 
-worker.postMessage({ urls: [
-    'https://datamb.football/database/CURRENT/PRO2425/GK/GK.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2025/GK/GK.xlsx',
-    'https://datamb.football/database/CURRENT/TOP72425/GK/GK.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2425/CB/CB.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2025/CB/CB.xlsx',
-    'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2425/FB/FB.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2025/FB/FB.xlsx',
-    'https://datamb.football/database/CURRENT/TOP72425/FB/FB.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2425/CM/CM.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2025/CM/CM.xlsx',
-    'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2425/FW/FW.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2025/FW/FW.xlsx',
-    'https://datamb.football/database/CURRENT/TOP72425/FW/FW.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2425/ST/ST.xlsx',
-    'https://datamb.football/database/CURRENT/PRO2025/ST/ST.xlsx',
-    'https://datamb.football/database/CURRENT/TOP72425/ST/ST.xlsx'
-] });
-
-worker.onmessage = function(event) {
-    if (event.data.type === 'complete') {
-        allData = event.data.data;
-        document.getElementById('loadingContainer').style.display = 'none';
+// Function to initialize and start the worker
+function loadData() {
+    if (isDataLoaded) {
+        console.log('Data is already loaded');
+        return;
     }
 
+    // Show loading container
+    document.getElementById('loadingContainer').style.display = 'flex';
+    
+    // Create worker if it doesn't exist
+    if (!worker) {
+        worker = new Worker('xlsxWorker.js');
+        
+        worker.onmessage = function(event) {
+            if (event.data.type === 'complete') {
+                allData = event.data.data;
+                document.getElementById('loadingContainer').style.display = 'none';
+                isDataLoaded = true;
+                
+                // Call any initialization functions that depend on the data
+                if (typeof initializeAfterDataLoad === 'function') {
+                    initializeAfterDataLoad();
+                }
+            }
+        };
+    }
 
+    // Post message to worker to start loading
+    worker.postMessage({ urls: [
+        'https://datamb.football/database/CURRENT/PRO2425/GK/GK.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2025/GK/GK.xlsx',
+        'https://datamb.football/database/CURRENT/TOP72425/GK/GK.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2425/CB/CB.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2025/CB/CB.xlsx',
+        'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2425/FB/FB.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2025/FB/FB.xlsx',
+        'https://datamb.football/database/CURRENT/TOP72425/FB/FB.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2425/CM/CM.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2025/CM/CM.xlsx',
+        'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2425/FW/FW.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2025/FW/FW.xlsx',
+        'https://datamb.football/database/CURRENT/TOP72425/FW/FW.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2425/ST/ST.xlsx',
+        'https://datamb.football/database/CURRENT/PRO2025/ST/ST.xlsx',
+        'https://datamb.football/database/CURRENT/TOP72425/ST/ST.xlsx'
+    ]});
+}
+
+// Add event listener when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const loadButton = document.getElementById('loadDataButton');
+    if (loadButton) {
+        loadButton.addEventListener('click', loadData);
+    }
+    
+    // Hide the loading container initially
+    document.getElementById('loadingContainer').style.display = 'none';
+});
 
         const leagues = {
 
