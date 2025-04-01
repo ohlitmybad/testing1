@@ -400,12 +400,12 @@ worker.onmessage = function(event) {
     if (event.data.type === 'complete') {
         allData = event.data.data;
 
-        // Hide the loading container using visibility and opacity
-        document.getElementById('loadingContainer').style.visibility = 'hidden';
-        document.getElementById('loadingContainer').style.opacity = 0;
+        // Hide loading container
+        document.getElementById('loadingContainer').style.display = 'none';
+        
+        // Now show the MembershipWorks script
+        document.getElementById('membershipWorksContainer').style.display = 'block';
     }
-    
-
 
         const leagues = {
 
