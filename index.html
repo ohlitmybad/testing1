@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html>
-	<script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
-
 <head>
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.535, user-scalable=no"">
@@ -415,6 +413,12 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  /* Add hardware acceleration */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: opacity;
 }
 
 .loading-text {
@@ -451,10 +455,24 @@ h1 {
   }
 }
 
+    body.dark-mode #SFctr {
+        color: #ffffff !important
+        }
+        
+        
+        #SFctr input {
+            background-color: #ffffff !important;
+        color:#000000 !important;
+        border: 1px solid #c2c2c2 !important
+        }
 
 #SFctr {
 	font-family: Arial, Helvetica, sans-serif !important;
+	color: #000000 !important;
   margin-left: 4px;
+  /* Prevent layout shifts from login plugin */
+  min-height: 50px;
+  contain: layout style paint;
 }
 
 #SFusrlogpst strong:first-child {
@@ -497,11 +515,32 @@ h1 {
 
 <body>
 		<div class="loading-container" id="loadingContainer">
-  <div class="loading-text">Loading data...</div>
+  <div class="loading-text" data-i18n="loading">Loading data...</div>
   <div class="loading-bar">
     <div class="loading-progress"></div>
   </div>
 </div>
+<script type="text/javascript">
+// Remove the immediate body hide
+// document.body.style.visibility="hidden";
+
+// Instead, use a more controlled approach
+(function() {
+    const mainContent = document.createElement('div');
+    mainContent.id = 'mainContent';
+    mainContent.style.visibility = 'hidden';
+    
+    // Move all content except loading container into mainContent
+    Array.from(document.body.children).forEach(child => {
+        if (!child.classList.contains('loading-container')) {
+            mainContent.appendChild(child);
+        }
+    });
+    
+    document.body.appendChild(mainContent);
+})();
+</script>
+<div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
 
 
     <div class="spinner" id="spinner">
@@ -559,6 +598,15 @@ h1 {
     <script src="main.js"></script>
 
 <script>
+// Set default hover content immediately when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleButton = document.querySelector('.toggle-button');
+  const toggleSortingButton = document.querySelector('.toggleSortingButton');
+  
+  // Set default English values
+  toggleButton.setAttribute('data-hover', 'Per 90 : Yes / No');
+  toggleSortingButton.setAttribute('data-hover', 'Ascending : Yes / No');
+});
 
 function setHoverContent() {
   const toggleButton = document.querySelector('.toggle-button');
@@ -610,6 +658,12 @@ function translateMetricName(metricName) {
   return metricName;
 }
 
+function translateRankSuffix(suffix) {
+  if (currentTranslations && currentTranslations.rankSuffixes && currentTranslations.rankSuffixes[suffix]) {
+    return currentTranslations.rankSuffixes[suffix];
+  }
+  return suffix;
+}
 
   function getPreferredLanguage() {
     // PRIORITY 1: Check URL parameter first
@@ -647,6 +701,7 @@ function translateMetricName(metricName) {
       .then(translations => {
         // Only proceed if translations exist
         if (translations) {
+          currentTranslations = translations;
           document.querySelectorAll('[data-i18n]').forEach(element => {
             const keys = element.getAttribute('data-i18n').split('.');
             let value = translations;
@@ -712,7 +767,8 @@ function translateMetricName(metricName) {
       }
     }
   
-    window.translateMetricName = translateMetricName; 
+    window.translateMetricName = translateMetricName;
+    window.translateRankSuffix = translateRankSuffix;
     const preferredLanguage = getPreferredLanguage();
     applyLanguage(preferredLanguage);
   
