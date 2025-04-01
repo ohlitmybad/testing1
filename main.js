@@ -399,13 +399,13 @@ worker.postMessage({ urls: [
 worker.onmessage = function(event) {
     if (event.data.type === 'complete') {
         allData = event.data.data;
-        
-        // Use requestAnimationFrame to delay hiding the loading container
-        requestAnimationFrame(function() {
-            document.getElementById('loadingContainer').style.display = 'none';
-        });
+
+        // Hide the loading container using visibility and opacity
+        document.getElementById('loadingContainer').style.visibility = 'hidden';
+        document.getElementById('loadingContainer').style.opacity = 0;
     }
 }
+
 
 
 
