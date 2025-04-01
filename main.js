@@ -399,9 +399,13 @@ worker.postMessage({ urls: [
 worker.onmessage = function(event) {
     if (event.data.type === 'complete') {
         allData = event.data.data;
-        document.getElementById('loadingContainer').style.display = 'none';
+        
+        // Use requestAnimationFrame to delay hiding the loading container
+        requestAnimationFrame(function() {
+            document.getElementById('loadingContainer').style.display = 'none';
+        });
     }
-}
+
 
     
 
