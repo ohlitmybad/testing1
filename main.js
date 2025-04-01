@@ -396,21 +396,10 @@ worker.postMessage({ urls: [
     'https://datamb.football/database/CURRENT/TOP72425/ST/ST.xlsx'
 ] });
 
-// Dynamically load the MembershipWorks script
-function loadMembershipWorksScript() {
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'https://cdn.membershipworks.com/mfl.js';
-    document.head.appendChild(script);
-}
-
-
 worker.onmessage = function(event) {
     if (event.data.type === 'complete') {
         allData = event.data.data;
         document.getElementById('loadingContainer').style.display = 'none';
-	    loadMembershipWorksScript();
-
     }
 
 
