@@ -413,12 +413,6 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Add hardware acceleration */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: opacity;
 }
 
 .loading-text {
@@ -469,34 +463,11 @@ h1 {
 #SFctr {
 	font-family: Arial, Helvetica, sans-serif !important;
 	color: #000000 !important;
-    margin-left: 4px;
-    /* Prevent layout shifts from login plugin */
-    min-height: 50px;
-    contain: layout style paint;
-    /* Add smooth transitions */
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    will-change: opacity;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-}
-
-/* Add transition class for the login plugin */
-#SFctr.visible {
-    opacity: 1;
-}
-
-/* Optimize plugin loading on mobile */
-@media (max-width: 767px) {
-    #SFctr {
-        transition: opacity 0.8s ease;
-        contain: layout style paint;
-        will-change: opacity, transform;
-    }
+  margin-left: 4px;
 }
 
 #SFusrlogpst strong:first-child {
-    font-size: 0px;
+  font-size: 0px;
 }
 
 #SFusrlogpst input[type="checkbox"],
@@ -540,61 +511,8 @@ h1 {
     <div class="loading-progress"></div>
   </div>
 </div>
+<script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
 
-<!-- Create a placeholder for the login plugin -->
-<div id="loginPluginContainer"></div>
-
-<script type="text/javascript">
-(function() {
-    // Create main content wrapper
-    const mainContent = document.createElement('div');
-    mainContent.id = 'mainContent';
-    mainContent.style.visibility = 'hidden';
-    
-    // Move all content except loading container and login placeholder into mainContent
-    Array.from(document.body.children).forEach(child => {
-        if (!child.classList.contains('loading-container') && child.id !== 'loginPluginContainer') {
-            mainContent.appendChild(child);
-        }
-    });
-    
-    document.body.appendChild(mainContent);
-
-    // Function to load the login plugin
-    function loadLoginPlugin() {
-        const loginContainer = document.getElementById('loginPluginContainer');
-        loginContainer.innerHTML = '<div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div>';
-        
-        // Create and load the script with a delay
-        setTimeout(() => {
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = 'https://cdn.membershipworks.com/mfl.js';
-            script.async = true;
-            
-            // Handle script load
-            script.onload = () => {
-                // Wait for plugin initialization
-                setTimeout(() => {
-                    const sfctr = document.getElementById('SFctr');
-                    if (sfctr) {
-                        requestAnimationFrame(() => {
-                            sfctr.classList.add('visible');
-                        });
-                    }
-                }, 500);
-            };
-            
-            document.body.appendChild(script);
-        }, 800); // Delay plugin loading to ensure smooth main content transition
-    }
-
-    // Create a custom event for when our main content is ready
-    window.addEventListener('mainContentReady', function() {
-        loadLoginPlugin();
-    });
-})();
-</script>
 
     <div class="spinner" id="spinner">
   <div class="spinner-icon"></div>
@@ -648,61 +566,37 @@ h1 {
         <canvas id="pizzaChart"></canvas>
     </div>
     <div id="results"></div></div>
-    
-    <!-- Add loading sequence manager -->
-    <script>
-    // Add necessary styles for transitions
-    document.head.insertAdjacentHTML('beforeend', `
-        <style>
-            #loadingContainer {
-                transition: opacity 0.3s ease;
-            }
-            #mainContent {
-                transition: opacity 0.3s ease;
-                opacity: 0;
-            }
-            #SFctr {
-                opacity: 0;
-                transition: opacity 0.3s ease;
-            }
-        </style>
-    `);
-
-    // Override the worker message handler
-    const originalWorkerOnMessage = Worker.prototype.onmessage;
-    Worker.prototype.onmessage = function(event) {
-        if (event.data && event.data.type === 'complete') {
-            const loadingContainer = document.getElementById('loadingContainer');
-            const mainContent = document.getElementById('mainContent');
-            
-            // Start the transition sequence
-            loadingContainer.style.opacity = '0';
-            
-            // Wait for loading container fade out
-            setTimeout(() => {
-                loadingContainer.style.display = 'none';
-                
-                // Show main content with a delay
-                setTimeout(() => {
-                    mainContent.style.visibility = 'visible';
-                    requestAnimationFrame(() => {
-                        mainContent.style.opacity = '1';
-                        
-                        // Initialize the login plugin after main content is visible
-                        setTimeout(() => {
-                            window.dispatchEvent(new Event('mainContentReady'));
-                        }, 300);
-                    });
-                }, 100);
-            }, 300);
-        }
-        // Call the original handler
-        if (originalWorkerOnMessage) {
-            originalWorkerOnMessage.call(this, event);
-        }
-    };
-    </script>
     <script src="main.js"></script>
+    <script>
+
+
+	    // This script ensures the body becomes visible after data loading
+(function() {
+    // The original worker.onmessage function
+    const originalWorkerOnMessage = Worker.prototype.onmessage;
+    
+    // Set an interval to check if body is hidden and make it visible
+    // This helps when the membership plugin may be keeping the body hidden
+    const visibilityInterval = setInterval(function() {
+        if (document.body.style.visibility === 'hidden' && 
+            document.getElementById('loadingContainer').style.display === 'none') {
+            document.body.style.visibility = 'visible';
+            console.log('Fixed body visibility');
+            clearInterval(visibilityInterval);
+        }
+    }, 200);
+
+    // Also set a timeout to force visibility after 10 seconds regardless of loading state
+    // This prevents the page from being permanently hidden if something goes wrong
+    setTimeout(function() {
+        if (document.body.style.visibility === 'hidden') {
+            document.body.style.visibility = 'visible';
+            console.log('Forced body visibility after timeout');
+            clearInterval(visibilityInterval);
+        }
+    }, 10000);
+})(); 
+    </script>
 
 <script>
 // Set default hover content immediately when DOM loads
