@@ -399,11 +399,7 @@ worker.postMessage({ urls: [
 worker.onmessage = function(event) {
     if (event.data.type === 'complete') {
         allData = event.data.data;
-
-        // Add a small timeout to ensure the page finishes processing
-        setTimeout(function() {
-            document.getElementById('loadingContainer').style.display = 'none';
-        }, 100);  // Adjust the delay time as needed
+        document.getElementById('loadingContainer').style.display = 'none';
     }
 }
 
