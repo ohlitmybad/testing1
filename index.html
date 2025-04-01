@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="mobile-fix.js"></script>
 
 
 <style>
@@ -574,39 +575,7 @@ h1 {
     </div>
     <div id="results"></div></div>
     <script src="main.js"></script>
-    <script>
-
-
-
-	    // This script ensures the body becomes visible after data loading
-(function() {
-    // The original worker.onmessage function
-    const originalWorkerOnMessage = Worker.prototype.onmessage;
-    
-    // Set an interval to check if body is hidden and make it visible
-    // This helps when the membership plugin may be keeping the body hidden
-    const visibilityInterval = setInterval(function() {
-        if (document.body.style.visibility === 'hidden' && 
-            document.getElementById('loadingContainer').style.display === 'none') {
-            document.body.style.visibility = 'visible';
-            console.log('Fixed body visibility');
-            clearInterval(visibilityInterval);
-        }
-    }, 200);
-
-    // Also set a timeout to force visibility after 10 seconds regardless of loading state
-    // This prevents the page from being permanently hidden if something goes wrong
-    setTimeout(function() {
-        if (document.body.style.visibility === 'hidden') {
-            document.body.style.visibility = 'visible';
-            console.log('Forced body visibility after timeout');
-            clearInterval(visibilityInterval);
-        }
-    }, 10000);
-})(); 
-
-	    
-    </script>
+    <script src="fix-visibility.js"></script>
 
 <script>
 // Set default hover content immediately when DOM loads
@@ -788,5 +757,3 @@ function translateRankSuffix(suffix) {
         
 </body>
 </html>
-
-
