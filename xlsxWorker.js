@@ -9,7 +9,7 @@ self.onmessage = async function(event) {
     
     // Pre-allocate array for better memory management
     const estimatedTotalRows = 20000; // Adjust based on expected data size
-    allData = [];
+    allData = new Array(estimatedTotalRows);
     
 
     // Optimize XLSX reading configuration
@@ -61,7 +61,7 @@ self.onmessage = async function(event) {
             });
 
             // Pre-allocate array for row processing
-            const processedData = [];
+            const processedData = new Array(jsonData.length);
             
             // Optimize row processing
             const fileIndex = urls.indexOf(url);
@@ -69,13 +69,14 @@ self.onmessage = async function(event) {
             
             for (let i = 0; i < jsonData.length; i++) {
                 if (fileIndex !== 0 && i === 0) {
+                    processedData[i] = null;
                     continue;
                 }
                 
-                const row = jsonData[i];
+                const row = jsonData[i]; // Trim to 93 columns
                 // Optimize array operations
                 row.splice(2, 0, label); // Insert label at position 2
-                processedData.push(row);
+                processedData[i] = row;
             }
             
             cache.set(url, processedData);
@@ -84,70 +85,31 @@ self.onmessage = async function(event) {
 
         const batchResults = await Promise.all(batchPromises);
         
-        // Optimize batch merging - avoid splice which can be slow
-        let newData = [];
+        // Optimize batch merging
+        let currentIndex = allData.length;
         batchResults.forEach((data, index) => {
             if (!data) return;
             
             if (startIndex + index === 0) {
-                newData = newData.concat(data);
+                allData.push(...data);
             } else {
-                newData = newData.concat(data);
+                allData.push(...data.filter(row => row !== null));
             }
         });
-
-        // Update allData with efficient concat
-        allData = allData.concat(newData);
 
         processedFiles += batchResults.length;
         
-        // Send progress update to main thread
-        self.postMessage({
-            type: 'progress',
-            processedFiles: processedFiles,
-            totalFiles: urls.length
-        });
+
 
         if (endIndex < urls.length) {
-            // Use setTimeout with 0ms delay to allow UI thread to breathe
+            // Use requestAnimationFrame equivalent for workers
             setTimeout(() => processBatch(endIndex), 0);
         } else {
-            // Send data in chunks to avoid large message freezing
-            const CHUNK_SIZE = 1000;
-            const totalChunks = Math.ceil(allData.length / CHUNK_SIZE);
-            
-            // First notify that processing is complete
+            // Optimize final data transfer
             self.postMessage({
-                type: 'processing_complete',
-                totalChunks: totalChunks
+                type: 'complete',
+                data: allData // Remove any null entries
             });
-            
-            // Then send data in manageable chunks with delays
-            for (let i = 0; i < totalChunks; i++) {
-                const start = i * CHUNK_SIZE;
-                const end = Math.min(start + CHUNK_SIZE, allData.length);
-                const chunk = allData.slice(start, end);
-                
-                // Use setTimeout to stagger the transfers and prevent UI blocking
-                setTimeout(() => {
-                    self.postMessage({
-                        type: 'chunk',
-                        chunkIndex: i,
-                        totalChunks: totalChunks,
-                        data: chunk
-                    });
-                    
-                    // Send complete message after the last chunk
-                    if (i === totalChunks - 1) {
-                        setTimeout(() => {
-                            self.postMessage({
-                                type: 'complete',
-                                dispatchEvent: true
-                            });
-                        }, 100);
-                    }
-                }, i * 20); // Small delay between chunks
-            }
         }
     }
 
