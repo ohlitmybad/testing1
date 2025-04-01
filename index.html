@@ -942,7 +942,24 @@ let allData = [];
 let isFirstFileProcessed = false;
 
 const urls = [
-'https://datamb.football/database/CURRENT/PRO2425/GK/GK.xlsx'
+'https://datamb.football/database/CURRENT/PRO2425/GK/GK.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2025/GK/GK.xlsx',
+    'https://datamb.football/database/CURRENT/TOP72425/GK/GK.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2425/CB/CB.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2025/CB/CB.xlsx',
+    'https://datamb.football/database/CURRENT/TOP72425/CB/CB.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2425/FB/FB.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2025/FB/FB.xlsx',
+    'https://datamb.football/database/CURRENT/TOP72425/FB/FB.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2425/CM/CM.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2025/CM/CM.xlsx',
+    'https://datamb.football/database/CURRENT/TOP72425/CM/CM.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2425/FW/FW.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2025/FW/FW.xlsx',
+    'https://datamb.football/database/CURRENT/TOP72425/FW/FW.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2425/ST/ST.xlsx',
+    'https://datamb.football/database/CURRENT/PRO2025/ST/ST.xlsx',
+    'https://datamb.football/database/CURRENT/TOP72425/ST/ST.xlsx'
 ];
 
 const fetchPromises = urls.map(url => fetch(url).then(response => response.arrayBuffer()));
