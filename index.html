@@ -2283,7 +2283,7 @@ color: #ffffff
               // Add title
               const title = document.createElement("span");
               title.classList.add("similar-text");
-              title.innerHTML = `<span data-i18n="similar.to">Similar data to</span> <span>${playerData[1]}</span>`;
+              title.innerHTML = `<span data-i18n="similar.to">Similar data to</span><span> ${playerData[1]}</span>`;
               title.classList.add(playerColor || colorClasses[colorIndex % colorClasses.length]);
               
               // Create selector container
