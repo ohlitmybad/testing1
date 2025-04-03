@@ -379,6 +379,13 @@ body.dark-mode #searchButton1 {
 
 
 
+@media (hover: none) and (pointer: coarse) {
+      .similar-text, .player-text {
+        line-height: 1 !important;
+        font-weight: 500 !important;
+      }
+    }
+    
 
 /* Similar players table */
 .similar-table {
@@ -967,17 +974,6 @@ body.dark-mode #SFctr {
 color: #ffffff
 }
 
-.similar-text, .player-text {
-  font-size: 12px;
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .similar-text, .player-text {
-    font-size: 12px !important;
-    line-height: 1 !important;
-    font-weight: 500 !important;
-  }
-}
 
 </style>
 </defs>
@@ -2280,7 +2276,8 @@ color: #ffffff
               
               // Add title
               const title = document.createElement("span");
-  title.innerHTML = `<span data-i18n="similar.to" class="similar-text">Similar data to</span> <span class="player-text">${playerData[1]}</span>`;
+              title.style.fontSize = "13px";  // This will apply to all child elements
+              title.innerHTML = `<span data-i18n="similar.to" class="similar-text">Similar data to</span> <span class="player-text">${playerData[1]}</span>`;
               title.classList.add(playerColor || colorClasses[colorIndex % colorClasses.length]);
               
               // Create selector container
