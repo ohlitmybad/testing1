@@ -436,7 +436,7 @@ button:hover {
   flex: 1;
   position: relative;
   height: fit-content !important; /* Use fit-content to size based on actual content */
-  max-height: 864px; /* Maximum height cap */
+  max-height: 865px; /* Maximum height cap */
   overflow: auto;
   background-color: var(--container-bg);
   border-radius: 12px;
