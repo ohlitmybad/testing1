@@ -286,7 +286,7 @@ body {
   padding: 2px 8px;
   background-color: var(--container-bg);
   width: 35px;
-  height: 16px;
+  height: 15px;
   appearance: textfield;
   -moz-appearance: textfield;
 }
@@ -327,7 +327,7 @@ body {
 .container {
   display: flex;
   max-width: min(1380px, 95%); /* Use the smaller of 1380px or 95% of viewport */
-  margin: 20px auto 40px;
+  margin: 20px auto;
   padding: 0 5px;
   gap: 15px;
   justify-content: flex-start; /* Align to start to maintain consistent gap */
@@ -338,12 +338,13 @@ body {
   flex: 0 0 280px;
   min-width: 280px;
   max-width: 280px; /* Keep minimum width same as flex-basis */
-  padding: 16px;
+  padding: 20.8px 17px;
   font-size: 12px;
   background-color: var(--container-bg);
   border-radius: 12px;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
+
 }
 
 .inputs input[type="number"] {
@@ -411,18 +412,15 @@ button {
 
 button:hover {
   background-color: #2980b9;
-  transform: translateY(-1px);
 }
 
-button:active {
-  transform: translateY(0);
-}
+
 
 /* Results table container */
 #tableWrapper {
   flex: 1;
   position: relative;
-  height: 863px; /* Set height to fill viewport minus space for navbar and margins */
+  height: 864px; /* Set height to fill viewport minus space for navbar and margins */
   overflow: auto;
   background-color: var(--container-bg);
   border-radius: 12px;
@@ -793,6 +791,7 @@ body.dark-mode button {
   
   .top-controls {
     padding: 0 15px;
+    margin-bottom:35px;
      /* Ensure top controls maintain minimum width */
   }
   
@@ -827,7 +826,7 @@ body.dark-mode button {
   #tableWrapper {
     width: 100%;
     max-width: 100%;
-    height: 950px;
+    height: 933px;
     min-width: 350px; /* Minimum width to ensure readability */
     overflow-x: auto;
   }
