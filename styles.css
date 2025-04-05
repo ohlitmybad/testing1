@@ -456,9 +456,12 @@ button:active {
 #tableWrapper th:first-child,
 #tableWrapper td:first-child {
   width: 22%;
-  min-width: 180px;
+  min-width: min(250px, 100%); /* Increase minimum width and ensure it doesn't exceed container */
   text-align: left;
   padding-left: 16px;
+  white-space: nowrap; /* Prevent text wrapping to keep row heights consistent */
+  overflow: visible; /* Allow content to be fully visible */
+  text-overflow: clip;
 }
 
 /* Ensure all other columns have equal width */
@@ -847,7 +850,7 @@ body.dark-mode th {
 }
 
 /* Media query for small screens under 760px */
-@media (max-width: 840px) {
+@media (max-width: 985px) {
   /* Reduce spacing between columns */
   #tableWrapper th:not(:first-child),
   #tableWrapper td:not(:first-child) {
@@ -856,14 +859,22 @@ body.dark-mode th {
     padding: 8px 2px; /* Reduce horizontal padding */
   }
   
-  /* Make the header content more compact */
-  .header-content {
-    gap: 2px; /* Reduce gap between sort indicator and text */
-  }
+
   
   /* Reduce overall table spacing */
   #tableWrapper td, 
   #tableWrapper th {
-    padding: 6px 2px;
+    padding: 8px 2px;
   }
+
+  
+  /* Hide the minutes section in player info */
+  .player-info .minutes {
+    display: none;
+  }
+
+  #tableWrapper th:first-child,
+#tableWrapper td:first-child {
+  width: 18%;
+}
 }
