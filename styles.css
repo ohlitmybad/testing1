@@ -597,8 +597,10 @@ td {
   transition: background-color 0.2s ease;
 }
 
-tr:hover td {
-  background-color: var(--hover-color);
+@media (hover: hover) {
+  tr:hover td {
+    background-color: var(--hover-color);
+  }
 }
 
 td:not(:first-child) {
