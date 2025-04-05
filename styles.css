@@ -653,13 +653,17 @@ th:not(:first-child)::before {
 .player-info {
   font-style: italic;
   font-size: 12px;
-  color: #777;
   display: block;
   margin-top: 4px;
+
+}
+
+.player-info, .player-info .age, .player-info .minutes {
+  color: #777 !important;
 }
 
 .dark-mode .player-info, .player-info .age, .player-info .minutes {
-  color: #aaa;
+  color: #777 !important;
 }
 
 .no-results-message {
