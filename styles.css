@@ -878,3 +878,15 @@ body.dark-mode th {
   width: 18%;
 }
 }
+@media (max-width: 765px) {
+
+
+
+  
+  /* Hide the minutes section in player info */
+  .player-info .age {
+    display: none;
+  }
+
+ 
+}
