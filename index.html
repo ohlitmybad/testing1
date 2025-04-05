@@ -1,1 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>	
+
+    <meta name="viewport" content="user-scalable=no">
+	<meta name="robots" content="noindex">
+  <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+
+<defs>
+<style>
+
+</style>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+	
+</head>
+
+<body>
+  <!-- Season selector aligned with navbar -->
+  <div class="top-controls">
+    <div class="season-selector">
+      <a class="active" style="user-select: none;">
+        <span data-i18n="current">Current</span>
+      </a>
+      <div class="season-divider"></div>
+      <a href="https://datamb.football/prosearch/" target="_self" rel="noopener noreferrer">
+        <span data-i18n="previous">Previous</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="inputs-wrapper">
+      <div class="inputs">
+        <form id="searchForm">
+          <!-- Custom position selector -->
+          <div class="custom-select-container">
+            <div class="custom-select-trigger" id="position-select-trigger">
+              <span>Goalkeepers</span>
+            </div>
+            <div class="custom-select-options" id="position-select-options">
+              <!-- Options will be populated by JavaScript -->
+            </div>
+            <select id="datasetSelector" style="display: none;" data-i18n="selectors.dataset">
+              <option value="dataset1">Goalkeepers</option>
+              <option value="dataset2">Centre-backs</option>
+              <option value="dataset3">Full-backs</option>
+              <option value="dataset4">Midfielders</option>
+              <option value="dataset5">Wingers</option>
+              <option value="dataset6">Strikers</option>
+            </select>
+          </div>
+
+          <!-- Custom league selector -->
+          <div class="custom-select-container">
+            <div class="custom-select-trigger" id="league-select-trigger">
+              <span>🌎 All Leagues</span>
+            </div>
+            <div class="custom-select-options" id="league-select-options">
+              <!-- Options will be populated by JavaScript -->
+            </div>
+            <select id="league" style="display: none;">
+              <option value="All" data-i18n="league.all">🌎 All Leagues</option>
+              <option value="Top 5 Leagues" data-i18n="league.top5">🇪🇺 Top 5 Leagues</option>
+              <option value="Top 7 Leagues" data-i18n="league.top7">🇪🇺 Top 7 Leagues</option>
+              <option value="Premier League">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+              <option value="La Liga">🇪🇸 La Liga</option>
+              <option value="Bundesliga">🇩🇪 Bundesliga</option>
+              <option value="Serie A">🇮🇹 Serie A</option> 
+              <option value="Ligue 1">🇫🇷 Ligue 1</option>
+              <option value="Liga Portugal">🇵🇹 Liga Portugal</option>
+              <option value="Eredivisie">🇳🇱 Eredivisie</option>
+              <option value="Belgium Pro League">🇧🇪 Belgium</option>
+              <option value="Scotland Premiership">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland</option>
+              <option value="Austrian Bundesliga">🇦🇹 Austria</option>
+              <option value="Swiss Super League">🇨🇭 Switzerland</option>      
+              <option value="Süper Lig">🇹🇷 Türkiye</option>
+              <option value="Denmark Superliga">🇩🇰 Denmark</option>
+              <option value="Sweden Allsvenskan">🇸🇪 Sweden</option>
+              <option value="Norway Eliteserien">🇳🇴 Norway</option>
+              <option value="Croatia HNL">🇭🇷 Croatia</option>
+              <option value="Serbia SuperLiga">🇷🇸 Serbia</option>
+              <option value="Czech Fortuna Liga">🇨🇿 Czech Republic</option>
+              <option value="Poland">🇵🇱 Poland</option>
+              <option value="Ukraine">🇺🇦 Ukraine</option>
+              <option value="Russia">🇷🇺 Russia</option>
+              <option value="Greece">🇬🇷 Greece</option>
+              <option value="Israel">🇮🇱 Israel</option>
+              <option value="J1 League">🇯🇵 Japan</option>
+              <option value="K League 1">🇰🇷 Korea</option>
+              <option value="Saudi Pro League">🇸🇦 Saudi Arabia</option>
+              <option value="MLS">🇺🇸 United States</option>
+              <option value="LigaMX">🇲🇽 Mexico</option>
+              <option value="Brazil Serie A">🇧🇷 Brazil</option>
+              <option value="Argentina Primera">🇦🇷 Argentina</option>
+              <option value="Uruguay Primera">🇺🇾 Uruguay</option>
+              <option value="Chile">🇨🇱 Chile</option>
+              <option value="Colombia">🇨🇴 Colombia</option>
+              <option value="Ecuador">🇪🇨 Ecuador</option>
+              <option value="Paraguay">🇵🇾 Paraguay</option>
+              <option value="Championship">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Championship</option>
+              <option value="Segunda Division">🇪🇸 Spain Segunda</option>
+              <option value="Serie B">🇮🇹 Serie B</option>
+              <option value="Bundesliga 2">🇩🇪 2. Bundesliga</option>
+              <option value="Ligue 2">🇫🇷 Ligue 2</option>  
+              <option value="Non Top 7 Leagues">🌍 Outside Top 7</option>
+              <option value="South America">🌎 South America</option>
+              <option value="Scandinavia">🌍 Scandinavia</option>
+              <option value="Balkans">🌍 Eastern Europe</option>
+            </select>
+          </div>
+
+          <!-- Replace input fields with range sliders -->
+          <div class="range-field">
+            <label for="defensiveActionsLow" data-i18n="metrics.gk.def_actions">Defensive Actions</label>
+            <div class="range-slider-container">
+              <input type="range" id="defensiveActionsLow" min="0" max="100" value="0" class="range-slider">
+              <input type="number" class="range-value" id="defensiveActionsLowValue" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <div class="range-field">
+            <label for="aerialsContestedLow" data-i18n="metrics.gk.aerials">Aerials Contested</label>
+            <div class="range-slider-container">
+              <input type="range" id="aerialsContestedLow" min="0" max="100" value="0" class="range-slider">
+              <input type="number" class="range-value" id="aerialsContestedLowValue" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <div class="range-field">
+            <label for="exitLineLow" data-i18n="metrics.gk.exit_line">Exit Line</label>
+            <div class="range-slider-container">
+              <input type="range" id="exitLineLow" min="0" max="100" value="0" class="range-slider">
+              <input type="number" class="range-value" id="exitLineLowValue" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <div class="range-field">
+            <label for="passesLow" data-i18n="metrics.gk.passes">Passes</label>
+            <div class="range-slider-container">
+              <input type="range" id="passesLow" min="0" max="100" value="0" class="range-slider">
+              <input type="number" class="range-value" id="passesLowValue" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <div class="range-field">
+            <label for="longPassPercentageLow" data-i18n="metrics.gk.long_pass">Long Pass %</label>
+            <div class="range-slider-container">
+              <input type="range" id="longPassPercentageLow" min="0" max="100" value="0" class="range-slider">
+              <input type="number" class="range-value" id="longPassPercentageLowValue" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <div class="range-field">
+            <label for="shortPassPercentageLow" data-i18n="metrics.gk.short_pass">Short Pass %</label>
+            <div class="range-slider-container">
+              <input type="range" id="shortPassPercentageLow" min="0" max="100" value="0" class="range-slider">
+              <input type="number" class="range-value" id="shortPassPercentageLowValue" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <div class="range-field">
+            <label for="psxgLow" data-i18n="metrics.gk.psxg_ga">PSxG - GA</label>
+            <div class="range-slider-container">
+              <input type="range" id="psxgLow" min="0" max="100" value="0" class="range-slider">
+              <input type="number" class="range-value" id="psxgLowValue" value="0" min="0" max="100">
+            </div>
+          </div>
+
+          <!-- Age range inputs -->
+          <div class="input-group">
+            <label for="ageLow" data-i18n="search.age">Age</label>
+            <div class="input-row">
+              <input type="number" id="ageLow" min="0" placeholder="15">
+              <input type="number" id="ageHigh" min="0" placeholder="45">
+            </div>
+          </div>
+
+          <!-- Minutes played range inputs -->
+          <div class="input-group">
+            <label for="minutesPlayedLow" data-i18n="search.minutes">Minutes Played</label>
+            <div class="input-row">
+              <input type="number" id="minutesPlayedLow" min="0" placeholder="0">
+              <input type="number" id="minutesPlayedHigh" min="0" placeholder="10,000">
+            </div>
+          </div>
+
+          <button type="submit" data-i18n="search.button">Search</button>
+        </form>
+      </div>
+      
+      <div class="inputs-toggle">
+        <div class="inputs-toggle-icon"></div>
+      </div>
+    </div>
+
+    <div id="tableWrapper">
+      <div id="resultsContainer">
+        <!-- The search results will be displayed here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Dark mode toggle placed fixed at bottom right just like in plot.html -->
+  <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <span class="toggle-icon"></span>
+  </div>
+
+  <script src="main.js"></script>
+  <script>
+    // Function to toggle dark mode
+    function toggleDarkMode() {
+      const body = document.querySelector("body");
+      body.classList.toggle("dark-mode");
+
+      // Store the user's preference in local storage
+      const isDarkMode = body.classList.contains("dark-mode");
+      localStorage.setItem("darkMode", isDarkMode);
+      
+      // Update all slider gradients based on new dark mode state
+      updateSliderGradients(isDarkMode);
+    }
+
+    // Function to handle inputs toggle on mobile
+    function setupInputsToggle() {
+      const inputsToggle = document.querySelector('.inputs-toggle');
+      const inputs = document.querySelector('.inputs');
+      
+      // Default state for mobile - inputs visible by default
+      if (window.innerWidth <= 1350) {
+        // Don't add collapsed class by default
+        // inputs.classList.add('collapsed');
+        // inputsToggle.classList.add('collapsed');
+      }
+      
+      inputsToggle.addEventListener('click', function() {
+        inputs.classList.toggle('collapsed');
+        this.classList.toggle('collapsed');
+      });
+      
+      // Re-evaluate state on window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth <= 1350) {
+          // Only manage visibility, don't force collapsed state
+        } else {
+          // Remove collapsed classes on desktop
+          inputs.classList.remove('collapsed');
+          inputsToggle.classList.remove('collapsed');
+        }
+      });
+    }
+
+    // Function to update all slider gradients
+    function updateSliderGradients(isDarkMode) {
+      document.querySelectorAll('.range-slider').forEach(slider => {
+        const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+        const bgColor = isDarkMode ? '#333' : '#e0e0e0';
+        slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${bgColor} ${percent}%, ${bgColor} 100%)`;
+      });
+    }
+
+    // Check if user has a stored preference for dark mode
+    const storedDarkMode = localStorage.getItem("darkMode");
+
+    if (storedDarkMode === "true") {
+      const body = document.querySelector("body");
+      body.classList.add("dark-mode");
+      
+      // Make sure to update slider gradients after DOM is fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        updateSliderGradients(true);
+      });
+    }
+
+    // Setup for custom selectors
+    function setupCustomSelect(trigger, options, selectElement) {
+      // Toggle dropdown when clicking the trigger
+      trigger.addEventListener('click', function() {
+        // Close all other open dropdowns first
+        document.querySelectorAll('.custom-select-trigger.open').forEach(function(openTrigger) {
+          if (openTrigger !== trigger) {
+            openTrigger.classList.remove('open');
+            const openOptions = openTrigger.nextElementSibling;
+            if (openOptions) openOptions.style.display = 'none';
+          }
+        });
+        
+        // Toggle this dropdown
+        trigger.classList.toggle('open');
+        const isOpen = trigger.classList.contains('open');
+        options.style.display = isOpen ? 'block' : 'none';
+      });
+      
+      // Handle option selection
+      options.addEventListener('click', function(e) {
+        const option = e.target.closest('.custom-select-option');
+        if (!option) return;
+        
+        // Update selected option
+        options.querySelectorAll('.custom-select-option').forEach(opt => 
+          opt.classList.remove('selected')
+        );
+        option.classList.add('selected');
+        
+        // Update trigger text
+        const dataValue = option.getAttribute('data-value');
+        trigger.querySelector('span').textContent = option.textContent.trim();
+        
+        // Update hidden select
+        selectElement.value = dataValue;
+        const event = new Event('change');
+        selectElement.dispatchEvent(event);
+        
+        // Close dropdown
+        trigger.classList.remove('open');
+        options.style.display = 'none';
+      });
+    }
+
+    // Custom function to update metric labels based on position
+    function customUpdateMetricLabels(dataset) {
+      let position = '';
+      let metricLabels = [];
+      
+      // Maps for each position's metrics with proper attribute names
+      const fieldMappingByPosition = {
+        'gk': {
+          'defensiveActionsLow': { label: 'Defensive Actions', key: 'metrics.gk.def_actions' },
+          'aerialsContestedLow': { label: 'Aerials Contested', key: 'metrics.gk.aerials' },
+          'exitLineLow': { label: 'Exit Line', key: 'metrics.gk.exit_line' },
+          'passesLow': { label: 'Passes', key: 'metrics.gk.passes' },
+          'longPassPercentageLow': { label: 'Long Pass %', key: 'metrics.gk.long_pass' },
+          'shortPassPercentageLow': { label: 'Short Pass %', key: 'metrics.gk.short_pass' },
+          'psxgLow': { label: 'PSxG - GA', key: 'metrics.gk.psxg_ga' }
+        },
+        'cb': {
+          'defensiveActionsLow': { label: 'Passes', key: 'metrics.cb.passes' },
+          'aerialsContestedLow': { label: 'Forward Pass %', key: 'metrics.cb.forward_pass' },
+          'exitLineLow': { label: 'Progressive Passes', key: 'metrics.cb.prog_passes' },
+          'passesLow': { label: 'Defensive Actions', key: 'metrics.cb.def_actions' },
+          'longPassPercentageLow': { label: 'Defensive Duels', key: 'metrics.cb.def_duel' },
+          'shortPassPercentageLow': { label: 'Aerial Duels', key: 'metrics.cb.aerial' },
+          'psxgLow': { label: 'Progressive Carries', key: 'metrics.cb.prog_carries' }
+        },
+        'fb': {
+          'defensiveActionsLow': { label: 'Crosses', key: 'metrics.fb.cross' },
+          'aerialsContestedLow': { label: 'xA', key: 'metrics.fb.xa' },
+          'exitLineLow': { label: 'Progressive Passes', key: 'metrics.fb.prog_passes' },
+          'passesLow': { label: 'Defensive Actions', key: 'metrics.fb.def_actions' },
+          'longPassPercentageLow': { label: 'Defensive Duels', key: 'metrics.fb.def_duel' },
+          'shortPassPercentageLow': { label: 'Aerial Duels', key: 'metrics.fb.aerial' },
+          'psxgLow': { label: 'Progressive Carries', key: 'metrics.fb.prog_carries' }
+        },
+        'cm': {
+          'defensiveActionsLow': { label: 'Duels', key: 'metrics.cm.duel' },
+          'aerialsContestedLow': { label: 'Defensive Actions', key: 'metrics.cm.def_actions' },
+          'exitLineLow': { label: 'Progressive Carries', key: 'metrics.cm.prog_carries' },
+          'passesLow': { label: 'Forward Passes', key: 'metrics.cm.forward_passes' },
+          'longPassPercentageLow': { label: 'Forward Pass %', key: 'metrics.cm.forward_pass' },
+          'shortPassPercentageLow': { label: 'Key Passes', key: 'metrics.cm.key_passes' },
+          'psxgLow': { label: 'Progressive Passes', key: 'metrics.cm.prog_passes' }
+        },
+        'fw': {
+          'defensiveActionsLow': { label: 'Progressive Carries', key: 'metrics.fw.prog_carries' },
+          'aerialsContestedLow': { label: 'Dribbles', key: 'metrics.fw.dribbles' },
+          'exitLineLow': { label: 'NPG', key: 'metrics.fw.npg' },
+          'passesLow': { label: 'xG + xA', key: 'metrics.fw.xg_xa' },
+          'longPassPercentageLow': { label: 'Assists', key: 'metrics.fw.assists' },
+          'shortPassPercentageLow': { label: 'Key Passes', key: 'metrics.fw.key_passes' },
+          'psxgLow': { label: 'Offensive Actions', key: 'metrics.fw.off_actions' }
+        },
+        'st': {
+          'defensiveActionsLow': { label: 'Pass Received', key: 'metrics.st.pass_received' },
+          'aerialsContestedLow': { label: 'Aerial Duels', key: 'metrics.st.aerial' },
+          'exitLineLow': { label: 'NPG', key: 'metrics.st.npg' },
+          'passesLow': { label: 'xG', key: 'metrics.st.xg' },
+          'longPassPercentageLow': { label: 'Pass to Pen', key: 'metrics.st.pass_to_pen' },
+          'shortPassPercentageLow': { label: 'xA', key: 'metrics.st.xa' },
+          'psxgLow': { label: 'Offensive Actions', key: 'metrics.st.off_actions' }
+        }
+      };
+      
+      // Determine position code based on dataset
+      switch(dataset) {
+        case 'dataset1': position = 'gk'; break;
+        case 'dataset2': position = 'cb'; break;
+        case 'dataset3': position = 'fb'; break;
+        case 'dataset4': position = 'cm'; break;
+        case 'dataset5': position = 'fw'; break;
+        case 'dataset6': position = 'st'; break;
+      }
+      
+      const mappingForPosition = fieldMappingByPosition[position];
+      
+      // Update each label with the metric name for this position
+      Object.entries(mappingForPosition).forEach(([fieldId, metadata]) => {
+        const label = document.querySelector(`label[for="${fieldId}"]`);
+        if (label) {
+          // Set the data-i18n attribute for translations
+          label.setAttribute('data-i18n', metadata.key);
+          
+          // Set the actual metric name directly
+          label.textContent = metadata.label;
+        }
+      });
+    }
+
+    // Initialize custom selectors
+    document.addEventListener('DOMContentLoaded', function() {
+      // Position selector
+      const positionSelector = document.getElementById('datasetSelector');
+      const positionTrigger = document.getElementById('position-select-trigger');
+      const positionOptions = document.getElementById('position-select-options');
+      
+      // Populate position options
+      Array.from(positionSelector.options).forEach(option => {
+        const customOption = document.createElement('div');
+        customOption.className = 'custom-select-option';
+        if (option.selected) customOption.classList.add('selected');
+        customOption.setAttribute('data-value', option.value);
+        customOption.textContent = option.textContent;
+        positionOptions.appendChild(customOption);
+      });
+      
+      setupCustomSelect(positionTrigger, positionOptions, positionSelector);
+      
+      // League selector
+      const leagueSelector = document.getElementById('league');
+      const leagueTrigger = document.getElementById('league-select-trigger');
+      const leagueOptions = document.getElementById('league-select-options');
+      
+      // Populate league options
+      Array.from(leagueSelector.options).forEach(option => {
+        const customOption = document.createElement('div');
+        customOption.className = 'custom-select-option';
+        if (option.selected) customOption.classList.add('selected');
+        customOption.setAttribute('data-value', option.value);
+        customOption.textContent = option.textContent;
+        leagueOptions.appendChild(customOption);
+      });
+      
+      setupCustomSelect(leagueTrigger, leagueOptions, leagueSelector);
+
+      // Range sliders - critical fix for search functionality
+      document.querySelectorAll('.range-slider').forEach(slider => {
+        const valueInput = slider.nextElementSibling;
+        
+        // Set initial gradient based on value
+        const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+        slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${slider.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${slider.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+        
+        // Update value input and gradient on slider input
+        slider.addEventListener('input', function() {
+          // Update value input
+          valueInput.value = this.value;
+          
+          // Update the original slider's value to ensure JS can find it
+          this.value = valueInput.value;
+          
+          // Update gradient fill based on value
+          const percent = (this.value - this.min) / (this.max - this.min) * 100;
+          this.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+        });
+        
+        // Update slider when value input changes
+        valueInput.addEventListener('input', function() {
+          // Make sure the value is within bounds
+          let value = parseInt(this.value);
+          
+          // Handle empty input
+          if (isNaN(value)) {
+            value = 0;
+          }
+          
+          // Clamp value between min and max
+          value = Math.max(0, Math.min(100, value));
+          
+          // Update value if it was adjusted
+          this.value = value;
+          
+          // Update slider value
+          slider.value = value;
+          
+          // Update gradient
+          const percent = (value - slider.min) / (slider.max - slider.min) * 100;
+          slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+        });
+      });
+
+      // Fix for preserving slider values when changing position or league
+      // Override datasetSelector change event
+      positionSelector.addEventListener('change', function() {
+        // Call our custom function to update labels based on position
+        customUpdateMetricLabels(this.value);
+        
+        // Need to add this before the original event handler is called by main.js
+        // Store current slider and input values to restore after clearSearchInputs is called
+        
+        // The original event in main.js will run and clear all inputs, then we'll restore our values
+        setTimeout(() => {
+          // After main.js has run clearSearchInputs(), restore our values
+          document.querySelectorAll('.range-slider').forEach(slider => {
+            // Reset to 0 for all sliders when changing position
+            slider.value = 0;
+            const valueInput = slider.nextElementSibling;
+            valueInput.value = 0;
+            
+            // Update slider gradients
+            const percent = 0;
+            slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+          });
+        }, 10); // Small delay to ensure this runs after main.js event handler
+      }, true); // Use capture phase to run before main.js handler
+      
+      // Same for league changes
+      leagueSelector.addEventListener('change', function() {
+        // Run this after the original event handler to restore values
+        setTimeout(() => {
+          // Restore slider values after main.js might clear them
+          document.querySelectorAll('.range-slider').forEach(slider => {
+            // For league changes, we just make sure values are correctly set to 0
+            if (!slider.value) {
+              slider.value = 0;
+            }
+            const valueInput = slider.nextElementSibling;
+            if (!valueInput.value) {
+              valueInput.value = 0;
+            }
+            
+            // Update slider gradients
+            const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+            slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+          });
+        }, 10); // Small delay to ensure this runs after main.js event handler
+      });
+
+      // Override form submission to ensure slider values are properly set
+      document.getElementById('searchForm').addEventListener('submit', function(event) {
+        // Don't preventDefault here - let the main.js handle it
+        
+        // Make sure range slider values are synchronized before submission
+        document.querySelectorAll('.range-slider').forEach(slider => {
+          const valueInput = slider.nextElementSibling;
+          slider.value = valueInput.value || 0;
+        });
+        
+        // Clear the tableWrapper to ensure we don't have stale results
+        const tableWrapper = document.getElementById('tableWrapper');
+        tableWrapper.innerHTML = '<div id="resultsContainer"></div>';
+      }, true); // Use capture phase to run before main.js handler
+
+      // Click outside to close dropdowns
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-select-container')) {
+          document.querySelectorAll('.custom-select-trigger.open').forEach(trigger => {
+            trigger.classList.remove('open');
+            trigger.nextElementSibling.style.display = 'none';
+          });
+        }
+      });
+      
+      // Initialize the labels on page load
+      customUpdateMetricLabels('dataset1');
+    });
+
+    let translations = {};
+    let currentLanguage = 'en';
+
+    function getPreferredLanguage() {
+      // PRIORITY 1: URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get('lang');
+      
+      if (langParam) {
+        return langParam; 
+      }
+      
+      // PRIORITY 2: Stored preference
+      const storedLang = localStorage.getItem('preferredLanguage');
+      if (storedLang) {
+        return storedLang;
+      }
+      
+      // PRIORITY 3: Browser language
+      const browserLang = navigator.language.slice(0, 2);
+      return browserLang || 'en';
+    }
+
+    // Helper function to get nested translations
+    function getNestedTranslation(obj, path) {
+      return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    }
+
+    // Load and apply translations
+    async function applyLanguage(lang) {
+      currentLanguage = lang;
+      console.log(lang);
+
+      // Skip fetching translations for English
+      if (lang === 'en') {
+        return;
+      }
+      
+      try {
+        const response = await fetch(`./locales/${lang}.json`);
+        
+        // Don't throw an error, just return null if response is not OK
+        if (response.ok) {
+          translations = await response.json();
+        } else {
+          translations = null;
+        }
+      } catch (error) {
+        translations = null;
+      }
+      
+      // Apply translations to all elements with data-i18n attribute
+      document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        const translation = getNestedTranslation(translations, key);
+        if (translation) {
+          if (translation.includes('<')) {
+            element.innerHTML = translation;
+          } else {
+            element.textContent = translation;
+          }
+        }
+      });
+
+      // Update position selector options
+      const datasetSelector = document.getElementById('datasetSelector');
+      if (datasetSelector) {
+        const defaultPositions = {
+          'goalkeepers': 'Goalkeepers',
+          'centre-backs': 'Centre-backs',
+          'full-backs': 'Full-backs',
+          'midfielders': 'Midfielders',
+          'wingers': 'Wingers',
+          'strikers': 'Strikers'
+        };
+        
+        const positions = translations && translations.position ? translations.position : defaultPositions;
+        
+        datasetSelector.options[0].textContent = positions.goalkeepers || defaultPositions.goalkeepers;
+        datasetSelector.options[1].textContent = positions['centre-backs'] || defaultPositions['centre-backs'];
+        datasetSelector.options[2].textContent = positions['full-backs'] || defaultPositions['full-backs'];
+        datasetSelector.options[3].textContent = positions.midfielders || defaultPositions.midfielders;
+        datasetSelector.options[4].textContent = positions.wingers || defaultPositions.wingers;
+        datasetSelector.options[5].textContent = positions.strikers || defaultPositions.strikers;
+        
+        // Update custom selector text
+        const positionTrigger = document.getElementById('position-select-trigger');
+        const selectedOption = datasetSelector.options[datasetSelector.selectedIndex];
+        if (positionTrigger && selectedOption) {
+          positionTrigger.querySelector('span').textContent = selectedOption.textContent;
+        }
+      }
+    }
+
+    // Initialize with preferred language following priority rules
+    document.addEventListener('DOMContentLoaded', async () => {
+      const preferredLanguage = getPreferredLanguage();
+      await applyLanguage(preferredLanguage);
+      
+      // Setup inputs toggle for mobile
+      setupInputsToggle();
+    });
+  </script>
+</body>
+</html>
 
