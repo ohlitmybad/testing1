@@ -225,15 +225,32 @@ body {
   -webkit-appearance: none;
   height: 4px;
   border-radius: 2px;
-  background: #e0e0e0;
   outline: none;
-  transition: all 0.2s ease;
   position: relative;
+  /* Remove the transition for background - we'll use a CSS variable approach */
+  --slider-position: 0%;
 }
 
-/* The colored fill effect */
+/* The colored fill effect using CSS variables */
 .range-slider {
-  background: linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) 0%, #e0e0e0 0%, #e0e0e0 100%);
+  background: linear-gradient(
+    to right, 
+    var(--primary-color) 0%, 
+    var(--primary-color) var(--slider-position), 
+    #e0e0e0 var(--slider-position), 
+    #e0e0e0 100%
+  );
+}
+
+/* Dark mode adjustments using CSS variables */
+.dark-mode .range-slider {
+  background: linear-gradient(
+    to right, 
+    var(--primary-color) 0%, 
+    var(--primary-color) var(--slider-position), 
+    #333 var(--slider-position), 
+    #333 100%
+  );
 }
 
 /* Make thumb smaller and centered */
@@ -301,11 +318,6 @@ body {
 .range-value:focus {
   outline: none;
   border-color: var(--primary-color);
-}
-
-/* Dark mode adjustments */
-.dark-mode .range-slider {
-  background: linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) 0%, #333 0%, #333 100%);
 }
 
 /* Input Group Styles */
@@ -666,7 +678,7 @@ th:not(:first-child)::before {
   cursor: pointer;
   box-shadow: var(--shadow);
   z-index: 100;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease-out;
 }
 
 .toggle-icon::before {
