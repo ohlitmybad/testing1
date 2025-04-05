@@ -412,47 +412,6 @@
       // Store the user's preference in local storage
       const isDarkMode = body.classList.contains("dark-mode");
       localStorage.setItem("darkMode", isDarkMode);
-      
-      // Update all slider gradients based on new dark mode state
-      updateSliderGradients(isDarkMode);
-    }
-
-    // Function to handle inputs toggle on mobile
-    function setupInputsToggle() {
-      const inputsToggle = document.querySelector('.inputs-toggle');
-      const inputs = document.querySelector('.inputs');
-      
-      // Default state for mobile - inputs visible by default
-      if (window.innerWidth <= 1350) {
-        // Don't add collapsed class by default
-        // inputs.classList.add('collapsed');
-        // inputsToggle.classList.add('collapsed');
-      }
-      
-      inputsToggle.addEventListener('click', function() {
-        inputs.classList.toggle('collapsed');
-        this.classList.toggle('collapsed');
-      });
-      
-      // Re-evaluate state on window resize
-      window.addEventListener('resize', function() {
-        if (window.innerWidth <= 1350) {
-          // Only manage visibility, don't force collapsed state
-        } else {
-          // Remove collapsed classes on desktop
-          inputs.classList.remove('collapsed');
-          inputsToggle.classList.remove('collapsed');
-        }
-      });
-    }
-
-    // Function to update all slider gradients
-    function updateSliderGradients(isDarkMode) {
-      document.querySelectorAll('.range-slider').forEach(slider => {
-        const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-        const bgColor = isDarkMode ? '#333' : '#e0e0e0';
-        slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${bgColor} ${percent}%, ${bgColor} 100%)`;
-      });
     }
 
     // Check if user has a stored preference for dark mode
@@ -461,11 +420,6 @@
     if (storedDarkMode === "true") {
       const body = document.querySelector("body");
       body.classList.add("dark-mode");
-      
-      // Make sure to update slider gradients after DOM is fully loaded
-      document.addEventListener('DOMContentLoaded', function() {
-        updateSliderGradients(true);
-      });
     }
 
     // Setup for custom selectors
@@ -540,8 +494,6 @@
           }
         }
         
-        // Update text (maintain this part)
-        
         // Update hidden select
         selectElement.value = dataValue;
         const event = new Event('change');
@@ -550,6 +502,35 @@
         // Close dropdown
         trigger.classList.remove('open');
         options.style.display = 'none';
+      });
+    }
+
+    // Function to handle inputs toggle on mobile
+    function setupInputsToggle() {
+      const inputsToggle = document.querySelector('.inputs-toggle');
+      const inputs = document.querySelector('.inputs');
+      
+      // Default state for mobile - inputs visible by default
+      if (window.innerWidth <= 1350) {
+        // Don't add collapsed class by default
+        // inputs.classList.add('collapsed');
+        // inputsToggle.classList.add('collapsed');
+      }
+      
+      inputsToggle.addEventListener('click', function() {
+        inputs.classList.toggle('collapsed');
+        this.classList.toggle('collapsed');
+      });
+      
+      // Re-evaluate state on window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth <= 1350) {
+          // Only manage visibility, don't force collapsed state
+        } else {
+          // Remove collapsed classes on desktop
+          inputs.classList.remove('collapsed');
+          inputsToggle.classList.remove('collapsed');
+        }
       });
     }
 
@@ -673,11 +654,11 @@
       document.querySelectorAll('.range-slider').forEach(slider => {
         const valueInput = slider.nextElementSibling;
         
-        // Set initial gradient based on value
+        // Set initial position as a CSS variable
         const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-        slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${slider.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${slider.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+        slider.style.setProperty('--slider-position', `${percent}%`);
         
-        // Update value input and gradient on slider input
+        // Update value input and position on slider input
         slider.addEventListener('input', function() {
           // Update value input
           valueInput.value = this.value;
@@ -685,9 +666,9 @@
           // Update the original slider's value to ensure JS can find it
           this.value = valueInput.value;
           
-          // Update gradient fill based on value
+          // Update position CSS variable
           const percent = (this.value - this.min) / (this.max - this.min) * 100;
-          this.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+          this.style.setProperty('--slider-position', `${percent}%`);
         });
         
         // Update slider when value input changes
@@ -709,9 +690,9 @@
           // Update slider value
           slider.value = value;
           
-          // Update gradient
+          // Update position CSS variable
           const percent = (value - slider.min) / (slider.max - slider.min) * 100;
-          slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+          slider.style.setProperty('--slider-position', `${percent}%`);
         });
       });
 
@@ -721,21 +702,17 @@
         // Call our custom function to update labels based on position
         customUpdateMetricLabels(this.value);
         
-        // Need to add this before the original event handler is called by main.js
-        // Store current slider and input values to restore after clearSearchInputs is called
-        
         // The original event in main.js will run and clear all inputs, then we'll restore our values
         setTimeout(() => {
-          // After main.js has run clearSearchInputs(), restore our values
+          // After main.js has run clearSearchInputs(), reset sliders to 0
           document.querySelectorAll('.range-slider').forEach(slider => {
             // Reset to 0 for all sliders when changing position
             slider.value = 0;
             const valueInput = slider.nextElementSibling;
             valueInput.value = 0;
             
-            // Update slider gradients
-            const percent = 0;
-            slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+            // Reset position variable
+            slider.style.setProperty('--slider-position', '0%');
           });
         }, 10); // Small delay to ensure this runs after main.js event handler
       }, true); // Use capture phase to run before main.js handler
@@ -744,9 +721,9 @@
       leagueSelector.addEventListener('change', function() {
         // Run this after the original event handler to restore values
         setTimeout(() => {
-          // Restore slider values after main.js might clear them
+          // Make sure slider values are correctly set
           document.querySelectorAll('.range-slider').forEach(slider => {
-            // For league changes, we just make sure values are correctly set to 0
+            // For league changes, ensure values are correctly synchronized
             if (!slider.value) {
               slider.value = 0;
             }
@@ -755,9 +732,9 @@
               valueInput.value = 0;
             }
             
-            // Update slider gradients
+            // Update position variable
             const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-            slider.style.background = `linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} ${percent}%, ${document.body.classList.contains('dark-mode') ? '#333' : '#e0e0e0'} 100%)`;
+            slider.style.setProperty('--slider-position', `${percent}%`);
           });
         }, 10); // Small delay to ensure this runs after main.js event handler
       });
