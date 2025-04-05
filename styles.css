@@ -113,7 +113,7 @@ body {
   cursor: pointer;
   user-select: none;
   position: relative;
-  line-height: 1;
+  line-height: 1.4;
   height: 40px;
   transition: all 0.2s ease;
 }
@@ -124,7 +124,16 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 20px);
+  padding: 2px 0;
+  margin-left: 8px;
 }
+
+.custom-select-option span {
+
+  margin-left: 9px;
+}
+
+
 
 .custom-select-trigger::after {
   content: '';
@@ -165,7 +174,14 @@ body {
   cursor: pointer;
   color: var(--text-color);
   transition: background-color 0.2s ease;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
 }
+.custom-select-option iconify-icon, .custom-select-trigger iconify-icon {
+  transform: translateY(-1px);
+}
+
 
 .custom-select-option:hover {
   background-color: var(--hover-color);
@@ -415,6 +431,7 @@ button:active {
   transition: all 0.3s ease;
   overflow-x: auto;
   min-width: 1050px; /* Minimum width to ensure readability */
+  
 }
 
 /* Ensure table takes full width and uses proper layout */
@@ -471,7 +488,8 @@ thead tr {
 
 /* Fix header cells for better spacing */
 th {
-  height: 40px; /* Fixed height for header cells */
+  height: 40px; /* Changed from fixed height to auto to accommodate wrapped text */
+  min-height: 40px; /* Minimum height to ensure consistent spacing */
   vertical-align: middle;
   background-color: var(--table-header-bg);
   font-size: 12px;
@@ -482,8 +500,9 @@ th {
   color: var(--text-color);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  white-space: nowrap;
+  white-space: normal; /* Changed from nowrap to normal to allow wrapping */
   box-shadow: 0 1px 0 var(--border-color);
+  padding: 8px 16px; /* Add consistent padding for all header cells */
 }
 
 table {
@@ -516,8 +535,9 @@ th:not(:first-child) {
   height: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal; /* Changed from nowrap to normal to allow wrapping */
   min-width: 50px; /* Ensure minimum width for metric column headers */
+  line-height: 1.2; /* Add line height for better readability when wrapped */
 }
 
 /* First column header content should be left-aligned */
@@ -758,14 +778,13 @@ body.dark-mode button {
 }
 
 /* Switch to mobile layout */
-@media (max-width: 1350px) {
-
-
+@media (max-width: 1355px) {
   .container {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
     padding: 0 15px;
-     /* Ensure container maintains minimum width */
+    /* Ensure container maintains minimum width */
   }
   
   .top-controls {
@@ -804,11 +823,10 @@ body.dark-mode button {
   #tableWrapper {
     width: 100%;
     max-width: 100%;
+    height: 950px;
     min-width: 350px; /* Minimum width to ensure readability */
     overflow-x: auto;
   }
-  
-
 }
 
 /* Dark mode specific styling for table header */
