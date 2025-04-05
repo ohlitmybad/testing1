@@ -39,12 +39,12 @@ body {
   transition: background-color 0.3s, color 0.3s;
   margin: 0;
   padding: 0;
-  min-width: 1000px; /* Prevent page from shrinking below 1000px */
+   /* Prevent page from shrinking below 1000px */
 }
 
 /* Top controls with season selector */
 .top-controls {
-  max-width: 95%;
+  max-width: min(1380px, 95%); /* Use the smaller of 1380px or 95% of viewport */
   margin: 20px auto 0;
   padding: 0 5px;
   display: flex;
@@ -310,17 +310,18 @@ body {
 /* Main layout container */
 .container {
   display: flex;
-  max-width: 95%;
+  max-width: min(1380px, 95%); /* Use the smaller of 1380px or 95% of viewport */
   margin: 20px auto 40px;
   padding: 0 5px;
   gap: 15px;
-  justify-content: center;
+  justify-content: flex-start; /* Align to start to maintain consistent gap */
 }
 
 /* Form inputs container */
 .inputs {
   flex: 0 0 280px;
-  min-width: 280px; /* Keep minimum width same as flex-basis */
+  min-width: 280px;
+  max-width: 280px; /* Keep minimum width same as flex-basis */
   padding: 16px;
   font-size: 12px;
   background-color: var(--container-bg);
@@ -758,22 +759,18 @@ body.dark-mode button {
 
 /* Switch to mobile layout */
 @media (max-width: 1350px) {
-  body {
-    /* Keep minimum width even in mobile layout */
-    min-width: 1000px;
-  }
+
 
   .container {
     flex-direction: column;
     align-items: center;
     padding: 0 15px;
-    min-width: 1000px; /* Ensure container maintains minimum width */
+     /* Ensure container maintains minimum width */
   }
   
   .top-controls {
-    max-width: 100%;
     padding: 0 15px;
-    min-width: 1000px; /* Ensure top controls maintain minimum width */
+     /* Ensure top controls maintain minimum width */
   }
   
   /* Inputs wrapper in mobile */
@@ -807,14 +804,11 @@ body.dark-mode button {
   #tableWrapper {
     width: 100%;
     max-width: 100%;
-    min-width: 1000px; /* Ensure table wrapper maintains minimum width */
+    min-width: 350px; /* Minimum width to ensure readability */
     overflow-x: auto;
   }
   
-  /* Ensure table has horizontal scroll if needed */
-  #tableWrapper table {
-    min-width: 1050px;
-  }
+
 }
 
 /* Dark mode specific styling for table header */
