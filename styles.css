@@ -49,6 +49,7 @@ body {
   padding: 0 5px;
   display: flex;
   justify-content: flex-start;
+  margin-bottom: 35px
 }
 
 /* Season selector styling */
@@ -803,7 +804,7 @@ body.dark-mode button {
   
   .top-controls {
     padding: 0 15px;
-    margin-bottom: 45px;
+    margin-bottom: 35px;
      /* Ensure top controls maintain minimum width */
   }
   
