@@ -435,7 +435,8 @@ button:hover {
 #tableWrapper {
   flex: 1;
   position: relative;
-  height: 864px; /* Set height to fill viewport minus space for navbar and margins */
+  height: fit-content !important; /* Use fit-content to size based on actual content */
+  max-height: 864px; /* Maximum height cap */
   overflow: auto;
   background-color: var(--container-bg);
   border-radius: 12px;
@@ -444,7 +445,7 @@ button:hover {
   transition: all 0.3s ease;
   overflow-x: auto;
   min-width: 1050px; /* Minimum width to ensure readability */
-  
+  display: block; /* Ensure proper display mode */
 }
 
 /* Ensure table takes full width and uses proper layout */
@@ -453,6 +454,7 @@ button:hover {
   margin: 0;
   width: 100%;
   table-layout: fixed;
+  height: auto !important; /* Make sure the table itself adjusts to content */
 }
 
 /* Properly align and size cells */
@@ -818,7 +820,6 @@ body.dark-mode button {
   
   /* Inputs wrapper in mobile */
   .inputs-wrapper {
-    margin-bottom: 20px;
     width: 100%;
     max-width: 100%;
   }
@@ -845,11 +846,14 @@ body.dark-mode button {
   }
   
   #tableWrapper {
+    margin-top: 5px;
     width: 100%;
     max-width: 100%;
-    height: 933px;
+    height: fit-content !important; /* Use fit-content to match content size */
+    max-height: 933px; /* Maximum height cap */
     min-width: 350px; /* Minimum width to ensure readability */
     overflow-x: auto;
+    display: block; /* Ensure proper display mode */
   }
 }
 
