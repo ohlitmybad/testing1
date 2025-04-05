@@ -1934,7 +1934,9 @@ document.getElementById('league').addEventListener('change', function () {
 
   // Initialize the metric labels based on the default dataset
   updateMetricLabels('dataset1');
-
+  
+  // Display search instructions when the page loads
+  displaySearchInstructions();
 
 
     function clearSearchInputs() {
@@ -1945,6 +1947,30 @@ document.getElementById('league').addEventListener('change', function () {
       // Clear the results container
       const resultsContainer = document.getElementById('resultsContainer');
       resultsContainer.innerHTML = '';
+
+    }
+    
+    // Function to display search instructions when the page loads
+    function displaySearchInstructions() {
+      const resultsContainer = document.getElementById('resultsContainer');
+      resultsContainer.innerHTML = '';
+      
+      const instructionsMessage = document.createElement('div');
+      instructionsMessage.classList.add('no-results-message');
+      
+      instructionsMessage.innerHTML = `
+          <span data-i18n="search.instructions_text"><h3>Search Instructions</h3>
+        Enter percentile values to find players matching your criteria.<br><br>
+      
+          <li>Select a position and league first</li>
+          <li>Enter minimum percentile values (0-100) for the metrics you care about</li>
+          <li>Leave fields blank if you don't want to filter by that metric</li>
+          <li>Click 'Search' to find matching players</li><span>
+        
+      `;
+      
+      resultsContainer.appendChild(instructionsMessage);
+      applyLanguage(getPreferredLanguage());
     }
 
     document.getElementById('searchForm').addEventListener('submit', function (event) {
@@ -2449,5 +2475,8 @@ return true;
     const preferredLanguage = getPreferredLanguage();
     loadTranslations(preferredLanguage);
   });
+
+  // Display search instructions when the page loads
+  displaySearchInstructions();
 
 })}) })}) })}) })}) })}) })}) 
