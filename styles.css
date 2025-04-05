@@ -465,6 +465,7 @@ button:active {
 #tableWrapper th:not(:first-child),
 #tableWrapper td:not(:first-child) {
   width: 11%; /* Equal width for all metric columns */
+  min-width: max-content; /* Ensure width is at least as wide as the content */
 }
 
 /* Improve header styling */
@@ -843,4 +844,26 @@ body.dark-mode th {
   background-color: #222222;
   color: var(--text-color);
   box-shadow: 0 1px 0 var(--border-color);
+}
+
+/* Media query for small screens under 760px */
+@media (max-width: 840px) {
+  /* Reduce spacing between columns */
+  #tableWrapper th:not(:first-child),
+  #tableWrapper td:not(:first-child) {
+    width: auto;
+    min-width: 30px;
+    padding: 8px 2px; /* Reduce horizontal padding */
+  }
+  
+  /* Make the header content more compact */
+  .header-content {
+    gap: 2px; /* Reduce gap between sort indicator and text */
+  }
+  
+  /* Reduce overall table spacing */
+  #tableWrapper td, 
+  #tableWrapper th {
+    padding: 6px 2px;
+  }
 }
