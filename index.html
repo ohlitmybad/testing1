@@ -710,7 +710,7 @@
             // Reset to 0 for all sliders when changing position
             slider.value = 0;
             const valueInput = slider.nextElementSibling;
-            valueInput.value = 0;
+            valueInput.value = '';
             
             // Reset position variable
             slider.style.setProperty('--slider-position', '0%');
@@ -729,13 +729,13 @@
               slider.value = 0;
             }
             const valueInput = slider.nextElementSibling;
-            if (!valueInput.value) {
-              valueInput.value = 0;
-            }
             
-            // Update position variable
-            const percent = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-            slider.style.setProperty('--slider-position', `${percent}%`);
+            // If there is a value, make sure position is correct
+            if (valueInput.value) {
+              const percent = (valueInput.value - slider.min) / (slider.max - slider.min) * 100;
+              slider.style.setProperty('--slider-position', `${percent}%`);
+              slider.value = valueInput.value;
+            }
           });
         }, 10); // Small delay to ensure this runs after main.js event handler
       });
@@ -747,7 +747,10 @@
         // Make sure range slider values are synchronized before submission
         document.querySelectorAll('.range-slider').forEach(slider => {
           const valueInput = slider.nextElementSibling;
-          slider.value = valueInput.value || 0;
+          // Only sync values if there is actually a value, otherwise keep empty
+          if (valueInput.value !== '') {
+            slider.value = valueInput.value;
+          }
         });
         
         // Clear the tableWrapper to ensure we don't have stale results
