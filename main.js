@@ -2049,7 +2049,7 @@ if (restrictedPlayers.length === 0) {
 
 
     // Create a formatted HTML string
-    const formattedText = `<span>${playerName}</span><br><span class="player-info">${playerData11}, ${playerData2}, ${playerData10} min</span>`;
+    const formattedText = `<span>${playerName}</span><br><span class="player-info">${playerData2}, ${playerData11}<span class="minutes">, ${playerData10} min</span></span>`;
 
     // Set the formatted HTML as the content of playerNameCell
     playerNameCell.innerHTML = formattedText;
