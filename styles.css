@@ -357,8 +357,9 @@ body {
   border-radius: 12px;
   box-shadow: var(--shadow);
   transition: all 0.3s ease;
-
 }
+
+
 
 .inputs input[type="number"] {
   margin-bottom: 0;
@@ -802,6 +803,14 @@ body.dark-mode button {
   transform: rotate(45deg);
 }
 
+@media (min-width: 1354px) {
+
+  .inputs {
+min-height: 824px;
+max-height: 824px;
+overflow-y: auto;
+}
+}
 /* Switch to mobile layout */
 @media (max-width: 1355px) {
   .container {
