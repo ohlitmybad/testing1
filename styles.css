@@ -49,7 +49,7 @@ body {
   padding: 0 5px;
   display: flex;
   justify-content: flex-start;
-  margin-bottom: 35px
+  margin-bottom: 35px;
 }
 
 /* Season selector styling */
@@ -654,7 +654,7 @@ th:not(:first-child)::before {
   margin-top: 4px;
 }
 
-.dark-mode .player-info {
+.dark-mode .player-info, .player-info .age, .player-info .minutes {
   color: #aaa;
 }
 
@@ -804,7 +804,7 @@ body.dark-mode button {
   
   .top-controls {
     padding: 0 15px;
-    margin-bottom: 35px;
+    margin-bottom:35px;
      /* Ensure top controls maintain minimum width */
   }
   
