@@ -157,6 +157,7 @@
     "age": "Âge",
     "minutes": "Minutes Jouées",
     "button": "Rechercher",
+    "no_results": "Aucun Joueur Trouvé",
     "instructions_text": "<strong>Instructions de recherche</strong><br><br><li>Sélectionnez une position et un championnat</li><li>Entrez les valeurs minimales en centiles (0-100)</li><li>Filtrez par âge et minutes jouées</li><li>Cliquez sur l'en-tête d'une colonne pour trier selon cette métrique</li><li>Cliquez sur \"Précédent\" pour les données de la saison passée</li>"
   },
   "current": "Actuel",
