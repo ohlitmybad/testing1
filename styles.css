@@ -348,7 +348,7 @@ body {
 .container {
   display: flex;
   max-width: min(1380px, 95%); /* Use the smaller of 1380px or 95% of viewport */
-  margin: 20px auto;
+  margin: 10px auto;
   padding: 0 5px;
   gap: 15px;
   justify-content: flex-start; /* Align to start to maintain consistent gap */
