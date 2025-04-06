@@ -977,9 +977,16 @@ body.dark-mode th {
   white-space: nowrap; /* Prevent text from wrapping */
   top: -15px;
 }
-body.dark-mode #SFctr {
-color: #ffffff
-}
+
+    body.dark-mode #SFctr {
+        color: #ffffff !important
+        }
+
+        #SFctr input {
+            background-color: #ffffff !important;
+        color:#000000 !important;
+        border: 1px solid #c2c2c2 !important
+        }
 
 @media (max-width: 625px) {
   #SFctr {
