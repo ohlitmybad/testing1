@@ -40,7 +40,7 @@
             </div>
             <select id="datasetSelector" style="display: none;">
               <option value="dataset1" data-i18n="position.goalkeepers">Goalkeepers</option>
-              <option value="dataset2" data-i18n="position.centre-bakcs">Centre-backs</option>
+              <option value="dataset2" data-i18n="position.centre-backs">Centre-backs</option>
               <option value="dataset3" data-i18n="position.full-backs">Full-backs</option>
               <option value="dataset4" data-i18n="position.midfielders">Midfielders</option>
               <option value="dataset5" data-i18n="position.wingers">Wingers</option>
@@ -148,7 +148,7 @@
                     <span data-i18n="leagues.belgium">Belgium</span>
                 </div>
                 <div class="custom-select-option" data-value="Scotland Premiership">
-                    <div style="width: 18px; height: 18px; border-radius: 50%; overflow: hidden; margin-right: 8px; background-color: #005EB8; background-image: url('https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg'); background-size: 150% 150%; background-position: center;"></div>
+                    <div style="width: 18px; height: 18px; border-radius: 50%; overflow: hidden; background-color: #005EB8; background-image: url('https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg'); background-size: 150% 150%; background-position: center;"></div>
                     <span data-i18n="leagues.scotland">Scotland</span>
                 </div>
                 <div class="custom-select-option" data-value="Austrian Bundesliga">
@@ -544,7 +544,7 @@
       const fieldMappingByPosition = {
         'gk': {
           'defensiveActionsLow': { label: 'Successful defensive actions', key: 'metrics1.gk.def_actions' },
-          'aerialsContestedLow': { label: 'Aerials Ccntested', key: 'metrics1.gk.aerials' },
+          'aerialsContestedLow': { label: 'Aerials Contested', key: 'metrics1.gk.aerials' },
           'exitLineLow': { label: 'Line exits', key: 'metrics1.gk.exit_line' },
           'passesLow': { label: 'Passes', key: 'metrics1.gk.passes' },
           'longPassPercentageLow': { label: 'Long pass completion %', key: 'metrics1.gk.long_pass' },
@@ -619,6 +619,14 @@
           
           // Set the actual metric name directly
           label.textContent = metadata.label;
+          
+          // If translations are available, try to use them
+          if (translations && translations[metadata.key.split('.')[0]]) {
+            const translation = getNestedTranslation(translations, metadata.key);
+            if (translation) {
+              label.textContent = translation;
+            }
+          }
         }
       });
     }
@@ -857,13 +865,36 @@
         datasetSelector.options[4].textContent = positions.wingers || defaultPositions.wingers;
         datasetSelector.options[5].textContent = positions.strikers || defaultPositions.strikers;
         
-        // Update custom selector text
+        // Update custom selector text for the selected position
         const positionTrigger = document.getElementById('position-select-trigger');
         const selectedOption = datasetSelector.options[datasetSelector.selectedIndex];
         if (positionTrigger && selectedOption) {
           positionTrigger.querySelector('span').textContent = selectedOption.textContent;
         }
+        
+        // Also update all options in the custom dropdown
+        const positionOptions = document.getElementById('position-select-options');
+        if (positionOptions) {
+          // Clear existing options
+          positionOptions.innerHTML = '';
+          
+          // Recreate all options with translated text
+          Array.from(datasetSelector.options).forEach((option, index) => {
+            const customOption = document.createElement('div');
+            customOption.className = 'custom-select-option';
+            if (index === datasetSelector.selectedIndex) {
+              customOption.classList.add('selected');
+            }
+            customOption.setAttribute('data-value', option.value);
+            customOption.textContent = option.textContent;
+            positionOptions.appendChild(customOption);
+          });
+        }
       }
+      
+      // Apply translations to metric labels based on current position
+      const currentDataset = document.getElementById('datasetSelector').value;
+      customUpdateMetricLabels(currentDataset);
     }
 
     // Initialize with preferred language following priority rules
