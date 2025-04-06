@@ -686,7 +686,10 @@ th:not(:first-child)::before {
   margin: 21px;
   color: var(--primary-color);
   font-weight: 500;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
+
 
 /* Dark mode toggle */
 .dark-mode-toggle {
@@ -942,7 +945,7 @@ body.dark-mode th {
 
 #SFctr {
 	font-family: Arial, Helvetica, sans-serif !important;
-  margin-left: -30px;
+  margin-left: -40px;
 }
 
 #SFusrlogpst strong:first-child {
@@ -978,15 +981,15 @@ body.dark-mode th {
   top: -15px;
 }
 
-    body.dark-mode #SFctr {
-        color: #ffffff !important
-        }
+body.dark-mode #SFctr {
+  color: #ffffff !important
+  }
 
-        #SFctr input {
-            background-color: #ffffff !important;
-        color:#000000 !important;
-        border: 1px solid #c2c2c2 !important
-        }
+  #SFctr input {
+      background-color: #ffffff !important;
+  color:#000000 !important;
+  border: 1px solid #c2c2c2 !important
+  }
 
 @media (max-width: 625px) {
   #SFctr {
@@ -998,3 +1001,4 @@ body.dark-mode th {
     left: 0px;
   }
 }
+
