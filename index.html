@@ -1076,7 +1076,8 @@ body.dark-mode #autocompleteBoxmodal a, body.dark-mode #autocompleteBoxmodal2 a 
 
 @supports (-webkit-touch-callout: none) {
     input:focus, textarea:focus {
-        transform: translateZ(0);
+        zoom: 1;
+        -webkit-appearance: textfield;
     }
 }
 
