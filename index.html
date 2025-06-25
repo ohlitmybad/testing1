@@ -1076,7 +1076,10 @@ body.dark-mode #autocompleteBoxmodal a, body.dark-mode #autocompleteBoxmodal2 a 
 
 @supports (-webkit-touch-callout: none) {
     * {
-        caret-color: red !important;
+        caret-color: auto; /* Remove the red */
+        text-indent: 0px;
+        padding-left: 0px;
+        margin-left: 0px;
     }
 }
 </style>
