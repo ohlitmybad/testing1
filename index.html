@@ -1333,98 +1333,7 @@ h1 {
         return false;
       }
 
-      document.addEventListener("DOMContentLoaded", function() {
-    var selectElement = document.getElementById("sectionSelect");
-    var options = {
-        "samePositionAndLeague": "vs League and Position, per 90",
-        "samePositionAndLeagueWithMinutes": "vs League and Position",
-        "position": "vs World and Position, per 90",
-        "positionWithMinutes": "vs World and Position",
-        "league": "vs League, per 90",
-        "leagueWithMinutes": "vs League",
-        "allCsv": "vs World, per 90",
-        "allCsvWithMinutes": "vs World"
-    };
-
-    // Function to add options to the select element
-    function addOption(key, value) {
-        var option = document.createElement("option");
-        option.value = key;
-        option.text = value;
-        option.setAttribute('data-i18n', key);
-        selectElement.add(option);
-    }
-
-    // Populate the select element with options based on your criteria
-    function populateOptions(usePer90) {
-        selectElement.innerHTML = ""; // Clear existing options
-
-        if (usePer90) {
-            addOption("samePositionAndLeague", options["samePositionAndLeague"]);
-            addOption("position", options["position"]);
-            addOption("league", options["league"]);
-            addOption("allCsv", options["allCsv"]);
-        } else {
-            addOption("samePositionAndLeagueWithMinutes", options["samePositionAndLeagueWithMinutes"]);
-            addOption("positionWithMinutes", options["positionWithMinutes"]);
-            addOption("leagueWithMinutes", options["leagueWithMinutes"]);
-            addOption("allCsvWithMinutes", options["allCsvWithMinutes"]);
-        }
-        
-        // Apply translations to the newly added options if translations are available
-        if (currentTranslations) {
-          selectElement.querySelectorAll('option').forEach(option => {
-            const key = option.getAttribute('data-i18n');
-            if (key && currentTranslations.options && currentTranslations.options[key]) {
-              option.text = currentTranslations.options[key];
-              option.textContent = currentTranslations.options[key];
-            }
-          });
-        }
-      }
-
-    populateOptions(true); // Initially populate with per 90 options
-
-    // Keep track of the original selected value
-    var originalSelectedValue = selectElement.value;
-
-    // Toggle button functionality
-    var toggleMetrics = document.getElementById("toggleMetrics");
-    toggleMetrics.addEventListener("change", function() {
-        // Show spinner
-        showSpinner();
-
-        // Get the current selected value
-        var selectedValue = selectElement.value;
-
-        // Update the original selected value
-        originalSelectedValue = selectedValue;
-
-        // Determine whether the selected metric should be per 90 or not based on the toggle state
-        var usePer90 = toggleMetrics.checked;
-
-        // Repopulate options based on toggle state
-        populateOptions(usePer90);
-
-        // Update the selected value to its equivalent based on the toggle state
-        if (usePer90) {
-            selectedValue = selectedValue.replace("WithMinutes", "");
-        } else {
-            if (!selectedValue.endsWith("WithMinutes")) {
-                selectedValue += "WithMinutes";
-            }
-        }
-
-        // Set the selected value
-        selectElement.value = selectedValue;
-
-        // Simulate long computation with setTimeout
-        setTimeout(() => {
-            // Hide spinner
-            hideSpinner();
-        }, 1000); // Adjust the timeout value as needed
-    });
-});
+     
 
 const metricColumnMap = {    'Accelerations': 'accelerations',
     'Cross accuracy %': 'accurateCrossesPercentage',
@@ -13937,31 +13846,6 @@ function updateTooltips() {
   }
 }
 
-// Add event listeners for tooltip updates
-document.addEventListener('DOMContentLoaded', function() {
-  const metricsToggle = document.getElementById('toggleMetrics');
-  const sortingToggle = document.getElementById('toggleSortingButton');
-  
-  // Ensure metrics toggle starts checked (per 90 mode) to match main.js logic
-  if (metricsToggle) {
-    metricsToggle.checked = true;
-    metricsToggle.addEventListener('change', function() {
-      updateTooltips();
-      // Re-populate section options when toggle changes to reflect new metrics
-      populateSectionOptions();
-    });
-  }
-  
-  if (sortingToggle) {
-    sortingToggle.addEventListener('change', updateTooltips);
-  }
-  
-  // Initialize tooltips after setting states
-  updateTooltips();
-  
-  // Initialize custom selectors
-  initializeCustomSelectors();
-});
 
 // Custom Selector Functionality
 function initializeCustomSelectors() {
@@ -14539,7 +14423,121 @@ chartColorObserver.observe(document.body, {
       attributeFilter: ['style']
     });
 
-  });
+
+    var selectElement = document.getElementById("sectionSelect");
+    var options = {
+        "samePositionAndLeague": "vs League and Position, per 90",
+        "samePositionAndLeagueWithMinutes": "vs League and Position",
+        "position": "vs World and Position, per 90",
+        "positionWithMinutes": "vs World and Position",
+        "league": "vs League, per 90",
+        "leagueWithMinutes": "vs League",
+        "allCsv": "vs World, per 90",
+        "allCsvWithMinutes": "vs World"
+    };
+
+    // Function to add options to the select element
+    function addOption(key, value) {
+        var option = document.createElement("option");
+        option.value = key;
+        option.text = value;
+        option.setAttribute('data-i18n', key);
+        selectElement.add(option);
+    }
+
+    // Populate the select element with options based on your criteria
+    function populateOptions(usePer90) {
+        selectElement.innerHTML = ""; // Clear existing options
+
+        if (usePer90) {
+            addOption("samePositionAndLeague", options["samePositionAndLeague"]);
+            addOption("position", options["position"]);
+            addOption("league", options["league"]);
+            addOption("allCsv", options["allCsv"]);
+        } else {
+            addOption("samePositionAndLeagueWithMinutes", options["samePositionAndLeagueWithMinutes"]);
+            addOption("positionWithMinutes", options["positionWithMinutes"]);
+            addOption("leagueWithMinutes", options["leagueWithMinutes"]);
+            addOption("allCsvWithMinutes", options["allCsvWithMinutes"]);
+        }
+        
+        // Apply translations to the newly added options if translations are available
+        if (currentTranslations) {
+          selectElement.querySelectorAll('option').forEach(option => {
+            const key = option.getAttribute('data-i18n');
+            if (key && currentTranslations.options && currentTranslations.options[key]) {
+              option.text = currentTranslations.options[key];
+              option.textContent = currentTranslations.options[key];
+            }
+          });
+        }
+      }
+
+    populateOptions(true); // Initially populate with per 90 options
+
+    // Keep track of the original selected value
+    var originalSelectedValue = selectElement.value;
+
+    // Toggle button functionality
+    var toggleMetrics = document.getElementById("toggleMetrics");
+    toggleMetrics.addEventListener("change", function() {
+        // Show spinner
+        showSpinner();
+
+        // Get the current selected value
+        var selectedValue = selectElement.value;
+
+        // Update the original selected value
+        originalSelectedValue = selectedValue;
+
+        // Determine whether the selected metric should be per 90 or not based on the toggle state
+        var usePer90 = toggleMetrics.checked;
+
+        // Repopulate options based on toggle state
+        populateOptions(usePer90);
+
+        // Update the selected value to its equivalent based on the toggle state
+        if (usePer90) {
+            selectedValue = selectedValue.replace("WithMinutes", "");
+        } else {
+            if (!selectedValue.endsWith("WithMinutes")) {
+                selectedValue += "WithMinutes";
+            }
+        }
+
+        // Set the selected value
+        selectElement.value = selectedValue;
+
+        // Simulate long computation with setTimeout
+        setTimeout(() => {
+            // Hide spinner
+            hideSpinner();
+        }, 1000); // Adjust the timeout value as needed
+    });
+
+  const metricsToggle = document.getElementById('toggleMetrics');
+  const sortingToggle = document.getElementById('toggleSortingButton');
+  
+  // Ensure metrics toggle starts checked (per 90 mode) to match main.js logic
+  if (metricsToggle) {
+    metricsToggle.checked = true;
+    metricsToggle.addEventListener('change', function() {
+      updateTooltips();
+      // Re-populate section options when toggle changes to reflect new metrics
+      populateSectionOptions();
+    });
+  }
+  
+  if (sortingToggle) {
+    sortingToggle.addEventListener('change', updateTooltips);
+  }
+  
+  // Initialize tooltips after setting states
+  updateTooltips();
+  
+  // Initialize custom selectors
+  initializeCustomSelectors();
+});
 </script>
 </body>
 </html>
