@@ -1,0 +1,1908 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.535, user-scalable=no"">
+	<meta name="robots" content="noindex">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+
+  
+
+<style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f5f7fa;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --hover-color: #f0f0f0;
+            --button-color: #3498db;
+            --button-text: #ffffff;
+            --header-bg: #ffffff;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --table-bg: #f2f2f2;
+        }
+
+        .dark-mode {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #0e0f0f;
+            --container-bg: #1a1a1a;
+            --text-color: #e0e0e0;
+            --border-color: #333333;
+            --hover-color: #252525;
+            --button-color: #2980b9;
+            --button-text: #ffffff;
+            --header-bg: #0e0f0f;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            --table-bg: #333333;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--container-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            transition: background-color 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .dark-mode .rank-bar {
+            border: 1px solid #000000;
+        }
+
+        /* Dark mode pizza chart enhancements */
+        .dark-mode #pizzaChart {
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        /* Dark mode chart container enhancements */
+        .dark-mode #chartContainer {
+            background-color: rgba(26, 26, 26, 0.3);
+            border-radius: 10px;
+        }
+
+        .toggle-icon::before {
+            font-family: "Ionicons";
+            content: "\f467";
+            font-size: 24px;
+            color: var(--text-color);
+        }
+
+        .dark-mode .toggle-icon::before {
+            content: "\f3b0";
+            font-size: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        
+
+        .container {
+            max-width: 1200px;
+            height: 96vh;
+            margin: 0.3vh auto 2.4vh auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-wrapper {
+            background-color: var(--container-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            width: 100%;
+            padding: 0px 15px 20px 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0; /* Prevent controls from shrinking */
+        }
+        
+        /* Smart responsive system - selectors fill available space */
+        @media screen and (max-width: 600px) {
+            .controls {
+                gap: 8px;
+            }
+        }
+
+
+      
+        
+        select, input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            height: 36px;
+            box-sizing: border-box;
+        }
+
+        #sectionSelect {
+            padding-left: 6px;
+        }
+
+        /* Custom Select Styling to match UI.html */
+        .custom-select-container {
+            position: relative;
+            width: 180px;
+            margin-bottom: 0;
+        }
+        
+        .select-style-custom {
+            flex: 1;
+            min-width: 140px;
+            max-width: 250px;
+        }
+        
+        .select-age-custom {
+            flex: 1;
+            min-width: 60px;
+            max-width: 140px;
+        }
+        
+        .custom-select-trigger {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            line-height: 1.4;
+            height: 36px;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+        
+        .custom-select-trigger span {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: calc(100% - 20px);
+            padding: 2px 0;
+        }
+        
+        .custom-select-trigger::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            margin-left: auto;
+            border-right: 1.5px solid var(--text-color);
+            border-bottom: 1.5px solid var(--text-color);
+            transform: rotate(45deg) translateY(-2px);
+            transition: transform 0.3s;
+            opacity: 0.7;
+            margin-right: 2px;
+        }
+        
+        .custom-select-trigger.open::after {
+            transform: rotate(-135deg) translateY(1px);
+        }
+        
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-top: 4px;
+            max-height: 285px;
+            overflow-y: auto;
+            z-index: 1000;
+            font-size: 14px;
+            display: none;
+            box-shadow: var(--shadow);
+        }
+        
+        .custom-select-option {
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: background-color 0.2s ease;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+        }
+        
+        .custom-select-option:hover {
+            background-color: var(--hover-color);
+        }
+        
+        .custom-select-option.selected {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Keyboard navigation highlighting for all selectors */
+        .custom-select-options .custom-select-option.selected {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+        }
+
+        select:focus, input:focus, button:focus, .custom-select-trigger:focus {
+            outline: none !important;
+        }
+        
+        /* Only search bar gets blue border on focus */
+        .search-bar:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* Override any browser default focus styles */
+        input:focus, select:focus, button:focus, textarea:focus, 
+        [tabindex]:focus, .custom-select-trigger:focus {
+            outline: none !important;
+            outline-style: none !important;
+            outline-width: 0 !important;
+            outline-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--button-color);
+            color: var(--button-text);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            height: 36px;
+            box-sizing: border-box;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        /* Hover effects for buttons on hover-capable devices only */
+        @media (hover: hover) and (pointer: fine) {
+            .btn:hover {
+                background-color: #2980b9;
+        
+            }
+
+            .btn-outline:hover {
+                background-color: var(--hover-color);
+            }
+        }
+
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 6px;
+        }
+
+        @media only screen and (max-width: 767px) {
+    /* Apply styles for screens smaller than 768px (typical mobile devices) */
+    #fullcontainer {
+        max-height: 79.5vh; /* Adjusted height for mobile */
+    }
+} 
+ 
+.spinner {
+  display: none;
+  position: absolute;
+right: 0px;
+  top: 101px;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+
+}
+
+.spinner .spinner-icon {
+  border: 8px solid transparent;
+  border-top-color: #ff5733;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.toggle-button {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-button button, .toggleSortingButton button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 18px;
+}
+
+.toggle-button button.active, .toggleSortingButton button.active {
+  background-color: var(--primary-color);
+  color: var(--button-text);
+  border-color: var(--primary-color);
+}
+
+/* Hide the default checkbox */
+.toggle-button input[type="checkbox"], .toggleSortingButton input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+
+/* Style the custom checkbox labels */
+.toggle-button label, .toggleSortingButton label {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--container-bg);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style the buttons */
+.toggle-button button, .toggleSortingButton button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--container-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 18px;
+}
+
+/* Style the unchecked state for metrics (total mode = blue) */
+.toggle-button input[type="checkbox"]:not(:checked) + label {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Style the checked state for sorting button (keep original logic) */
+.toggleSortingButton input[type="checkbox"]:checked + label {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Style the icons */
+.toggle-button label i, .toggleSortingButton label i, .toggle-button button i, .toggleSortingButton button i {
+  font-size: 18px;
+  color: var(--text-color);
+  font-weight: bold;
+  -webkit-text-stroke: 0.8px currentColor;
+  text-stroke: 0.8px currentColor;
+}
+
+/* Hover effects on hover-capable devices only */
+@media (hover: hover) and (pointer: fine) {
+    .toggle-button label:hover, .toggleSortingButton label:hover {
+        background-color: var(--hover-color);
+    }
+    
+    .toggle-button button:hover, .toggleSortingButton button:hover {
+        background-color: var(--hover-color);
+    }
+}
+
+/* Style the icon when metrics is unchecked (total mode = blue bg, white icon) */
+.toggle-button input[type="checkbox"]:not(:checked) + label i {
+  color: var(--button-text);
+}
+
+/* Style the icon when sorting is checked (blue bg, white icon) */
+.toggleSortingButton input[type="checkbox"]:checked + label i {
+  color: var(--button-text);
+}
+
+.toggleSortingButton {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Style for the select element */
+.select-style {
+width: 215px;
+cursor: pointer;
+}
+
+.select-age {
+cursor: pointer;
+}
+
+        .search-bar {
+          width: 215px;
+          min-width: 215px;
+          flex-shrink: 0;
+          padding: 0 12px;
+          border: 1px solid var(--border-color);
+          border-radius: 6px;
+          background-color: var(--container-bg);
+          color: var(--text-color);
+          font-family: 'Inter', sans-serif;
+          font-size: 14px;
+          transition: border-color 0.2s;
+          height: 36px;
+          box-sizing: border-box;
+          line-height: 1.4;
+        }
+        
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+.combo-box {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.custom-dropdown {
+  position: absolute;
+  top: 19.8%;
+  left: 92%;
+  width: 6.1%;
+  border-top: none;
+}
+
+/* Media query for screens smaller than 768px (typical mobile devices) */
+@media screen and (max-width: 767px) {
+  .custom-dropdown {
+    position: absolute;
+  top: 19.8%;
+  left: 86.6%;
+  width: 10.2%;
+  border-top: none;
+} }
+
+.custom-dropdown select {
+  width: 100%;
+  border: none;
+  font-size: 12px;
+  border-radius: 0;
+  height: 14.5px;
+  cursor: pointer;
+}
+
+    .rank-bar {
+      background-color: rgb(213, 213, 213);
+      cursor: pointer;
+      border: 1px solid #fff;
+      border-radius: 20px;
+      height: 17.1px;
+      width: 546px;
+      max-width: 100%;
+      margin: 0 auto 5px auto; /* Center the rank bars */
+      position: relative;
+    }
+  
+    .rank-bar-fill {
+      background-color: var(--primary-color);
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 20px;
+    }
+
+    html {
+    overflow: scroll;
+}
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+@media only screen and (pointer: coarse) and (hover: none) {
+    body {
+        zoom: 119.2%;
+    }
+}
+
+h2, h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 22.5px;
+    margin-bottom: -8px;
+}
+
+
+h1 {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 16.5px !important;
+    max-font-size: 16.5px !important;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-weight: normal !important;
+    margin-bottom: 10.5px;
+    text-align: center;
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+}
+
+#chartTitle {
+    text-align: center;
+    flex-shrink: 0; /* Prevent title from shrinking */
+}
+
+
+.logo-image2 {
+    width: 43.5px; /* Example width */
+   position: absolute;
+   right: 38.5px;
+   top: 79.5px;
+}
+
+
+/* Tooltip styles */
+.toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    max-width: 160px;
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    text-align: center;
+    border-radius: 6px;
+    padding: 6px 8px;
+    position: absolute;
+    z-index: 999999 !important;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    font-weight: normal;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.toggle-button .btn-tooltip-text::after, .toggleSortingButton .btn-tooltip-text::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent var(--border-color) transparent;
+}
+
+/* Show tooltips on hover for hover-capable devices only */
+@media (hover: hover) and (pointer: fine) {
+    .toggle-button:hover .btn-tooltip-text, .toggleSortingButton:hover .btn-tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+/* Responsive tooltip positioning for viewport boundaries */
+.toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+    /* Ensure tooltip doesn't go off right edge */
+    margin-left: 0;
+    left: 50%;
+    right: auto;
+}
+
+/* Adjust tooltip position when near right edge of viewport */
+@media screen and (max-width: 768px) {
+    .toggle-button:last-child .btn-tooltip-text,
+    .toggle-button:nth-last-child(1) .btn-tooltip-text,
+    .toggleSortingButton:last-child .btn-tooltip-text,
+    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text {
+        left: auto;
+        right: 0;
+        transform: translateX(0);
+    }
+    
+    .toggle-button:last-child .btn-tooltip-text::after,
+    .toggle-button:nth-last-child(1) .btn-tooltip-text::after,
+    .toggleSortingButton:last-child .btn-tooltip-text::after,
+    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text::after {
+        left: auto;
+        right: 15px;
+        transform: translateX(0);
+    }
+}
+
+/* If button is in bottom area, show tooltip above */
+@media screen and (max-height: 600px) {
+    .toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+        top: auto;
+        bottom: calc(100% + 8px);
+    }
+    
+    .toggle-button .btn-tooltip-text::after, .toggleSortingButton .btn-tooltip-text::after {
+        top: 100%;
+        bottom: auto;
+        border-color: var(--border-color) transparent transparent transparent;
+    }
+}
+
+/* Hide tooltips on touch devices */
+@media (hover: none) {
+    .toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+        display: none !important;
+    }
+}
+
+
+
+.hover-content {
+    position: absolute;
+    top: -28px; /* Position above the bar */
+    right: 0; /* Position at the extreme right of the bar */
+    color: var(--text-color);
+    background-color: var(--container-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    display: none;
+    padding: 2px 8px;
+    z-index: 1000;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+    pointer-events: none;
+}
+
+
+.hover-content::before {
+    content: "";
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 4px;
+    border-style: solid;
+    border-color: var(--container-bg) transparent transparent transparent;
+}
+
+.hover-content::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--border-color) transparent transparent transparent;
+}
+
+/* Show tooltip on hover for hover-capable devices only */
+@media (hover: hover) and (pointer: fine) {
+    .rank-bar:hover .hover-content {
+        display: block;
+    }
+}
+
+/* Show tooltip on click for all devices */
+.rank-bar.active .hover-content {
+    display: block;
+}
+
+            #chartContainer {
+    width: 550px;  /* Set the desired width of the container */
+    height: 550px; /* Set the desired height of the container */
+    position: relative;
+    margin: -20px auto 0 auto; /* Center the chart container and move up */
+}
+
+#chartButton {
+  position: absolute;
+  right: 0px;
+  top: 490px;
+  z-index: 10;
+}
+
+#pizzaChart {
+    width: 100%;
+    height: 100%;
+}
+
+#results {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the results content */
+}
+
+#fullcontainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center all content within fullcontainer */
+    max-height: 78.4vh;
+    overflow-y: auto;
+    flex: 1; /* Take remaining space */
+    min-height: 0; /* Allow shrinking when needed */
+}
+
+.rank-bar {
+    position: relative;
+    z-index: 1; /* Ensure it's below the chart */
+}
+
+.dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: var(--container-bg);
+        min-width: 250px;
+        max-height: 300px;
+        overflow-y: auto;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        z-index: 1;
+        padding: 10px;
+    }
+
+
+    .dropdown-content label {
+        display: flex;
+        align-items: center;
+        padding: 8px 5px;
+        cursor: pointer;
+        margin: 2px 0;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+        position: relative;
+    }
+    
+ 
+
+    .dropdown-content input[type="checkbox"] {
+        margin-right: 10px;
+        margin-left: 0;
+        flex-shrink: 0;
+    }
+    
+    .dropdown-content .checkbox-label-text {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .dropdown .dropbtn {
+        background-color: var(--container-bg);
+        color: var(--text-color);
+        border: none;
+        border-radius: 6px;
+        padding: 8px 12px;
+        font-size: 16px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        height: 36px;
+        width: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .dropdown .dropbtn:focus {
+        outline: none;
+    }
+    
+    /* Tooltip for chart button */
+    .dropdown .chart-tooltip {
+        visibility: hidden;
+        width: max-content;
+        max-width: 140px;
+        background-color: var(--container-bg);
+        color: var(--text-color);
+        text-align: center;
+        border-radius: 6px;
+        padding: 6px 8px;
+        position: absolute;
+        z-index: 999999 !important;
+        top: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 12px;
+        font-weight: normal;
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border-color);
+        pointer-events: none;
+        white-space: nowrap;
+    }
+    
+    .dropdown .chart-tooltip::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent var(--border-color) transparent;
+    }
+    
+    /* Chart tooltip viewport adjustments */
+    .dropdown .chart-tooltip.tooltip-left {
+        left: auto;
+        right: 0;
+        transform: translateX(0);
+    }
+    
+    .dropdown .chart-tooltip.tooltip-left::after {
+        left: auto;
+        right: 15px;
+        transform: translateX(0);
+    }
+    
+    .dropdown .chart-tooltip.tooltip-above {
+        top: auto;
+        bottom: calc(100% + 8px);
+    }
+    
+    .dropdown .chart-tooltip.tooltip-above::after {
+        top: 100%;
+        bottom: auto;
+        border-color: var(--border-color) transparent transparent transparent;
+    }
+    
+    /* Special positioning for chart button tooltip when near edges */
+    #chartButton .chart-tooltip {
+        /* Default to left-aligned since chart button is at right edge */
+        left: auto;
+        right: 0;
+        transform: translateX(0);
+    }
+    
+    #chartButton .chart-tooltip::after {
+        left: auto;
+        right: 15px;
+        transform: translateX(0);
+    }
+    
+    /* Show tooltip on hover for hover-capable devices only */
+    @media (hover: hover) and (pointer: fine) {
+        .dropdown:hover .chart-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+    .dropdown.show .dropdown-content {
+        display: block;
+    }
+
+    /* Special positioning for chartButton dropdown to open top-left */
+    #chartButton .dropdown-content {
+        bottom: 100%;
+        top: auto;
+        right: 0;
+        left: auto;
+        margin-bottom: 4px;
+        margin-top: 0;
+    }
+
+    /* Section indicators for dropdown */
+    .dropdown-content label[style*="border-bottom"] {
+        padding-right: 25px; /* Space for the bar chart icon */
+    }
+
+    .dropdown-content label[style*="border-bottom"]::before {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        content: "\f681"; /* Chart-simple icon for histogram */
+        position: absolute;
+        right: 5px; /* More to the right */
+        top: -2px; /* Higher above the container */
+        font-size: 12px;
+        opacity: 0.6;
+        pointer-events: none;
+        color: var(--text-color);
+    }
+
+    .dropdown.show .dropdown-content::after {
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        content: "\f200"; /* Pie chart icon for pizza/radar chart section */
+        position: absolute;
+        right: 15px; /* More to the right */
+        top: 75px; /* Even lower positioning */
+        font-size: 12px;
+        opacity: 0.6;
+        pointer-events: none;
+        color: var(--text-color);
+        z-index: 10;
+    }
+
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background-color);
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-text {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+}
+
+.loading-bar {
+  width: 300px;
+  height: 10px;
+  background: var(--border-color);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.loading-progress {
+  width: 0%;
+  height: 100%;
+  background: var(--primary-color);
+  border-radius: 5px;
+  animation: progress 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}
+
+    body.dark-mode #SFctr {
+        color: #ffffff !important
+        }
+        
+        
+        #SFctr input {
+            background-color: #ffffff !important;
+        color:#000000 !important;
+        border: 1px solid #c2c2c2 !important
+        }
+
+#SFctr {
+	font-family: 'Inter', sans-serif !important;
+	color: #000000 !important;
+  margin-left: 4px;
+}
+
+#SFusrlogpst strong:first-child {
+  font-size: 0px;
+}
+
+#SFusrlogpst input[type="checkbox"],
+#SFusrlogpwd input[type="checkbox"],
+#SFusrlogpst i,
+#SFusrlogpwd i {
+  display: none !important;
+}
+
+#SFctr .SFfrm input[type="text"],
+#SFctr .SFfrm input[type="password"],
+#SFctr .SFfrm button {
+  border-radius: 6px;
+}
+
+#SFusrlogpwd strong {
+  visibility: hidden; /* Hide the original text */
+  position: relative;
+}
+
+#SFusrlogpwd strong::after {
+  content: "Forgot Password?"; /* Add the new text */
+  visibility: visible;
+  position: absolute;
+  font-size: 12px;
+  font-weight: 400;
+  left: 100px;
+  white-space: nowrap; /* Prevent text from wrapping */
+  top: -15px;
+}
+/* Move "Forgot Password?" text more to the left on small screens */
+@media (max-width : 757px) {
+  #SFusrlogpwd strong::after {
+    left: 20px; /* Reduced from 100px to 60px for small screens */
+  }
+}
+	
+.membershipworksplaceholder{
+  height: 15px;
+}
+	
+.autocomplete-items {
+  position: absolute;
+  border-top: none;
+  z-index: 1000;
+  top: 100%;
+  left: 0;
+  right: 0;
+      background: var(--container-bg);
+  max-height: 285px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  margin-top: 4px;
+  box-shadow: var(--shadow);
+}
+
+
+
+
+
+.autocomplete-items:empty {
+  border: none;
+  /* or border: 0; */
+}
+.autocomplete-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: var(--container-bg);
+  border-bottom: none;
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  line-height: 1.4;
+}
+.autocomplete-item:hover {
+  background-color: var(--hover-color);
+}
+
+.autocomplete-active {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+  </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="chart-wrapper">
+        <div class="loading-container" id="loadingContainer">
+          <div class="loading-text" data-i18n="loading">Loading data...</div>
+          <div class="loading-bar">
+            <div class="loading-progress"></div>
+          </div>
+        </div>
+        <div id="membershipworksPlaceholder" class="membershipworksplaceholder"></div>
+        <div class="spinner" id="spinner">
+          <div class="spinner-icon"></div>
+        </div>
+        
+        
+        
+    
+        <div class="controls">
+            <div class="combo-box">
+              <input type="text" id="searchInput" class="search-bar" placeholder="Search for a player..." data-i18n="search.placeholder" autocomplete="off">
+              <div id="autocomplete-list" class="autocomplete-items"></div>
+              <select id="playerSelect" style="display:none;"></select>
+            </div>
+            
+                         <div class="custom-select-container select-style-custom">
+                 <div class="custom-select-trigger" id="sectionSelectTrigger">
+                     <span></span>
+                 </div>
+                 <div class="custom-select-options" id="sectionSelectOptions">
+                     <!-- Options will be populated by JavaScript -->
+                 </div>
+                 <select id="sectionSelect" class="select-style" style="display: none;">
+                 </select>
+             </div>
+             
+             <div class="custom-select-container select-age-custom">
+                 <div class="custom-select-trigger" id="ageSelectTrigger">
+                     <span data-i18n="age.all">Age</span>
+                 </div>
+                 <div class="custom-select-options" id="ageSelectOptions">
+                     <div class="custom-select-option" data-value="" data-i18n="age.all">Age</div>
+                     <div class="custom-select-option" data-value="17">U17</div>
+                     <div class="custom-select-option" data-value="18">U18</div>
+                     <div class="custom-select-option" data-value="19">U19</div>
+                     <div class="custom-select-option" data-value="20">U20</div>
+                     <div class="custom-select-option" data-value="21">U21</div>
+                     <div class="custom-select-option" data-value="22">U22</div>
+                     <div class="custom-select-option" data-value="23">U23</div>
+                     <div class="custom-select-option" data-value="24">U24</div>
+                     <div class="custom-select-option" data-value="25">U25</div>
+                     <div class="custom-select-option" data-value="26">U26</div>
+                     <div class="custom-select-option" data-value="27">U27</div>
+                     <div class="custom-select-option" data-value="28">U28</div>
+                     <div class="custom-select-option" data-value="29">U29</div>
+                     <div class="custom-select-option" data-value="30">U30</div>
+                     <div class="custom-select-option" data-value="35">U35</div>
+                 </div>
+                 <select id="ageSelect" class="select-age" style="display: none;">
+                   <option value="" data-i18n="age.all">Age</option>
+                     <option value="17">U17</option>
+                     <option value="18">U18</option>
+                     <option value="19">U19</option>
+                     <option value="20">U20</option>
+                     <option value="21">U21</option>
+                     <option value="22">U22</option>
+                     <option value="23">U23</option>
+                     <option value="24">U24</option>
+                     <option value="25">U25</option>
+                     <option value="26">U26</option>
+                     <option value="27">U27</option>
+                     <option value="28">U28</option>
+                     <option value="29">U29</option>
+                     <option value="30">U30</option>
+                     <option value="35">U35</option>
+                     <!-- Add more age options as needed -->
+                 </select>
+             </div>
+            
+            <div class="toggle-button">
+              <input type="checkbox" id="toggleMetrics">
+              <label for="toggleMetrics">
+                <i class="ion-ios-stopwatch-outline"></i>
+              </label>
+              <span class="btn-tooltip-text" id="metricsTooltip">Switch to total</span>
+            </div>
+            
+            <div class="toggle-button">
+              <button type="button" id="navigateButton" onclick="window.location.href='https://datamb.football/rank7old'">
+                <i class="ion-calendar"></i>
+              </button>
+              <span class="btn-tooltip-text">Switch to past season</span>
+            </div>
+        </div>
+        
+            <div id="chartTitle"></div>
+        <div id="fullcontainer">
+        <div id="chartContainer">
+            <canvas id="pizzaChart"></canvas>
+            <div id="chartButton"></div>
+        </div>
+        <div id="results"></div></div>
+    </div>
+</div>
+
+<div class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <span class="toggle-icon"></span>
+</div>
+
+<script src="main.js"></script>
+
+<script>
+// Dark mode functionality
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  
+  // Update chart colors when toggling dark mode
+  setTimeout(() => {
+    updateChartColors();
+  }, 10);
+}
+
+// Check for saved dark mode preference on page load
+if (localStorage.getItem('darkMode') === 'true') {
+  document.body.classList.add('dark-mode');
+}
+
+// Dynamic tooltip updates
+function updateTooltips() {
+  const metricsToggle = document.getElementById('toggleMetrics');
+  const sortingToggle = document.getElementById('toggleSortingButton');
+  const metricsTooltip = document.getElementById('metricsTooltip');
+  const sortingTooltip = document.getElementById('sortingTooltip');
+
+  if (metricsToggle && metricsTooltip) {
+    // Checked (white) = Per 90 mode = "Switch to total"
+    // Unchecked (blue) = Total mode = "Switch to per 90"
+    metricsTooltip.textContent = metricsToggle.checked ? 'Switch to total' : 'Switch to per 90';
+  }
+  
+  if (sortingToggle && sortingTooltip) {
+    sortingTooltip.textContent = sortingToggle.checked ? 'Switch to default order' : 'Switch to ascending order';
+  }
+}
+
+// Add event listeners for tooltip updates
+document.addEventListener('DOMContentLoaded', function() {
+  const metricsToggle = document.getElementById('toggleMetrics');
+  const sortingToggle = document.getElementById('toggleSortingButton');
+  
+  // Ensure metrics toggle starts checked (per 90 mode) to match main.js logic
+  if (metricsToggle) {
+    metricsToggle.checked = true;
+    metricsToggle.addEventListener('change', function() {
+      updateTooltips();
+      // Re-populate section options when toggle changes to reflect new metrics
+      populateSectionOptions();
+    });
+  }
+  
+  if (sortingToggle) {
+    sortingToggle.addEventListener('change', updateTooltips);
+  }
+  
+  // Initialize tooltips after setting states
+  updateTooltips();
+  
+  // Initialize custom selectors
+  initializeCustomSelectors();
+});
+
+// Custom Selector Functionality
+function initializeCustomSelectors() {
+
+  
+  // Age selector
+  const ageTrigger = document.getElementById('ageSelectTrigger');
+  const ageOptions = document.getElementById('ageSelectOptions');
+  const ageSelect = document.getElementById('ageSelect');
+  
+  if (ageTrigger && ageOptions && ageSelect) {
+    // Set first option as default
+    const firstOption = ageOptions.querySelector('.custom-select-option');
+    if (firstOption) {
+      firstOption.classList.add('selected');
+      // Keep the translated "Age" text instead of overriding with option text
+      // ageTrigger.querySelector('span').textContent = firstOption.textContent;
+      ageSelect.value = firstOption.getAttribute('data-value');
+    }
+    
+    // Toggle dropdown
+    ageTrigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = ageOptions.style.display === 'block';
+      closeAllCustomSelectors();
+      if (!isOpen) {
+        ageOptions.style.display = 'block';
+        ageTrigger.classList.add('open');
+        // Ensure correct option is highlighted when opening
+        const currentValue = ageSelect.value;
+        const currentlyHighlighted = ageOptions.querySelector('.custom-select-option.selected');
+        const shouldBeHighlighted = ageOptions.querySelector(`[data-value="${currentValue}"]`);
+        
+        // Only update highlighting if it's wrong
+        if (!currentlyHighlighted || currentlyHighlighted !== shouldBeHighlighted) {
+          // Clear any previous selections
+          ageOptions.querySelectorAll('.custom-select-option').forEach(opt => opt.classList.remove('selected'));
+          
+          // Highlight the correct option
+          if (shouldBeHighlighted) {
+            shouldBeHighlighted.classList.add('selected');
+            shouldBeHighlighted.scrollIntoView({ block: 'nearest' });
+          }
+        }
+        ageTrigger.focus();
+      }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      // Only process keyboard input when this dropdown is open
+      if (!ageTrigger.classList.contains('open')) return;
+      
+      handleKeyboardNavigation(e, ageOptions, (option) => {
+        selectOption(option, ageTrigger, ageSelect, ageOptions);
+      });
+    });
+    
+    // Handle Enter/Space to open dropdown when focused
+    ageTrigger.addEventListener('keydown', function(e) {
+      if (!ageTrigger.classList.contains('open') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        ageTrigger.click();
+      }
+    });
+    
+    // Handle option selection
+    ageOptions.addEventListener('click', function(e) {
+      if (e.target.classList.contains('custom-select-option')) {
+        selectOption(e.target, ageTrigger, ageSelect, ageOptions);
+      }
+    });
+    
+    // Make trigger focusable
+    ageTrigger.setAttribute('tabindex', '0');
+  }
+  
+  // Section selector (similar structure but will be populated by existing JS)
+  const sectionTrigger = document.getElementById('sectionSelectTrigger');
+  const sectionOptions = document.getElementById('sectionSelectOptions');
+  const sectionSelect = document.getElementById('sectionSelect');
+  
+  if (sectionTrigger && sectionOptions && sectionSelect) {
+    // Toggle dropdown
+    sectionTrigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = sectionOptions.style.display === 'block';
+      closeAllCustomSelectors();
+      if (!isOpen) {
+        // Populate options from hidden select
+        populateSectionOptions();
+        sectionOptions.style.display = 'block';
+        sectionTrigger.classList.add('open');
+        // Ensure correct option is highlighted when opening
+        const currentValue = sectionSelect.value;
+        const currentlyHighlighted = sectionOptions.querySelector('.custom-select-option.selected');
+        const shouldBeHighlighted = sectionOptions.querySelector(`[data-value="${currentValue}"]`);
+        
+        // Only update highlighting if it's wrong
+        if (!currentlyHighlighted || currentlyHighlighted !== shouldBeHighlighted) {
+          // Clear any previous selections
+          sectionOptions.querySelectorAll('.custom-select-option').forEach(opt => opt.classList.remove('selected'));
+          
+          // Highlight the correct option
+          if (shouldBeHighlighted) {
+            shouldBeHighlighted.classList.add('selected');
+            shouldBeHighlighted.scrollIntoView({ block: 'nearest' });
+          }
+        }
+        sectionTrigger.focus();
+      }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      // Only process keyboard input when this dropdown is open
+      if (!sectionTrigger.classList.contains('open')) return;
+      
+      handleKeyboardNavigation(e, sectionOptions, (option) => {
+        selectOption(option, sectionTrigger, sectionSelect, sectionOptions);
+      });
+    });
+    
+    // Handle Enter/Space to open dropdown when focused
+    sectionTrigger.addEventListener('keydown', function(e) {
+      if (!sectionTrigger.classList.contains('open') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        sectionTrigger.click();
+      }
+    });
+    
+    // Handle option selection
+    sectionOptions.addEventListener('click', function(e) {
+      if (e.target.classList.contains('custom-select-option')) {
+        selectOption(e.target, sectionTrigger, sectionSelect, sectionOptions);
+      }
+    });
+    
+    // Make trigger focusable
+    sectionTrigger.setAttribute('tabindex', '0');
+  }
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', closeAllCustomSelectors);
+}
+
+function populateSectionOptions() {
+  const sectionSelect = document.getElementById('sectionSelect');
+  const sectionOptions = document.getElementById('sectionSelectOptions');
+  
+  if (sectionSelect && sectionOptions) {
+    sectionOptions.innerHTML = '';
+    let hasSelected = false;
+    
+    Array.from(sectionSelect.options).forEach((option, index) => {
+      const div = document.createElement('div');
+      div.className = 'custom-select-option';
+      div.setAttribute('data-value', option.value);
+      div.textContent = option.textContent;
+      
+      if (option.selected || (!hasSelected && index === 0)) {
+        div.classList.add('selected');
+        document.getElementById('sectionSelectTrigger').querySelector('span').textContent = option.textContent;
+        hasSelected = true;
+      }
+      
+      sectionOptions.appendChild(div);
+    });
+  }
+}
+
+// Helper functions for keyboard navigation
+function handleKeyboardNavigation(e, optionsContainer, selectCallback) {
+  switch(e.key) {
+    case 'ArrowDown':
+    case 'ArrowUp':
+      e.preventDefault();
+      
+      const visibleOptions = Array.from(optionsContainer.querySelectorAll('.custom-select-option'));
+      const currentIndex = visibleOptions.findIndex(opt => opt.classList.contains('selected'));
+      let newIndex;
+      
+    
+      if (e.key === 'ArrowDown') {
+        newIndex = currentIndex < visibleOptions.length - 1 ? currentIndex + 1 : 0;
+      } else {
+        newIndex = currentIndex > 0 ? currentIndex - 1 : visibleOptions.length - 1;
+      }
+      
+      // Update selection
+      visibleOptions.forEach(opt => opt.classList.remove('selected'));
+      visibleOptions[newIndex].classList.add('selected');
+      
+      // Ensure the selected option is visible in the dropdown
+      visibleOptions[newIndex].scrollIntoView({ block: 'nearest' });
+      break;
+      
+    case 'Enter':
+      e.preventDefault();
+      const selectedOption = optionsContainer.querySelector('.selected');
+      if (selectedOption) {
+        selectCallback(selectedOption);
+      }
+      break;
+      
+    case 'Escape':
+      e.preventDefault();
+      closeAllCustomSelectors();
+      break;
+  }
+}
+
+function selectOption(option, trigger, hiddenSelect, optionsContainer) {
+  const value = option.getAttribute('data-value');
+  const text = option.textContent;
+  
+  // Update display
+  trigger.querySelector('span').textContent = text;
+  
+  // Update hidden select
+  hiddenSelect.value = value;
+  
+  // Trigger change event on hidden select
+  const changeEvent = new Event('change', { bubbles: true });
+  hiddenSelect.dispatchEvent(changeEvent);
+  
+  // Close dropdown
+  optionsContainer.style.display = 'none';
+  trigger.classList.remove('open');
+  
+  // Update selected state
+  optionsContainer.querySelectorAll('.custom-select-option').forEach(opt => opt.classList.remove('selected'));
+  option.classList.add('selected');
+}
+
+
+function closeAllCustomSelectors() {
+  document.querySelectorAll('.custom-select-options').forEach(options => {
+    options.style.display = 'none';
+  });
+  document.querySelectorAll('.custom-select-trigger').forEach(trigger => {
+    trigger.classList.remove('open');
+  });
+}
+
+function setHoverContent() {
+  // Function kept for compatibility but tooltips are now handled by .btn-tooltip-text spans
+}
+
+function translateLeague(league) {
+  if (!currentTranslations || !currentTranslations.leagues) return league;
+  // Handle special cases
+  if (league === "All Leagues") return currentTranslations.leagues.all;
+  
+  const key = league.toLowerCase().replace(/\s+/g, '');
+  return currentTranslations.leagues[key] || league;
+}
+
+function translatePosition(position) {
+  if (!currentTranslations || !currentTranslations.positions) return position;
+  if (position === "Player") return currentTranslations.positions.all;
+  const key = position.toLowerCase().replace(/[-\s]+/g, '');
+  return currentTranslations.positions[key] || position;
+}
+
+function translatePositionPlural(position) {
+  if (!currentTranslations) return position + "s";
+  
+  // For French, use plural forms if available
+  if (currentTranslations.positions_plural) {
+    if (position === "Player") return currentTranslations.positions_plural.all;
+    const key = position.toLowerCase().replace(/[-\s]+/g, '');
+    return currentTranslations.positions_plural[key] || (currentTranslations.positions[key] + "s");
+  }
+  
+  // For English or other languages, just add "s"
+  return translatePosition(position) + "s";
+}
+
+function translateTitle(league, suffix, position, includePer90 = false) {
+  if (!currentTranslations || !currentTranslations.player_comparison) {
+    return "vs " + league + " " + suffix + " " + position +"s" + (includePer90 ? ", per 90" : "");
+  }
+  const template = currentTranslations.player_comparison.title;
+  const translatedLeague = translateLeague(league);
+  const translatedPositionPlural = translatePositionPlural(position);
+  const per90Text = includePer90 ? (currentTranslations.player_comparison.per90 || ", per 90") : "";
+  
+  return template
+    .replace('{league}', translatedLeague)
+    .replace('{suffix}', suffix)
+    .replace('{position}', translatedPositionPlural) + per90Text;
+}
+
+let currentTranslations = null;
+
+function translateMetricName(metricName) {
+  if (currentTranslations && currentTranslations.metrics && currentTranslations.metrics[metricName]) {
+    return currentTranslations.metrics[metricName];
+  }
+  return metricName;
+}
+
+function translateRankSuffix(suffix) {
+  if (currentTranslations && currentTranslations.rankSuffixes && currentTranslations.rankSuffixes[suffix]) {
+    return currentTranslations.rankSuffixes[suffix];
+  }
+  return suffix;
+}
+
+  function getPreferredLanguage() {
+    // PRIORITY 1: Check URL parameter first
+    const urlParams = new URLSearchParams(window.location.search);
+    const langParam = urlParams.get('lang');
+    if (langParam) {
+      return langParam;
+    }
+    // PRIORITY 2: Check localStorage
+    const storedLang = localStorage.getItem('preferredLanguage');
+    if (storedLang) {
+      return storedLang;
+    }
+    // PRIORITY 3: Use browser language
+    return getBrowserLanguage() || 'en';
+  }
+
+  function getBrowserLanguage() {
+    return navigator.language.slice(0, 2);
+  }
+
+  function applyLanguage(language) {
+    console.log(language);
+
+    if (language === 'en') {
+      return;
+    }
+
+    
+    fetch(`locales/${language}.json`)
+      .then(response => {
+        // Don't throw an error, just return null if response is not OK
+        return response.ok ? response.json() : null;
+      })
+      .then(translations => {
+        // Only proceed if translations exist
+        if (translations) {
+          currentTranslations = translations;
+          
+          document.querySelectorAll('[data-i18n]').forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let value = translations;
+            for (const key of keys) {
+              if (value === undefined || value === null) break;
+              value = value[key];
+            }
+            if (value) {
+              if (element.tagName === 'OPTION') {
+                element.text = value;
+                element.textContent = value;
+              } else if (element.tagName === 'META') {
+                element.setAttribute('content', value);
+              } else if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+                element.setAttribute('placeholder', value);
+              } else if (value.includes('<')) {
+              element.innerHTML = value;
+              } else {
+                element.textContent = value;
+              }
+            }
+            // setHoverContent(); // No longer needed as tooltips are handled by HTML/CSS
+
+            
+
+          });
+          
+          // Re-populate section options AFTER translations are applied
+          populateSectionOptions();
+        }
+      })
+      .catch(() => {
+        // Completely empty catch block to silently ignore any errors
+      });
+
+       
+      // Handle metrics translation in text nodes
+      if (translations.metrics) {
+        const walker = document.createTreeWalker(
+          document.body,
+          NodeFilter.SHOW_TEXT,
+          {
+            acceptNode: function(node) {
+              // Skip script and style tags
+              if (node.parentNode.tagName === 'SCRIPT' || 
+                  node.parentNode.tagName === 'STYLE') {
+                return NodeFilter.FILTER_REJECT;
+              }
+              return NodeFilter.FILTER_ACCEPT;
+            }
+          },
+          false
+        );
+
+        let node;
+        while (node = walker.nextNode()) {
+          let text = node.nodeValue;
+          Object.entries(translations.metrics).forEach(([key, translation]) => {
+            const regex = new RegExp(`\\b${key}\\b(?=\\s*[–-])`, 'g');
+            text = text.replace(regex, translation);
+          });
+          node.nodeValue = text;
+        }
+      }
+
+      // Trigger a re-render of the metrics if needed
+      if (window.displaySelectedPlayer) {
+        displaySelectedPlayer();
+      }
+    }
+  
+    // Helper function to translate a specific element or re-scan for new data-i18n elements
+    function translateElement(element) {
+      if (!currentTranslations || !element.hasAttribute('data-i18n')) return;
+      
+      const keys = element.getAttribute('data-i18n').split('.');
+      let value = currentTranslations;
+      for (const key of keys) {
+        if (value === undefined || value === null) break;
+        value = value[key];
+      }
+      if (value) {
+        if (element.tagName === 'OPTION') {
+          element.text = value;
+          element.textContent = value;
+        } else if (element.tagName === 'META') {
+          element.setAttribute('content', value);
+        } else if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
+          element.setAttribute('placeholder', value);
+        } else if (value.includes('<')) {
+          element.innerHTML = value;
+        } else {
+          element.textContent = value;
+        }
+      }
+    }
+
+    // Function to translate all new data-i18n elements (for dynamically created content)
+    function translateNewElements() {
+      if (!currentTranslations) return;
+      document.querySelectorAll('[data-i18n]').forEach(translateElement);
+    }
+
+    window.translateMetricName = translateMetricName;
+    window.translateRankSuffix = translateRankSuffix;
+    window.translatePositionPlural = translatePositionPlural;
+    window.translateElement = translateElement;
+    window.translateNewElements = translateNewElements;
+    const preferredLanguage = getPreferredLanguage();
+    applyLanguage(preferredLanguage);
+
+
+// Dark mode chart enhancement
+function isDarkMode() {
+  return document.body.classList.contains('dark-mode');
+}
+
+function getChartColors() {
+  if (isDarkMode()) {
+    return {
+      textColor: '#ffffff',
+      gridColor: 'rgba(255, 255, 255, 0.4)'
+    };
+  } else {
+    return {
+      textColor: '#333333',
+      gridColor: 'rgba(0, 0, 0, 0.1)'
+    };
+  }
+}
+
+// Function to update chart colors when dark mode changes
+function updateChartColors() {
+  const chart = Chart.getChart('pizzaChart');
+  if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[0]) {
+    return;
+  }
+  
+  const colors = getChartColors();
+  
+  // Update legend colors
+  if (chart.options.plugins && chart.options.plugins.legend && chart.options.plugins.legend.labels) {
+    chart.options.plugins.legend.labels.color = colors.textColor;
+  }
+  
+  // Update radial scale colors
+  if (chart.options.scales && chart.options.scales.r) {
+    if (chart.options.scales.r.ticks) {
+      chart.options.scales.r.ticks.color = colors.textColor;
+    }
+    if (chart.options.scales.r.pointLabels) {
+      chart.options.scales.r.pointLabels.color = colors.textColor;
+    }
+    if (chart.options.scales.r.grid) {
+      chart.options.scales.r.grid.color = colors.gridColor;
+    }
+    if (chart.options.scales.r.angleLines) {
+      chart.options.scales.r.angleLines.color = colors.gridColor;
+    }
+  }
+  
+  // Update dataset border colors for dark mode
+  if (chart.data.datasets && chart.data.datasets[0]) {
+    if (isDarkMode()) {
+      chart.data.datasets[0].borderColor = '#1a1a1a';
+      chart.data.datasets[0].borderWidth = 2;
+    } else {
+      chart.data.datasets[0].borderColor = '#ffffff';
+      chart.data.datasets[0].borderWidth = 2;
+    }
+  }
+  
+  chart.update('none');
+}
+
+// Make chart enhancement functions available globally
+window.getChartColors = getChartColors;
+window.updateChartColors = updateChartColors;
+window.isDarkMode = isDarkMode;
+
+// Listen for dark mode changes and update chart colors
+const chartColorObserver = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    if (mutation.attributeName === 'class') {
+      if (!window.chartUpdateInProgress) {
+        window.chartUpdateInProgress = true;
+        setTimeout(() => {
+          updateChartColors();
+          window.chartUpdateInProgress = false;
+        }, 5);
+      }
+    }
+  });
+});
+
+chartColorObserver.observe(document.body, {
+  attributes: true,
+  attributeFilter: ['class']
+});
+
+  </script>
+<script>
+
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    const originalHideLoadingContainer = document.getElementById('loadingContainer').style.display;
+        const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.target.style.display === 'none' && mutation.target.id === 'loadingContainer') {
+          setTimeout(loadMembershipworks, 10);
+          observer.disconnect();
+        }
+      });
+    });
+       observer.observe(document.getElementById('loadingContainer'), { 
+      attributes: true,
+      attributeFilter: ['style']
+    });
+
+  });
+</script>
+</body>
+</html>
+
