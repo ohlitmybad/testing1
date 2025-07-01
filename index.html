@@ -14537,8 +14537,14 @@ chartColorObserver.observe(document.body, {
   
   // Initialize custom selectors
   initializeCustomSelectors();
+  
+  // Force set the span text immediately
+  const trigger = document.getElementById('sectionSelectTrigger');
+  const sectionSelect = document.getElementById('sectionSelect');
+  if (trigger && trigger.querySelector('span') && sectionSelect && sectionSelect.options.length > 0) {
+    trigger.querySelector('span').textContent = sectionSelect.options[0].textContent;
+  }
 });
 </script>
 </body>
 </html>
-
