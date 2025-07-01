@@ -1885,23 +1885,6 @@ chartColorObserver.observe(document.body, {
   </script>
 <script>
 
-  
-  document.addEventListener('DOMContentLoaded', function() {
-    const originalHideLoadingContainer = document.getElementById('loadingContainer').style.display;
-        const observer = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        if (mutation.target.style.display === 'none' && mutation.target.id === 'loadingContainer') {
-          setTimeout(loadMembershipworks, 10);
-          observer.disconnect();
-        }
-      });
-    });
-       observer.observe(document.getElementById('loadingContainer'), { 
-      attributes: true,
-      attributeFilter: ['style']
-    });
-
-  });
 
   function loadMembershipworks() {
     const container = document.getElementById('membershipworksPlaceholder');
