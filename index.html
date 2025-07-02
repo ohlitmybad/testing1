@@ -14,7 +14,17 @@
   
 
 <style>
-        :root {
+@media (max-width: 699px) {
+  body {
+    transform: scale(calc(100vw / 700));
+    transform-origin: top left;
+    width: 700px;
+    overflow-x: hidden;
+    height: calc(100vh * (700 / 100vw)); /* optional: preserves vertical scroll */
+  }
+}
+
+	:root {
             --primary-color: #3498db;
             --secondary-color: #2ecc71;
             --background-color: #f5f7fa;
