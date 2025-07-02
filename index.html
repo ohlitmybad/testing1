@@ -359,7 +359,7 @@ right: 0px;
   justify-content: center;
 }
 
-.toggle-button button, .toggleSortingButton button {
+.toggle-button button {
   width: 36px;
   height: 36px;
   border: 1px solid var(--border-color);
@@ -374,14 +374,14 @@ right: 0px;
   font-size: 18px;
 }
 
-.toggle-button button.active, .toggleSortingButton button.active {
+.toggle-button button.active {
   background-color: var(--primary-color);
   color: var(--button-text);
   border-color: var(--primary-color);
 }
 
 /* Hide the default checkbox */
-.toggle-button input[type="checkbox"], .toggleSortingButton input[type="checkbox"] {
+.toggle-button input[type="checkbox"] {
   opacity: 0;
   width: 0;
   height: 0;
@@ -390,7 +390,7 @@ right: 0px;
 
 
 /* Style the custom checkbox labels */
-.toggle-button label, .toggleSortingButton label {
+.toggle-button label {
   display: inline-block;
   width: 36px;
   height: 36px;
@@ -406,7 +406,7 @@ right: 0px;
 }
 
 /* Style the buttons */
-.toggle-button button, .toggleSortingButton button {
+.toggle-button button {
   width: 36px;
   height: 36px;
   border: 1px solid var(--border-color);
@@ -428,13 +428,13 @@ right: 0px;
 }
 
 /* Style the checked state for sorting button (keep original logic) */
-.toggleSortingButton input[type="checkbox"]:checked + label {
+.toggle-button input[type="checkbox"]:checked + label {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
 }
 
 /* Style the icons */
-.toggle-button label i, .toggleSortingButton label i, .toggle-button button i, .toggleSortingButton button i {
+.toggle-button label i, .toggle-button button i {
   font-size: 18px;
   color: var(--text-color);
   font-weight: bold;
@@ -444,11 +444,11 @@ right: 0px;
 
 /* Hover effects on hover-capable devices only */
 @media (hover: hover) and (pointer: fine) {
-    .toggle-button label:hover, .toggleSortingButton label:hover {
+    .toggle-button label:hover {
         background-color: var(--hover-color);
     }
     
-    .toggle-button button:hover, .toggleSortingButton button:hover {
+    .toggle-button button:hover {
         background-color: var(--hover-color);
     }
 }
@@ -458,21 +458,7 @@ right: 0px;
   color: var(--button-text);
 }
 
-/* Style the icon when sorting is checked (blue bg, white icon) */
-.toggleSortingButton input[type="checkbox"]:checked + label i {
-  color: var(--button-text);
-}
 
-.toggleSortingButton {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 /* Style for the select element */
 .select-style {
@@ -597,7 +583,7 @@ h1 {
 
 
 /* Tooltip styles */
-.toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+.toggle-button .btn-tooltip-text {
     visibility: hidden;
     width: max-content;
     max-width: 160px;
@@ -621,7 +607,7 @@ h1 {
     white-space: nowrap;
 }
 
-.toggle-button .btn-tooltip-text::after, .toggleSortingButton .btn-tooltip-text::after {
+.toggle-button .btn-tooltip-text::after {
     content: "";
     position: absolute;
     bottom: 100%;
@@ -633,13 +619,13 @@ h1 {
 }
 
 /* Show tooltips on hover */
-.toggle-button:hover .btn-tooltip-text, .toggleSortingButton:hover .btn-tooltip-text {
+.toggle-button:hover .btn-tooltip-text {
     visibility: visible;
     opacity: 1;
 }
 
 /* Responsive tooltip positioning for viewport boundaries */
-.toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+.toggle-button .btn-tooltip-text {
     /* Ensure tooltip doesn't go off right edge */
     margin-left: 0;
     left: 50%;
@@ -649,7 +635,7 @@ h1 {
 
 /* Hide tooltips and disable hover behaviors on touch devices */
 @media (hover: none) {
-    .toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+    .toggle-button .btn-tooltip-text {
         display: none !important;
     }
     
@@ -1015,18 +1001,14 @@ h1 {
 
 @media screen and (max-width: 849px) {
     .toggle-button:last-child .btn-tooltip-text,
-    .toggle-button:nth-last-child(1) .btn-tooltip-text,
-    .toggleSortingButton:last-child .btn-tooltip-text,
-    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text {
+    .toggle-button:nth-last-child(1) .btn-tooltip-text {
         left: auto;
         right: 0;
         transform: translateX(0);
     }
     
     .toggle-button:last-child .btn-tooltip-text::after,
-    .toggle-button:nth-last-child(1) .btn-tooltip-text::after,
-    .toggleSortingButton:last-child .btn-tooltip-text::after,
-    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text::after {
+    .toggle-button:nth-last-child(1) .btn-tooltip-text::after {
         left: auto;
         right: 15px;
         transform: translateX(0);
@@ -1305,7 +1287,6 @@ function updateTooltips() {
 // Add event listeners for tooltip updates
 document.addEventListener('DOMContentLoaded', function() {
   const metricsToggle = document.getElementById('toggleMetrics');
-  const sortingToggle = document.getElementById('toggleSortingButton');
   
   // Ensure metrics toggle starts checked (per 90 mode) to match main.js logic
   if (metricsToggle) {
