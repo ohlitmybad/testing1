@@ -12392,7 +12392,6 @@ function populatePlayerOptions() {
 }
 
 const searchInput = document.getElementById('searchInput');
-const customDropdown = document.querySelector('.custom-dropdown');
 const playerSelect = document.getElementById('playerSelect');
 const spinner = document.querySelector('.spinner');
 
@@ -12467,13 +12466,7 @@ function smartNameMatch(queryName, itemName) {
 searchInput.addEventListener('input', function () {
     const searchText = this.value.trim();
     
-    // Show or hide the custom dropdown based on input value
-    if (searchText === '') {
-        customDropdown.classList.remove('open');
-    } else {
-        customDropdown.classList.add('open');
-    }
-    
+
     // Use smart matching for filtering options
     setTimeout(() => {
         if (searchText === '') {
@@ -12583,24 +12576,6 @@ searchInput.addEventListener('input', function () {
     });
 
 
-document.getElementById('toggleSortingButton').addEventListener('change', function () {
-    // Show spinner
-    showSpinner();
-
-    // Toggle the sorting preference
-    sortEnabled = !sortEnabled;
-
-
-
-    // Simulate long computation with setTimeout
-    setTimeout(() => {
-        // Display selected player again to reflect the change
-        displaySelectedPlayer();
-
-        // Hide spinner
-        hideSpinner();
-    }, 1000); // Adjust the timeout value as needed
-});
 
 
 };function toggleActive(element) {
