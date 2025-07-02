@@ -1683,46 +1683,16 @@ function translateRankSuffix(suffix) {
           
           // Update tooltips with translations
           updateTooltips();
+          
+          // Trigger a re-render of the metrics if needed
+          if (window.displaySelectedPlayer) {
+            displaySelectedPlayer();
+          }
         }
       })
       .catch(() => {
         // Completely empty catch block to silently ignore any errors
       });
-
-       
-      // Handle metrics translation in text nodes
-      if (translations.metrics) {
-        const walker = document.createTreeWalker(
-          document.body,
-          NodeFilter.SHOW_TEXT,
-          {
-            acceptNode: function(node) {
-              // Skip script and style tags
-              if (node.parentNode.tagName === 'SCRIPT' || 
-                  node.parentNode.tagName === 'STYLE') {
-                return NodeFilter.FILTER_REJECT;
-              }
-              return NodeFilter.FILTER_ACCEPT;
-            }
-          },
-          false
-        );
-
-        let node;
-        while (node = walker.nextNode()) {
-          let text = node.nodeValue;
-          Object.entries(translations.metrics).forEach(([key, translation]) => {
-            const regex = new RegExp(`\\b${key}\\b(?=\\s*[–-])`, 'g');
-            text = text.replace(regex, translation);
-          });
-          node.nodeValue = text;
-        }
-      }
-
-      // Trigger a re-render of the metrics if needed
-      if (window.displaySelectedPlayer) {
-        displaySelectedPlayer();
-      }
     }
   
     // Helper function to translate a specific element or re-scan for new data-i18n elements
