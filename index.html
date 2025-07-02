@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="robots" content="noindex">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -142,12 +142,7 @@
             flex-shrink: 0; /* Prevent controls from shrinking */
         }
         
-        /* Smart responsive system - selectors fill available space */
-        @media screen and (max-width: 614px) {
-            .controls {
-                gap: 8px;
-            }
-        }
+        
 
 
       
@@ -176,17 +171,7 @@
             margin-bottom: 0;
         }
         
-        .select-style-custom {
-            flex: 1;
-            min-width: 140px;
-            max-width: 250px;
-        }
-        
-        .select-age-custom {
-            flex: 1;
-            min-width: 60px;
-            max-width: 140px;
-        }
+
         
         .custom-select-trigger {
             display: flex;
@@ -337,12 +322,7 @@
             border-radius: 6px;
         }
 
-        @media only screen and (max-width: 767px) {
-    /* Apply styles for screens smaller than 768px (typical mobile devices) */
-    #fullcontainer {
-        max-height: 79.5vh; /* Adjusted height for mobile */
-    }
-} 
+
  
 .spinner {
   display: none;
@@ -540,15 +520,6 @@ cursor: pointer;
   border-top: none;
 }
 
-/* Media query for screens smaller than 768px (typical mobile devices) */
-@media screen and (max-width: 767px) {
-  .custom-dropdown {
-    position: absolute;
-  top: 19.8%;
-  left: 86.6%;
-  width: 10.2%;
-  border-top: none;
-} }
 
 .custom-dropdown select {
   width: 100%;
@@ -587,32 +558,9 @@ cursor: pointer;
     width: 0;  /* Remove scrollbar space */
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
-/* Mobile responsiveness improvements */
-@media screen and (max-width: 614px) {
-   
-    
-    .search-bar {
-        max-width: 160px;
-    }
-    
 
 
-    .rank-bar {
-        width: 480px;
-        max-width: 480px;
-    }
-  
-    h1 {
-        font-size: 14px !important;
-        margin-bottom: 8px;
-    }
-    
-    h2, h3 {
-        font-size: 18px;
-        width: 480px;
-        max-width: 480px;
-    }
-}
+
 
 h2, h3 {
     font-family: 'Inter', sans-serif;
@@ -684,12 +632,10 @@ h1 {
     border-color: transparent transparent var(--border-color) transparent;
 }
 
-/* Show tooltips on hover for hover-capable devices only */
-@media (hover: hover) and (pointer: fine) {
-    .toggle-button:hover .btn-tooltip-text, .toggleSortingButton:hover .btn-tooltip-text {
-        visibility: visible;
-        opacity: 1;
-    }
+/* Show tooltips on hover */
+.toggle-button:hover .btn-tooltip-text, .toggleSortingButton:hover .btn-tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
 
 /* Responsive tooltip positioning for viewport boundaries */
@@ -700,30 +646,18 @@ h1 {
     right: auto;
 }
 
-/* Adjust tooltip position when near right edge of viewport */
-@media screen and (max-width: 768px) {
-    .toggle-button:last-child .btn-tooltip-text,
-    .toggle-button:nth-last-child(1) .btn-tooltip-text,
-    .toggleSortingButton:last-child .btn-tooltip-text,
-    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text {
-        left: auto;
-        right: 0;
-        transform: translateX(0);
-    }
-    
-    .toggle-button:last-child .btn-tooltip-text::after,
-    .toggle-button:nth-last-child(1) .btn-tooltip-text::after,
-    .toggleSortingButton:last-child .btn-tooltip-text::after,
-    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text::after {
-        left: auto;
-        right: 15px;
-        transform: translateX(0);
-    }
-}
 
-/* Hide tooltips on touch devices */
+/* Hide tooltips and disable hover behaviors on touch devices */
 @media (hover: none) {
     .toggle-button .btn-tooltip-text, .toggleSortingButton .btn-tooltip-text {
+        display: none !important;
+    }
+    
+    .dropdown .chart-tooltip {
+        display: none !important;
+    }
+    
+    .rank-bar:hover .hover-content {
         display: none !important;
     }
 }
@@ -771,11 +705,9 @@ h1 {
     border-color: var(--border-color) transparent transparent transparent;
 }
 
-/* Show tooltip on hover for hover-capable devices only */
-@media (hover: hover) and (pointer: fine) {
-    .rank-bar:hover .hover-content {
-        display: block;
-    }
+/* Show tooltip on hover */
+.rank-bar:hover .hover-content {
+    display: block;
 }
 
 /* Show tooltip on click for all devices */
@@ -964,12 +896,10 @@ h1 {
         transform: translateX(0);
     }
     
-    /* Show tooltip on hover for hover-capable devices only */
-    @media (hover: hover) and (pointer: fine) {
-        .dropdown:hover .chart-tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
+    /* Show tooltip on hover */
+    .dropdown:hover .chart-tooltip {
+        visibility: visible;
+        opacity: 1;
     }
 
     .dropdown.show .dropdown-content {
@@ -1067,21 +997,86 @@ h1 {
   }
 }
 
+
+
+
+/* IS THIS NEEDED?!? */
+@media screen and (max-width: 768px) {
+  #fullcontainer {
+        max-height: 79.5vh; /* Adjusted height for mobile */
+    }
+  .custom-dropdown {
+    position: absolute;
+  top: 19.8%;
+  left: 86.6%;
+  width: 10.2%;
+  border-top: none;
+} }
+
+@media screen and (max-width: 849px) {
+    .toggle-button:last-child .btn-tooltip-text,
+    .toggle-button:nth-last-child(1) .btn-tooltip-text,
+    .toggleSortingButton:last-child .btn-tooltip-text,
+    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text {
+        left: auto;
+        right: 0;
+        transform: translateX(0);
+    }
+    
+    .toggle-button:last-child .btn-tooltip-text::after,
+    .toggle-button:nth-last-child(1) .btn-tooltip-text::after,
+    .toggleSortingButton:last-child .btn-tooltip-text::after,
+    .toggleSortingButton:nth-last-child(1) .btn-tooltip-text::after {
+        left: auto;
+        right: 15px;
+        transform: translateX(0);
+    }
+
+}
+
+        
+.select-style-custom {
+            flex: 1;
+            min-width: 190px;
+            max-width: 270px;
+        }
+        
+        .select-age-custom {
+            flex: 1;
+            min-width: 60px;
+            max-width: 120px;
+        }
+@media screen and (max-width: 614px) {
+
+  .controls {
+                gap: 8px;
+            }
+
+    .rank-bar {
+        width: 480px;
+        max-width: 480px;
+    }
+    h1 {
+        font-size: 14px !important;
+        margin-bottom: 8px;
+    }
+    h2, h3 {
+        font-size: 18px;
+        width: 480px;
+        max-width: 480px;
+    }
+}
+
+
+
     body.dark-mode #SFctr {
         color: #ffffff !important
         }
         
         
-        #SFctr input {
-            background-color: #ffffff !important;
-        color:#000000 !important;
-        border: 1px solid #c2c2c2 !important
-        }
-
-#SFctr {
-	font-family: 'Inter', sans-serif !important;
-	color: #000000 !important;
-  margin-left: 4px;
+        #SFctr {
+	font-family: Arial, Helvetica, sans-serif !important;
+  margin-left: 21.4px;
 }
 
 #SFusrlogpst strong:first-child {
@@ -1116,12 +1111,7 @@ h1 {
   white-space: nowrap; /* Prevent text from wrapping */
   top: -15px;
 }
-/* Move "Forgot Password?" text more to the left on small screens */
-@media (max-width : 757px) {
-  #SFusrlogpwd strong::after {
-    left: 20px; /* Reduced from 100px to 60px for small screens */
-  }
-}
+
 	
 .autocomplete-items {
   position: absolute;
@@ -1507,6 +1497,13 @@ function populateSectionOptions() {
     });
   }
 }
+document.addEventListener('DOMContentLoaded', function() {
+  const trigger = document.getElementById('sectionSelectTrigger');
+  const sectionSelect = document.getElementById('sectionSelect');
+  if (trigger && trigger.querySelector('span') && sectionSelect && sectionSelect.options.length > 0) {
+    trigger.querySelector('span').textContent = sectionSelect.options[0].textContent;
+  }
+  });
 
 // Helper functions for keyboard navigation
 function handleKeyboardNavigation(e, optionsContainer, selectCallback) {
@@ -1580,10 +1577,6 @@ function closeAllCustomSelectors() {
   document.querySelectorAll('.custom-select-trigger').forEach(trigger => {
     trigger.classList.remove('open');
   });
-}
-
-function setHoverContent() {
-  // Function kept for compatibility but tooltips are now handled by .btn-tooltip-text spans
 }
 
 function translateLeague(league) {
@@ -1706,7 +1699,6 @@ function translateRankSuffix(suffix) {
                 element.textContent = value;
               }
             }
-            // setHoverContent(); // No longer needed as tooltips are handled by HTML/CSS
 
             
 
@@ -1890,13 +1882,7 @@ chartColorObserver.observe(document.body, {
 
 
   
-  document.addEventListener('DOMContentLoaded', function() {
-  const trigger = document.getElementById('sectionSelectTrigger');
-  const sectionSelect = document.getElementById('sectionSelect');
-  if (trigger && trigger.querySelector('span') && sectionSelect && sectionSelect.options.length > 0) {
-    trigger.querySelector('span').textContent = sectionSelect.options[0].textContent;
-  }
-  });
+
 </script>
 </body>
 </html>
