@@ -427,11 +427,6 @@ right: 0px;
   border-color: var(--primary-color);
 }
 
-/* Style the checked state for sorting button (keep original logic) */
-.toggle-button input[type="checkbox"]:checked + label {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
 
 /* Style the icons */
 .toggle-button label i, .toggle-button button i {
@@ -1298,9 +1293,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  if (sortingToggle) {
-    sortingToggle.addEventListener('change', updateTooltips);
-  }
+
   
   // Initialize tooltips after setting states
   updateTooltips();
