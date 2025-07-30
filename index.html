@@ -839,6 +839,8 @@ svg text.label{
     color: var(--text-color);
     background-color: var(--container-bg);
     font-size: 11px; /* Reduced font size */
+    touch-action: manipulation; /* Optimize for touch */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
 }
 
 .custom-select-trigger {
@@ -856,6 +858,7 @@ svg text.label{
     position: relative;
     height: 22px; /* Reduced height */
     box-sizing: border-box;
+    touch-action: manipulation; /* Optimize for touch */
 }
 
 .custom-select-trigger span {
@@ -2320,33 +2323,39 @@ function search(query) {
                 if (index === 0) selectOption.selected = true;
                 leagueSelect.appendChild(selectOption);
                 
-                // Handle option click
-                customOption.addEventListener("click", function() {
-                  // Update selected option
-                  leagueSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
-                    opt.classList.remove("selected")
-                  );
-                  customOption.classList.add("selected");
+                // Handle option click with optimized performance
+                customOption.addEventListener("click", function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
                   
-                  // Update trigger text
-                  leagueSelectSpan.textContent = option.text;
-                  leagueSelectSpan.setAttribute("data-i18n", "league_" + option.value);
-                  
-                  // Update hidden select
-                  leagueSelect.value = option.value;
-                  const event = new Event("change");
-                  leagueSelect.dispatchEvent(event);
-                  
-                  // Close dropdown
-                  leagueSelectTrigger.classList.remove("open");
-                  leagueSelectOptions.style.display = "none";
+                  // Batch DOM updates for better performance
+                  requestAnimationFrame(() => {
+                    // Update selected option
+                    leagueSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
+                      opt.classList.remove("selected")
+                    );
+                    customOption.classList.add("selected");
+                    
+                    // Update trigger text
+                    leagueSelectSpan.textContent = option.text;
+                    leagueSelectSpan.setAttribute("data-i18n", "league_" + option.value);
+                    
+                    // Update hidden select
+                    leagueSelect.value = option.value;
+                    const event = new Event("change");
+                    leagueSelect.dispatchEvent(event);
+                    
+                    // Close dropdown
+                    leagueSelectTrigger.classList.remove("open");
+                    leagueSelectOptions.style.display = "none";
+                  });
                 });
                 
                 leagueSelectOptions.appendChild(customOption);
               });
               
-              // Toggle dropdown on trigger click
-              leagueSelectTrigger.addEventListener("click", function(e) {
+              // Toggle dropdown on trigger click with touch optimization
+              const handleLeagueTriggerClick = function(e) {
                 e.stopPropagation();
                 
                 // Close other open dropdowns
@@ -2361,7 +2370,10 @@ function search(query) {
                 const isOpen = leagueSelectTrigger.classList.contains("open");
                 leagueSelectTrigger.classList.toggle("open");
                 leagueSelectOptions.style.display = isOpen ? "none" : "block";
-              });
+              };
+              
+              leagueSelectTrigger.addEventListener("click", handleLeagueTriggerClick);
+              leagueSelectTrigger.addEventListener("touchstart", handleLeagueTriggerClick, { passive: true });
               
               // Add elements to container
               leagueSelectContainer.appendChild(leagueSelectTrigger);
@@ -2414,33 +2426,39 @@ function search(query) {
                 if (index === 0) selectOption.selected = true;
                 seasonSelect.appendChild(selectOption);
                 
-                // Handle option click
-                customOption.addEventListener("click", function() {
-                  // Update selected option
-                  seasonSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
-                    opt.classList.remove("selected")
-                  );
-                  customOption.classList.add("selected");
+                // Handle option click with optimized performance
+                customOption.addEventListener("click", function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
                   
-                  // Update trigger text
-                  seasonSelectSpan.textContent = option.text;
-                  seasonSelectSpan.setAttribute("data-i18n", "season_" + option.value);
-                  
-                  // Update hidden select
-                  seasonSelect.value = option.value;
-                  const event = new Event("change");
-                  seasonSelect.dispatchEvent(event);
-                  
-                  // Close dropdown
-                  seasonSelectTrigger.classList.remove("open");
-                  seasonSelectOptions.style.display = "none";
+                  // Batch DOM updates for better performance
+                  requestAnimationFrame(() => {
+                    // Update selected option
+                    seasonSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
+                      opt.classList.remove("selected")
+                    );
+                    customOption.classList.add("selected");
+                    
+                    // Update trigger text
+                    seasonSelectSpan.textContent = option.text;
+                    seasonSelectSpan.setAttribute("data-i18n", "season_" + option.value);
+                    
+                    // Update hidden select
+                    seasonSelect.value = option.value;
+                    const event = new Event("change");
+                    seasonSelect.dispatchEvent(event);
+                    
+                    // Close dropdown
+                    seasonSelectTrigger.classList.remove("open");
+                    seasonSelectOptions.style.display = "none";
+                  });
                 });
                 
                 seasonSelectOptions.appendChild(customOption);
               });
               
-              // Toggle dropdown on trigger click
-              seasonSelectTrigger.addEventListener("click", function(e) {
+              // Toggle dropdown on trigger click with touch optimization
+              const handleSeasonTriggerClick = function(e) {
                 e.stopPropagation();
                 
                 // Close other open dropdowns
@@ -2455,7 +2473,10 @@ function search(query) {
                 const isOpen = seasonSelectTrigger.classList.contains("open");
                 seasonSelectTrigger.classList.toggle("open");
                 seasonSelectOptions.style.display = isOpen ? "none" : "block";
-              });
+              };
+              
+              seasonSelectTrigger.addEventListener("click", handleSeasonTriggerClick);
+              seasonSelectTrigger.addEventListener("touchstart", handleSeasonTriggerClick, { passive: true });
               
               // Add elements to container
               seasonSelectContainer.appendChild(seasonSelectTrigger);
@@ -2511,33 +2532,39 @@ function search(query) {
                 if (index === 0) selectOption.selected = true;
                 ageSelect.appendChild(selectOption);
                 
-                // Handle option click
-                customOption.addEventListener("click", function() {
-                  // Update selected option
-                  ageSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
-                    opt.classList.remove("selected")
-                  );
-                  customOption.classList.add("selected");
+                                // Handle option click with optimized performance
+                customOption.addEventListener("click", function(e) {
+                  e.preventDefault();
+                  e.stopPropagation();
                   
-                  // Update trigger text
-                  ageSelectSpan.textContent = option.text;
-                  ageSelectSpan.setAttribute("data-i18n", "age_" + option.value);
-              
-                  // Update hidden select
-                  ageSelect.value = option.value;
-                  const event = new Event("change");
-                  ageSelect.dispatchEvent(event);
-                  
-                  // Close dropdown
-                  ageSelectTrigger.classList.remove("open");
-                  ageSelectOptions.style.display = "none";
+                  // Batch DOM updates for better performance
+                  requestAnimationFrame(() => {
+                    // Update selected option
+                    ageSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
+                      opt.classList.remove("selected")
+                    );
+                    customOption.classList.add("selected");
+                    
+                    // Update trigger text
+                    ageSelectSpan.textContent = option.text;
+                    ageSelectSpan.setAttribute("data-i18n", "age_" + option.value);
+                    
+                    // Update hidden select
+                    ageSelect.value = option.value;
+                    const event = new Event("change");
+                    ageSelect.dispatchEvent(event);
+                    
+                    // Close dropdown
+                    ageSelectTrigger.classList.remove("open");
+                    ageSelectOptions.style.display = "none";
+                  });
                 });
                 
                 ageSelectOptions.appendChild(customOption);
               });
               
-              // Toggle dropdown on trigger click
-              ageSelectTrigger.addEventListener("click", function(e) {
+              // Toggle dropdown on trigger click with touch optimization
+              const handleAgeTriggerClick = function(e) {
                 e.stopPropagation();
                 
                 // Close other open dropdowns
@@ -2552,7 +2579,10 @@ function search(query) {
                 const isOpen = ageSelectTrigger.classList.contains("open");
                 ageSelectTrigger.classList.toggle("open");
                 ageSelectOptions.style.display = isOpen ? "none" : "block";
-              });
+              };
+              
+              ageSelectTrigger.addEventListener("click", handleAgeTriggerClick);
+              ageSelectTrigger.addEventListener("touchstart", handleAgeTriggerClick, { passive: true });
               
               // Add elements to container
               ageSelectContainer.appendChild(ageSelectTrigger);
@@ -2996,6 +3026,7 @@ if (radar) {
 
     chartWrapper.classList.remove('screenshot-capture');
   }).catch(error => {
+    console.error('Error capturing screenshot:', error);
   });
 }
 
