@@ -143,6 +143,8 @@ svg.radar > g {
   overflow-y: auto;
   margin-bottom: 15px;
   min-height: 0;
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
 }
 
 #matchingNames:empty {
@@ -163,6 +165,10 @@ svg.radar > g {
   transition: background-color 0.2s ease-in-out;
   font-family: 'Inter', sans-serif;
   position: relative;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  transform: translateZ(0);
 }
 .name:hover {
   background-color: var(--hover-color);
@@ -841,6 +847,8 @@ svg text.label{
     font-size: 11px; /* Reduced font size */
     touch-action: manipulation; /* Optimize for touch */
     -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    will-change: transform; /* Optimize for animations */
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .custom-select-trigger {
@@ -859,6 +867,8 @@ svg text.label{
     height: 22px; /* Reduced height */
     box-sizing: border-box;
     touch-action: manipulation; /* Optimize for touch */
+    will-change: transform; /* Optimize for animations */
+    transform: translateZ(0); /* Force hardware acceleration */
 }
 
 .custom-select-trigger span {
@@ -1708,11 +1718,31 @@ color: #ffffff
             <span class="team">${team})</span>
         `;
         
-        // Add event listener to handle selection
-        nameElement.addEventListener("click", () => {
-            searchInput.value = fullName + "," + team + "," + age; // Set full query as input value
-            searchButton1.click(); // Directly trigger the search
+        // Add event listener to handle selection with mobile optimization
+        nameElement.addEventListener("mousedown", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Immediate visual feedback
+            nameElement.style.backgroundColor = 'var(--hover-color)';
+            
+            // Set value and trigger search immediately
+            searchInput.value = fullName + "," + team + "," + age;
+            searchButton1.click();
         });
+        
+        // Also handle touch events for mobile
+        nameElement.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Immediate visual feedback
+            nameElement.style.backgroundColor = 'var(--hover-color)';
+            
+            // Set value and trigger search immediately
+            searchInput.value = fullName + "," + team + "," + age;
+            searchButton1.click();
+        }, { passive: false });
         
         matchingNamesContainer.appendChild(nameElement);
     });
@@ -2323,56 +2353,40 @@ function search(query) {
                 if (index === 0) selectOption.selected = true;
                 leagueSelect.appendChild(selectOption);
                 
-                // Handle option click with optimized performance
-                customOption.addEventListener("click", function(e) {
+                // Ultra-optimized option click handler
+                customOption.addEventListener("mousedown", function(e) {
                   e.preventDefault();
                   e.stopPropagation();
                   
-                  // Batch DOM updates for better performance
-                  requestAnimationFrame(() => {
-                    // Update selected option
-                    leagueSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
-                      opt.classList.remove("selected")
-                    );
-                    customOption.classList.add("selected");
-                    
-                    // Update trigger text
-                    leagueSelectSpan.textContent = option.text;
-                    leagueSelectSpan.setAttribute("data-i18n", "league_" + option.value);
-                    
-                    // Update hidden select
-                    leagueSelect.value = option.value;
-                    const event = new Event("change");
-                    leagueSelect.dispatchEvent(event);
-                    
-                    // Close dropdown
-                    leagueSelectTrigger.classList.remove("open");
-                    leagueSelectOptions.style.display = "none";
-                  });
+                  // Immediate visual feedback
+                  customOption.classList.add("selected");
+                  
+                  // Update trigger text immediately
+                  leagueSelectSpan.textContent = option.text;
+                  
+                  // Update hidden select and dispatch event
+                  leagueSelect.value = option.value;
+                  leagueSelect.dispatchEvent(new Event("change"));
+                  
+                  // Close dropdown immediately
+                  leagueSelectTrigger.classList.remove("open");
+                  leagueSelectOptions.style.display = "none";
                 });
                 
                 leagueSelectOptions.appendChild(customOption);
               });
               
-              // Toggle dropdown on trigger click with touch optimization
+              // Ultra-optimized trigger click handler
               const handleLeagueTriggerClick = function(e) {
                 e.stopPropagation();
                 
-                // Close other open dropdowns
-                document.querySelectorAll(".custom-select-trigger.open").forEach(trigger => {
-                  if (trigger !== leagueSelectTrigger) {
-                    trigger.classList.remove("open");
-                    trigger.nextElementSibling.style.display = "none";
-                  }
-                });
-                
-                // Toggle this dropdown
+                // Toggle this dropdown immediately
                 const isOpen = leagueSelectTrigger.classList.contains("open");
                 leagueSelectTrigger.classList.toggle("open");
                 leagueSelectOptions.style.display = isOpen ? "none" : "block";
               };
               
-              leagueSelectTrigger.addEventListener("click", handleLeagueTriggerClick);
+              leagueSelectTrigger.addEventListener("mousedown", handleLeagueTriggerClick);
               leagueSelectTrigger.addEventListener("touchstart", handleLeagueTriggerClick, { passive: true });
               
               // Add elements to container
@@ -2426,56 +2440,40 @@ function search(query) {
                 if (index === 0) selectOption.selected = true;
                 seasonSelect.appendChild(selectOption);
                 
-                // Handle option click with optimized performance
+                // Ultra-optimized option click handler
                 customOption.addEventListener("click", function(e) {
                   e.preventDefault();
                   e.stopPropagation();
                   
-                  // Batch DOM updates for better performance
-                  requestAnimationFrame(() => {
-                    // Update selected option
-                    seasonSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
-                      opt.classList.remove("selected")
-                    );
-                    customOption.classList.add("selected");
-                    
-                    // Update trigger text
-                    seasonSelectSpan.textContent = option.text;
-                    seasonSelectSpan.setAttribute("data-i18n", "season_" + option.value);
-                    
-                    // Update hidden select
-                    seasonSelect.value = option.value;
-                    const event = new Event("change");
-                    seasonSelect.dispatchEvent(event);
-                    
-                    // Close dropdown
-                    seasonSelectTrigger.classList.remove("open");
-                    seasonSelectOptions.style.display = "none";
-                  });
+                  // Immediate visual feedback
+                  customOption.classList.add("selected");
+                  
+                  // Update trigger text immediately
+                  seasonSelectSpan.textContent = option.text;
+                  
+                  // Update hidden select and dispatch event
+                  seasonSelect.value = option.value;
+                  seasonSelect.dispatchEvent(new Event("change"));
+                  
+                  // Close dropdown immediately
+                  seasonSelectTrigger.classList.remove("open");
+                  seasonSelectOptions.style.display = "none";
                 });
                 
                 seasonSelectOptions.appendChild(customOption);
               });
               
-              // Toggle dropdown on trigger click with touch optimization
+              // Ultra-optimized trigger click handler
               const handleSeasonTriggerClick = function(e) {
                 e.stopPropagation();
                 
-                // Close other open dropdowns
-                document.querySelectorAll(".custom-select-trigger.open").forEach(trigger => {
-                  if (trigger !== seasonSelectTrigger) {
-                    trigger.classList.remove("open");
-                    trigger.nextElementSibling.style.display = "none";
-                  }
-                });
-                
-                // Toggle this dropdown
+                // Toggle this dropdown immediately
                 const isOpen = seasonSelectTrigger.classList.contains("open");
                 seasonSelectTrigger.classList.toggle("open");
                 seasonSelectOptions.style.display = isOpen ? "none" : "block";
               };
               
-              seasonSelectTrigger.addEventListener("click", handleSeasonTriggerClick);
+              seasonSelectTrigger.addEventListener("mousedown", handleSeasonTriggerClick);
               seasonSelectTrigger.addEventListener("touchstart", handleSeasonTriggerClick, { passive: true });
               
               // Add elements to container
@@ -2532,56 +2530,40 @@ function search(query) {
                 if (index === 0) selectOption.selected = true;
                 ageSelect.appendChild(selectOption);
                 
-                                // Handle option click with optimized performance
+                                                // Ultra-optimized option click handler
                 customOption.addEventListener("click", function(e) {
                   e.preventDefault();
                   e.stopPropagation();
                   
-                  // Batch DOM updates for better performance
-                  requestAnimationFrame(() => {
-                    // Update selected option
-                    ageSelectOptions.querySelectorAll(".custom-select-option").forEach(opt => 
-                      opt.classList.remove("selected")
-                    );
-                    customOption.classList.add("selected");
-                    
-                    // Update trigger text
-                    ageSelectSpan.textContent = option.text;
-                    ageSelectSpan.setAttribute("data-i18n", "age_" + option.value);
-                    
-                    // Update hidden select
-                    ageSelect.value = option.value;
-                    const event = new Event("change");
-                    ageSelect.dispatchEvent(event);
-                    
-                    // Close dropdown
-                    ageSelectTrigger.classList.remove("open");
-                    ageSelectOptions.style.display = "none";
-                  });
+                  // Immediate visual feedback
+                  customOption.classList.add("selected");
+                  
+                  // Update trigger text immediately
+                  ageSelectSpan.textContent = option.text;
+                  
+                  // Update hidden select and dispatch event
+                  ageSelect.value = option.value;
+                  ageSelect.dispatchEvent(new Event("change"));
+                  
+                  // Close dropdown immediately
+                  ageSelectTrigger.classList.remove("open");
+                  ageSelectOptions.style.display = "none";
                 });
                 
                 ageSelectOptions.appendChild(customOption);
               });
               
-              // Toggle dropdown on trigger click with touch optimization
+              // Ultra-optimized trigger click handler
               const handleAgeTriggerClick = function(e) {
                 e.stopPropagation();
                 
-                // Close other open dropdowns
-                document.querySelectorAll(".custom-select-trigger.open").forEach(trigger => {
-                  if (trigger !== ageSelectTrigger) {
-                    trigger.classList.remove("open");
-                    trigger.nextElementSibling.style.display = "none";
-                  }
-                });
-                
-                // Toggle this dropdown
+                // Toggle this dropdown immediately
                 const isOpen = ageSelectTrigger.classList.contains("open");
                 ageSelectTrigger.classList.toggle("open");
                 ageSelectOptions.style.display = isOpen ? "none" : "block";
               };
               
-              ageSelectTrigger.addEventListener("click", handleAgeTriggerClick);
+              ageSelectTrigger.addEventListener("mousedown", handleAgeTriggerClick);
               ageSelectTrigger.addEventListener("touchstart", handleAgeTriggerClick, { passive: true });
               
               // Add elements to container
