@@ -1272,8 +1272,8 @@ if (match) {
     const position = match[2]; // Original position for display fallback
     const positionKey = position.replace(/[^a-zA-Z]/g, ''); // Cleaned key for lookup
     
-    // Translate using the cleaned key, fallback to original position
-    const translatedPosition = translatePosition(positionKey) || position;
+    // Get translation for the cleaned key, if it exists use it, otherwise use original
+    const translatedPosition = translatePosition(positionKey) ? translatePosition(positionKey) : position;
     
     // Reconstruct the display text
     link.textContent = `${playerName} (${translatedPosition})`;
