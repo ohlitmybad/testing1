@@ -1269,13 +1269,11 @@ function search3(query) {
 const match = item.name.match(/(.*)\s+\((.*)\)/);
 if (match) {
     const playerName = match[1];
-    const position = match[2];
+    const position = match[2]; // Original position for display fallback
+    const positionKey = position.replace(/[^a-zA-Z]/g, ''); // Cleaned key for lookup
     
-    // Clean the position key by removing all non-letter characters for translation lookup
-    const cleanPositionKey = position.replace(/[^a-zA-Z]/g, '');
-    
-    // Translate the position using the cleaned key, but display the full translated result
-    const translatedPosition = translatePosition(cleanPositionKey);
+    // Translate using the cleaned key, fallback to original position
+    const translatedPosition = translatePosition(positionKey) || position;
     
     // Reconstruct the display text
     link.textContent = `${playerName} (${translatedPosition})`;
