@@ -1716,7 +1716,7 @@ e.stopPropagation();
     nameElement.addEventListener ("touchstart", (e) => {
 e.preventDefault();
 e.stopPropagation();
-searchInput.value = fullName + " " + team + " " + age;
+searchInput.value = fullName + "," + team + "," + age;
 searchButton1.click();
 }, 
 { passive: false });
