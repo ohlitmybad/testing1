@@ -81,42 +81,10 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  width: 100%;
-  max-width: 470px;
-  margin: 0 auto;
+  width: 470px;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 470px) {
-  body {
-    font-size: calc(14px * (100vw / 470));
-  }
-  
-  .main-content-container,
-  .similar-players-container {
-    margin-left: calc(12px * (100vw / 470));
-    margin-right: calc(12px * (100vw / 470));
-    width: calc(100% - 24px * (100vw / 470));
-  }
-  
-  #resultsTable,
-  #similarPlayersContainer {
-    padding-left: calc(12px * (100vw / 470));
-    padding-right: calc(12px * (100vw / 470));
-  }
-  
-  .position-switcher-container {
-    padding-left: calc(12px * (100vw / 470));
-    padding-right: calc(12px * (100vw / 470));
-  }
-  
-  #searchInput1 {
-    width: calc(385px * (100vw / 470));
-    margin-left: calc(12px * (100vw / 470));
-  }
 }
 
 #matchingNames {
@@ -681,16 +649,8 @@ border-color: var(--primary-color);
 svg.radar {
 height: 391px;
 width: 391px;
-max-width: 100%;
 display: block;
 margin: 0 auto;
-}
-
-@media (max-width: 470px) {
-  svg.radar {
-    height: calc(391px * (100vw / 470));
-    width: calc(391px * (100vw / 470));
-  }
 }
 
 /* Radar container centering and spacing */
