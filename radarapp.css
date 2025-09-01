@@ -81,28 +81,11 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  width: 100%;
+  width: 470px;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
 }
-
-/* Main container that holds your 470px design */
-.screenshotcontainer {
-  width: 470px;
-  margin: 0 auto;
-  position: relative;
-}
-
-/* Scale the container on smaller screens to fit */
-@media (max-width: 470px) {
-  .screenshotcontainer {
-    transform: scale(calc(100vw / 470));
-    transform-origin: center top;
-  }
-}
-
-
 
 #matchingNames {
 background-color: var(--container-bg);
