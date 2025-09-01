@@ -102,17 +102,7 @@ body {
   }
 }
 
-/* Make sure AdSense breaks out of the scaled container */
-.adsbygoogle {
-  transform: none !important;
-  width: 100vw !important;
-  max-width: 100% !important;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw !important;
-  margin-right: -50vw !important;
-}
+
 
 #matchingNames {
 background-color: var(--container-bg);
