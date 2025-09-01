@@ -81,10 +81,13 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  width: 470px;
+  width: 100%;
+  max-width: 470px;
+  margin: 0 auto;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
+  box-sizing: border-box;
 }
 
 #matchingNames {
@@ -649,6 +652,7 @@ border-color: var(--primary-color);
 svg.radar {
 height: 391px;
 width: 391px;
+max-width: 100%;
 display: block;
 margin: 0 auto;
 }
