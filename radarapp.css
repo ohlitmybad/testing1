@@ -81,7 +81,6 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  width: 470px;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
@@ -921,5 +920,13 @@ opacity: 1;
 
 .pro-button i {
   font-size: 12px;
+}
+
+/* Responsive content container - will be scaled by JavaScript */
+.responsive-content-container {
+  width: 470px;
+  margin: 0 auto;
+  transform-origin: top center;
+  transition: transform 0.1s ease;
 }
 
