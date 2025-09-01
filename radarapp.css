@@ -942,39 +942,5 @@ opacity: 1;
 
 
 
-/* Ad container styles */
-.ad-container-small {
-  height: 90px !important;
-  min-height: 90px !important;
-  max-height: 90px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 5px;
-  position: relative;
-}
-
-.ad-container-large {
-  height: 300px !important;
-  min-height: 300px !important;
-  max-height: 300px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  position: relative;
-}
-
-/* Force ads to respect container dimensions */
-.ad-container-small ins,
-.ad-container-large ins {
-  max-width: 100% !important;
-  max-height: 100% !important;
-  height: auto !important;
-  width: auto !important;
-}
-
-
-
 
 
