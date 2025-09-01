@@ -550,7 +550,7 @@ display: flex;
 align-items: center;
 justify-content: center;
 padding: 4.5px 6px;
-min-width: 46.9px; /* Minimum width instead of fixed width */
+min-width: 46.4px; /* Minimum width instead of fixed width */
 background-color: var(--container-bg);
 color: var(--text-color);
 text-decoration: none;
@@ -830,7 +830,7 @@ overflow: hidden;
 background-color: var(--container-bg);
 border-radius: 10px;
 box-shadow: var(--shadow);
-margin: 5px 12px;
+margin: 11px 12px;
 position: relative;
 width: calc(100% - 24px);
 max-width: 100%;
