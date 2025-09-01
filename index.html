@@ -4,14 +4,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="robots" content="noindex">
 <meta name="Mediapartners-Google" content="index, follow">
-<script>
-(function() {
-      var width = window.innerWidth;
-      var initialScale = width / 470;
-      var viewportMeta = document.querySelector('meta[name="viewport"]');
-      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
-  })();
-</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -31,8 +23,25 @@
 <script src="appgk.js"></script>
 <script src="/apphelpers.js"></script>
 
+<script>
+(function() {
+  function scaleContent() {
+    var width = window.innerWidth;
+    var scale = width / 470;
+    var container = document.querySelector('.responsive-content-container');
+    if (container) {
+      container.style.transform = 'scale(' + scale + ')';
+    }
+  }
+  
+  // Scale on load and resize
+  scaleContent();
+  window.addEventListener('resize', scaleContent);
+})();
+</script>
 
 <body>
+  <div class="responsive-content-container">
   <div class="screenshotcontainer">
     <div class="position-switcher-container">
      
@@ -133,6 +142,7 @@
         <div id="similarPlayersContainer"></div>
         <button onclick="takeScreenshot()" class="button-10"><div class="icon2"></div></button>
       </div>
+    </div>
     </div>
 <center>    
 <ins class="adsbygoogle"
