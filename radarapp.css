@@ -567,7 +567,7 @@ display: flex;
 align-items: center;
 justify-content: center;
 padding: 4.5px 6px;
-min-width: 47.1px; /* Minimum width instead of fixed width */
+min-width: 47px; /* Minimum width instead of fixed width */
 background-color: var(--container-bg);
 color: var(--text-color);
 text-decoration: none;
