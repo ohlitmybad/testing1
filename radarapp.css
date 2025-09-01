@@ -82,12 +82,36 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  max-width: 470px;
-  margin: 0 auto;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
-  box-sizing: border-box;
+}
+
+/* Main container that holds your 470px design */
+.screenshotcontainer {
+  width: 470px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Scale the container on smaller screens to fit */
+@media (max-width: 470px) {
+  .screenshotcontainer {
+    transform: scale(calc(100vw / 470));
+    transform-origin: center top;
+  }
+}
+
+/* Make sure AdSense breaks out of the scaled container */
+.adsbygoogle {
+  transform: none !important;
+  width: 100vw !important;
+  max-width: 100% !important;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
 }
 
 #matchingNames {
@@ -652,7 +676,6 @@ border-color: var(--primary-color);
 svg.radar {
 height: 391px;
 width: 391px;
-max-width: 100%;
 display: block;
 margin: 0 auto;
 }
