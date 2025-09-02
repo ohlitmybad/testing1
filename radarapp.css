@@ -1,6 +1,4 @@
 
-
-
 :root {
   --primary-color: #3B82F6;
   --secondary-color: #2ecc71;
@@ -81,6 +79,7 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
+  width: 470px;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
@@ -830,7 +829,7 @@ overflow: hidden;
 background-color: var(--container-bg);
 border-radius: 10px;
 box-shadow: var(--shadow);
-margin: 11px 12px;
+margin: 5px 12px;
 position: relative;
 width: calc(100% - 24px);
 max-width: 100%;
@@ -920,13 +919,5 @@ opacity: 1;
 
 .pro-button i {
   font-size: 12px;
-}
-
-/* Responsive content container - will be scaled by JavaScript */
-.responsive-content-container {
-  width: 470px;
-  margin: 0 auto;
-  transform-origin: top center;
-  transition: transform 0.1s ease;
 }
 
