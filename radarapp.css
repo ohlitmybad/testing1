@@ -79,7 +79,7 @@ body {
   line-height: 1.6;
   margin: 0;
   padding: 0;
-  width: 470px;
+  width: 468px;
   overflow-x: hidden;
   position: relative;
   min-height: 100vh;
@@ -829,7 +829,7 @@ overflow: hidden;
 background-color: var(--container-bg);
 border-radius: 10px;
 box-shadow: var(--shadow);
-margin: 5px 12px;
+margin:11px 12px;
 position: relative;
 width: calc(100% - 24px);
 max-width: 100%;
@@ -920,4 +920,20 @@ opacity: 1;
 .pro-button i {
   font-size: 12px;
 }
+
+/* Prevent ALL horizontal scrolling and movement */
+html, body {
+  overflow-x: hidden;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent horizontal panning on all elements */
+* {
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: none;
+}
+
+
 
