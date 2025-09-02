@@ -4,6 +4,14 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <meta name="robots" content="noindex">
 <meta name="Mediapartners-Google" content="index, follow">
+<script>
+(function() {
+      var width = window.innerWidth;
+      var initialScale = width / 470;
+      var viewportMeta = document.querySelector('meta[name="viewport"]');
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+  })();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -23,25 +31,8 @@
 <script src="appgk.js"></script>
 <script src="/apphelpers.js"></script>
 
-<script>
-(function() {
-  function scaleContent() {
-    var width = window.innerWidth;
-    var scale = width / 470;
-    var container = document.querySelector('.responsive-content-container');
-    if (container) {
-      container.style.transform = 'scale(' + scale + ')';
-    }
-  }
-  
-  // Scale on load and resize
-  scaleContent();
-  window.addEventListener('resize', scaleContent);
-})();
-</script>
 
 <body>
-  <div class="responsive-content-container">
   <div class="screenshotcontainer">
     <div class="position-switcher-container">
      
@@ -121,13 +112,21 @@
 <line x1="0" y1="0" x2="158.9" y2="-45.8" stroke="#D3D3D3" stroke-width="1" transform="translate(-158.89, 45.63)"></line>
 <line x1="0" y1="0" x2="134.5" y2="95.58" stroke="#D3D3D3" stroke-width="1" transform="translate(-134.51, -95.67)"></line>
 
-
+<div class="floating-buttons">
+  <a href="https://datamb.football/proguide/" target="_blank" rel="noopener noreferrer" class="floating-button guide-button">
+    <i class="fas fa-question-circle"></i>
+  </a>
+  <a href="https://datamb.football/appjoin/" target="_blank" rel="noopener noreferrer" class="floating-button pro-button">
+    <i class="fas fa-user-plus"></i>
+  </a>
+</div>
 
 <g class="radarWrapper"></g>
 </g></g>
       </svg>
     </div>
-    </div>    </div>
+    </div>
+  </div>
 
     <div class="similar-players-container">
       <div class="logo-screenshot-container">
@@ -135,15 +134,6 @@
         <div id="similarPlayersContainer"></div>
         <button onclick="takeScreenshot()" class="button-10"><div class="icon2"></div></button>
       </div>
-    </div>
-    </div>
-    <div class="floating-buttons">
-      <a href="https://datamb.football/proguide/" target="_blank" rel="noopener noreferrer" class="floating-button guide-button">
-        <i class="fas fa-question-circle"></i>
-      </a>
-      <a href="https://datamb.football/appjoin/" target="_blank" rel="noopener noreferrer" class="floating-button pro-button">
-        <i class="fas fa-user-plus"></i>
-      </a>
     </div>
 <center>    
 <ins class="adsbygoogle"
