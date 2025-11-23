@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=770, initial-scale=0.51">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="language" content="en">
   <link rel="canonical" href="https://datamb.football/keepers/" /> 
   <link rel="alternate" hreflang="x-default" href="https://datamb.football/keepers/" />   
@@ -22,6 +22,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
+	<style>
+    /* Page wrapper scaling */
+    .page-wrapper {
+      width: 770px;          /* your original layout width */
+      transform: scale(0.51); /* scale down to fit screen */
+      transform-origin: top left;
+    }
+  </style>
 
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <link rel="stylesheet" href="/radarfree.css">
@@ -83,7 +91,7 @@
 
 
 <body>
-
+  <div class="page-wrapper">
   <center>
 <!-- radarplotsearch -->
 <ins class="adsbygoogle"
@@ -257,6 +265,6 @@
     </nav>
   </div>
 </footer>
-
+  </div>
 </body>
 </html>
