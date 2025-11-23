@@ -26,7 +26,6 @@
 
   <style>
  body {
-	 width: 800px;
      font-family: system-ui;
      margin: 0;
      padding: 0;
@@ -34,6 +33,13 @@
      color: var(--text-color);
      background-color: var(--background-color);
 }
+/* Only for touch devices with no hover (typically mobiles) */
+@media (hover: none) and (pointer: coarse) {
+    body {
+        width: 770px;
+    }
+}
+
  :root {
      --primary-color: #3498db;
      --secondary-color: #2ecc71;
