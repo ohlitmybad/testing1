@@ -24,11 +24,11 @@
 
 	<style>
     /* Page wrapper scaling */
-    .page-wrapper {
-      width: 770px;          /* your original layout width */
-      transform: scale(0.51); /* scale down to fit screen */
-      transform-origin: top left;
-    }
+   .page-wrapper {
+      width: 770px;          /* design width */
+      max-width: 100%;       /* never overflow viewport */
+      margin: 0 auto;        /* center on wider screens */
+  }
   </style>
 
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
