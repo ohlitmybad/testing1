@@ -20,11 +20,19 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <script>
 (function() {
-      var width = window.innerWidth;
-      var initialScale = width / 768;
-      var viewportMeta = document.querySelector('meta[name="viewport"]');
-      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
-  })();
+  var width = window.innerWidth;
+  var designWidth = 770;        // Your page design width
+  var maxZoomOut = 0.8;         // Never scale below this
+  var initialScale = Math.max(width / designWidth, maxZoomOut);
+
+  var viewportMeta = document.querySelector('meta[name="viewport"]');
+  if (viewportMeta) {
+    viewportMeta.setAttribute(
+      'content',
+      'width=device-width, initial-scale=' + initialScale + ', user-scalable=no'
+    );
+  }
+})();
 </script>
 
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
