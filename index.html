@@ -74,9 +74,11 @@ body {
   transition: background-color 0.3s, color 0.3s;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Change this */
-  width: 100vw; /* Add this */
-  height: 100vh; /* Add this */
+  min-width: 770px;
+  overflow-x: hidden;
+  transform: scale(0.51);
+  transform-origin: top left;
+  width: 196%; /* Compensate for the scale */
 }
 body.dark-mode {
   background-color: #0e0f0f !important;
@@ -1177,7 +1179,6 @@ body.dark-mode .sub-footer svg {
 
 
 <body>
-<div id="content-wrapper" style="transform: scale(0.51); transform-origin: top left; width: 100%; min-width: 770px; height: 100vh; overflow: auto;">
 <header class="header">
   <div class="logo">
     <a href="https://datamb.football">
@@ -1378,6 +1379,5 @@ body.dark-mode .sub-footer svg {
     </nav>
   </div>
 </footer>
-	  </div>
 </body>
 </html>
