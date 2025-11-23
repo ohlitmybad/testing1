@@ -8,8 +8,8 @@
   <link rel="alternate" hreflang="fr" href="https://datamb.football/keepers/?lang=fr" />
   <link rel="alternate" hreflang="es" href="https://datamb.football/keepers/?lang=es" />
   <link rel="alternate" hreflang="tr" href="https://datamb.football/keepers/?lang=tr" />
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
   <title data-i18n="meta.title">DataMB | Compare Goalkeepers</title>
   <meta property="og:image" content="https://datamb.football/vignettes/gk.png">
 	<meta name="description" data-i18n="meta.description" content="Compare goalkeeper statistics in the Top 7 Leagues. Visualize player performance. Find similar profiles. Use our radar tool to compare shot-stopping with prevented goals (PSxG-GA); sweeping and interceptions; aerial duels won; save rate percentage; passes completed; long and short pass accuracy and more for goalkeepers in Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga.">
@@ -22,23 +22,7 @@
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-<script>
-  (function() {
-      var width = window.innerWidth;
-      var viewportMeta = document.querySelector('meta[name="viewport"]');
-      if (viewportMeta) {
-if (width < 770) {
-	      
-      var initialScale = width / 770;
-viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
-} else {
-            var fixedScale = 1;
-	viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + fixedScale + ', user-scalable=no');
 
-  }
-    } 
-})();
-</script>
 
 
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -46,9 +30,13 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
      crossorigin="anonymous"></script>
 
-  
-  
-  
+  <style>
+#content-wrapper {
+  transform: scale(0.51);
+  transform-origin: top left;
+  width: 196.08%;
+}
+  </style>
 </head>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PSBMXX80EF"></script>
@@ -72,6 +60,8 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
 
 
 <body>
+	  <div id="content-wrapper">
+
 <header class="header">
   <div class="logo">
     <a href="https://datamb.football">
@@ -272,6 +262,6 @@ viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + init
     </nav>
   </div>
 </footer>
-
+	  </div>
 </body>
 </html>
