@@ -20,22 +20,11 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <script>
 (function() {
-  var width = window.innerWidth;
-  var designWidth = 770;   // your fixed design width
-  var minScale = 0.6;      // safe lower limit for AdSense overlay
-  var maxScale = 1;        // don’t zoom in beyond 1
-
-  var scale = width / designWidth;
-  var initialScale = Math.min(maxScale, Math.max(minScale, scale));
-
-  var viewportMeta = document.querySelector('meta[name="viewport"]');
-  if (viewportMeta) {
-    viewportMeta.setAttribute(
-      'content',
-      'width=device-width, initial-scale=' + initialScale + ', user-scalable=no'
-    );
-  }
-})();
+      var width = window.innerWidth;
+      var initialScale = width / 560;
+      var viewportMeta = document.querySelector('meta[name="viewport"]');
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+  })();
 </script>
 
 
