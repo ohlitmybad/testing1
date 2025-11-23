@@ -22,18 +22,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 
-	<style>
-    /* Page wrapper scaling */
-   .page-wrapper {
-      width: 770px;          /* design width */
-      max-width: 100%;       /* never overflow viewport */
-      margin: 0 auto;        /* center on wider screens */
-  }
-  </style>
+<script>
+const scale = window.innerWidth / 770;
+const content = document.getElementById('page-wrapper');
+
+content.style.transform = `scale(${scale})`;
+content.style.transformOrigin = 'top left';
+content.style.width = `${100 / scale}%`;
+
+// Remove whitespace
+document.body.style.overflow = 'hidden';
+content.style.position = 'relative';
+	
+</script>
 
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <link rel="stylesheet" href="/radarfree.css">
-<div class="page-wrapper">
+<div id="page-wrapper">
 <header class="header">
   <div class="logo">
     <a href="https://datamb.football">
