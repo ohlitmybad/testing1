@@ -8,7 +8,6 @@
   <link rel="alternate" hreflang="fr" href="https://datamb.football/keepers/?lang=fr" />
   <link rel="alternate" hreflang="es" href="https://datamb.football/keepers/?lang=es" />
   <link rel="alternate" hreflang="tr" href="https://datamb.football/keepers/?lang=tr" />
-  <meta name="viewport" content="width=device-width">
   <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
   <title data-i18n="meta.title">DataMB | Compare Goalkeepers</title>
   <meta property="og:image" content="https://datamb.football/vignettes/gk.png">
@@ -18,7 +17,15 @@
   <meta name="twitter:title" content="DataMB | Compare Goalkeepers">
   <meta name="twitter:description" content="Radar Comparison Tool">
   <meta name="twitter:image" content="https://datamb.football/vignettes/gk.png">
-
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<script>
+(function() {
+      var width = window.innerWidth;
+      var initialScale = width / 768;
+      var viewportMeta = document.querySelector('meta[name="viewport"]');
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
+  })();
+</script>
 
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
