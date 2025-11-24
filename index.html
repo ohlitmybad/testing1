@@ -68,11 +68,7 @@
 }
 
 html {
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: 100vh;
-  min-height: 100vh;
-  max-height: 100vh;
+  overflow-y: hidden;
 }
 body {
   font-family: 'Inter', sans-serif;
@@ -82,8 +78,11 @@ body {
   transition: background-color 0.3s, color 0.3s;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
   position: relative;
 }
 
