@@ -83,7 +83,9 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   height: 100vh;
+  min-height: 100vh;
   max-height: 100vh;
+  position: relative;
 }
 
 #full-page {
@@ -91,10 +93,10 @@ body {
   transform-origin: top left;
   min-width: 770px;
   width: 196%;
-  height: 196%; /* Scale height proportionally */
-  overflow: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
-	
 body.dark-mode {
   background-color: #0e0f0f !important;
   min-width: 770px;
