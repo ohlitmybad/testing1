@@ -85,12 +85,10 @@ body {
 }
 
 #full-page {
-	  transform: scale(0.51);
-  transform-origin: top left;
+  transform: scale(0.51) translateY(0); /* NEW */
+  margin-bottom: calc(-100% + 51%); /* NEW - removes 49% of content height */  transform-origin: top left;
 	min-width: 770px;
   width: 196%;
-	  margin-bottom: -49%; /* Remove bottom whitespace - THIS IS KEY */
-
 }
 	
 body.dark-mode {
