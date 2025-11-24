@@ -67,13 +67,12 @@
   box-sizing: border-box;
 }
 
-html, body {
-  height: 100%;
+	html {
   overflow: hidden;
+  height: 100%;
 }
 
 body {
-  max-height: 100vh;
   font-family: 'Inter', sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
@@ -82,15 +81,18 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  overflow-y: auto; /* Body handles scrolling */
-
+  overflow-y: auto;
+  height: 100vh;
+  max-height: 100vh;
 }
 
 #full-page {
-	  transform: scale(0.51);
+  transform: scale(0.51);
   transform-origin: top left;
-	min-width: 770px;
+  min-width: 770px;
   width: 196%;
+  height: 196%; /* Scale height proportionally */
+  overflow: visible;
 }
 	
 body.dark-mode {
