@@ -67,9 +67,8 @@
   box-sizing: border-box;
 }
 html {
-  overflow-y: auto; /* HTML handles scrolling */
-  overflow-x: hidden;
-  height: 100vh;
+  overflow: hidden;
+  height: 51vh; /* 100vh * 0.51 */
 }
 
 body {
@@ -81,11 +80,12 @@ body {
   margin: 0;
   padding: 0;
   min-width: 770px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto; /* Body handles scrolling */
   transform: scale(0.51);
   transform-origin: top left;
   width: 196%;
-  height: 196vh; /* Tall enough so scaled content fills viewport */
+  height: 196vh; /* Make body taller so when scaled it fills properly */
 }
 body.dark-mode {
   background-color: #0e0f0f !important;
