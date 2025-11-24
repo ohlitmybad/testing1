@@ -82,11 +82,16 @@ body {
   min-width: 770px;
   overflow-x: hidden;
   overflow-y: auto; /* Body handles scrolling */
-  transform: scale(0.51);
+
+}
+
+#full-page {
+	  transform: scale(0.51);
   transform-origin: top left;
   width: 196%;
   height: 196vh; /* Make body taller so when scaled it fills properly */
 }
+	
 body.dark-mode {
   background-color: #0e0f0f !important;
   min-width: 770px;
@@ -1186,6 +1191,7 @@ body.dark-mode .sub-footer svg {
 
 
 <body>
+	<div id="full-page">
 <header class="header">
   <div class="logo">
     <a href="https://datamb.football">
@@ -1386,5 +1392,6 @@ body.dark-mode .sub-footer svg {
     </nav>
   </div>
 </footer>
+</div>
 </body>
 </html>
