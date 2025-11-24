@@ -71,8 +71,13 @@ body {
   margin: 0;
   padding: 0;
   min-width: 770px;
-  overflow-x: auto;
 }
+	html, body {
+    overflow-x: hidden; /* Crucial to prevent horizontal scrolling */
+    width: 100vw;
+    height: 100vh;
+}
+	
 body.dark-mode {
   background-color: #0e0f0f !important;
   min-width: 770px;
