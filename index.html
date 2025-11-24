@@ -68,7 +68,6 @@
 }
 html {
   overflow: hidden;
-  height: 51vh; /* 100vh * 0.51 */
 }
 
 body {
@@ -80,16 +79,15 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  overflow-y: auto;
-  max-height: fit-content;
+  overflow-y: auto; /* Body handles scrolling */
+
 }
 
 #full-page {
-  transform: scale(0.51);
+	  transform: scale(0.51);
   transform-origin: top left;
-  min-width: 770px;
+	min-width: 770px;
   width: 196%;
-  display: block;
 }
 	
 body.dark-mode {
