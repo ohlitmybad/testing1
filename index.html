@@ -85,10 +85,11 @@ body {
 }
 
 #full-page {
-  transform: scale(calc(100vw / 770));
+  --scale: calc(100vw / 770);
+  width: calc(100% / var(--scale));
+  transform: scale(var(--scale));
   transform-origin: top left;
   min-width: 770px;
-  width: calc(100% / (100vw / 770));
   position: absolute;
   top: 0;
   left: 0;
