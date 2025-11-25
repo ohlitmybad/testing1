@@ -46,18 +46,20 @@ body {
 body {
 overflow-x: hidden;
 overflow-y: auto;
+height: 100vh;
+min-height: 100vh;
+max-height: 100vh;
 position: relative;
 }
 #full-page {
- width: var(--dynamic-width);
-  transform: scale(var(--dynamic-scale));
+  width: var(--dynamic-width);
+  transform: scaleX(var(--dynamic-scale));
   transform-origin: top left;
   min-width: 770px;
   position: absolute;
   top: 0;
   left: 0;
-overflow: hidden; /* Add this line */
-
+  overflow: hidden;
 }
 	}
 
