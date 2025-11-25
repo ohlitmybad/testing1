@@ -27,7 +27,15 @@
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
      crossorigin="anonymous"></script>
+<script>
+	const width = window.innerWidth;
+const scale = width / 770;
+const widthPercent = 100 / scale;
 
+// Set CSS custom properties on the root element (which always exists)
+document.documentElement.style.setProperty('--dynamic-width', widthPercent + '%');
+document.documentElement.style.setProperty('--dynamic-scale', scale);
+</script>
 <style>
 
  :root {
@@ -85,9 +93,8 @@ body {
 }
 
 #full-page {
-  --scale: calc(100vw / 770);
-  width: calc(100% / var(--scale));
-  transform: scale(var(--scale));
+ width: var(--dynamic-width);
+  transform: scale(var(--dynamic-scale));
   transform-origin: top left;
   min-width: 770px;
   position: absolute;
