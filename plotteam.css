@@ -46,9 +46,6 @@ body {
 body {
 overflow-x: hidden;
 overflow-y: auto;
-height: 100vh;
-min-height: 100vh;
-max-height: 100vh;
 position: relative;
 }
 #full-page {
@@ -770,7 +767,6 @@ align-items: center;
 justify-content: center;
 transform: translateY(-1px);
 }
-@media screen and (max-width: 550px) { .header .navigation { display: none; } }
 
 /* Enhanced Dark Mode Styles */
 .dark-mode .chart-wrapper {
