@@ -86,14 +86,18 @@ body {
   transition: background-color 0.3s, color 0.3s;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: 100vh;
-  min-height: 100vh;
-  max-height: 100vh;
-  position: relative;
 }
 
+
+@media (hover: none) and (pointer: coarse) {
+body {
+overflow-x: hidden;
+overflow-y: auto;
+height: 100vh;
+min-height: 100vh;
+max-height: 100vh;
+position: relative;
+}
 #full-page {
  width: var(--dynamic-width);
   transform: scale(var(--dynamic-scale));
@@ -102,9 +106,10 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-	  overflow: hidden; /* Add this line */
+overflow: hidden; /* Add this line */
 
 }
+	}
 body.dark-mode {
   background-color: #0e0f0f !important;
 }
