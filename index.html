@@ -89,14 +89,15 @@ body {
     line-height: 1.6;
     transition: background-color 0.3s, color 0.3s;
 }
-@media (hover: none) and (pointer: coarse) {
-  /* For pages WITHOUT header */
-  html:not(:has(header)) body {
+
+        @media (hover: none) and (pointer: coarse) {
+  /* For pages WITH header */
+  html:has(header) body {
     width: 770px;
   }
   
-  /* For pages WITH header */
-  html:has(header) body {
+  /* For pages WITHOUT header */
+  html:not(:has(header)) body {
     overflow-x: hidden;
     overflow-y: auto;
     height: 100vh;
@@ -105,7 +106,7 @@ body {
     position: relative;
   }
   
-  html:has(header) .full-page {
+  html:not(:has(header)) .full-page {
     width: var(--dynamic-width);
     transform: scale(var(--dynamic-scale));
     transform-origin: top left;
@@ -116,6 +117,7 @@ body {
     overflow: hidden;
   }
 }
+        
 .header {
     background-color: var(--header-bg);
     display: flex;
