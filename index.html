@@ -3,26 +3,28 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="language" content="en">
-  <link rel="canonical" href="https://datamb.football/teams/" />
-  <link rel="alternate" hreflang="x-default" href="https://datamb.football/teams/" />
-  <link rel="alternate" hreflang="en" href="https://datamb.football/teams/?lang=en" />
-  <link rel="alternate" hreflang="fr" href="https://datamb.football/teams/?lang=fr" />
-  <link rel="alternate" hreflang="es" href="https://datamb.football/teams/?lang=es" />
-  <link rel="alternate" hreflang="tr" href="https://datamb.football/teams/?lang=tr" />
+  <link rel="canonical" href="https://datamb.football" />
+  <link rel="alternate" hreflang="x-default" href="https://datamb.football" />
+  <link rel="alternate" hreflang="en" href="https://datamb.football/?lang=en" />
+  <link rel="alternate" hreflang="fr" href="https://datamb.football/?lang=fr" />
+  <link rel="alternate" hreflang="es" href="https://datamb.football/?lang=es" />
+  <link rel="alternate" hreflang="tr" href="https://datamb.football/?lang=tr" />
   <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
+  <meta name="description" data-i18n="meta.description" content="Compare football players and teams. Browse player and team profiles, try our radar comparison and other tools to visualise data from Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga and more leagues.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="description" data-i18n="meta.description" content="Compare team statistics from around the Top 7 Leagues. Browse player and team profiles, try our radar comparison and other tools to visualise data from Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Primeira Liga.">
   <meta name="twitter:site" content="@DataMB_">
-  <meta name="twitter:title" content="DataMB | Team Data">
+  <meta name="twitter:title" content="DataMB | Football Visuals and Statistics">
   <meta name="twitter:description" content="">
-  <meta name="twitter:image" content="https://datamb.football/vignettes/teams.png">
-  <meta property="og:image" content="https://datamb.football/vignettes/teams.png">
-  <meta itemprop="name" content="DataMB | Compare Team Statistics">
+  <meta name="twitter:image" content="https://datamb.football/vignettes/home.png">
+  <meta property="og:image" content="https://datamb.football/vignettes/home.png">
+  <meta itemprop="name" content="DataMB | Compare Players and Team Statistics">
   <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js"></script>
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/css/flag-icons.min.css"/>
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Oswald:wght@700&display=swap" rel="stylesheet">
-  <title data-i18n="meta.title">DataMB | Teams</title>
+	<script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+  <title data-i18n="meta.title">DataMB | Football Visuals and Statistics</title>
   <script>
 const width = window.innerWidth;
 
@@ -107,7 +109,6 @@ overflow: hidden; /* Add this line */
      top: 0;
      z-index: 100;
 }
-
  body.dark-mode .header .button10 {
      color: #aeaeae;
 }
@@ -254,7 +255,8 @@ overflow: hidden; /* Add this line */
  .dark-mode .toggle-icon::before {
      color: #e0e0e0;
 }
- 
+
+
  .dark-mode .header .button10 {
      color: #aaa;
 }
@@ -283,24 +285,81 @@ overflow: hidden; /* Add this line */
      color: #e0e0e0;
 }
  
-
- body.dark-mode #searchInput {
-     background-color: #333;
-     color: #e0e0e0;
-     border-color: #555;
+ .button-container {
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: center;
+     align-items: center;
 }
- body.dark-mode .sub-footer svg {
-     fill: white;
+ .bouton {
+     display: flex;
+     width: 245px;
+     height: 245px;
+     padding: 20px 40px;
+     background-color: transparent;
+     border: none;
+     border-radius: 5px;
+     margin: 20px;
+     cursor: pointer;
+     position: relative;
+     justify-content: center;
 }
- body.dark-mode .search-input-container {
-     background-color: #333;
+ .bouton span {
+     position: absolute;
+     top: 72%;
+     transform: translateY(-50%);
+     transform: translateX(1.8%);
 }
- .header .logo-text {
-     margin-left: 10px;
-     font-size: 23px;
-     color: #444444;
+ .image-1 span, .image-3 span {
+     color: #222;
      font-weight: 600;
-     transform: translateY(-5%) 
+     font-size: 30px;
+     font-family: 'Oswald', sans-serif;
+}
+ body.dark-mode .image-2 span {
+     color: #e0e0e0;
+}
+ .image-2 span {
+     color: #ffffff;
+     font-weight: 700;
+     font-size: 30px;
+     font-family: 'Oswald', sans-serif;
+}
+ body.dark-mode .image-1, body.dark-mode .image-2, body.dark-mode .image-3 {
+     background-color: #151515;
+}
+ .image-1 {
+     border-radius: 10px;
+     text-decoration: none;
+     background-color: white;
+     font-size: 24px;
+     font-weight: bold;
+     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+     transition: background-color 0.1s ease;
+     background-image: url('https://datamb.football/homeimg/1.png');
+     background-size: cover;
+}
+ .image-2 {
+     background-image: url('https://datamb.football/homeimg/4freetrial.png');
+     background-size: cover;
+     background-color: #0e0f0f;
+     border-radius: 10px;
+     text-decoration: none;
+     font-size: 24px;
+     font-weight: bold;
+     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+     transition: background-color 0.1s ease;
+}
+ .image-3 {
+     border-radius: 10px;
+     text-decoration: none;
+     background-color: white;
+     font-size: 24px;
+     font-weight: bold;
+     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+     transition: background-color 0.1s ease;
+     background-image: url('https://datamb.football/homeimg/2.png');
+     background-size: cover;
 }
  .footer {
      font-family: system-ui;
@@ -367,61 +426,33 @@ overflow: hidden; /* Add this line */
  .footer p {
      margin-bottom: 0;
 }
- .button-container {
+ .search-input2 {
+     width: 320px;
+     padding: 10px;
+     border: 1px solid var(--border-color);
+     border-radius: 6px;
+     font-size: 17px;
+     font-family: 'Inter', sans-serif;
+     outline: none;
+     height: 50px;
+     box-sizing: border-box;
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+}
+
+.search-input2:focus {
+  box-shadow: 0 0 0 2px var(--primary-color) !important;
+
+}
+body.dark-mode .search-input2 {
+    color: #ffffff;
+}
+
+ .container2 {
      display: flex;
      flex-wrap: wrap;
-     justify-content: center;
-     align-items: center;
-}
- .bouton {
-     display: flex;
-     width: 245px;
-     height: 245px;
-     padding: 20px 40px;
-     background-color: transparent;
-     border: none;
-     border-radius: 5px;
-     margin: 20px;
-     cursor: pointer;
-     position: relative;
-     justify-content: center;
-}
- .bouton span {
-     position: absolute;
-     top: 72%;
-     transform: translateY(-50%);
-     transform: translateX(1.8%);
-}
- .image-1 span, .image-3 span {
-     color: #222;
-     font-weight: 600;
-     font-size: 30px;
-     font-family: 'Oswald', sans-serif;
-}
- body.dark-mode .image-1, body.dark-mode .image-3 {
-     background-color: #151515;
-}
- .image-1 {
-     border-radius: 10px;
-     text-decoration: none;
-     background-color: white;
-     font-size: 24px;
-     font-weight: bold;
-     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-     transition: background-color 0.1s ease;
-     background-image: url('https://datamb.football/teamhome/1.png');
-     background-size: cover;
-}
- .image-3 {
-     border-radius: 10px;
-     text-decoration: none;
-     background-color: white;
-     font-size: 24px;
-     font-weight: bold;
-     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-     transition: background-color 0.1s ease;
-     background-image: url('https://datamb.football/teamhome/2.png');
-     background-size: cover;
+     justify-content: space-between;
 }
  .box2 {
      position: relative;
@@ -652,6 +683,9 @@ overflow: hidden; /* Add this line */
      color: #001e5a;
      font-size: 16px;
 }
+
+
+
  body.dark-mode .box, body.dark-mode .box2 {
      background-color: rgba(40, 40, 40, 0.7);
 }
@@ -663,6 +697,56 @@ overflow: hidden; /* Add this line */
 }
  body.dark-mode .image-1 span, body.dark-mode .image-3 span {
      color: #e0e0e0;
+}
+ body.dark-mode .sub-footer svg {
+     fill: white;
+}
+
+ #autocompleteBox2 {
+     width: 600px;
+     max-height: 200px;
+     overflow-y: auto;
+     position: relative;
+     left: 50%;
+     
+     top: 0%;
+     transform: translate(-50%, -0%);
+}
+ #autocompleteBox2 ul {
+     list-style: none;
+     padding: 0;
+     
+     margin: 0;
+}
+ #autocompleteBox2 li {
+     margin: 0;
+     padding: 5px;
+     
+}
+ #autocompleteBox2 {
+     line-height: 2;
+     text-align: center !important;
+     top: 12px;
+}
+ #autocompleteBox2 a {
+     text-decoration: none;
+     font-family: Arial, sans-serif;
+     text-align: center !important;
+     color: #0c2e70f7 !important;
+     cursor: pointer;
+}
+ #autocompleteBox2 li:hover {
+     background-color: #f0f0f0;
+}
+ .search-container2 {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+}
+
+ body.dark-mode #searchInput2 {
+     box-shadow: var(--shadow);
+     background-color: var(--container-bg);
 }
 
 
@@ -770,9 +854,10 @@ body.dark-mode .search-input-container {
     color: #999;
 }
 
-body.dark-mode #autocompleteBoxmodal a, body.dark-mode #autocompleteBoxmodal2 a {
+body.dark-mode #autocompleteBoxmodal a, body.dark-mode #autocompleteBox2 a {
     color: var(--text-color) !important;
 }
+
 
 
   </style>
@@ -781,22 +866,12 @@ body.dark-mode #autocompleteBoxmodal a, body.dark-mode #autocompleteBoxmodal2 a 
 
 
   
-  
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206"
-crossorigin="anonymous"></script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PSBMXX80EF"></script>
+  <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
 <script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-
-gtag('config', 'G-PSBMXX80EF');
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
 </script>
-
 </head>
-
-
-
 
 
 
@@ -812,50 +887,52 @@ gtag('config', 'G-PSBMXX80EF');
 	<header class="header">
   <div class="logo">
     <a href="https://datamb.football">
-        <img src="https://datamb.football/logo.png" alt="Visual team comparisons" /></a>
-    <div class="logo-text"><a href="https://datamb.football">&nbsp;Teams</a></div>
-  </div>
+        <img src="https://datamb.football/logo.png" alt="Player and team comparisons" /></a>
+    <div class="logo-text"><a href="https://datamb.football"></a></div>
+  </div>&nbsp;
   <nav class="navigation">
-    <a href="https://datamb.football/radars" class="button10" data-i18n="common.nav.players">Players</a>
-    <a href="https://datamb.football/join" class="button10" data-i18n="common.nav.pro">Pro</a>
-    <a href="https://datamb.football/guide" class="button10" data-i18n="common.nav.guide">Guide</a>  
-  </nav>
-  <div class="header-right">
-    <div class="search-container">
-      <button id="searchButtonmodal"><iconify-icon icon="ion:search-outline"></iconify-icon></button>
-    </div>
-    <div class="language-switcher-container">
-      <button class="language-button" id="languageButton">
-        <iconify-icon icon="heroicons:globe-alt"></iconify-icon>
-      </button>
-      <div class="language-dropdown" id="languageDropdown">
-        <a href="?lang=en" class="language-option"><iconify-icon icon="flag:gb-4x3"></iconify-icon>English</a>
-        <a href="?lang=fr" class="language-option"><iconify-icon icon="flag:fr-4x3"></iconify-icon>Français</a>  
-        <a href="?lang=es" class="language-option"><iconify-icon icon="flag:es-4x3"></iconify-icon>Español</a>
-        <a href="?lang=tr" class="language-option"><iconify-icon icon="flag:tr-4x3"></iconify-icon>Türkçe</a>  
-      </div>
-    </div>
+    <a href="https://datamb.football/radars" class="button10" data-i18n="header.players">Players</a>
+    <a href="https://datamb.football/join" class="button10" data-i18n="header.pro">Pro</a>
+    <a href="https://datamb.football/teams" class="button10" data-i18n="header.teams">Teams</a>  
+  </nav>  <div class="header-right">
+
+  <div class="search-container">
+    <button id="searchButtonmodal"><iconify-icon icon="ion:search-outline"></iconify-icon></button>
   </div>
+  <div class="language-switcher-container">
+    <button class="language-button" id="languageButton">
+      <iconify-icon icon="heroicons:globe-alt"></iconify-icon>
+    </button>
+        <div class="language-dropdown" id="languageDropdown">
+      <a href="?lang=en" class="language-option"><iconify-icon icon="flag:gb-4x3"></iconify-icon>English</a>
+      <a href="?lang=fr" class="language-option"><iconify-icon icon="flag:fr-4x3"></iconify-icon>Français</a>
+      <a href="?lang=es" class="language-option"><iconify-icon icon="flag:es-4x3"></iconify-icon>Español</a>
+      <a href="?lang=tr" class="language-option"><iconify-icon icon="flag:tr-4x3"></iconify-icon>Türkçe</a>
+    </div>
+  </div></div>
 </header>
 		<div class="search-input-modal" id="searchInputModal">
   <div class="search-input-container">
-      <input type="text" id="searchInputforModal" data-i18n="search.placeholder" placeholder="Enter a team or player name...">
+      <input type="text" id="searchInputforModal" data-i18n="search.placeholder2" placeholder="Enter a team or player name...">
       <div id="autocompleteBoxmodal"></div>
   </div>
 </div>
 <script src="/modal.js"></script>
 	<br><br>
-  
   <div class="button-container">
-    <a href="https://datamb.football/teamradars/" class="bouton image-1"><span data-i18n="button.radars">RADARS</span></a>
-    <a href="https://datamb.football/plotteam/" class="bouton image-3"><span data-i18n="button.plots">PLOTS</span></a>
+    <a href="https://datamb.football/radars/" class="bouton image-1"><span data-i18n="button.players">PLAYERS</span></a>
+    <a href="https://datamb.football/join/" class="bouton image-2"><span data-i18n="button.pro">PRO</span></a>
+    <a href="https://datamb.football/teams/" class="bouton image-3"><span data-i18n="button.teams">TEAMS</span></a>
   </div><br>
 
+<div class="search-container2">
+    <input type="text" id="searchInput2" class="search-input2" data-i18n="search.placeholder" placeholder="Search for player or team..."> </div>
+    <div id="autocompleteBox2"></div>
+ 
 
-
-  <br>
-  <br>
-  <div class="container">
+<br>
+<br>
+<div class="container">
     <div class="box">
       <h2><span class="fi fi-gb-eng"></span><br><br>Premier League </h2>
       <ul class="team-list2">
@@ -1039,8 +1116,8 @@ gtag('config', 'G-PSBMXX80EF');
       
     </ul>
   </div>
-  </div>
-  
+</div>
+
   <br>
   <div align="center">
     <!-- radarplotsearch -->
@@ -1056,7 +1133,7 @@ gtag('config', 'G-PSBMXX80EF');
   <br>
 
 
-<footer class="footer">
+  <footer class="footer">
    
     <div class="google-play-container">
 
@@ -1086,6 +1163,165 @@ gtag('config', 'G-PSBMXX80EF');
   </footer>
 
 
+<script>
+
+
+  const xhr2 = new XMLHttpRequest();
+xhr2.open('GET', 'https://datamb.football/database/searchbar.csv', false); // false for synchronous request
+xhr2.send(null);
+
+let dataCSV2 = xhr2.responseText;
+
+  const dataLines2 = dataCSV2.split('\n');
+  const searchInput2 = document.getElementById('searchInput2');
+  const autocompleteBox2 = document.getElementById('autocompleteBox2');
+  
+  // Convert CSV data to an array of objects
+  const data11 = dataLines2.map(line => {
+      const [name, link] = line.split(',');
+      return { name, link };
+  });
+
+function removeDiacritics(str) {
+    const charMap = {
+        'ø': 'o',
+        'Ø': 'O',
+        'ı': 'i',
+        'ł': 'l',  // Added support for ł -> l
+        'Ł': 'L'   // Added support for Ł -> L
+    };
+    str = str.replace(/[øØıłŁ]/g, match => charMap[match]);
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function generateSearchVariations(query) {
+    const variations = [];
+    const words = query.trim().split(/\s+/);
+    
+    // Add original query
+    variations.push(query);
+    
+    // If we have multiple words, try converting first word to initial
+    if (words.length >= 2) {
+        const firstInitial = words[0].charAt(0).toUpperCase();
+        const restOfName = words.slice(1).join(' ');
+        
+        // Add variations with initial
+        variations.push(`${firstInitial}. ${restOfName}`);
+        variations.push(`${firstInitial} ${restOfName}`);
+        variations.push(`${firstInitial}.${restOfName}`);
+    }
+    
+    return variations;
+}
+
+function isInitialMatch(queryWord, nameWord) {
+    // Check if query word is an initial (1-2 chars, possibly with dot)
+    const cleanQuery = queryWord.replace(/\./g, '');
+    if (cleanQuery.length === 1) {
+        // Query is an initial, check if it matches first letter of name word
+        return cleanQuery.toLowerCase() === nameWord.charAt(0).toLowerCase();
+    }
+    return false;
+}
+
+function search3(query) {
+    autocompleteBox2.innerHTML = '';
+    
+    const searchVariations = generateSearchVariations(query);
+    const foundItems = new Set(); // Use Set to avoid duplicates
+    
+    searchVariations.forEach(variation => {
+        const sanitizedQuery = removeDiacritics(variation)
+            .replace(/[^\w\s]/g, '')  // Remove punctuation
+            .replace(/\s+/g, '')      // Remove all spaces
+            .toLowerCase();
+
+        const filteredData = data11.filter(item => {
+            const sanitizedItem = removeDiacritics(item.name)
+                .replace(/[^\w\s]/g, '')  // Remove punctuation  
+                .replace(/\s+/g, '')      // Remove all spaces
+                .toLowerCase();
+            
+            // Standard includes check
+            if (sanitizedItem.includes(sanitizedQuery)) {
+                return true;
+            }
+            
+            // Additional check for initial matching
+            // Split both query and item into words for intelligent matching
+            const queryWords = removeDiacritics(variation).replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 0);
+            const itemWords = removeDiacritics(item.name).replace(/[^\w\s]/g, '').split(/\s+/).filter(w => w.length > 0);
+            
+            if (queryWords.length >= 2 && itemWords.length >= 2) {
+                // Check if first word is initial and matches, and rest of words match
+                const firstWordMatches = isInitialMatch(queryWords[0], itemWords[0]) || 
+                                       queryWords[0].toLowerCase() === itemWords[0].toLowerCase();
+                
+                if (firstWordMatches) {
+                    // Check if remaining words match
+                    const restQueryWords = queryWords.slice(1);
+                    const restItemWords = itemWords.slice(1);
+                    
+                    // Create a combined string from remaining words for comparison
+                    const restQuery = restQueryWords.join('').toLowerCase();
+                    const restItem = restItemWords.join('').toLowerCase();
+                    
+                    return restItem.includes(restQuery);
+                }
+            }
+            
+            return false;
+        });
+        
+        // Add found items to our set
+        filteredData.forEach(item => foundItems.add(item));
+    });
+    
+    const filteredData2 = Array.from(foundItems);
+
+    if (filteredData2.length === 0) {
+        autocompleteBox2.style.display = 'none';
+        return;
+    }
+
+    filteredData2.forEach(item => {
+        const listItem = document.createElement('div');
+        const link = document.createElement('a');
+        link.href = item.link;
+        
+        // Extract player name and position
+        const match = item.name.match(/(.*)\s+\((.*)\)/);
+if (match) {
+    const playerName = match[1];
+    const position = match[2]; // Original position 
+    const positionKey = position.replace(/[^a-zA-Z]/g, ''); // Cleaned key
+    
+    // Pass cleaned key to translatePosition, but if it returns the cleaned key, use original position
+    const translation = translatePosition(positionKey);
+    const translatedPosition = translation === positionKey ? position : translation;
+    
+    // Reconstruct the display text
+    link.textContent = `${playerName} (${translatedPosition})`;
+} else {
+    // Fallback if pattern doesn't match
+    link.textContent = item.name;
+}
+        listItem.appendChild(link);
+        autocompleteBox2.appendChild(listItem);
+    });
+
+    autocompleteBox2.style.display = 'block';
+}
+
+searchInput2.addEventListener('input', () => {
+    const query = searchInput2.value;
+    if (query.trim() === '') {
+        autocompleteBox2.style.display = 'none';
+    } else {
+        search3(query);
+    }
+});    </script>
 
 
 
@@ -1142,8 +1378,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function getBrowserLanguage() {
-return navigator.language.slice(0, 2);
-}
+    return navigator.language.slice(0, 2);
+  }
 
 let cachedTranslations = {};
 function translatePosition(position) {
@@ -1161,12 +1397,12 @@ return position;
 
 }
 
-function applyLanguage(language) {
-console.log(language);
+  function applyLanguage(language) {
+    console.log(language);
 
-if (language === 'en') {
-return;
-}
+    if (language === 'en') {
+      return;
+    }
 
     
     fetch(`locales/${language}.json`)
@@ -1240,34 +1476,5 @@ return;
   });
   </script>
 	</div>
-	
-<script data-cfasync="false" type="text/javascript" id="clever-core">
-/* <![CDATA[ */
-    (function (document, window) {
-        var a, c = document.createElement("script"), f = window.frameElement;
-
-        c.id = "CleverCoreLoader98911";
-        c.src = "https://scripts.cleverwebserver.com/65085c59ceb1020e53925f001bd4b8d4.js";
-
-        c.async = !0;
-        c.type = "text/javascript";
-        c.setAttribute("data-target", window.name || (f && f.getAttribute("id")));
-        c.setAttribute("data-callback", "put-your-callback-function-here");
-        c.setAttribute("data-callback-url-click", "put-your-click-macro-here");
-        c.setAttribute("data-callback-url-view", "put-your-view-macro-here");
-
-        try {
-            a = parent.document.getElementsByTagName("script")[0] || document.getElementsByTagName("script")[0];
-        } catch (e) {
-            a = !1;
-        }
-
-        a || (a = document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]);
-        a.parentNode.insertBefore(c, a);
-    })(document, window);
-/* ]]> */
-</script>
-
 </body>
 </html>
-
