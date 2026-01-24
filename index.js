@@ -840,6 +840,11 @@ leagueSelect.addEventListener('change', handleSelectorsChange);
     // Initialize metric selector after data is loaded
     initializeMetricSelector();
     
+    // Update custom dropdown options (from indexhelpers.js)
+    if (typeof updateMetricOptions === 'function') {
+        updateMetricOptions();
+    }
+    
     // Initial display with Premier League filter applied
     filterTable();
 })();
