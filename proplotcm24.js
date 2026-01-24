@@ -569,8 +569,8 @@ function getTranslation(key, fallback) {
     return typeof value === 'string' ? value : fallback;
 }
 
-// Worker URL - replace with your actual Cloudflare Worker URL
-const WORKER_URL = 'https://your-worker.your-subdomain.workers.dev';
+// Worker URL
+const WORKER_URL = 'https://summer-dream-8f33.datamb-football.workers.dev';
 
 // File aliases to fetch (in order - first one includes header)
 // 8=TOP72526_CM, 14=PRO2526_CM, 20=PRO2025_CM
