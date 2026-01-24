@@ -1,152 +1,123 @@
 <!DOCTYPE html>
 <html>
-<head>	
-
-    <meta name="viewport" content="user-scalable=no">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="robots" content="noindex">
-
-
-	<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
-
-
-
-	
-  
-  
-  
-  
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-<link rel="stylesheet" href="/radarpro.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="/rank.css">
 </head>
+
 <body>
+  <div class="loading-container" id="loadingContainer">
+    <div class="loading-text" data-i18n="loading">Loading data...</div>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
+  </div>
   <script type="text/javascript">document.body.style.visibility="hidden";</script><div id="SFctr" data-org="31002" data-mfl="64c215764c0b6076026762a3"><div style="clear:both"></div></div><script type="text/javascript" src="https://cdn.membershipworks.com/mfl.js"></script>
-
-  <div class="container">
-      <div class="search-container">
-        <div class="search-controls">
-          <input type="text" id="searchInput1" class="search-bar" data-i18n="search.placeholder2" placeholder="Enter name of centreback..." />
-          <button id="searchButton1">+</button>
-        </div>
-        <div id="matchingNames"></div>
-      </div>
-
+<div class="container">
     <div class="chart-wrapper">
-
-      <div id="resultsTable"></div>
-      
-      <div class="radar-container">
-        
-  <svg class="radar"><g><g class="axisWrapper">
-  
-    <g class="radar_label">
-      <text class="label" data-type="Aerial%" data-idx="0" data-i18n="radar.aerial" transform="translate(-44.8 -219.56) scale(1.34) rotate(-1.7)">Aerial%</text>
-  </g>
-  
-  <g class="radar_label">
-      <text class="label" data-type="Def duel%" data-idx="6" data-i18n="radar.duel" transform="matrix(0.728, -1.252, 1.252, 0.728, -210.56, -80.64) scale(0.917) rotate(3)">Def duel%</text>
-  </g>
-  
-  <g class="radar_label">
-      <text class="label" data-type="Poss won" data-idx="5" data-i18n="radar.possWon" transform="matrix(-0.553, -1.354, 1.354, -0.553, -197.34, 106.4) scale(0.917) rotate(3.87)">Poss won</text>
-  </g>
-  
-  <g class="radar_label">
-      <text class="label" data-type="Prog passes" data-idx="4" data-i18n="radar.progPasses" transform="translate(-151.2 192.64) scale(1.34) rotate(21)">Prog passes</text>
-  </g>
-  
-  <g class="radar_label">
-      <text class="label" data-type="Fwd pass %" data-idx="3" data-i18n="radar.fwdPass" transform="translate(75.96 230.2) scale(1.34) rotate(-31)">Fwd pass%</text>
-  </g>
-  
-  <g class="radar_label">
-      <text class="label" data-type="Passes" data-idx="2" data-i18n="radar.passes" transform="translate(224.25 7.06) scale(1.34) rotate(99.11)">Passes</text>
-  </g>
-  
-  <g class="radar_label">
-      <text class="label" data-type="Carrying" data-idx="1" data-i18n="radar.carrying" transform="translate(144.19 -176.57) scale(1.34) rotate(52.49)">Carrying</text>
-  </g>
-  
-  
-    
-  
-  
-
-<circle class="blackCircle" r="214.2" style="fill:none; stroke:#D3D3D3; stroke-width:1;"></circle>
-<circle class="gridCircle" r="214.2" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="171.36" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="128.52" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="85.68" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="42.84" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle></g>
-
-
-
-
-<line x1="0" y1="0" x2="10.49" y2="213.6" stroke="#D3D3D3" stroke-width="1" transform="translate(-10.49, -213.6)"></line>
-<line x1="0" y1="0" x2="-159.81" y2="142.2" stroke="#D3D3D3" stroke-width="1" transform="translate(159.81, -142.2)"></line>
-<line x1="0" y1="0" x2="-210.79" y2="-36.31" stroke="#D3D3D3" stroke-width="1" transform="translate(210.79, 36.31)"></line>
-<line x1="0" y1="0" x2="-103.58" y2="-187.73" stroke="#D3D3D3" stroke-width="1" transform="translate(103.58, 187.73)"></line>
-<line x1="0" y1="0" x2="82.11" y2="-197.6" stroke="#D3D3D3" stroke-width="1" transform="translate(-82.11, 197.6)"></line>
-<line x1="1" y1="-2" x2="205.63" y2="-59.3" stroke="#D3D3D3" stroke-width="1" transform="translate(-205.63, 59.3)"></line>
-<line x1="0" y1="0" x2="174.15" y2="123.75" stroke="#D3D3D3" stroke-width="1" transform="translate(-174.15, -123.75)"></line>
-
-  <g class="radarWrapper"></g>
-  </g></g>
-        </svg>
-      </div>
-      <div id="insertHere"></div>
-
-      
-      <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--border-color); opacity: 0.5;">
-      
-      <div class="toggle-controls">
-        <div class="toggle-container">
-          <label class="toggle-label"></label>
-          <label class="toggle-checkbox">
-            <input type="checkbox" id="toggleButton" onclick="toggleFilling()" unchecked>
-            <span class="toggle-slider"></span>
-          </label>
+        <div class="spinner" id="spinner">
+          <div class="spinner-icon"></div>
         </div>
-        <div class="position-switcher-container">
 
-          <a href="https://datamb.football/proradargk/" target="_self" rel="noopener noreferrer" class="position-link">
-              <span>GK</span>
-          </a>
-          <span class="position-link active" style="user-select: none;">
-            <span>CB</span>
-        </span>
-          <a href="https://datamb.football/proradarfb/" target="_self" rel="noopener noreferrer" class="position-link">
-              <span>FB</span>
-          </a>
-          <a href="https://datamb.football/proradarcm/" target="_self" rel="noopener noreferrer" class="position-link">
-              <span>CM</span>
-          </a>
-          <a href="https://datamb.football/proradarfw/" target="_self" rel="noopener noreferrer" class="position-link">
-              <span>FW</span>
-          </a>
-          <a href="https://datamb.football/proradarst/" target="_self" rel="noopener noreferrer" class="position-link">
-              <span>ST</span>
-          </a>
-      
-    </div>
+        <div class="controls">
+            <div class="combo-box">
+              <input type="text" id="searchInput" class="search-bar" placeholder="Search for a player..." data-i18n="search.placeholder" autocomplete="off">
+              <div id="autocomplete-list" class="autocomplete-items"></div>
+              <select id="playerSelect" style="display:none;"></select>
+            </div>
+            
+                         <div class="custom-select-container select-style-custom">
+                 <div class="custom-select-trigger" id="sectionSelectTrigger">
+                     <span></span>
+                 </div>
+                 <div class="custom-select-options" id="sectionSelectOptions">
+                     <!-- Options will be populated by JavaScript -->
+                 </div>
+                 <select id="sectionSelect" class="select-style" style="display: none;">
+                 </select>
+             </div>
+             
+             <div class="custom-select-container select-age-custom">
+                 <div class="custom-select-trigger" id="ageSelectTrigger">
+                     <span data-i18n="age.all">Age</span>
+                 </div>
+                 <div class="custom-select-options" id="ageSelectOptions">
+                     <div class="custom-select-option" data-value="" data-i18n="age.all">Age</div>
+                     <div class="custom-select-option" data-value="17">U17</div>
+                     <div class="custom-select-option" data-value="18">U18</div>
+                     <div class="custom-select-option" data-value="19">U19</div>
+                     <div class="custom-select-option" data-value="20">U20</div>
+                     <div class="custom-select-option" data-value="21">U21</div>
+                     <div class="custom-select-option" data-value="22">U22</div>
+                     <div class="custom-select-option" data-value="23">U23</div>
+                     <div class="custom-select-option" data-value="24">U24</div>
+                     <div class="custom-select-option" data-value="25">U25</div>
+                     <div class="custom-select-option" data-value="26">U26</div>
+                     <div class="custom-select-option" data-value="27">U27</div>
+                     <div class="custom-select-option" data-value="28">U28</div>
+                     <div class="custom-select-option" data-value="29">U29</div>
+                     <div class="custom-select-option" data-value="30">U30</div>
+                     <div class="custom-select-option" data-value="35">U35</div>
+                 </div>
+                 <select id="ageSelect" class="select-age" style="display: none;">
+                   <option value="" data-i18n="age.all">Age</option>
+                     <option value="17">U17</option>
+                     <option value="18">U18</option>
+                     <option value="19">U19</option>
+                     <option value="20">U20</option>
+                     <option value="21">U21</option>
+                     <option value="22">U22</option>
+                     <option value="23">U23</option>
+                     <option value="24">U24</option>
+                     <option value="25">U25</option>
+                     <option value="26">U26</option>
+                     <option value="27">U27</option>
+                     <option value="28">U28</option>
+                     <option value="29">U29</option>
+                     <option value="30">U30</option>
+                     <option value="35">U35</option>
+                     <!-- Add more age options as needed -->
+                 </select>
+             </div>
+            
+            <div class="toggle-button">
+              <input type="checkbox" id="toggleMetrics">
+              <label for="toggleMetrics">
+                <i class="ion-ios-stopwatch-outline"></i>
+              </label>
+              <span class="btn-tooltip-text" id="metricsTooltip">Switch to total</span>
+            </div>
+            
+            <div class="toggle-button">
+              <button type="button" id="navigateButton" onclick="window.location.href='https://datamb.football/rankallpast/'">
+                <i class="ion-calendar"></i>
+              </button>
+              <span class="btn-tooltip-text" data-i18n="buttons.switch_to_past_season">Switch to past season</span>
+            </div>
+        </div>
         
-        <button onclick="takeScreenshot()" class="btn btn-outline btn-icon"><iconify-icon icon="ion:camera" style="color: var(--text-color); font-size: 18px;"></iconify-icon></button>
-      </div>
-      
+            <div id="chartTitle"></div>
+        <div id="fullcontainer">
+        <div id="chartContainer">
+            <canvas id="pizzaChart"></canvas>
+            <div id="chartButton"></div>
+        </div>
+        <div id="results"></div></div>
     </div>
-  </div>
-      
-  
-  <div class="dark-mode-toggle" onclick="toggleDarkMode()">
-    <div class="toggle-icon"></div>
-  </div>
+</div>
 
-  <script src="proradarcb.js"></script>
-	  
-<script src="/tradproradar.js"></script>
+<div class="dark-mode-toggle" onclick="toggleDarkMode()">
+    <span class="toggle-icon"></span>
+</div>
 
-
+<script src="rankall.js"></script>
+<script src="/rankhelpers.js"></script>
 </body>
 </html>
