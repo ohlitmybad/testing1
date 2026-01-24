@@ -568,17 +568,11 @@ responses.forEach((data, index) => {
     });
 
     // 3. Insert new columns and fill with appropriate values
-    const isFirstFile = !isFirstFileProcessed;
-    if (isFirstFile) {
-        // Include header only for the first file
+    // Include header only for the first file ('gk4.xlsx')
         jsonData.forEach(row => row.unshift(null)); // Insert empty column at the beginning
         jsonData[0][0] = "ID"; // Set header for the new column
         isFirstFileProcessed = true; // Mark the first file as processed
-    } else {
-        // Exclude header for all other files
-        jsonData.forEach(row => row.unshift(undefined)); // Insert undefined at the beginning
-    }
-
+ 
     // Fill ID column
     for (let i = 1; i < jsonData.length; i++) {
         jsonData[i][0] = i;
@@ -593,8 +587,8 @@ responses.forEach((data, index) => {
         }
     });
 
-    // 5. Collect the transformed data (including header for first file, excluding for others)
-    allData.push(...(isFirstFile ? jsonData : jsonData.slice(1)));
+    // 5. Collect the transformed data (excluding header for non-first 'gk4.xlsx')
+    allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72526/CM/CM.xlsx' ? jsonData : jsonData.slice(1)));
 });
 
 const leagues = {
