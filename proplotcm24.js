@@ -577,32 +577,17 @@ const WORKER_URL = 'https://summer-dream-8f33.datamb-football.workers.dev';
 const fileAliases = ['8', '14', '20'];
 const firstFileAlias = '8';
 
-// Fetch all files from worker
-fetch(`${WORKER_URL}/?files=${fileAliases.join(',')}`)
-.then(response => response.json())
-.then(workerResponse => {
-    const { results, errors } = workerResponse;
-    
-    if (errors && errors.length > 0) {
-        console.error('Worker errors:', errors);
-    }
-    
-    // Process files in order
-    fileAliases.forEach((alias) => {
-        if (!results[alias]) {
-            console.error(`Missing data for ${alias}`);
-            return;
-        }
+// Fetch all files from worker (separate calls, returns raw data)
+const fetchPromises = fileAliases.map(alias => 
+    fetch(`${WORKER_URL}/?file=${alias}`).then(response => response.arrayBuffer())
+);
+
+Promise.all(fetchPromises)
+.then(responses => {
+    responses.forEach((data, index) => {
+        const alias = fileAliases[index];
         
-        // Decode base64 to ArrayBuffer
-        const base64 = results[alias].data;
-        const binaryString = atob(base64);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-        
-        const workbook = XLSX.read(bytes, { type: 'array' });
+        const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
