@@ -533,7 +533,6 @@ document.addEventListener('click', function(e) {
 
 
 const allData = [];
-let isFirstFileProcessed = false;
 
 const urls = [
 'https://summer-dream-8f33.datamb-football.workers.dev',
@@ -568,10 +567,8 @@ responses.forEach((data, index) => {
     });
 
     // 3. Insert new columns and fill with appropriate values
-    // Include header only for the first file ('gk4.xlsx')
-        jsonData.forEach(row => row.unshift(null)); // Insert empty column at the beginning
-        jsonData[0][0] = "ID"; // Set header for the new column
-        isFirstFileProcessed = true; // Mark the first file as processed
+    jsonData.forEach(row => row.unshift(null)); // Insert empty column at the beginning
+    jsonData[0][0] = "ID"; // Set header for the new column
  
     // Fill ID column
     for (let i = 1; i < jsonData.length; i++) {
@@ -587,8 +584,8 @@ responses.forEach((data, index) => {
         }
     });
 
-    // 5. Collect the transformed data (excluding header for non-first 'gk4.xlsx')
-    allData.push(...(url === 'https://datamb.football/database/CURRENT/TOP72526/CM/CM.xlsx' ? jsonData : jsonData.slice(1)));
+    // 5. Collect the transformed data (including header row)
+    allData.push(...jsonData);
 });
 
 const leagues = {
