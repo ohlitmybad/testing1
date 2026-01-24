@@ -357,6 +357,11 @@ function updateCustomSelectorDisplay(triggerId, optionsId, value) {
 
 // Function to update metric options (called when toggling)
 function updateMetricOptions() {
+  // Guard: return early if data hasn't loaded yet
+  if (!currentDataArray || !currentDataArray[0]) {
+    return;
+  }
+  
   const currentSelection = metricSelect.value; // Preserve current selection
   metricOptions.innerHTML = '';
   
