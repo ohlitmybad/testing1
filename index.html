@@ -1,27 +1,74 @@
+
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, user-scalable=no">
-<meta name="robots" content="noindex">
-<meta name="Mediapartners-Google" content="index, follow">
-        <script>
-    if (localStorage.getItem("darkMode") === "true") {
-      document.documentElement.classList.add("dark-mode");
-    }
-(function() {
-      var width = window.innerWidth;
-      var initialScale = width / 468;
-      var viewportMeta = document.querySelector('meta[name="viewport"]');
-      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=' + initialScale + ', user-scalable=no');
-  })();
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<head>	
+  <meta name="language" content="en"> 
+<link rel="canonical" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/" />
+<link rel="alternate" hreflang="x-default" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/" />
+<link rel="alternate" hreflang="en" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=en" /> 
+<link rel="alternate" hreflang="fr" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=fr" />
+<link rel="alternate" hreflang="es" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=es" /> 
+<link rel="alternate" hreflang="tr" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=tr" />
+<link rel="alternate" hreflang="de" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=de" />
+<link rel="alternate" hreflang="it" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=it" />
+<link rel="alternate" hreflang="pt" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=pt" />
+<link rel="alternate" hreflang="id" href="https://datamb.football/[PLAYER_NAME_LINK]_Goalkeeper_stats/?lang=id" /> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title data-i18n="meta.title" data-template="prefix-name">L. Chevalier Football Stats and Visuals | DataMB</title>
+  <link rel="shortcut icon" type="image/x-icon" href="https://datamb.football/favicon.ico">
+  <meta name="description" data-i18n="meta.description" data-template="prefix-name" content="L. Chevalier 2025/26 data profile compared to goalkeepers in Europe's Top 7 Leagues. Check out his statistics with our radar chart and plots, or compare L. Chevalier to other players using our data comparison tool.">
+  <meta property="og:image" content="https://datamb.football/vignettes/profile.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@DataMB_">
+  <meta name="twitter:title" content="L. Chevalier | DataMB">
+  <meta name="twitter:image" content="https://datamb.football/vignettes/profile.png">
+  <script>
+    // Store template information before player names are replaced
+    document.addEventListener('DOMContentLoaded', function() {
+      // Store template information for elements with data-template attribute
+      document.querySelectorAll('[data-template]').forEach(element => {
+        const templateType = element.getAttribute('data-template');
+        
+        // Store the template pattern
+        if (templateType === 'prefix-name') {
+          // For elements where player name is at the beginning
+          element.setAttribute('data-name-position', 'prefix');
+        }
+      });
+    });
+
+    const width = window.innerWidth;
+
+if (width <= 681) {
+  const scale = width / 681;
+  const widthPercent = 100 / scale;
+
+  document.documentElement.style.setProperty('--dynamic-width', widthPercent + '%');
+  document.documentElement.style.setProperty('--dynamic-scale', scale);
+}
+  </script>
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-<link rel="stylesheet" href="/radarapp.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7677714701428206" crossorigin="anonymous"></script>
-</head>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<link rel="stylesheet" href="/players.css">
+  
+
+
+
+
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+     <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
+     <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
+       <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
+     <script>
+         window.ezstandalone = window.ezstandalone || {};
+         ezstandalone.cmd = ezstandalone.cmd || [];
+           ezstandalone.cmd.push(function () {
+             ezstandalone.showAds();
+         });
+     </script>
+    </head>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PSBMXX80EF"></script>
 <script>
@@ -30,130 +77,1227 @@
   gtag('js', new Date());
 
   gtag('config', 'G-PSBMXX80EF');
-</script> 
-
+</script>
 
 <body>
-  <div class="screenshotcontainer">
-    <div class="position-switcher-container">
-     
-      <a href="https://datamb.football/appgk/" target="_top" rel="noopener noreferrer" class="position-link">
-        <span>GK</span>
-    </a>
-    <a href="https://datamb.football/appcb/" target="_top" rel="noopener noreferrer" class="position-link">
-        <span>CB</span>
-    </a>
-
-      <a href="https://datamb.football/appfb/" target="_top" rel="noopener noreferrer" class="position-link">
-          <span>FB</span>
-      </a>
-      <a href="https://datamb.football/appcm/" target="_top" rel="noopener noreferrer" class="position-link">
-          <span>CM</span>
-      </a>
-      <a href="https://datamb.football/appfw/" target="_top" rel="noopener noreferrer" class="position-link">
-          <span>FW</span>
-      </a>
-      <a href="https://datamb.football/appst/" target="_top" rel="noopener noreferrer" class="position-link">
-        <span>ST</span>
-    </a>
-      <span class="position-link active" style="user-select: none;">
-        <span><i class="fas fa-users" style="transform: scale(0.9);"></i></span>
-    </span>
+<div id="full-page">
+  <header class="header">
+    <div class="logo">
+      <a href="https://datamb.football">
+          <img src="https://datamb.football/logo.png" alt="L. Chevalier football statistics and data visuals. 2025/26 L. Chevalier player data profile compared to top 7 league players. Radar comparison and plot charts"/></a>
+      <div class="logo-text"><a href="https://datamb.football"></a></div>
     </div>
-
+    <nav class="navigation">
+      <a href="https://datamb.football/" class="button" data-i18n="header.home">Home</a>
+      <a href="https://datamb.football/join" class="button" data-i18n="header.pro">Pro</a>
+      <a href="https://datamb.football/guide" class="button" data-i18n="header.guide">Guide</a>
+    </nav>
+    <div class="header-right">
     <div class="search-container">
-      <div class="search-controls">
-        <input type="text" id="searchInput1" class="search-bar" data-i18n="search.placeholder2" placeholder="Enter team name..." />
-        <button id="searchButton1">+</button>
+      <button id="searchButtonmodal"><iconify-icon icon="ion:search-outline"></iconify-icon></button>
+  </div>
+    <div class="language-switcher-container">
+      <button class="language-button" id="languageButton">
+        <iconify-icon icon="heroicons:globe-alt"></iconify-icon>
+      </button>
+          <div class="language-dropdown" id="languageDropdown">
+        <a href="?lang=en" class="language-option"><iconify-icon icon="flag:gb-4x3"></iconify-icon>English</a>
+        <a href="?lang=fr" class="language-option"><iconify-icon icon="flag:fr-4x3"></iconify-icon>Français</a>
+        <a href="?lang=es" class="language-option"><iconify-icon icon="flag:es-4x3"></iconify-icon>Español</a>
+        <a href="?lang=tr" class="language-option"><iconify-icon icon="flag:tr-4x3"></iconify-icon>Türkçe</a>
+        <a href="?lang=de" class="language-option"><iconify-icon icon="flag:de-4x3"></iconify-icon>Deutsch</a>
+        <a href="?lang=it" class="language-option"><iconify-icon icon="flag:it-4x3"></iconify-icon>Italiano</a>
+        <a href="?lang=pt" class="language-option"><iconify-icon icon="flag:pt-4x3"></iconify-icon>Português</a>
+        <a href="?lang=id" class="language-option"><iconify-icon icon="flag:id-4x3"></iconify-icon>Indonesia</a>
       </div>
-      <div id="matchingNames"></div>
-    </div>
+    </div></div>
+  </header>
+<div class="search-input-modal" id="searchInputModal">
+  <div class="search-input-container">
+      <input type="text" id="searchInputforModal" data-i18n="search.placeholder" placeholder="Enter a team or player name...">
+      <div id="autocompleteBoxmodal"></div>
+  </div>
+</div>
 
-    <div id="resultsTable"></div>
-    
-    <div class="main-content-container">
-      <div class="radar-container">
-        <svg class="radar">
-        <g transform="translate(0,0)"><g class="axisWrapper">
-          <g class="radar_label">
-            <text class="label" data-type="Aerial%" data-idx="0" data-i18n="radar.physicality" transform="translate(-52.17 -170.44) rotate(-1.7)">Physicality</text>
-        </g>
-        
+
+<script src="/modal.js"></script>
+
+	
+
+
+
+<br> 
+<div class="container">
+  <div class="desktop-row">
+    <div id="resultsTable" class="metric-table"></div>
+    <div class="radar-wrapper">
+      <svg class="radar"><g transform="translate(231.77,225.77)"><g class="axisWrapper">
         <g class="radar_label">
-          <text class="label" data-type="Long%" data-idx="6" data-i18n="radar.defending" transform="matrix(0.565, -0.972, 0.972, 0.565, -163.62, -69.57) scale(0.885) rotate(7.5)">Defending</text>
+          <text class="label" data-type="Aerial%" data-idx="0" data-i18n="radar.short" transform="translate(-40 -196.04) scale(1.3) rotate(-1.7)">Short%</text>
       </g>
       
       <g class="radar_label">
-          <text class="label" data-type="Passes" data-idx="5" data-i18n="radar.counters" transform="matrix(-0.429, -1.051, 1.051, -0.429, -150.41, 93.51) scale(0.885) rotate(3.87)">Counters</text>
+          <text class="label" data-type="Long%" data-idx="6" data-i18n="radar.long" transform="matrix(0.65, -1.118, 1.118, 0.65, -180.21, -88.03) rotate(3.5)">Long%</text>
       </g>
-        
-        <g class="radar_label">
-            <text class="label" data-type="Exits" data-idx="4" data-i18n="radar.possession" transform="translate(-114.89 154.05) rotate(21)">Possession</text>
-        </g>
-        
-        <g class="radar_label">
-            <text class="label" data-type="Aerial" data-idx="3" data-i18n="radar.attacking" transform="translate(62.45 179.64) rotate(-31)">Attacking</text>
-        </g>
-        
-        <g class="radar_label">
-            <text class="label" data-type="Def Actions" data-idx="2" data-i18n="radar.goals" transform="translate(174.09 5.48) rotate(99.11)">Goals</text>
-        </g>
-        
-        <g class="radar_label">
-            <text class="label" data-type="Shotstopping" data-idx="1" data-i18n="radar.pressing" transform="translate(109.27 -142.29) rotate(51.49)">Pressing</text>
-        </g>
+      
+      <g class="radar_label">
+          <text class="label" data-type="Passes" data-idx="5" data-i18n="radar.passes" transform="matrix(-0.494, -1.209, 1.209, -0.494, -178, 86.54) rotate(3.87)">Passes</text>
+      </g>
+      
+      <g class="radar_label">
+          <text class="label" data-type="Interceptions" data-idx="4" data-i18n="radar.int" transform="translate(-140.12 168.16) scale(1.3) rotate(24)">Interceptions</text>
+      </g>
+      
+      <g class="radar_label">
+          <text class="label" data-type="Aerial" data-idx="3" data-i18n="radar.aerialswon" transform="translate(60.82 208.54) scale(1.3) rotate(-30)">Aerials won</text>
+      </g>
+      
+      <g class="radar_label">
+          <text class="label" data-type="Save%" data-idx="2" data-i18n="radar.save" transform="translate(201.82 2.30) scale(1.3) rotate(100.11)">Save%</text>
+      </g>
+      
+      <g class="radar_label">
+          <text class="label" data-type="Prevented goals" data-idx="1" data-i18n="radar.prevented" transform="translate(123.64 -161.65) scale(1.3) rotate(51.9)">PSxG-GA</text>
+      </g>
+      
+      
+  <circle class="blackCircle" r="190" style="fill:none; stroke:#D3D3D3; stroke-width:1;"></circle>
+  <circle class="gridCircle" r="190" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="160" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="120" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="80" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <circle class="gridCircle" r="40" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+  <line x1="0" y1="0" x2="9.33" y2="189.4543362" stroke="#D3D3D3" stroke-width="1" transform="translate(-9.33, -189.4543362)"></line>
+  <line x1="0" y1="0" x2="-142.0538533333333" y2="126.24" stroke="#D3D3D3" stroke-width="1" transform="translate(141.74184, -126.24)"></line>
+  <line x1="0" y1="0" x2="-187.31589333333332" y2="-32.31413333333333" stroke="#D3D3D3" stroke-width="1" transform="translate(187.5574112, 32.2528)"></line>
+  <line x1="0" y1="0" x2="-91.84497333333333" y2="-166.92245333333333" stroke="#D3D3D3" stroke-width="1" transform="translate(91.84497333333333, 166.21328)"></line>
+  <line x1="0" y1="0" x2="72.99733333333333" y2="-175.84917333333335" stroke="#D3D3D3" stroke-width="1" transform="translate(-72.99997333333334, 175.334068)"></line>
+  <line x1="0" y1="0" x2="182.73258666666666" y2="-52.67472" stroke="#D3D3D3" stroke-width="1" transform="translate(-182.7209384, 52.480128)"></line>
+  <line x1="0" y1="0" x2="154.67849333333334" y2="109.91788799999999" stroke="#D3D3D3" stroke-width="1" transform="translate(-154.6883792222, -110.017215488)"></line>
+  
+  <g class="radarWrapper"></g> 
+</g></g></svg>      <a href="https://datamb.football/keepers/">
+  <button class="radar-button" data-i18n="gk.radar.compare">Compare goalkeepers</button>
+</a>
+</div>
+</div>
+  
+  
+<div class="desktop-row">
+
+  <!-- Wrapper for scatter plot and button -->
+  <div class="scatter-plot-wrapper">
+    <svg id="scatter-plot" class="scatter-plot"></svg>
+    <a href="https://datamb.football/join/">
+      <button class="plot-button" data-i18n="plot.more">Plot more metrics</button>
+    </a></div>
 
 
-<circle class="blackCircle" r="165" style="fill:none; stroke:#D3D3D3; stroke-width:1;"></circle>
-<circle class="gridCircle" r="165" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="139" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="104" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="70" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
-<circle class="gridCircle" r="35" style="fill: rgb(16, 135, 188); fill-opacity: 0.03;"></circle>
+    <div class="scatter-plot-wrapper-2">
+    <svg id="scatter-plot-2" class="scatter-plot-2"></svg>
+    <a href="https://datamb.football/join/">
+      <button class="plot-button" data-i18n="plot.more">Plot more metrics</button>
+    </a>
+  </div>
+</div>
+</div>
+  
+ 
 
-<line x1="0" y1="0" x2="8.11" y2="164.74" stroke="#D3D3D3" stroke-width="1" transform="translate(-8.11, -164.74)"></line>
-<line x1="0" y1="0" x2="-123.52" y2="109.77" stroke="#D3D3D3" stroke-width="1" transform="translate(123.25, -109.77)"></line>
-<line x1="0" y1="0" x2="-162.88" y2="-28.1" stroke="#D3D3D3" stroke-width="1" transform="translate(163.09, 28.04)"></line>
-<line x1="0" y1="0" x2="-79.86" y2="-145.15" stroke="#D3D3D3" stroke-width="1" transform="translate(79.86, 144.53)"></line>
-<line x1="0" y1="0" x2="63.48" y2="-152.91" stroke="#D3D3D3" stroke-width="1" transform="translate(-63.48, 152.47)"></line>
-<line x1="0" y1="0" x2="158.9" y2="-45.8" stroke="#D3D3D3" stroke-width="1" transform="translate(-158.89, 45.63)"></line>
-<line x1="0" y1="0" x2="134.5" y2="95.58" stroke="#D3D3D3" stroke-width="1" transform="translate(-134.51, -95.67)"></line>
+<input id="search-bar" style="display: none;">
+<select id="select-league" style="display: none;"><option value="all"></option></select>
+<select id="select-age" style="display: none;"><option value="all"></option></select>
+<select id="select-x" style="display: none;"></select>
+<select id="select-y" style="display: none;"></select>                   
+<select id="select-size" style="display: none;"></select>
 
-<g class="radarWrapper"></g>
-</g></g>
-      </svg>
-    </div>
-    </div>
+  <input type="text" id="searchInput1" class="search-bar" placeholder=""/>
+
+<input type="button" id="searchButton1" value=""/>
+  
+  
+  
+    <script>
+  
+  
+      const csvData = `1,L. Chevalier,PSG,Ligue 1,24,Goalkeeper,2025/26,0.8,0.16,0.05,0.41,0.49,0.74,0.87,1579`;    
+
+
+            const dataArray = csvData.split('\n').map(line => line.split(','));
+      // Make dataArray globally accessible for plot code
+      window.dataArray = dataArray;
+  
+      const colorClasses = ['result-color-blue'];
+      
+      let searchResults = []; // Declare the search results variable
+      
+      
+      function removeSpecialChars(str) {
+        return str.normalize('NFD').replace(/[\u0300-\u036f\s]/g, '');
+      }
+      
+      function search(query) {
+        const results = dataArray.filter(data =>
+          removeSpecialChars(data[1].toLowerCase()).includes(removeSpecialChars(query.toLowerCase()))
+        );
+        return results;
+      }
+      
+      function createTable(teamName, teamIndex, color) {
+        const resultsTable = document.getElementById('resultsTable');
+        const headerNames = [
+          '',
+          '',
+          'Club',
+          'League',
+          'Age',
+          'Position',
+          'Season',
+          'Save percentage %',
+          'Aerial duels won',
+          'Interceptions (PAdj)',
+          'Passes completed',
+          'Long pass accuracy %',
+          'Short pass accuracy %',
+          'PSxG - GA',
+          'Minutes played'
+    
+              ];
+        
+        // Translation keys for header names
+        const headerTranslationKeys = [
+          '',
+          '',
+          'table.club',
+          'table.league',
+          'table.age',
+          'table.position',
+          'table.season',
+          'table.metrics.save',
+          'table.metrics.aerials_won',
+          'table.metrics.int',
+          'table.metrics.passes',
+          'table.metrics.long_pass_accuracy',
+          'table.metrics.short_pass_accuracy',
+          'table.metrics.psxg_minus_ga',
+          'table.minutes_played'
+        ];
+      
+        // Check if table headers exist
+        const headersExist = resultsTable.querySelector('th') !== null;
+      
+        const table = headersExist ? resultsTable.querySelector('table') : document.createElement('table');
+        table.classList.add('metrics-table');
+      
+        if (!headersExist) {
+          // Create the table header
+          const headerRow = document.createElement('tr');
+          for (let i = 0; i < headerNames.length; i++) {
+            const th = document.createElement('th');
+            if (headerTranslationKeys[i]) {
+              th.setAttribute('data-i18n', headerTranslationKeys[i]);
+            }
+            th.textContent = headerNames[i];
+            headerRow.appendChild(th);
+          }
+        }
+      
+
+        const teamData = dataArray[teamIndex];
+
+        for (let i = 1; i < headerNames.length; i++) {
+
+          const dataRow = document.createElement('tr');
+
+          const td1 = document.createElement('td');
+
+          
+
+          // Add data-i18n attribute to the first cell in each row
+
+          if (headerTranslationKeys[i]) {
+
+            td1.setAttribute('data-i18n', headerTranslationKeys[i]);
+
+          }
+
+          td1.textContent = headerNames[i];
+          dataRow.appendChild(td1);
+          
+          const td2 = document.createElement('td');
+          let value = teamData[i];
+        
+          if (i === 5) {
+            const link = document.createElement('a');
+            link.textContent = value;
+            const positionKey = value.toLowerCase().replace(/[^a-z]/g, '');
+            link.setAttribute('data-i18n', `positions.${positionKey}`);
+            link.href = 'https://datamb.football/keepers'; // Replace with the URL you want to link to for cell 5
+            td2.appendChild(link);
+          } else if (i === 2) {
+            const link = document.createElement('a');
+            link.textContent = value;
+            link.href = 'https://datamb.football/[TEAM_NAME]_Team_stats'; // Replace with the URL you want to link to for cell 2
+            td2.appendChild(link);
+          } else {
+            if (i >= 7 && i <= 13) {
+              value = parseFloat(value) * 100;
+              const roundedValue = Math.round(value);
+              const lastDigit = roundedValue % 10;
+              let percentileSuffix = 'th';
+              if (lastDigit === 1 && roundedValue !== 11) {
+                percentileSuffix = 'st';
+              } else if (lastDigit === 2 && roundedValue !== 12) {
+                percentileSuffix = 'nd';
+              } else if (lastDigit === 3 && roundedValue !== 13) {
+                percentileSuffix = 'rd';
+              }
+                            // Store the numeric value separately
+              const numericValue = roundedValue;
+              
+              // Create a span for the percentile suffix to make it translatable
+              const valueSpan = document.createElement('span');
+              valueSpan.textContent = numericValue;
+              
+const suffixSpan = document.createElement('span');
+              if (percentileSuffix === 'th') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.th_suffix');
+              } else if (percentileSuffix === 'st') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.st_suffix');
+              } else if (percentileSuffix === 'nd') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.nd_suffix');
+              } else if (percentileSuffix === 'rd') {
+                suffixSpan.setAttribute('data-i18n', 'table.percentile_suffix.rd_suffix');
+              }
+              suffixSpan.textContent = percentileSuffix;
+              
+              
+              const percentileSpan = document.createElement('span');
+              percentileSpan.setAttribute('data-i18n', 'table.percentile');
+              percentileSpan.textContent = ' percentile';
+              
+              td2.appendChild(valueSpan);
+              td2.appendChild(suffixSpan);
+              td2.appendChild(percentileSpan);
+              
+              // Set empty text content since we're using child nodes
+              value = '';
+            }
+        
+            if ([1, 2, 3, 4, 5, 6, 14].includes(i)) {
+              td2.classList.add('black'); // Add the black class
+            }
+            
+
+                          if (value !== '') {
+
+              td2.textContent = value;
+
+            }            td2.classList.add(color);
+        
+            if ([7, 8, 9, 10, 11, 12, 13].includes(i)) { 
+              // Apply color based on value range
+              let numericValue;
+              if (value === '') {
+                // If we've already processed this cell with spans
+                numericValue = parseInt(td2.firstChild.textContent);
+              } else {
+                numericValue = parseFloat(value);
+              }
+              
+              if (numericValue >= 75 && numericValue <= 100) {
+                td2.classList.add('green');
+              } else if (numericValue >= 0 && numericValue <= 25) {
+                td2.classList.add('red');
+              }
+            }
+          }
+        
+          dataRow.appendChild(td2);
+          table.appendChild(dataRow);
+        }
+        
+    if (!headersExist) {
+      resultsTable.appendChild(table);
+    }
+      
+        const combResults = dataArray[teamIndex].join(', ');
+        console.log(combResults);
+      
+        const outerRadius = 190;
+        const center = [0, 0];
+        const angles = [
+          0,
+          (2 * Math.PI) / 7,
+          (4 * Math.PI) / 7,
+          (6 * Math.PI) / 7,
+          (8 * Math.PI) / 7,
+          (10 * Math.PI) / 7,
+          (12 * Math.PI) / 7
+        ];
+      
+        function axisValueToCartesian(axis, value) {
+          let angle = angles[axis - 1];
+          angle += (2 * Math.PI / 7) * 0.2;
+          const x = 190 * value * Math.cos(angle);
+          const y = 190 * value * Math.sin(angle);
+          return { x, y };
+        }
+      
+        const svg = document.querySelector('.radar');
+        const radarWrapper = svg.appendChild(
+          document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        );
+        radarWrapper.setAttribute('transform', 'translate(231.77,225.77)');
+        radarWrapper.innerHTML = '';
+      
+        const data = [];
+        const rowCols = combResults.split(',');
+        for (let i = 7; i < 14; i++) {
+          data.push({ axis: i - 6, value: parseFloat(rowCols[i]) });
+        }
+      
+        const points = data
+          .map(({ axis, value }) => {
+            const { x, y } = axisValueToCartesian(axis, value);
+            return `${x},${y}`;
+          })
+          .join(' ');
+      
+        const polyline = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'polyline'
+        );
+        polyline.setAttribute('class', `radarLines ${color}`);
+        polyline.setAttribute('points', `${points} ${points.split(' ')[0]}`);
+        polyline.setAttribute('stroke-width', '3');
+        polyline.setAttribute('fill', 'none');
+        radarWrapper.appendChild(polyline);
+      
+        const polygon = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'polygon'
+        );
+        polygon.setAttribute('class', `radarPolygon ${color}`);
+        polygon.setAttribute('points', points);
+        polygon.style.fillOpacity = '0.2';
+        radarWrapper.appendChild(polygon);
+      
+        data.forEach(({ axis, value }) => {
+          const { x, y } = axisValueToCartesian(axis, value);
+          const circle = document.createElementNS(
+            'http://www.w3.org/2000/svg',
+            'circle'
+          );
+          circle.setAttribute('class', `radarCircle ${color}`);
+          circle.style.fillOpacity = '0.86';
+          circle.setAttribute('r', '6');
+          circle.setAttribute('cx', x);
+          circle.setAttribute('cy', y);
+          radarWrapper.appendChild(circle);
+        });
+      }
+      
+      
+      
+      function toggleFilling() {
+        const radarPolygons = document.querySelectorAll('.radarPolygon');
+        radarPolygons.forEach(polygon => {
+          polygon.style.fill = polygon.style.fill ? '' : 'none'; // Toggle the filling
+        });
+      }
+      
+      
+        const teamNames = new Set();
+      
+      
+      function createTableForTeam1() {
+        const searchInput = document.getElementById('searchInput1');
+        const searchButton = document.getElementById('searchButton1');
+        const resultsTable = document.getElementById('resultsTable');
+        const teamNamesList = document.createElement('ul');
+        teamNamesList.style.fontFamily = 'Arial, sans-serif';
+        teamNamesList.style.listStyleType = 'none';
+        teamNamesList.style.paddingLeft = '9px';
+        resultsTable.appendChild(teamNamesList);
+        let searchCounter = 0;
+      
+        searchButton.addEventListener('click', function () {
+          const searchQuery = searchInput.value;
+          const results = search(searchQuery);
+      
+          // Reset the toggle state before performing a new search
+          const radarPolygons = document.querySelectorAll('.radarPolygon');
+          radarPolygons.forEach(polygon => {
+            polygon.style.fill = '';
+          });
+      
+          if (results) {
+            const teamId = parseInt(results[0]);
+            const teamName =
+              results[1] + ' (' + results[2] + ', ' + results[3] + ') - ' + results[11] + ' min';
+            const color = colorClasses[searchCounter % colorClasses.length];
+      
+            createTable(teamName, teamId - 1, color);
+      
+            searchCounter++;
+          }
+        });
+      }
+      
+      createTableForTeam1();
+      searchButton1.click(); // Trigger the search button click event
+    
+      
+            
+      
+        </script>
+
+
+
+<script>
+// Unified function to create scatter plots
+function createScatterPlot(config) {
+    const {
+        suffix = '',           // '' for first plot, '2' for second plot
+        scatterPlotId,         // 'scatter-plot' or 'scatter-plot-2'
+        defaultXMetric,        // header index for X axis default
+        defaultYMetric,        // header index for Y axis default
+        defaultSizeMetric      // header index for size default
+    } = config;
+
+    // Create unique variable names for this plot instance
+    const allData = suffix ? window[`allData${suffix}`] : window.allData;
+    const isFirstFileProcessed = suffix ? window[`isFirstFileProcessed${suffix}`] : window.isFirstFileProcessed;
+    const urls = suffix ? window[`urls${suffix}`] : window.urls;
+    
+    // Initialize arrays if they don't exist
+    if (suffix) {
+        window[`filteredData${suffix}`] = [];
+        window[`filteredNames${suffix}`] = [];
+        window[`clickedCircles${suffix}`] = [];
+        window[`circles${suffix}`] = null;
+    }
+
+    const WORKER_URL = 'https://summer-dream-8f33.datamb-football.workers.dev';
+    const fetchPromises = urls.map(alias => fetch(`${WORKER_URL}/?file=${alias}`).then(response => response.arrayBuffer()));
+
+    Promise.all(fetchPromises)
+        .then(responses => {
+            responses.forEach((data, index) => {
+                const alias = urls[index];
+                const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                // Perform transformations
+                // 1. Cut column C and paste it to the end
+                const columnC = jsonData.map(row => row[2]);
+                jsonData.forEach((row, index) => row.push(columnC[index]));
+                jsonData.forEach(row => row.splice(2, 1));
+
+            // 2. Delete specified columns
+            const columnsToDelete = [10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 34, 35, 36, 37, 38, 40, 41, 46, 47, 48, 49, 55, 56, 57, 58, 59, 60, 61, 62, 70, 83, 85, 86, 87, 88, 89, 90, 91, 92, 97, 98, 99, 100,101,102,103,104,105,106,107,108,109,110,111,124,125,126,128,129,130,131,132,133,135,136,137,138,139,140,141];
+            columnsToDelete.sort((a, b) => b - a); // Sort in descending order
+            columnsToDelete.forEach(col => {
+                jsonData.forEach(row => row.splice(col, 1));
+            });
+            
+                // 3. Insert new columns and fill with appropriate values
+                if (alias === '5' && !isFirstFileProcessed) { // 5 = TOP72526_GK
+                    jsonData.forEach(row => row.unshift(null));
+                    jsonData[0][0] = "ID";
+                    if (suffix) {
+                        window[`isFirstFileProcessed${suffix}`] = true;
+                    } else {
+                        window.isFirstFileProcessed = true;
+                    }
+                } else {
+                    jsonData.forEach(row => row.unshift(undefined));
+                }
+
+                // Fill ID column
+                for (let i = 1; i < jsonData.length; i++) {
+                    jsonData[i][0] = i;
+                }
+
+                // 4. Replace ", m" with " m" and ", %" with " %"
+                jsonData.forEach(row => {
+                    for (let i = 0; i < row.length; i++) {
+                        if (typeof row[i] === 'string') {
+                            row[i] = row[i].replace(', m', ' m').replace(', %', ' %');
+                        }
+                    }
+                });
+
+                // 5. Collect the transformed data
+                allData.push(...(alias === '5' ? jsonData : jsonData.slice(1))); // 5 = TOP72526_GK
+            });
+
+            const leagues = {
+                "Premier League": ["Manchester City", "Tottenham Hotspur", "Arsenal", "Manchester United", "Aston Villa", "Liverpool", "Leeds United", "Everton", "Chelsea", "Brighton", "Newcastle United", "Wolverhampton Wanderers", "Fulham", "Crystal Palace", "Brentford", "Bournemouth", "West Ham United", "Burnley", "Nottingham Forest", "Sunderland", "Wolverhampton"],
+                "La Liga": ["Valencia", "Atlético Madrid", "Barcelona", "Real Madrid", "Real Sociedad", "Real Betis", "Osasuna", "Deportivo Alavés", "Getafe", "Athletic Club", "Girona", "Mallorca", "Villarreal", "Real Oviedo", "Rayo Vallecano", "Levante", "Sevilla", "Elche", "Celta de Vigo", "Espanyol"],
+                "Serie A": ["Milan", "Juventus", "Atalanta", "Lazio", "Napoli", "Roma", "Sassuolo", "Internazionale", "Lecce", "Torino", "Parma", "Udinese", "Genoa", "Hellas Verona", "Bologna", "Fiorentina", "Cagliari", "Cremonese", "Como", "Pisa"],
+                "Bundesliga": ["Borussia Dortmund", "Stuttgart", "Wolfsburg", "Bayer Leverkusen", "Borussia M'gladbach", "Augsburg", "Union Berlin", "Eintracht Frankfurt", "Bayern München", "Hoffenheim", "Mainz 05", "Werder Bremen", "RB Leipzig", "St. Pauli", "Köln", "Freiburg", "Heidenheim", "Hamburger SV", "Borussia Mgladbach"],
+                "Ligue 1": ["PSG", "Lille", "Nice", "Lens", "Nantes", "Paris", "Olympique Lyonnais", "Monaco", "Olympique Marseille", "Brest", "Metz", "Lorient", "Angers SCO", "Le Havre", "Rennes", "Auxerre", "Strasbourg", "Toulouse"],
+                "Eredivisie": ["PSV", "Feyenoord", "Sparta Rotterdam", "Twente", "Utrecht", "Groningen", "PEC Zwolle", "Volendam", "NAC Breda", "NEC", "Fortuna Sittard", "Go Ahead Eagles", "Heerenveen", "Telstar", "Heracles", "AZ", "Excelsior", "Ajax"],
+                "Primeira Liga": ["Porto", "Benfica", "Sporting CP", "Sporting Braga", "Vitória Guimarães", "Gil Vicente", "Alverca", "Moreirense", "Nacional", "Arouca", "Estoril", "Rio Ave", "Santa Clara", "Tondela", "Casa Pia AC", "Famalicão", "Estrela Amadora", "AVS", "AVS "]
+            };
+
+            function getTeamLeague(team) {
+                for (const [league, teams] of Object.entries(leagues)) {
+                    if (teams.includes(team)) {
+                        return league;
+                    }
+                }
+                return "Unknown League";
+            }
+
+            const outputLines = [];
+            let playerId = 1;
+
+            // Store team names before they get replaced with league names (only for first plot)
+            if (!suffix) {
+                window.teamNames = allData.map(row => row[2]);
+            } else {
+                // For the second plot, we need to store team names too
+                window[`teamNames${suffix}`] = allData.map(row => row[2]);
+            }
+
+            allData.forEach((row, index) => {
+                if (row.length >= 3) {
+                    const team = row[2];
+                    const league = getTeamLeague(team);
+                    row[0] = playerId++;
+                    row[2] = league;
+                    outputLines.push(row.join(","));
+                } else {
+                    outputLines.push(row.join(","));
+                }
+            });
+
+            const output_data = outputLines.join("\n");
+            let csvData = output_data;
+            csvData = csvData.split('\\n').join('\n');
+
+            var rows = csvData.trim().split('\n');
+            var header = rows[0].split(',');
+            var data = rows.slice(1).map(function(row) {
+                return row.split(',').map(function(d, i) {
+                    if (i >= 3) {
+                        return parseFloat(d);
+                    } else {
+                        return d;
+                    }
+                });
+            });
+
+            var margin = { top: 40, right: 80, bottom: 100, left: 100 };
+            var width = 620 - margin.left - margin.right;
+            var height = 415 - margin.top - margin.bottom;
+
+            var leagueColors = {
+                "Premier League": "rgb(255, 0, 0, 0.7)",
+                "La Liga": "rgb(255, 223, 0, 0.7)",
+                "Bundesliga": "rgb(85, 209, 73, 0.7)",
+                "Serie A": "rgb(0, 191, 255, 0.7)",
+                "Ligue 1": "rgb(153, 50, 204, 0.7)",
+                "Eredivisie": "rgb(255, 140, 0, 0.7)",
+                "Primeira Liga": "rgb(255, 20, 147, 0.7)"
+            };
+
+            function getLeagueColor(league) {
+                return leagueColors[league] || "rgba(255, 0, 0, 0.7)";
+            }
+
+            var medianLinesVisible = true;
+
+            var selectX = d3.select("#select-x");
+            var selectY = d3.select("#select-y");
+            var selectSize = d3.select("#select-size");
+
+            var names = data.map(function(row) {
+                return row[1];
+            });
+
+            // Populate the select dropdowns
+            header.slice(3).forEach(function(metric) {
+                selectX.append("option")
+                    .text(metric)
+                    .attr("value", metric);
+                selectY.append("option")
+                    .text(metric)
+                    .attr("value", metric);
+                selectSize.append("option")
+                    .text(metric)
+                    .attr("value", metric);
+            });
+
+            // Set default values for the selectors
+            selectX.property("value", header[defaultXMetric]);
+            selectY.property("value", header[defaultYMetric]);
+            selectSize.property("value", header[defaultSizeMetric]);
+
+            // Create the SVG container
+            var svg = d3.select(`#${scatterPlotId}`)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var xScale = d3.scaleLinear().range([0, width]);
+            var yScale = d3.scaleLinear().range([height, 0]);
+            var sizeScale = d3.scaleLinear().range([5, 11]);
+
+            var xAxis = d3.axisBottom(xScale).tickSize(0);
+            var yAxis = d3.axisLeft(yScale).tickSize(0);
+
+            // Add X axis
+            var gXAxis = svg.append("g")
+                .attr("class", "x-axis")
+                .attr("transform", "translate(0," + height + ")");
+
+            // Add Y axis
+            var gYAxis = svg.append("g")
+                .attr("class", "y-axis");
+
+            // Add axis labels
+            var xLabel = svg.append("text")
+                .attr("class", "x-label")
+                .attr("text-anchor", "end")
+                .attr("x", width)
+                .attr("y", height + 35)
+                .style("font-family", "Inter, sans-serif")
+                .style("font-size", "14px");
+
+            var yLabel = svg.append("text")
+                .attr("class", "y-label")
+                .attr("text-anchor", "end")
+                .attr("transform", "rotate(-90)")
+                .attr("y", -53)
+                .attr("x", 0)
+                .style("font-family", "Inter, sans-serif")
+                .style("font-size", "14px");
+
+            // Initialize filtered data
+            if (suffix) {
+                window[`filteredData${suffix}`] = data;
+                window[`filteredNames${suffix}`] = names;
+            } else {
+                window.filteredData = data;
+                window.filteredNames = names;
+            }
+
+            // Create updateChart function for this specific plot
+            const updateChartName = suffix ? `updateChart${suffix}` : 'updateChart';
+            
+            window[updateChartName] = function() {
+                d3.select(`#${scatterPlotId}`)
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom);
+
+                // Update axis positions based on new dimensions
+                gXAxis.attr("transform", "translate(0," + height + ")");
+                xLabel.attr("x", width).attr("y", height + 35);
+                yLabel.attr("x", 0);
+
+                // Get the selected league and age
+                var selectedLeague = document.getElementById("select-league").value;
+                var selectedAge = document.getElementById("select-age").value;
+
+                // Filter data based on selected league
+                const currentFilteredData = suffix ? window[`filteredData${suffix}`] : window.filteredData;
+                const currentFilteredNames = suffix ? window[`filteredNames${suffix}`] : window.filteredNames;
+
+                // Update filtered names
+                if (suffix) {
+                    window[`filteredNames${suffix}`] = currentFilteredData.map(function(d) {
+                        return d[1];
+                    });
+                } else {
+                    window.filteredNames = currentFilteredData.map(function(d) {
+                        return d[1];
+                    });
+                }
+
+                // Get the selected metrics
+                var xMetric = selectX.property("value");
+                var yMetric = selectY.property("value");
+                var sizeMetric = selectSize.property("value");
+
+                // Update scales with consistent 10% padding on each side
+                xScale.range([0, width]).domain(function() {
+                    const extent = d3.extent(currentFilteredData, function(d) { 
+                        return +d[header.indexOf(xMetric)]; 
+                    });
+                    const niceScale = d3.scaleLinear().domain(extent).nice();
+                    const niceExtent = niceScale.domain();
+                    const originalRange = extent[1] - extent[0];
+                    const niceRange = niceExtent[1] - niceExtent[0];
+                    
+                    if ((niceRange / originalRange) > 1.2) {
+                        const padding = originalRange * 0.1;
+                        return [extent[0] - padding, extent[1] + padding];
+                    } else {
+                        return niceExtent;
+                    }
+                }());
+
+                yScale.range([height, 0]).domain(function() {
+                    const extent = d3.extent(currentFilteredData, function(d) { 
+                        return +d[header.indexOf(yMetric)]; 
+                    });
+                    const niceScale = d3.scaleLinear().domain(extent).nice();
+                    const niceExtent = niceScale.domain();
+                    const originalRange = extent[1] - extent[0];
+                    const niceRange = niceExtent[1] - niceExtent[0];
+                    
+                    if ((niceRange / originalRange) > 1.2) {
+                        const padding = originalRange * 0.1;
+                        return [extent[0] - padding, extent[1] + padding];
+                    } else {
+                        return niceExtent;
+                    }
+                }());
+
+                sizeScale.domain(d3.extent(currentFilteredData, function(d) { 
+                    return d[header.indexOf(sizeMetric)]; 
+                }));
+
+                // Update axes
+                gXAxis.call(d3.axisBottom(xScale).tickSize(0));
+                gYAxis.call(d3.axisLeft(yScale).tickSize(0));
+
+                // Create metric key for translation
+                const xMetricKey = "metrics." + xMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+                const yMetricKey = "metrics." + yMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+
+                // Set data-i18n attribute
+                xLabel.attr("data-i18n", xMetricKey);
+                yLabel.attr("data-i18n", yMetricKey);
+
+                // Apply translations directly if available
+                if (window.currentTranslations && window.currentTranslations.metrics) {
+                    const xTranslationKey = xMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+                    const yTranslationKey = yMetric.toLowerCase().replace(/ /g, '-').replace(/%/g, 'pct');
+
+                    const xTranslation = window.currentTranslations.metrics[xTranslationKey];
+                    const yTranslation = window.currentTranslations.metrics[yTranslationKey];
+
+                    xLabel.text(xTranslation || xMetric);
+                    yLabel.text(yTranslation || yMetric);
+                } else {
+                    xLabel.text(xMetric);
+                    yLabel.text(yMetric);
+                }
+
+                // Remove existing circles and labels
+                svg.selectAll("circle").remove();
+                svg.selectAll(".team-label").remove();
+                svg.selectAll(".xy-line").remove();
+                svg.selectAll(".xy-line-bg").remove();
+                svg.selectAll(".xy-line-label").remove();
+                svg.selectAll(".xy-line-label-bg").remove();
+                svg.selectAll(".performance-label").remove();
+                svg.selectAll("linearGradient#line-gradient").remove();
+                svg.selectAll("marker#arrow-over, marker#arrow-under").remove();
+                svg.selectAll(".xy-line-hover").remove();
+                svg.selectAll(".median-line").remove();
+
+                // Add diagonal reference line for xG vs Goals
+                if ((xMetric === 'xG per 90' && yMetric === 'Goals per 90') || 
+                    (xMetric === 'Goals per 90' && yMetric === 'xG per 90') ||
+                    (xMetric === 'Non-penalty goals per 90' && yMetric === 'npxG per 90') ||
+                    (xMetric === 'npxG per 90' && yMetric === 'Non-penalty goals per 90') ||
+                    (xMetric === 'Assists per 90' && yMetric === 'xA per 90') ||
+                    (xMetric === 'xA per 90' && yMetric === 'Assists per 90') ||
+                    (xMetric === 'NPG+A per 90' && yMetric === 'npxG+xA per 90') ||
+                    (xMetric === 'npxG+xA per 90' && yMetric === 'NPG+A per 90') ||
+                    (xMetric === 'xG conceded per 90' && yMetric === 'Goals conceded per 90') ||
+                    (xMetric === 'Goals conceded per 90' && yMetric === 'xG conceded per 90') ||
+                    (xMetric === 'xG conceded' && yMetric === 'Goals conceded') ||
+                    (xMetric === 'Goals conceded' && yMetric === 'xG conceded')) {
+                    
+                    var diagonalLineHoverTimer = null;
+                    
+                    var minX = d3.min(currentFilteredData, function(d) { return d[header.indexOf(xMetric)]; });
+                    var maxX = d3.max(currentFilteredData, function(d) { return d[header.indexOf(xMetric)]; });
+                    var minY = d3.min(currentFilteredData, function(d) { return d[header.indexOf(yMetric)]; });
+                    var maxY = d3.max(currentFilteredData, function(d) { return d[header.indexOf(yMetric)]; });
+                    
+                    var maxVal = Math.min(maxX, maxY);
+                    var minVal = Math.max(minX, minY);
+                    
+                    svg.append("line")
+                        .attr("class", "xy-line")
+                        .attr("x1", xScale(minVal))
+                        .attr("y1", yScale(minVal))
+                        .attr("x2", xScale(maxVal))
+                        .attr("y2", yScale(maxVal))
+                        .style("stroke", "#2ecc71")
+                        .style("stroke-width", "2")
+                        .style("stroke-dasharray", "5,3");
+                    
+                    svg.append("line")
+                        .attr("class", "xy-line-hover")
+                        .attr("x1", xScale(minVal))
+                        .attr("y1", yScale(minVal))
+                        .attr("x2", xScale(maxVal))
+                        .attr("y2", yScale(maxVal))
+                        .style("stroke", "transparent")
+                        .style("stroke-width", "15")
+                        .style("cursor", "help")
+                        .on("mouseover", function() {
+                            if (diagonalLineHoverTimer) {
+                                clearTimeout(diagonalLineHoverTimer);
+                            }
+                            var eventX = d3.event.pageX;
+                            var eventY = d3.event.pageY;
+                        });
+                }
+
+                // Add median lines if enabled
+                if (medianLinesVisible) {
+                    var xMedian = d3.median(currentFilteredData, function(d) { 
+                        return d[header.indexOf(xMetric)]; 
+                    });
+                    
+                    var yMedian = d3.median(currentFilteredData, function(d) { 
+                        return d[header.indexOf(yMetric)]; 
+                    });
+                    
+                    svg.append("line")
+                        .attr("class", "median-line")
+                        .attr("x1", xScale(xMedian))
+                        .attr("y1", 0)
+                        .attr("x2", xScale(xMedian))
+                        .attr("y2", height)
+                        .style("stroke", "rgba(0, 0, 0, 0.3)")
+                        .style("stroke-dasharray", "4");
+                    
+                    svg.append("line")
+                        .attr("class", "median-line")
+                        .attr("x1", 0)
+                        .attr("y1", yScale(yMedian))
+                        .attr("x2", width)
+                        .attr("y2", yScale(yMedian))
+                        .style("stroke", "rgba(0, 0, 0, 0.3)")
+                        .style("stroke-dasharray", "4");
+                }
+
+
+
+                // Add circles
+                const currentCircles = svg.selectAll("circle")
+                    .data(currentFilteredData)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) { return xScale(d[header.indexOf(xMetric)]); })
+                    .attr("cy", function(d) { return yScale(d[header.indexOf(yMetric)]); })
+                    .attr("r", function(d) { 
+                        const value = d[header.indexOf(sizeMetric)];
+                        return value !== undefined ? sizeScale(value) : 8;
+                    })
+                    .style("fill", function(d) {
+                        const currentClickedCircles = suffix ? window[`clickedCircles${suffix}`] : window.clickedCircles;
+                        if (currentClickedCircles && currentClickedCircles.includes(d[1])) {
+                            return getLeagueColor(d[2]);
+                        }
+                        return "rgba(70, 130, 180, 0.7)";
+                    })
+                    .style("stroke", function(d) {
+                        const currentClickedCircles = suffix ? window[`clickedCircles${suffix}`] : window.clickedCircles;
+                        return (currentClickedCircles && currentClickedCircles.includes(d[1])) ? "#000" : "none";
+                    })
+                    .style("stroke-width", function(d) {
+                        const currentClickedCircles = suffix ? window[`clickedCircles${suffix}`] : window.clickedCircles;
+                        return (currentClickedCircles && currentClickedCircles.includes(d[1])) ? 2 : 0;
+                    });
+
+                // Store circles reference
+                if (suffix) {
+                    window[`circles${suffix}`] = currentCircles;
+                } else {
+                    window.circles = currentCircles;
+                }
+
+                // Define addTeamLabel function HERE inside updateChart so it has access to xMetric, yMetric, etc.
+                function addTeamLabel(d, isSearchMatch) {
+                    var x = xScale(d[header.indexOf(xMetric)]);
+                    var y = yScale(d[header.indexOf(yMetric)]);
+                    
+                    var teamClass = "team-label-" + d[1].toLowerCase()
+                        .replace(/[^a-z0-9]/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-|-$/g, '');
+                    
+                    if (svg.select("." + teamClass).size() > 0) {
+                        return;
+                    }
+                    
+                    var tempLabel = svg.append("text")
+                        .attr("class", "temp-label")
+                        .text(d[1])
+                        .style("font-family", "Inter, sans-serif")
+                        .style("font-size", "12px")
+                        .style("opacity", 0);
+                    
+                    var labelWidth = tempLabel.node().getComputedTextLength();
+                    tempLabel.remove();
+                    
+                    var chartWidth = width;
+                    var chartHeight = height;
+                    
+                    var labelX = x + 18;
+                    var labelY = y;
+                    var anchor = "start";
+                    
+                    if (labelX + labelWidth > chartWidth) {
+                        labelX = x - 14;
+                        anchor = "end";
+                    }
+                    
+                    var label = svg.append("text")
+                        .attr("class", "team-label " + teamClass)
+                        .attr("x", labelX)
+                        .attr("y", labelY)
+                        .attr("text-anchor", anchor)
+                        .attr("dominant-baseline", "middle")
+                        .text(d[1])
+                        .style("font-family", "Inter, sans-serif")
+                        .style("font-size", "12px")
+                        .style("font-weight", "500")
+                        .style("fill", "#333");
+                }
+
+                // Add labels for clicked teams
+                const currentClickedCircles = suffix ? window[`clickedCircles${suffix}`] : window.clickedCircles;
+                if (currentClickedCircles) {
+                    currentClickedCircles.forEach(function(teamName) {
+                        var teamData = currentFilteredData.find(function(d) {
+                            return d[1] === teamName;
+                        });
+                        
+                        if (teamData) {
+                            addTeamLabel(teamData, false);
+                        }
+                    });
+                }
+
+                // Find all players with the name "L. Chevalier"
+                const allPlayerMatches = currentFilteredData.filter(d => d[1] === "L. Chevalier");
+                const radarTeamName = window.dataArray[0][2];
+                
+                let playerData;
+                if (allPlayerMatches.length > 1) {
+                    playerData = allPlayerMatches.find(d => {
+                        const playerIndex = currentFilteredData.indexOf(d);
+                        const teamNamesArray = suffix ? window[`teamNames${suffix}`] : window.teamNames;
+                        const originalTeamName = teamNamesArray[playerIndex + 1];
+                        return originalTeamName === radarTeamName;
+                    });
+                    
+                    if (!playerData) {
+                        playerData = allPlayerMatches[0];
+                    }
+                    
+                    svg.selectAll("circle").filter(function(d) {
+                        return d[1] === "L. Chevalier" && d !== playerData;
+                    })
+                    .style("fill", "rgba(70, 130, 180, 0.7)")
+                    .style("stroke", "none")
+                    .style("stroke-width", 0)
+                    .style("cursor", "pointer");
+                } else if (allPlayerMatches.length === 1) {
+                    playerData = allPlayerMatches[0];
+                } else {
+                    return;
+                }
+
+                if (playerData) {
+                    svg.selectAll("circle").filter(function(d) {
+                        return d === playerData;
+                    })
+                    .style("fill", function(d) {
+                        return getLeagueColor(d[2]);
+                    })
+                    .style("stroke", "#000")
+                    .style("stroke-width", 2)
+                    .style("cursor", "default")
+                    .each(function() {
+                        this.parentNode.appendChild(this);
+                    });
+                    
+                    addTeamLabel(playerData, false);
+                }
+                
+                // Set flag to true so we don't try to click Bruno again
+                window.initialClickPerformed = true;
+            };
+
+            // Function to remove special characters and diacritics for better search matching
+            function removeSpecialCharsAndDiacritics(str) {
+                if (!str) return '';
+                return str.normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/Ø/g, 'O')
+                    .replace(/ø/g, 'o');
+            }
+
+            // Add search functionality
+            var searchBar = document.getElementById("search-bar");
+            
+            searchBar.addEventListener("input", function() {
+                var searchTerm = searchBar.value.toLowerCase();
+                
+                if (searchTerm === '') {
+                    resetSearch();
+                    return;
+                }
+                
+                var normalizedSearchTerm = removeSpecialCharsAndDiacritics(searchTerm);
+                
+                // Reset previous search styling
+                svg.selectAll("circle").classed("search-match", false)
+                    .style("fill", function(d) {
+                        const currentClickedCircles = suffix ? window[`clickedCircles${suffix}`] : window.clickedCircles;
+                        return currentClickedCircles.includes(d[1]) ? getLeagueColor(d[2]) : "rgba(70, 130, 180, 0.7)";
+                    })
+                    .style("stroke", function(d) {
+                        const currentClickedCircles = suffix ? window[`clickedCircles${suffix}`] : window.clickedCircles;
+                        return currentClickedCircles.includes(d[1]) ? "#000" : "none";
+                    })
+                    .style("stroke-width", function(d) {
+                        const currentClickedCircles = suffix ? window[`clickedCircles${suffix}`] : window.clickedCircles;
+                        return currentClickedCircles.includes(d[1]) ? 2 : 0;
+                    })
+                    .style("filter", "none")
+                    .each(function() {
+                        d3.select(this).style("r", null);
+                    });
+                
+                svg.selectAll(".team-label")
+                    .classed("search-match", false)
+                    .classed("search-dimmed", false);
+                
+                var matchingTeams = [];
+                
+                svg.selectAll("circle").filter(function(d) {
+                    var teamName = d[1].toLowerCase();
+                    var normalizedTeamName = removeSpecialCharsAndDiacritics(teamName);
+                    
+                    var isMatch = teamName.includes(searchTerm) || normalizedTeamName.includes(normalizedSearchTerm);
+                    
+                    if (isMatch) {
+                        matchingTeams.push(d[1]);
+                    }
+                    
+                    return isMatch;
+                })
+                .classed("search-match", true)
+                .each(function() {
+                    this.parentNode.appendChild(this);
+                });
+                
+                if (matchingTeams.length > 0) {
+                    svg.selectAll(".team-label").classed("search-dimmed", true);
+                    
+                    svg.selectAll(".team-label").filter(function() {
+                        var labelText = d3.select(this).text();
+                        return matchingTeams.includes(labelText);
+                    })
+                    .classed("search-match", true)
+                    .classed("search-dimmed", false)
+                    .each(function() {
+                        this.parentNode.appendChild(this);
+                    });
+                    
+                    matchingTeams.forEach(function(teamName) {
+                        var labelClass = "team-label-" + teamName.toLowerCase()
+                            .replace(/[^a-z0-9]/g, '-')
+                            .replace(/-+/g, '-')
+                            .replace(/^-|-$/g, '');
+
+                        if (svg.select("." + labelClass).size() === 0) {
+                            var teamData = currentFilteredData.find(function(d) {
+                                return d[1] === teamName;
+                            });
+                            
+                            if (teamData) {
+                                addTeamLabel(teamData, true);
+                            }
+                        }
+                    });
+                } 
+            });
+
+            // Call updateChart to initialize the plot
+            window[updateChartName]();
+        });
+}
+
+// Initialize data arrays
+window.allData = [];
+window.isFirstFileProcessed = false;
+window.urls = ['5']; // 5 = TOP72526_GK
+
+window.allData2 = [];
+window.isFirstFileProcessed2 = false;
+window.urls2 = ['5']; // 5 = TOP72526_GK
+
+// Create both plots
+createScatterPlot({
+    suffix: '',
+    scatterPlotId: 'scatter-plot',
+    defaultXMetric: 41,
+    defaultYMetric: 45,
+    defaultSizeMetric: 3
+});
+
+createScatterPlot({
+    suffix: '2',
+    scatterPlotId: 'scatter-plot-2',
+    defaultXMetric: 23,
+    defaultYMetric: 25,
+    defaultSizeMetric: 3
+});
+
+</script>
+
+
+<div id="ezoic-pub-ad-placeholder-165"></div>
+<script src="/tradprofiles.js"></script>
+
+
+<footer class="footer">   
+  <div class="google-play-container">
+
+  <a href='https://play.google.com/store/apps/details?id=com.datamb.datamb.webviewflutter&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'></a>
+<a href='https://apps.apple.com/app/datamb/id6456224067?l=en-GB'><img alt='Download on the App Store' src='https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg'></a></div>
+<div class="logo">
+    <img src="https://datamb.football/logo.png" alt="L. Chevalier football stats and data visuals. 2025/26 L. Chevalier player data profile compared to top 7 league players. Radar comparison and plot charts" />
   </div>
 
-  <div class="floating-buttons">
-    <a href="https://datamb.football/appteamplot/" target="_blank" rel="noopener noreferrer" class="floating-button pro-button">
-      <i class="fas fa-chart-line"></i>
-    </a>
-    <a href="https://datamb.football/proguide/" target="_blank" rel="noopener noreferrer" class="floating-button guide-button">
-      <i class="fas fa-question-circle"></i>
-    </a>
+  <p class="description">DataMB</p>
+  <p class="info" data-i18n="footer.copyright">© All Rights Reserved</p>
+  <hr class="divider" />
+  <div class="sub-footer">
+    <nav>
+<a class="terms" data-i18n="footer.terms" target="_blank" href="https://datamb.football/privacy">Privacy</a>
+<a class="privacy" data-i18n="footer.privacy" href="https://datamb.football/guide#contact">Contact</a>
+<a class="glossary" data-i18n="footer.glossary" href="https://datamb.football/guide#aboutus">About</a>
+</nav>
+    <nav>
+      <a target="_blank" href="https://twitter.com/datamb_" class="twitter-link">
+                <svg width="23" height="22" fill="#000000" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      </a>
+    </nav>
   </div>
-    <script src="appteam.js"></script>
-    <div class="similar-players-container">
-      <div class="logo-screenshot-container">
-        <img src="https://datamb.football/logo.png" alt="Logo">
-        <div id="similarPlayersContainer"></div>
-        <button onclick="takeScreenshot()" class="screenshot-btn"><div class="icon2"></div></button>
-      </div>
-    </div>
-<center>    
-<ins class="adsbygoogle"
-          style="display:block"
-          data-ad-client="ca-pub-7677714701428206"
-          data-ad-slot="4458716228"
-          data-ad-format="auto"
-          data-full-width-responsive="true"></ins>
-      <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-</center>  
-        <script src="/apphelpers.js"></script>
+</footer>
+</div>
+
 </body>
 </html>
-
