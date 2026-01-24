@@ -22,6 +22,16 @@ const fileAliases6 = ['84', '102'];    // RAPRO2324_CB, RAPRO2023_CB
 const fileAliases7 = ['72'];           // RATOP72223_CB
 const fileAliases8 = ['90'];           // RAPRO2223_CB
 
+// Season suffixes for each file group
+const seasons1 = ['25/26'];
+const seasons2 = ['25/26', '2025'];
+const seasons3 = ['24/25'];
+const seasons4 = ['24/25', '2024'];
+const seasons5 = ['23/24'];
+const seasons6 = ['23/24', '2023'];
+const seasons7 = ['22/23'];
+const seasons8 = ['22/23'];
+
 const fetchPromises1 = fileAliases1.map(alias => fetch(`${WORKER_URL}/?file=${alias}`).then(response => response.arrayBuffer()));
 const fetchPromises2 = fileAliases2.map(alias => fetch(`${WORKER_URL}/?file=${alias}`).then(response => response.arrayBuffer()));
 const fetchPromises3 = fileAliases3.map(alias => fetch(`${WORKER_URL}/?file=${alias}`).then(response => response.arrayBuffer()));
@@ -41,15 +51,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                         const sheet = workbook.Sheets[sheetName];
                         const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                 
-                        // Get the URL for the current data
-                        const currentUrl = urls1[urlIndex];
-                        // Extract season information from URL
-                        let seasonSuffix = '25/26'; // Default
-                        // Check if URL contains PRO20 followed by 2 digits (like PRO2024)
-                        const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                        if (proMatch) {
-                            seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                        }
+                        // Get the season suffix for the current file
+                        const seasonSuffix = seasons1[urlIndex];
                 
                         // Exclude header row
                         const dataWithoutHeader = jsonData.slice(1);
@@ -112,15 +115,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                         const sheet = workbook.Sheets[sheetName];
                         const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                 
-                        // Get the URL for the current data
-                        const currentUrl = urls2[urlIndex];
-                        // Extract season information from URL
-                        let seasonSuffix = '25/26'; // Default
-                        // Check if URL contains PRO20 followed by 2 digits (like PRO2024)
-                        const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                        if (proMatch) {
-                            seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                        }
+                        // Get the season suffix for the current file
+                        const seasonSuffix = seasons2[urlIndex];
                 
                         // Exclude header row
                         const dataWithoutHeader = jsonData.slice(1);
@@ -184,15 +180,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                       const sheet = workbook.Sheets[sheetName];
                       const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
               
-                      // Get the URL for the current data
-                      const currentUrl = urls3[urlIndex];
-                      // Extract season information from URL
-                      let seasonSuffix = '24/25'; // Default
-                      // Check if URL contains PRO20 followed by 2 digits (like PRO2023)
-                      const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                      if (proMatch) {
-                          seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                      }
+                      // Get the season suffix for the current file
+                      const seasonSuffix = seasons3[urlIndex];
               
                       // Exclude header row
                       const dataWithoutHeader = jsonData.slice(1);
@@ -255,15 +244,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                     const sheet = workbook.Sheets[sheetName];
                     const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
             
-                    // Get the URL for the current data
-                    const currentUrl = urls4[urlIndex];
-                    // Extract season information from URL
-                    let seasonSuffix = '24/25'; // Default
-                    // Check if URL contains PRO20 followed by 2 digits (like PRO2023)
-                    const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                    if (proMatch) {
-                        seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                    }
+                    // Get the season suffix for the current file
+                    const seasonSuffix = seasons4[urlIndex];
             
                     // Exclude header row
                     const dataWithoutHeader = jsonData.slice(1);
@@ -325,15 +307,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                   const sheet = workbook.Sheets[sheetName];
                   const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
             
-                  // Get the URL for the current data
-                  const currentUrl = urls5[urlIndex];
-                  // Extract season information from URL
-                  let seasonSuffix = '23/24'; // Default
-                  // Check if URL contains PRO20 followed by 2 digits (like PRO2022)
-                  const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                  if (proMatch) {
-                      seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                  }
+                  // Get the season suffix for the current file
+                  const seasonSuffix = seasons5[urlIndex];
             
                   // Exclude header row
                   const dataWithoutHeader = jsonData.slice(1);
@@ -400,15 +375,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                   const sheet = workbook.Sheets[sheetName];
                   const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
             
-                  // Get the URL for the current data
-                  const currentUrl = urls6[urlIndex];
-                  // Extract season information from URL
-                  let seasonSuffix = '23/24'; // Default
-                  // Check if URL contains PRO20 followed by 2 digits (like PRO2022)
-                  const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                  if (proMatch) {
-                      seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                  }
+                  // Get the season suffix for the current file
+                  const seasonSuffix = seasons6[urlIndex];
             
                   // Exclude header row
                   const dataWithoutHeader = jsonData.slice(1);
@@ -474,15 +442,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                   const sheet = workbook.Sheets[sheetName];
                   const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
             
-                  // Get the URL for the current data
-                  const currentUrl = urls7[urlIndex];
-                  // Extract season information from URL
-                  let seasonSuffix = '22/23'; // Default
-                  // Check if URL contains PRO20 followed by 2 digits (like PRO2022)
-                  const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                  if (proMatch) {
-                      seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                  }
+                  // Get the season suffix for the current file
+                  const seasonSuffix = seasons7[urlIndex];
             
                   // Exclude header row
                   const dataWithoutHeader = jsonData.slice(1);
@@ -549,15 +510,8 @@ const fetchPromises8 = fileAliases8.map(alias => fetch(`${WORKER_URL}/?file=${al
                   const sheet = workbook.Sheets[sheetName];
                   const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
             
-                  // Get the URL for the current data
-                  const currentUrl = urls8[urlIndex];
-                  // Extract season information from URL
-                  let seasonSuffix = '22/23'; // Default
-                  // Check if URL contains PRO20 followed by 2 digits (like PRO2022)
-                  const proMatch = currentUrl.match(/PRO20(\d{2})/);
-                  if (proMatch) {
-                      seasonSuffix = '20' + proMatch[1]; // Use the 2 digits after PRO20 with 20 prefix
-                  }
+                  // Get the season suffix for the current file
+                  const seasonSuffix = seasons8[urlIndex];
             
                   // Exclude header row
                   const dataWithoutHeader = jsonData.slice(1);
