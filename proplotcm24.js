@@ -573,8 +573,9 @@ function getTranslation(key, fallback) {
 const WORKER_URL = 'https://your-worker.your-subdomain.workers.dev';
 
 // File aliases to fetch (in order - first one includes header)
-const fileAliases = ['TOP7_CM', 'PRO2526_CM', 'PRO2025_CM'];
-const firstFileAlias = 'TOP7_CM'; // The file that should include the header
+// 8=TOP72526_CM, 14=PRO2526_CM, 20=PRO2025_CM
+const fileAliases = ['8', '14', '20'];
+const firstFileAlias = '8';
 
 // Fetch all files from worker
 fetch(`${WORKER_URL}/?files=${fileAliases.join(',')}`)
