@@ -311,7 +311,8 @@ function populateMetricOptions(optionsContainer, metrics, callback) {
 // Function to set up a custom select
 function setupCustomSelect(trigger, options, selectElement, callback) {
     // Toggle dropdown when clicking the trigger
-    trigger.addEventListener('click', function() {
+    trigger.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent event from bubbling to document click handler
         // Close all other open dropdowns first
         document.querySelectorAll('.custom-select-trigger.open, .metric-select-trigger.open').forEach(function(openTrigger) {
             if (openTrigger !== trigger) {
@@ -327,53 +328,58 @@ function setupCustomSelect(trigger, options, selectElement, callback) {
         options.style.display = isOpen ? 'block' : 'none';
         });
     
-    // Handle option selection
-    const optionElements = options.querySelectorAll('.custom-select-option, .metric-select-option');
-    optionElements.forEach(option => {
-        option.addEventListener('click', function() {
-            // Update selected option
-            optionElements.forEach(opt => opt.classList.remove('selected'));
-            this.classList.add('selected');
-            
-            // Update trigger content
-            const text = this.querySelector('span').textContent;
-            const dataI18n = this.querySelector('span').getAttribute('data-i18n');
-            const icon = this.querySelector('iconify-icon');
-            
-            trigger.innerHTML = '';
-            
-            if (icon) {
-                const clonedIcon = icon.cloneNode(true);
-                clonedIcon.style.marginRight = '8px';
-                trigger.appendChild(clonedIcon);
-            }
-            
-            const span = document.createElement('span');
-            span.textContent = text;
-            if (dataI18n) {
-                span.setAttribute('data-i18n', dataI18n);
-            }
-            trigger.appendChild(span);
-            
-            // Update hidden select and trigger change event
-            const value = this.getAttribute('data-value');
-            selectElement.value = value || text;
-            
-            // Trigger the change event on the hidden select
-            const event = new Event('change');
-            selectElement.dispatchEvent(event);
-            
-            // Call callback function if provided, otherwise try to call updateChart if it exists
-            if (typeof callback === 'function') {
-                callback();
-            } else if (typeof updateChart === 'function') {
-                updateChart();
-            }
-            
-            // Close dropdown
-            trigger.classList.remove('open');
-            options.style.display = 'none';
-        });
+    // Handle option selection using event delegation
+    options.addEventListener('click', function(e) {
+        const option = e.target.closest('.custom-select-option, .metric-select-option');
+        if (!option) return; // Click wasn't on an option
+        
+        e.stopPropagation(); // Prevent event from bubbling to document click handler
+        
+        // Skip category headers
+        if (option.classList.contains('metric-category-header')) return;
+        
+        // Update selected option
+        options.querySelectorAll('.custom-select-option, .metric-select-option').forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+        
+        // Update trigger content
+        const text = option.querySelector('span').textContent;
+        const dataI18n = option.querySelector('span').getAttribute('data-i18n');
+        const icon = option.querySelector('iconify-icon');
+        
+        trigger.innerHTML = '';
+        
+        if (icon) {
+            const clonedIcon = icon.cloneNode(true);
+            clonedIcon.style.marginRight = '8px';
+            trigger.appendChild(clonedIcon);
+        }
+        
+        const span = document.createElement('span');
+        span.textContent = text;
+        if (dataI18n) {
+            span.setAttribute('data-i18n', dataI18n);
+        }
+        trigger.appendChild(span);
+        
+        // Update hidden select and trigger change event
+        const value = option.getAttribute('data-value');
+        selectElement.value = value || text;
+        
+        // Trigger the change event on the hidden select
+        const event = new Event('change');
+        selectElement.dispatchEvent(event);
+        
+        // Call callback function if provided, otherwise try to call updateChart if it exists
+        if (typeof callback === 'function') {
+            callback();
+        } else if (typeof updateChart === 'function') {
+            updateChart();
+        }
+        
+        // Close dropdown
+        trigger.classList.remove('open');
+        options.style.display = 'none';
     });
     
     // Add keyboard navigation
@@ -760,6 +766,11 @@ const outputLines = [];
 let playerId = 1; // Initialize player ID counter
 
 allData.forEach((row, index) => {
+// Skip the header row (index 0)
+if (index === 0) {
+outputLines.push(row.join(","));
+return;
+}
 // Ensure row has at least 3 elements
 if (row.length >= 3) {
 const team = row[2];
