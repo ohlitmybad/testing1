@@ -189,36 +189,38 @@ const customMetricOrder = [
 const columnIndexMap = {};
 // columnIndexMap is populated in the async init after data loads
 
-metricSelect.innerHTML = ''; // Clear existing options
+// Function to initialize metric selector after data loads
+function initializeMetricSelector() {
+    metricSelect.innerHTML = ''; // Clear existing options
 
-customMetricOrder.forEach(metric => {
-    const option = document.createElement('option');
-    if (metric.text.startsWith("CATEGORY: ")) {
-        option.textContent = metric.text.replace("CATEGORY: ", "");
-        option.disabled = true;
-        option.style.fontWeight = "bold";
-        option.style.color = "#aaa";
-        option.setAttribute('data-i18n', metric.i18n);
-    } else {
-        const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
-        const index = currentDataArray[0].indexOf(metricName);
-        if (index !== -1) {
-            option.value = index;
-            option.textContent = metricName;
+    customMetricOrder.forEach(metric => {
+        const option = document.createElement('option');
+        if (metric.text.startsWith("CATEGORY: ")) {
+            option.textContent = metric.text.replace("CATEGORY: ", "");
+            option.disabled = true;
+            option.style.fontWeight = "bold";
+            option.style.color = "#aaa";
             option.setAttribute('data-i18n', metric.i18n);
+        } else {
+            const metricName = isToggled ? metric.text.replace(' per 90', '') : metric.text;
+            const index = currentDataArray[0].indexOf(metricName);
+            if (index !== -1) {
+                option.value = index;
+                option.textContent = metricName;
+                option.setAttribute('data-i18n', metric.i18n);
+            }
         }
+        metricSelect.appendChild(option);
+    });
+
+    // Find and set Minutes played as the default selection BEFORE building options
+    const minutesPlayedIndex = currentDataArray[0].indexOf("Minutes played");
+    if (minutesPlayedIndex !== -1) {
+      metricSelect.value = minutesPlayedIndex;
     }
-    metricSelect.appendChild(option);
-});
 
-// Find and set Minutes played as the default selection BEFORE building options
-const minutesPlayedIndex = currentDataArray[0].indexOf("Minutes played");
-if (minutesPlayedIndex !== -1) {
-  metricSelect.value = minutesPlayedIndex;
+    metricSelect.dispatchEvent(new Event('change'));
 }
-
-
-metricSelect.dispatchEvent(new Event('change'));
 
 toggleSortButton.addEventListener('click', toggleSortOrder); // New event listener for sort order toggle
 metricSelect.addEventListener('change', () => {
@@ -834,6 +836,9 @@ leagueSelect.addEventListener('change', handleSelectorsChange);
     originalDataArray[0].forEach((name, index) => {
         columnIndexMap[name] = index;
     });
+    
+    // Initialize metric selector after data is loaded
+    initializeMetricSelector();
     
     // Initial display with Premier League filter applied
     filterTable();
