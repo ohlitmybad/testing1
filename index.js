@@ -7,10 +7,18 @@ function loadData() {
     try {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', dataUrl, false); // false for synchronous request
-        xhr.send(null);
+        xhr.setRequestHeader('CF-Access-Client-Secret', 'f76ca148744718ed7b666827df802c411e22dfed4b44b95447e412712da13216');
+        xhr.setRequestHeader('CF-Access-Client-Id', '9a87b63d3ca59eb364ff84deb05161f2.access');
+        try {
+            xhr.send(null);
+        } catch (e) {
+            console.error('XMLHttpRequest error:', e);
+            alert('Failed to load ' + (isPastSeason ? 'past season' : 'current season') + ' data. Error: ' + e.message + '\n\nThis might be a CORS issue. Check if the file exists and CORS headers are configured for /database1/');
+            return;
+        }
         
         if (xhr.status !== 200) {
-            alert('Failed to load ' + (isPastSeason ? 'past season' : 'current season') + ' data. Status: ' + xhr.status);
+            alert('Failed to load ' + (isPastSeason ? 'past season' : 'current season') + ' data. Status: ' + xhr.status + '\n\nURL: ' + dataUrl);
             return;
         }
         
