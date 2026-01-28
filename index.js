@@ -7,8 +7,6 @@ function loadData() {
     try {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', dataUrl, false); // false for synchronous request
-        xhr.setRequestHeader('CF-Access-Client-Secret', 'f76ca148744718ed7b666827df802c411e22dfed4b44b95447e412712da13216');
-        xhr.setRequestHeader('CF-Access-Client-Id', '9a87b63d3ca59eb364ff84deb05161f2.access');
         xhr.send(null);
         
         if (xhr.status !== 200) {
