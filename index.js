@@ -1,28 +1,23 @@
 let isPastSeason = false;
 let data;
 
-function loadData() {
+async function loadData() {
     const dataUrl = isPastSeason ? 'https://datamb.football/database1/OLDINDEX.csv' : 'https://datamb.football/database1/INDEX.csv';
     
     try {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', dataUrl, false); // false for synchronous request
-        xhr.setRequestHeader('CF-Access-Client-Secret', 'f76ca148744718ed7b666827df802c411e22dfed4b44b95447e412712da13216');
-        xhr.setRequestHeader('CF-Access-Client-Id', '9a87b63d3ca59eb364ff84deb05161f2.access');
-        try {
-            xhr.send(null);
-        } catch (e) {
-            console.error('XMLHttpRequest error:', e);
-            alert('Failed to load ' + (isPastSeason ? 'past season' : 'current season') + ' data. Error: ' + e.message + '\n\nThis might be a CORS issue. Check if the file exists and CORS headers are configured for /database1/');
+        const response = await fetch(dataUrl, {
+            headers: {
+                'CF-Access-Client-Secret': 'f76ca148744718ed7b666827df802c411e22dfed4b44b95447e412712da13216',
+                'CF-Access-Client-Id': '9a87b63d3ca59eb364ff84deb05161f2.access'
+            }
+        });
+        
+        if (!response.ok) {
+            alert('Failed to load ' + (isPastSeason ? 'past season' : 'current season') + ' data. Status: ' + response.status);
             return;
         }
         
-        if (xhr.status !== 200) {
-            alert('Failed to load ' + (isPastSeason ? 'past season' : 'current season') + ' data. Status: ' + xhr.status + '\n\nURL: ' + dataUrl);
-            return;
-        }
-        
-        data = xhr.responseText;
+        data = await response.text();
         
         let extraHeaderRow = 'Player,Team,League,Position,Age,Performance Index,Minutes played,Possessions won per 90,Defensive duels per 90,Aerial duels per 90,Sliding tackles per 90,Sliding tackles (PAdj),Shots blocked per 90,Interceptions per 90,Interceptions (PAdj),Successful attacking actions per 90,Goals per 90,Non-penalty goals per 90,xG per 90,Headed goals per 90,Shots per 90,Assists per 90,Crosses per 90,Crosses to box per 90,Dribbles attempted per 90,Offensive duels per 90,Touches in box per 90,Progressive carries per 90,Accelerations per 90,Fouls suffered per 90,Passes per 90,Forward passes per 90,Short passes per 90,Long passes per 90,Average pass length (m),xA per 90,Shot assists per 90,Key passes per 90,Passes to final third per 90,Passes to penalty box per 90,Through passes per 90,Deep completions per 90,Progressive passes per 90,Shots conceded per 90,Clean sheets,xG conceded per 90,Prevented goals per 90,Exits per 90,Defensive duels won %,Aerial duels won %,Shots on target %,Goal conversion %,Cross accuracy %,Dribble success rate %,Offensive duels won %,Pass completion %,Forward pass completion %,Short pass completion %,Long pass accuracy %,Pass completion (to final third) %,Pass completion (to penalty box) %,Through pass completion %,Progressive pass accuracy %,Save percentage %,Free kicks per 90,Direct free kicks per 90,Direct free kicks oT %,Corners per 90,Penalties attempted,Penalty success rate %,Matches played,Duels per 90,Duels won %,Possession +/-,Forward pass ratio,xA per 100 passes,Chance creation ratio,Inaccurate passes %,Goals + Assists per 90,NPG+A per 90,xG+xA per 90,xG/Shot,Goals - xG per 90,Goals per xG,Assists - xA per 90,Assists per xA,Successful dribbles per 90,Shots on target per 90,Accurate crosses per 90,Offensive duels won per 90,Defensive duels won per 90,Aerial duels won per 90,Passes completed per 90,Forward passes completed per 90,Short passes completed per 90,Long passes completed per 90,Accurate passes to final third per 90,Accurate passes to pen box per 90,Through passes completed per 90,Progressive passes completed per 90,Misplaced passes per 90,Saves per 90,Possessions lost per 90,Possessions won - lost per 90,Progressive actions per 90,Duels won per 90,Minutes per match,Backward pass ratio,Penalties scored,npxG per 90,npxG/Shot,npxG+xA per 90,Touches per 90,Progressive action rate,Progressive passes (PAdj),Ball-carrying frequency,xG per 100 touches,Shot frequency,Dribbles per 100 touches,Goals per 100 touches,Passes received per 90,Backward passes per 90,Pre-assists per 90';
         data = extraHeaderRow + '\n' + data;
@@ -33,7 +28,9 @@ function loadData() {
 }
 
 // Initial data load
-loadData();
+loadData().catch(err => {
+    console.error('Failed to load initial data:', err);
+});
 
 
 let originalDataArray = data.split('\n').map(row => row.split(','));
@@ -266,9 +263,8 @@ function initPastSeasonButton() {
         }
         
         // Reload data and refresh table
-        loadData();
-        
-        originalDataArray = data.split('\n').map(row => row.split(','));
+        loadData().then(() => {
+            originalDataArray = data.split('\n').map(row => row.split(','));
         currentDataArray = originalDataArray;
         
         // Rebuild column index map
@@ -276,13 +272,16 @@ function initPastSeasonButton() {
             columnIndexMap[name] = index;
         });
         
-        // Reapply any current toggle state
-        if (isToggled) {
-            toggleData();
-        }
-        
-        // Refresh the table
-        filterTable();
+            // Reapply any current toggle state
+            if (isToggled) {
+                toggleData();
+            }
+            
+            // Refresh the table
+            filterTable();
+        }).catch(err => {
+            console.error('Failed to reload data:', err);
+        });
     });
 }
 
